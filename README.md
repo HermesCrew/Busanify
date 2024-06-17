@@ -7,7 +7,7 @@
 ## 팀원 👥
 |이서경|이인호|장예진|최광우|황규상|
 |:-:|:-:|:-:|:-:|:-:|
-|<img src="https://avatars.githubusercontent.com/u/105649543?v=4" width=320 />|<img src="https://avatars.githubusercontent.com/u/28581796?v=4" width=320 />|<img src="https://avatars.githubusercontent.com/u/101628142?v=4" width=320 />|<img src="https://avatars.githubusercontent.com/u/78129823?v=4" width=320 />|<img src="https://avatars.githubusercontent.com/u/51147673?v=4" width=320 />|
+|<img src="https://avatars.githubusercontent.com/u/105649543?v=4" width=400 />|<img src="https://avatars.githubusercontent.com/u/28581796?v=4" width=400 />|<img src="https://avatars.githubusercontent.com/u/101628142?v=4" width=400 />|<img src="https://avatars.githubusercontent.com/u/78129823?v=4" width=400 />|<img src="https://avatars.githubusercontent.com/u/51147673?v=4" width=400 />|
 |[@seokyung402](https://github.com/seokyung402)|[@womyo](https://github.com/womyo)|[@yehjinjang](https://github.com/yehjinjang)|[@madcow95](https://github.com/madcow95)|[@kyuSangHwang](https://github.com/kyuSangHwang)
 
 ## 기술스택
