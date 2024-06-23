@@ -99,8 +99,11 @@
 		C296D6FC2C1F16B000691515 /* Busanify */ = {
 			isa = PBXGroup;
 			children = (
-				C296D6FD2C1F16B000691515 /* AppDelegate.swift */,
-				C296D6FF2C1F16B000691515 /* SceneDelegate.swift */,
+				C296D72F2C1F2B0200691515 /* Application */,
+				C296D72D2C1F2AA100691515 /* Data */,
+				C296D72E2C1F2AB400691515 /* Network */,
+				C296D7342C1F2B8B00691515 /* Domain */,
+				C296D7302C1F2B4700691515 /* Presentation */,
 				C296D7012C1F16B000691515 /* ViewController.swift */,
 				C296D7032C1F16B000691515 /* Main.storyboard */,
 				C296D7062C1F16B200691515 /* Assets.xcassets */,
@@ -125,6 +128,75 @@
 				C296D7202C1F16B200691515 /* BusanifyUITestsLaunchTests.swift */,
 			);
 			path = BusanifyUITests;
+			sourceTree = "<group>";
+		};
+		C296D72D2C1F2AA100691515 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		C296D72E2C1F2AB400691515 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		C296D72F2C1F2B0200691515 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				C296D6FD2C1F16B000691515 /* AppDelegate.swift */,
+				C296D6FF2C1F16B000691515 /* SceneDelegate.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		C296D7302C1F2B4700691515 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				C296D7332C1F2B5D00691515 /* ViewModels */,
+				C296D7312C1F2B5000691515 /* Views */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		C296D7312C1F2B5000691515 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		C296D7332C1F2B5D00691515 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		C296D7342C1F2B8B00691515 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				C296D7362C1F2BA100691515 /* Usecases */,
+				C296D7352C1F2B9200691515 /* Entities */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		C296D7352C1F2B9200691515 /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Entities;
+			sourceTree = "<group>";
+		};
+		C296D7362C1F2BA100691515 /* Usecases */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Usecases;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
