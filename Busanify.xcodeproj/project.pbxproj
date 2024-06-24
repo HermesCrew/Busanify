@@ -16,6 +16,13 @@
 		C296D7152C1F16B200691515 /* BusanifyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D7142C1F16B200691515 /* BusanifyTests.swift */; };
 		C296D71F2C1F16B200691515 /* BusanifyUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D71E2C1F16B200691515 /* BusanifyUITests.swift */; };
 		C296D7212C1F16B200691515 /* BusanifyUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D7202C1F16B200691515 /* BusanifyUITestsLaunchTests.swift */; };
+		C2D279C72C29456200AEAFD1 /* PlacesApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279C62C29456200AEAFD1 /* PlacesApi.swift */; };
+		C2D279C92C29456E00AEAFD1 /* HomeViewUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279C82C29456E00AEAFD1 /* HomeViewUseCase.swift */; };
+		C2D279CB2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279CA2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift */; };
+		C2D279CD2C29458800AEAFD1 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279CC2C29458800AEAFD1 /* Place.swift */; };
+		C2D279CF2C29459000AEAFD1 /* PlaceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279CE2C29459000AEAFD1 /* PlaceType.swift */; };
+		C2D279D32C2945A300AEAFD1 /* TempViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279D22C2945A300AEAFD1 /* TempViewModel.swift */; };
+		C2D279D52C2945B000AEAFD1 /* TempViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279D42C2945B000AEAFD1 /* TempViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +56,14 @@
 		C296D71A2C1F16B200691515 /* BusanifyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BusanifyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C296D71E2C1F16B200691515 /* BusanifyUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusanifyUITests.swift; sourceTree = "<group>"; };
 		C296D7202C1F16B200691515 /* BusanifyUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusanifyUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		C2D279C62C29456200AEAFD1 /* PlacesApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesApi.swift; sourceTree = "<group>"; };
+		C2D279C82C29456E00AEAFD1 /* HomeViewUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewUseCase.swift; sourceTree = "<group>"; };
+		C2D279CA2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailViewUseCase.swift; sourceTree = "<group>"; };
+		C2D279CC2C29458800AEAFD1 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
+		C2D279CE2C29459000AEAFD1 /* PlaceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceType.swift; sourceTree = "<group>"; };
+		C2D279D22C2945A300AEAFD1 /* TempViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempViewModel.swift; sourceTree = "<group>"; };
+		C2D279D42C2945B000AEAFD1 /* TempViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempViewController.swift; sourceTree = "<group>"; };
+		C2D279D72C2947C700AEAFD1 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +94,7 @@
 		C296D6F12C1F16B000691515 = {
 			isa = PBXGroup;
 			children = (
+				C2D279D72C2947C700AEAFD1 /* Config.xcconfig */,
 				C296D6FC2C1F16B000691515 /* Busanify */,
 				C296D7132C1F16B200691515 /* BusanifyTests */,
 				C296D71D2C1F16B200691515 /* BusanifyUITests */,
@@ -140,6 +156,7 @@
 		C296D72E2C1F2AB400691515 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				C2D279C62C29456200AEAFD1 /* PlacesApi.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -165,6 +182,7 @@
 		C296D7312C1F2B5000691515 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C2D279D12C29459A00AEAFD1 /* Temp */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -172,6 +190,7 @@
 		C296D7332C1F2B5D00691515 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				C2D279D02C29459500AEAFD1 /* Temp */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -188,6 +207,8 @@
 		C296D7352C1F2B9200691515 /* Entities */ = {
 			isa = PBXGroup;
 			children = (
+				C2D279CC2C29458800AEAFD1 /* Place.swift */,
+				C2D279CE2C29459000AEAFD1 /* PlaceType.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -195,8 +216,26 @@
 		C296D7362C1F2BA100691515 /* Usecases */ = {
 			isa = PBXGroup;
 			children = (
+				C2D279C82C29456E00AEAFD1 /* HomeViewUseCase.swift */,
+				C2D279CA2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift */,
 			);
 			path = Usecases;
+			sourceTree = "<group>";
+		};
+		C2D279D02C29459500AEAFD1 /* Temp */ = {
+			isa = PBXGroup;
+			children = (
+				C2D279D22C2945A300AEAFD1 /* TempViewModel.swift */,
+			);
+			path = Temp;
+			sourceTree = "<group>";
+		};
+		C2D279D12C29459A00AEAFD1 /* Temp */ = {
+			isa = PBXGroup;
+			children = (
+				C2D279D42C2945B000AEAFD1 /* TempViewController.swift */,
+			);
+			path = Temp;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -330,8 +369,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C2D279C92C29456E00AEAFD1 /* HomeViewUseCase.swift in Sources */,
+				C2D279CF2C29459000AEAFD1 /* PlaceType.swift in Sources */,
+				C2D279C72C29456200AEAFD1 /* PlacesApi.swift in Sources */,
 				C296D7022C1F16B000691515 /* ViewController.swift in Sources */,
+				C2D279D32C2945A300AEAFD1 /* TempViewModel.swift in Sources */,
+				C2D279CB2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift in Sources */,
+				C2D279D52C2945B000AEAFD1 /* TempViewController.swift in Sources */,
 				C296D6FE2C1F16B000691515 /* AppDelegate.swift in Sources */,
+				C2D279CD2C29458800AEAFD1 /* Place.swift in Sources */,
 				C296D7002C1F16B000691515 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -390,6 +436,7 @@
 /* Begin XCBuildConfiguration section */
 		C296D7222C1F16B200691515 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C2D279D72C2947C700AEAFD1 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -453,6 +500,7 @@
 		};
 		C296D7232C1F16B200691515 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C2D279D72C2947C700AEAFD1 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
