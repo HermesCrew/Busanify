@@ -11,7 +11,7 @@
 3. 
     - terminal에서 프로젝트 디렉토리 경로로 이동
     - ```$ cd 디렉토리 경로(이동할 디렉토리 터미널로 드래그 해도 됨)```
-    - pod install 실행
+    - pod install 실행(정상적으로 돌아가면 시간이 좀 오래걸림!)
     - 새로 생성된 *.xcworkspace 파일 실행
     - AppDelegate 파일에서
     ```Swift
