@@ -6,126 +6,112 @@
 //
 
 import UIKit
-import CoreLocation
 
-class WeatherViewController: UIViewController, CLLocationManagerDelegate {
-
-    let locationManager = CLLocationManager()
-    var weatherData: WeatherData?
-
-    let temperatureLabel = UILabel()
-    let descriptionLabel = UILabel()
+class WeatherViewController: UIViewController, WeatherFetcherDelegate {
+    
     let locationLabel = UILabel()
-    let weatherIconImageView = UIImageView()
-    let updateLocationButton = UIButton(type: .system)
+    let temperatureLabel = UILabel()
+    let minTempLabel = UILabel()
+    let maxTempLabel = UILabel()
+    let descriptionLabel = UILabel()
+    let weatherIcon = UIImageView()
+    let weatherFetcher = WeatherFetcher()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-
-        // Set up labels and image view
-        temperatureLabel.font = UIFont.systemFont(ofSize: 32)
-        temperatureLabel.textAlignment = .center
-        temperatureLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        descriptionLabel.font = UIFont.systemFont(ofSize: 20)
-        descriptionLabel.textAlignment = .center
-        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        locationLabel.font = UIFont.systemFont(ofSize: 20)
-        locationLabel.textAlignment = .center
-        locationLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        weatherIconImageView.contentMode = .scaleAspectFit
-        weatherIconImageView.translatesAutoresizingMaskIntoConstraints = false
-
-        updateLocationButton.setTitle("Update Location", for: .normal)
-        updateLocationButton.addTarget(self, action: #selector(updateLocation), for: .touchUpInside)
-        updateLocationButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(temperatureLabel)
-        view.addSubview(descriptionLabel)
-        view.addSubview(locationLabel)
-        view.addSubview(weatherIconImageView)
-        view.addSubview(updateLocationButton)
-        
-        NSLayoutConstraint.activate([
-            temperatureLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            temperatureLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            
-            descriptionLabel.topAnchor.constraint(equalTo: temperatureLabel.bottomAnchor, constant: 20),
-            descriptionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-
-            locationLabel.bottomAnchor.constraint(equalTo: temperatureLabel.topAnchor, constant: -20),
-            locationLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
-            weatherIconImageView.bottomAnchor.constraint(equalTo: locationLabel.topAnchor, constant: -20),
-            weatherIconImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            weatherIconImageView.widthAnchor.constraint(equalToConstant: 50),
-            weatherIconImageView.heightAnchor.constraint(equalToConstant: 50),
-            
-            updateLocationButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 20),
-            updateLocationButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ])
-        
-        // Set up location manager
-        locationManager.delegate = self
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
+        weatherFetcher.delegate = self
+        setupUI()
+        weatherFetcher.startFetchingWeather()
     }
     
-    @objc func updateLocation() {
-        locationManager.startUpdatingLocation()
+    func setupUI() {
+        locationLabel.translatesAutoresizingMaskIntoConstraints = false
+        locationLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        locationLabel.textAlignment = .center
+        view.addSubview(locationLabel)
+        
+        temperatureLabel.translatesAutoresizingMaskIntoConstraints = false
+        temperatureLabel.font = UIFont.systemFont(ofSize: 48, weight: .bold)
+        temperatureLabel.textAlignment = .center
+        view.addSubview(temperatureLabel)
+        
+        minTempLabel.translatesAutoresizingMaskIntoConstraints = false
+        minTempLabel.font = UIFont.systemFont(ofSize: 20)
+        minTempLabel.textAlignment = .center
+        view.addSubview(minTempLabel)
+        
+        maxTempLabel.translatesAutoresizingMaskIntoConstraints = false
+        maxTempLabel.font = UIFont.systemFont(ofSize: 20)
+        maxTempLabel.textAlignment = .center
+        view.addSubview(maxTempLabel)
+        
+        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        descriptionLabel.font = UIFont.systemFont(ofSize: 20)
+        descriptionLabel.textAlignment = .center
+        view.addSubview(descriptionLabel)
+        
+        weatherIcon.translatesAutoresizingMaskIntoConstraints = false
+        weatherIcon.contentMode = .scaleAspectFit
+        view.addSubview(weatherIcon)
+        
+        NSLayoutConstraint.activate([
+            locationLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            locationLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            locationLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            temperatureLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 20),
+            temperatureLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            temperatureLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            maxTempLabel.topAnchor.constraint(equalTo: temperatureLabel.bottomAnchor, constant: 20),
+            maxTempLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            maxTempLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            minTempLabel.topAnchor.constraint(equalTo: maxTempLabel.bottomAnchor, constant: 10),
+            minTempLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            minTempLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            descriptionLabel.topAnchor.constraint(equalTo: minTempLabel.bottomAnchor, constant: 20),
+            descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            weatherIcon.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 20),
+            weatherIcon.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            weatherIcon.widthAnchor.constraint(equalToConstant: 100),
+            weatherIcon.heightAnchor.constraint(equalToConstant: 100)
+        ])
     }
-
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.last {
-            fetchWeatherData(lat: location.coordinate.latitude, lon: location.coordinate.longitude)
-            locationManager.stopUpdatingLocation() // Stop updates to prevent repeated calls
-        }
-    }
-
-    func fetchWeatherData(lat: Double, lon: Double) {
-        let apiKey = "API_KEY"
-        let urlString = "https://api.openweathermap.org/data/2.5/weather?lat=\(lat)&lon=\(lon)&appid=\(apiKey)&units=metric"
-        guard let url = URL(string: urlString) else {
+    
+    func didUpdateWeather(_ weatherData: WeatherData) {
+        locationLabel.text = weatherData.name
+        temperatureLabel.text = "\(weatherData.main.temp)°C"
+        minTempLabel.text = "Min: \(weatherData.main.temp_min)°C"
+        maxTempLabel.text = "Max: \(weatherData.main.temp_max)°C"
+        descriptionLabel.text = weatherData.weather.first?.description ?? ""
+        
+        let iconUrlString = "https://openweathermap.org/img/wn/\(weatherData.weather.first?.icon ?? "")@2x.png"
+        guard let iconUrl = URL(string: iconUrlString) else {
+            print("Invalid icon URL")
             return
         }
         
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            if error != nil {
+        let task = URLSession.shared.dataTask(with: iconUrl) { data, response, error in
+            if let error = error {
+                print("Error loading icon image: \(error)")
                 return
             }
             
-            guard let data = data else {
+            guard let data = data, let iconImage = UIImage(data: data) else {
+                print("No icon data returned or data is not an image")
                 return
             }
             
-            do {
-                let decodedData = try JSONDecoder().decode(WeatherData.self, from: data)
-                DispatchQueue.main.async {
-                    self.updateUI(with: decodedData)
-                }
-            } catch {
+            DispatchQueue.main.async {
+                self.weatherIcon.image = iconImage
             }
         }
+        
         task.resume()
-    }
-    
-    func updateUI(with weatherData: WeatherData) {
-        temperatureLabel.text = "\(weatherData.main.temp)°C"
-        descriptionLabel.text = weatherData.weather.first?.description.capitalized
-        locationLabel.text = weatherData.name
-
-        if let icon = weatherData.weather.first?.icon {
-            let iconURL = URL(string: "https://openweathermap.org/img/wn/\(icon)@2x.png")!
-            DispatchQueue.global().async {
-                if let data = try? Data(contentsOf: iconURL) {
-                    DispatchQueue.main.async {
-                        self.weatherIconImageView.image = UIImage(data: data)
-                    }
-                }
-            }
-        }
     }
 }

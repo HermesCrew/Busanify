@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		B8B3AB3A2C2AA94600E4AB7A /* WeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B3AB392C2AA94600E4AB7A /* WeatherData.swift */; };
 		B8B3AB3C2C2AA99500E4AB7A /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B3AB3B2C2AA99500E4AB7A /* WeatherViewController.swift */; };
+		B8B3AB3E2C2B9C0200E4AB7A /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B8B3AB3D2C2B9C0200E4AB7A /* Config.xcconfig */; };
+		B8B3AB3F2C2B9C0200E4AB7A /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B8B3AB3D2C2B9C0200E4AB7A /* Config.xcconfig */; };
+		B8B3AB402C2B9C0200E4AB7A /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B8B3AB3D2C2B9C0200E4AB7A /* Config.xcconfig */; };
+		B8B3AB442C2BE10B00E4AB7A /* WeatherDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B3AB432C2BE10B00E4AB7A /* WeatherDetailsViewController.swift */; };
+		B8B3AB462C2BFB1200E4AB7A /* WeatherFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B3AB452C2BFB1200E4AB7A /* WeatherFetcher.swift */; };
 		C296D6FE2C1F16B000691515 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D6FD2C1F16B000691515 /* AppDelegate.swift */; };
 		C296D7002C1F16B000691515 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D6FF2C1F16B000691515 /* SceneDelegate.swift */; };
 		C296D7022C1F16B000691515 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D7012C1F16B000691515 /* ViewController.swift */; };
@@ -47,6 +52,9 @@
 /* Begin PBXFileReference section */
 		B8B3AB392C2AA94600E4AB7A /* WeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherData.swift; sourceTree = "<group>"; };
 		B8B3AB3B2C2AA99500E4AB7A /* WeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewController.swift; sourceTree = "<group>"; };
+		B8B3AB3D2C2B9C0200E4AB7A /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		B8B3AB432C2BE10B00E4AB7A /* WeatherDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailsViewController.swift; sourceTree = "<group>"; };
+		B8B3AB452C2BFB1200E4AB7A /* WeatherFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherFetcher.swift; sourceTree = "<group>"; };
 		C296D6FA2C1F16B000691515 /* Busanify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Busanify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C296D6FD2C1F16B000691515 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C296D6FF2C1F16B000691515 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -67,7 +75,6 @@
 		C2D279CE2C29459000AEAFD1 /* PlaceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceType.swift; sourceTree = "<group>"; };
 		C2D279D22C2945A300AEAFD1 /* TempViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempViewModel.swift; sourceTree = "<group>"; };
 		C2D279D42C2945B000AEAFD1 /* TempViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempViewController.swift; sourceTree = "<group>"; };
-		C2D279D72C2947C700AEAFD1 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,7 +105,7 @@
 		C296D6F12C1F16B000691515 = {
 			isa = PBXGroup;
 			children = (
-				C2D279D72C2947C700AEAFD1 /* Config.xcconfig */,
+				B8B3AB3D2C2B9C0200E4AB7A /* Config.xcconfig */,
 				C296D6FC2C1F16B000691515 /* Busanify */,
 				C296D7132C1F16B200691515 /* BusanifyTests */,
 				C296D71D2C1F16B200691515 /* BusanifyUITests */,
@@ -161,6 +168,7 @@
 			isa = PBXGroup;
 			children = (
 				C2D279C62C29456200AEAFD1 /* PlacesApi.swift */,
+				B8B3AB452C2BFB1200E4AB7A /* WeatherFetcher.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -238,8 +246,9 @@
 		C2D279D12C29459A00AEAFD1 /* Temp */ = {
 			isa = PBXGroup;
 			children = (
-				C2D279D42C2945B000AEAFD1 /* TempViewController.swift */,
 				B8B3AB3B2C2AA99500E4AB7A /* WeatherViewController.swift */,
+				B8B3AB432C2BE10B00E4AB7A /* WeatherDetailsViewController.swift */,
+				C2D279D42C2945B000AEAFD1 /* TempViewController.swift */,
 			);
 			path = Temp;
 			sourceTree = "<group>";
@@ -348,6 +357,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B8B3AB3E2C2B9C0200E4AB7A /* Config.xcconfig in Resources */,
 				C296D7072C1F16B200691515 /* Assets.xcassets in Resources */,
 				C296D70A2C1F16B200691515 /* Base in Resources */,
 				C296D7052C1F16B000691515 /* Base in Resources */,
@@ -358,6 +368,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B8B3AB3F2C2B9C0200E4AB7A /* Config.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -365,6 +376,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B8B3AB402C2B9C0200E4AB7A /* Config.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,6 +387,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B8B3AB462C2BFB1200E4AB7A /* WeatherFetcher.swift in Sources */,
+				B8B3AB442C2BE10B00E4AB7A /* WeatherDetailsViewController.swift in Sources */,
 				C2D279C92C29456E00AEAFD1 /* HomeViewUseCase.swift in Sources */,
 				B8B3AB3C2C2AA99500E4AB7A /* WeatherViewController.swift in Sources */,
 				C2D279CF2C29459000AEAFD1 /* PlaceType.swift in Sources */,
@@ -444,7 +458,7 @@
 /* Begin XCBuildConfiguration section */
 		C296D7222C1F16B200691515 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C2D279D72C2947C700AEAFD1 /* Config.xcconfig */;
+			baseConfigurationReference = B8B3AB3D2C2B9C0200E4AB7A /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -508,7 +522,7 @@
 		};
 		C296D7232C1F16B200691515 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C2D279D72C2947C700AEAFD1 /* Config.xcconfig */;
+			baseConfigurationReference = B8B3AB3D2C2B9C0200E4AB7A /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -570,6 +584,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = KM8D8UY7M5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Busanify/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -597,6 +612,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = KM8D8UY7M5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Busanify/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
