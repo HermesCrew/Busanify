@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C23152782C2CF49C00FD1213 /* SignInApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23152772C2CF49C00FD1213 /* SignInApi.swift */; };
+		C231527A2C2D259400FD1213 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23152792C2D259400FD1213 /* AuthenticationViewModel.swift */; };
+		C231527E2C2D300C00FD1213 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C231527D2C2D300C00FD1213 /* UserProfileViewController.swift */; };
 		C243BA762C2B227C00EE8F8C /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = C243BA752C2B227C00EE8F8C /* GoogleSignIn */; };
 		C243BA792C2B271900EE8F8C /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C243BA782C2B271900EE8F8C /* SignInViewController.swift */; };
 		C296D6FE2C1F16B000691515 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D6FD2C1F16B000691515 /* AppDelegate.swift */; };
@@ -25,6 +28,8 @@
 		C2D279CF2C29459000AEAFD1 /* PlaceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279CE2C29459000AEAFD1 /* PlaceType.swift */; };
 		C2D279D32C2945A300AEAFD1 /* TempViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279D22C2945A300AEAFD1 /* TempViewModel.swift */; };
 		C2D279D52C2945B000AEAFD1 /* TempViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279D42C2945B000AEAFD1 /* TempViewController.swift */; };
+		C2F4333A2C2D9F8900B8EB1E /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F433392C2D9F8900B8EB1E /* MainViewController.swift */; };
+		C2F4333C2C2DB3FE00B8EB1E /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F4333B2C2DB3FE00B8EB1E /* LoadingViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +51,9 @@
 
 /* Begin PBXFileReference section */
 		C203E64F2C2B122E005BAA99 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		C23152772C2CF49C00FD1213 /* SignInApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInApi.swift; sourceTree = "<group>"; };
+		C23152792C2D259400FD1213 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
+		C231527D2C2D300C00FD1213 /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		C243BA782C2B271900EE8F8C /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		C296D6FA2C1F16B000691515 /* Busanify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Busanify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C296D6FD2C1F16B000691515 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -67,6 +75,8 @@
 		C2D279CE2C29459000AEAFD1 /* PlaceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceType.swift; sourceTree = "<group>"; };
 		C2D279D22C2945A300AEAFD1 /* TempViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempViewModel.swift; sourceTree = "<group>"; };
 		C2D279D42C2945B000AEAFD1 /* TempViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempViewController.swift; sourceTree = "<group>"; };
+		C2F433392C2D9F8900B8EB1E /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		C2F4333B2C2DB3FE00B8EB1E /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,12 +105,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		C243BA772C2B26E600EE8F8C /* SignIn */ = {
+		C243BA772C2B26E600EE8F8C /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
 				C243BA782C2B271900EE8F8C /* SignInViewController.swift */,
+				C231527D2C2D300C00FD1213 /* UserProfileViewController.swift */,
+				C2F433392C2D9F8900B8EB1E /* MainViewController.swift */,
+				C2F4333B2C2DB3FE00B8EB1E /* LoadingViewController.swift */,
 			);
-			path = SignIn;
+			path = Authentication;
 			sourceTree = "<group>";
 		};
 		C296D6F12C1F16B000691515 = {
@@ -169,6 +182,7 @@
 			isa = PBXGroup;
 			children = (
 				C2D279C62C29456200AEAFD1 /* PlacesApi.swift */,
+				C23152772C2CF49C00FD1213 /* SignInApi.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -194,7 +208,7 @@
 		C296D7312C1F2B5000691515 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				C243BA772C2B26E600EE8F8C /* SignIn */,
+				C243BA772C2B26E600EE8F8C /* Authentication */,
 				C2D279D12C29459A00AEAFD1 /* Temp */,
 			);
 			path = Views;
@@ -203,6 +217,7 @@
 		C296D7332C1F2B5D00691515 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				C2F4333D2C2DC0C400B8EB1E /* Authentication */,
 				C2D279D02C29459500AEAFD1 /* Temp */,
 			);
 			path = ViewModels;
@@ -249,6 +264,14 @@
 				C2D279D42C2945B000AEAFD1 /* TempViewController.swift */,
 			);
 			path = Temp;
+			sourceTree = "<group>";
+		};
+		C2F4333D2C2DC0C400B8EB1E /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				C23152792C2D259400FD1213 /* AuthenticationViewModel.swift */,
+			);
+			path = Authentication;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -388,14 +411,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C231527A2C2D259400FD1213 /* AuthenticationViewModel.swift in Sources */,
+				C231527E2C2D300C00FD1213 /* UserProfileViewController.swift in Sources */,
 				C243BA792C2B271900EE8F8C /* SignInViewController.swift in Sources */,
+				C2F4333C2C2DB3FE00B8EB1E /* LoadingViewController.swift in Sources */,
 				C2D279C92C29456E00AEAFD1 /* HomeViewUseCase.swift in Sources */,
 				C2D279CF2C29459000AEAFD1 /* PlaceType.swift in Sources */,
 				C2D279C72C29456200AEAFD1 /* PlacesApi.swift in Sources */,
 				C296D7022C1F16B000691515 /* ViewController.swift in Sources */,
 				C2D279D32C2945A300AEAFD1 /* TempViewModel.swift in Sources */,
 				C2D279CB2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift in Sources */,
+				C2F4333A2C2D9F8900B8EB1E /* MainViewController.swift in Sources */,
 				C2D279D52C2945B000AEAFD1 /* TempViewController.swift in Sources */,
+				C23152782C2CF49C00FD1213 /* SignInApi.swift in Sources */,
 				C296D6FE2C1F16B000691515 /* AppDelegate.swift in Sources */,
 				C2D279CD2C29458800AEAFD1 /* Place.swift in Sources */,
 				C296D7002C1F16B000691515 /* SceneDelegate.swift in Sources */,
