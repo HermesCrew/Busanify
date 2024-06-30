@@ -668,6 +668,7 @@
 		};
 		C296D7252C1F16B200691515 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8C0A080C2DD911068678876 /* Pods-Busanify.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -675,6 +676,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Busanify/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "필요하다 너의 위치 정보";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "필요하다 너의 위치 정보";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -695,6 +698,7 @@
 		};
 		C296D7262C1F16B200691515 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6AFFFE0B6C958425CF4F8A5F /* Pods-Busanify.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -702,6 +706,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Busanify/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "필요하다 너의 위치 정보";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "필요하다 너의 위치 정보";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

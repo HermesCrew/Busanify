@@ -25,7 +25,9 @@ class HomeViewController: UIViewController, MapControllerDelegate {
     let weatherIcon: UIImageView = {
         let icon = UIImageView()
         icon.translatesAutoresizingMaskIntoConstraints = false
-        icon.image = UIImage(systemName: "sun.max.fill")
+        let symbol = UIImage(systemName: "sun.max.fill")!
+        icon.image = symbol
+        
         icon.tintColor = .orange
         
         return icon
@@ -34,12 +36,14 @@ class HomeViewController: UIViewController, MapControllerDelegate {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "20°C"
+        label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 13)
         
         return label
     }()
-    let searchTextField: UITextField = {
+    lazy var searchTextField: UITextField = {
         let tf = UITextField()
+        tf.delegate = self
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.placeholder = "검색하기"
         tf.borderStyle = .roundedRect
@@ -48,6 +52,9 @@ class HomeViewController: UIViewController, MapControllerDelegate {
         tf.layer.borderWidth = 1
         tf.layer.borderColor = UIColor.lightGray.cgColor
         tf.returnKeyType = .search
+        tf.autocapitalizationType = .none
+        tf.autocorrectionType = .no
+        tf.textColor = .black
         tf.setLeftPaddingPoints(30)
         
         return tf
@@ -74,9 +81,13 @@ class HomeViewController: UIViewController, MapControllerDelegate {
         return content
     }()
     
-    var weatherContainerWidthConstraint: NSLayoutConstraint!
-    var searchTextFieldLeadingConstraint: NSLayoutConstraint!
-    var searchTextFieldLeadingConstraintExpanded: NSLayoutConstraint!
+    private var cancellable = Set<AnyCancellable>()
+    private var weatherContainerWidthConstraint: NSLayoutConstraint!
+    private var searchTextFieldLeadingConstraint: NSLayoutConstraint!
+    private var searchTextFieldLeadingConstraintExpanded: NSLayoutConstraint!
+    private let latRange = 34.8799083...35.3959361
+    private let longRange = 128.7384361...129.3728194
+    private let viewModel = HomeViewModel()
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         _observerAdded = false
@@ -100,8 +111,8 @@ class HomeViewController: UIViewController, MapControllerDelegate {
     }
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
+        
         self.view.backgroundColor = .systemBackground
         mapContainer = self.view as? KMViewContainer
         
@@ -120,38 +131,34 @@ class HomeViewController: UIViewController, MapControllerDelegate {
     
     func setWeatherArea() {
         view.addSubview(weatherContainer)
+        view.addSubview(searchTextField)
         weatherContainer.addSubview(weatherIcon)
         weatherContainer.addSubview(temperatureLabel)
-        view.addSubview(searchTextField)
-        view.addSubview(searchIcon)
         
         weatherContainerWidthConstraint = weatherContainer.widthAnchor.constraint(equalToConstant: view.frame.width / 6.5)
         NSLayoutConstraint.activate([
-            weatherContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             weatherContainer.centerYAnchor.constraint(equalTo: searchTextField.centerYAnchor),
+            weatherContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
             weatherContainer.heightAnchor.constraint(equalToConstant: 40),
-            weatherContainerWidthConstraint
-        ])
-        
-        NSLayoutConstraint.activate([
+            weatherContainerWidthConstraint,
+            
             weatherIcon.centerXAnchor.constraint(equalTo: weatherContainer.centerXAnchor),
             weatherIcon.centerYAnchor.constraint(equalTo: weatherContainer.centerYAnchor),
             weatherIcon.heightAnchor.constraint(equalToConstant: 24),
-            weatherIcon.widthAnchor.constraint(equalToConstant: 24)
-        ])
-        
-        NSLayoutConstraint.activate([
-            temperatureLabel.leadingAnchor.constraint(equalTo: weatherIcon.trailingAnchor, constant: -15), // Adjusted constraint to overlap
+            weatherIcon.widthAnchor.constraint(equalToConstant: 24),
+            
+            temperatureLabel.leadingAnchor.constraint(equalTo: weatherIcon.trailingAnchor, constant: -15),
             temperatureLabel.centerYAnchor.constraint(equalTo: weatherContainer.centerYAnchor, constant: 8)
         ])
         
-        searchTextField.delegate = self
+        view.addSubview(searchIcon)
+        
         searchTextFieldLeadingConstraint = searchTextField.leadingAnchor.constraint(equalTo: weatherContainer.trailingAnchor, constant: 10)
         searchTextFieldLeadingConstraintExpanded = searchTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20)
         NSLayoutConstraint.activate([
+            searchTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             searchTextFieldLeadingConstraint,
             searchTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            searchTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             searchTextField.heightAnchor.constraint(equalToConstant: 40)
         ])
         
@@ -259,7 +266,16 @@ class HomeViewController: UIViewController, MapControllerDelegate {
     }
     
     func addViews() {
-        let defaultPosition: MapPoint = MapPoint(longitude: 126.978365, latitude: 37.566691)
+        // 임시로 부산이 아닐 때 부산시청의 위,경도 설정
+        var long = 129.0756
+        var lat = 35.1796
+        if let currentLong = viewModel.currentLong, let currentLat = viewModel.currentLat {
+            if longRange.contains(currentLong) && latRange.contains(currentLat) {
+                long = currentLong
+                lat = currentLat
+            }
+        }
+        let defaultPosition: MapPoint = MapPoint(longitude: long, latitude: lat)
         let mapviewInfo: MapviewInfo = MapviewInfo(viewName: "mapview", viewInfoName: "map", defaultPosition: defaultPosition)
         
         mapController?.addView(mapviewInfo)
@@ -369,9 +385,9 @@ extension HomeViewController: UITextFieldDelegate {
 }
 
 extension UITextField {
-    func setLeftPaddingPoints(_ amount:CGFloat){
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: self.frame.height))
-        self.leftView = paddingView
+    func setLeftPaddingPoints(_ amount: CGFloat){
+        let emptyView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: self.frame.height))
+        self.leftView = emptyView
         self.leftViewMode = .always
     }
 }

@@ -8,7 +8,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Item 2-->
+        <!--Bookmark-->
         <scene sceneID="hKl-j6-4Mf">
             <objects>
                 <viewController id="8JV-6q-7Wx" sceneMemberID="viewController">
@@ -18,13 +18,13 @@
                         <viewLayoutGuide key="safeArea" id="5pR-By-ioD"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item 2" id="Zke-N1-IhA"/>
+                    <tabBarItem key="tabBarItem" title="Bookmark" image="bookmark" catalog="system" id="Zke-N1-IhA"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="l23-fd-RwO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-238" y="83"/>
         </scene>
-        <!--Item-->
+        <!--Setting-->
         <scene sceneID="twN-V2-noP">
             <objects>
                 <viewController id="k0h-1F-TGy" sceneMemberID="viewController">
@@ -34,13 +34,13 @@
                         <viewLayoutGuide key="safeArea" id="Nkd-13-yK9"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="W4I-Ud-1aW"/>
+                    <tabBarItem key="tabBarItem" title="Setting" image="gearshape" catalog="system" id="W4I-Ud-1aW"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7u6-Oo-5u8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="549" y="82"/>
         </scene>
-        <!--Item 1-->
+        <!--Home-->
         <scene sceneID="YVk-3H-60W">
             <objects>
                 <viewController storyboardIdentifier="HomeViewController" id="EnA-cr-ZUm" customClass="HomeViewController" customModule="Busanify" customModuleProvider="target" sceneMemberID="viewController">
@@ -50,13 +50,13 @@
                         <viewLayoutGuide key="safeArea" id="U4O-Zc-jdm"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item 1" id="BGG-Aq-pcq"/>
+                    <tabBarItem key="tabBarItem" title="Home" image="house" catalog="system" id="BGG-Aq-pcq"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SRo-74-XCl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-238" y="-524"/>
         </scene>
-        <!--Item-->
+        <!--Community-->
         <scene sceneID="o8X-jL-hUw">
             <objects>
                 <viewController id="N8l-EH-tjq" sceneMemberID="viewController">
@@ -66,7 +66,7 @@
                         <viewLayoutGuide key="safeArea" id="8Im-sm-Pd9"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="7ho-1m-pYx"/>
+                    <tabBarItem key="tabBarItem" title="Community" image="shareplay" catalog="system" id="7ho-1m-pYx"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PkE-NO-YD5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -94,6 +94,10 @@
         </scene>
     </scenes>
     <resources>
+        <image name="bookmark" catalog="system" width="110" height="128"/>
+        <image name="gearshape" catalog="system" width="128" height="123"/>
+        <image name="house" catalog="system" width="128" height="104"/>
+        <image name="shareplay" catalog="system" width="128" height="75"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
