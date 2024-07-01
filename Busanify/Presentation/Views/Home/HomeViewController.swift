@@ -276,25 +276,40 @@ class HomeViewController: UIViewController, MapControllerDelegate {
             }
         }
         let defaultPosition: MapPoint = MapPoint(longitude: long, latitude: lat)
-        let mapviewInfo: MapviewInfo = MapviewInfo(viewName: "mapview", viewInfoName: "map", defaultPosition: defaultPosition)
+        let mapviewInfo: MapviewInfo = MapviewInfo(viewName: "mapview",
+                                                   viewInfoName: "map",
+                                                   defaultPosition: defaultPosition,
+                                                   defaultLevel: 14)
         
         mapController?.addView(mapviewInfo)
-    }
-    
-    func viewInit(viewName: String) {
-        print("OK")
     }
     
     //addView 성공 이벤트 delegate. 추가적으로 수행할 작업을 진행한다.
     func addViewSucceeded(_ viewName: String, viewInfoName: String) {
         let view = mapController?.getView("mapview") as! KakaoMap
+        
+        // 지도에 나침반 표시
+        view.setCompassPosition(origin: GuiAlignment(vAlign: .bottom, hAlign: .left), position: CGPoint(x: 10.0, y: 100.0))
+        view.showCompass()
+        view.setLanguage("en")
         view.viewRect = mapContainer!.bounds    //뷰 add 도중에 resize 이벤트가 발생한 경우 이벤트를 받지 못했을 수 있음. 원하는 뷰 사이즈로 재조정.
-        viewInit(viewName: viewName)
-    }
-    
-    //addView 실패 이벤트 delegate. 실패에 대한 오류 처리를 진행한다.
-    func addViewFailed(_ viewName: String, viewInfoName: String) {
-        print("Failed")
+        
+        // 현재 위치 핀 표시
+        let manager = view.getLabelManager()
+        let layerOption = LabelLayerOptions(layerID: "PoiLayer", competitionType: .none, competitionUnit: .poi, orderType: .rank, zOrder: 1)
+        let _ = manager.addLabelLayer(option: layerOption)
+        
+        let layer = manager.getLabelLayer(layerID: "PoiLayer")
+        let poiOption = PoiOptions(styleID: "PerLevelStyle")
+        poiOption.rank = 0
+        
+        let poi1 = layer?.addPoi(option:poiOption, at: MapPoint(longitude: 129.0595, latitude: 35.1577))
+        
+        // MARK: TODO - UIImage 핀같은 이미지로 교체
+        let badge = PoiBadge(badgeID: "noti", image: UIImage(systemName: "sun.max")!, offset: CGPoint(x: 0, y: 0), zOrder: 1)
+        poi1?.addBadge(badge)
+        poi1?.show()
+        poi1?.showBadge(badgeID: "noti")
     }
     
     //Container 뷰가 리사이즈 되었을때 호출된다. 변경된 크기에 맞게 ViewBase들의 크기를 조절할 필요가 있는 경우 여기에서 수행한다.
@@ -385,7 +400,7 @@ extension HomeViewController: UITextFieldDelegate {
 }
 
 extension UITextField {
-    func setLeftPaddingPoints(_ amount: CGFloat){
+    func setLeftPaddingPoints(_ amount: CGFloat) {
         let emptyView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: self.frame.height))
         self.leftView = emptyView
         self.leftViewMode = .always
