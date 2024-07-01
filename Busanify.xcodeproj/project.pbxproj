@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		753520A42C326B0E00E439CF /* PlaceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753520A32C326B0E00E439CF /* PlaceListViewModel.swift */; };
+		753520AA2C3286D400E439CF /* PlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753520A92C3286D400E439CF /* PlaceListViewController.swift */; };
 		C296D6FE2C1F16B000691515 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D6FD2C1F16B000691515 /* AppDelegate.swift */; };
 		C296D7002C1F16B000691515 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D6FF2C1F16B000691515 /* SceneDelegate.swift */; };
 		C296D7022C1F16B000691515 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D7012C1F16B000691515 /* ViewController.swift */; };
@@ -43,10 +45,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		753520A22C2BB2F200E439CF /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		753520A32C326B0E00E439CF /* PlaceListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewModel.swift; sourceTree = "<group>"; };
+		753520A92C3286D400E439CF /* PlaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewController.swift; sourceTree = "<group>"; };
 		C296D6FA2C1F16B000691515 /* Busanify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Busanify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C296D6FD2C1F16B000691515 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C296D6FF2C1F16B000691515 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		C296D7012C1F16B000691515 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		C296D7012C1F16B000691515 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = Presentation/ViewController.swift; sourceTree = "<group>"; };
 		C296D7042C1F16B000691515 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C296D7062C1F16B200691515 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C296D7092C1F16B200691515 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -63,7 +68,6 @@
 		C2D279CE2C29459000AEAFD1 /* PlaceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceType.swift; sourceTree = "<group>"; };
 		C2D279D22C2945A300AEAFD1 /* TempViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempViewModel.swift; sourceTree = "<group>"; };
 		C2D279D42C2945B000AEAFD1 /* TempViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempViewController.swift; sourceTree = "<group>"; };
-		C2D279D72C2947C700AEAFD1 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,7 +98,7 @@
 		C296D6F12C1F16B000691515 = {
 			isa = PBXGroup;
 			children = (
-				C2D279D72C2947C700AEAFD1 /* Config.xcconfig */,
+				753520A22C2BB2F200E439CF /* Config.xcconfig */,
 				C296D6FC2C1F16B000691515 /* Busanify */,
 				C296D7132C1F16B200691515 /* BusanifyTests */,
 				C296D71D2C1F16B200691515 /* BusanifyUITests */,
@@ -183,6 +187,7 @@
 			isa = PBXGroup;
 			children = (
 				C2D279D12C29459A00AEAFD1 /* Temp */,
+				753520A92C3286D400E439CF /* PlaceListViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -190,6 +195,7 @@
 		C296D7332C1F2B5D00691515 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				753520A32C326B0E00E439CF /* PlaceListViewModel.swift */,
 				C2D279D02C29459500AEAFD1 /* Temp */,
 			);
 			path = ViewModels;
@@ -369,9 +375,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				753520AA2C3286D400E439CF /* PlaceListViewController.swift in Sources */,
 				C2D279C92C29456E00AEAFD1 /* HomeViewUseCase.swift in Sources */,
 				C2D279CF2C29459000AEAFD1 /* PlaceType.swift in Sources */,
 				C2D279C72C29456200AEAFD1 /* PlacesApi.swift in Sources */,
+				753520A42C326B0E00E439CF /* PlaceListViewModel.swift in Sources */,
 				C296D7022C1F16B000691515 /* ViewController.swift in Sources */,
 				C2D279D32C2945A300AEAFD1 /* TempViewModel.swift in Sources */,
 				C2D279CB2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift in Sources */,
@@ -436,7 +444,7 @@
 /* Begin XCBuildConfiguration section */
 		C296D7222C1F16B200691515 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C2D279D72C2947C700AEAFD1 /* Config.xcconfig */;
+			baseConfigurationReference = 753520A22C2BB2F200E439CF /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -500,7 +508,7 @@
 		};
 		C296D7232C1F16B200691515 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C2D279D72C2947C700AEAFD1 /* Config.xcconfig */;
+			baseConfigurationReference = 753520A22C2BB2F200E439CF /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;

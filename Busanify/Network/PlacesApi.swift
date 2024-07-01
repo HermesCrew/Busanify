@@ -19,7 +19,8 @@ final class PlacesApi: HomeViewUseCase, PlaceDetailViewUseCase {
     }
     
     func getPlaces(by typeId: PlaceType, lang: String, lat: Double, lng: Double, radius: Double) -> AnyPublisher<[Place], Never> {
-        let urlString = "\(baseURL)/places/searchByType?typeId=\(typeId)&lang=\(lang)&lat=\(lat)&lng=\(lng)&radius=\(radius)"
+        let urlString = "\(baseURL)/places/searchByType?typeId=\(typeId.rawValue)&lang=\(lang)&lat=\(lat)&lng=\(lng)&radius=\(radius)"
+        // 데이터 출력 확인을 위해 typeId.rawValue로 바꿈
         guard let url = URL(string: urlString) else {
             fatalError("Invalid URL")
         }
