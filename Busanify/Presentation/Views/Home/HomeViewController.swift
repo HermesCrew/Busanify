@@ -7,58 +7,12 @@
 
 import UIKit
 import KakaoMapsSDK
+import Combine
 
 class HomeViewController: UIViewController, MapControllerDelegate {
     
-    let weatherContainer: UIView = {
-        let uv = UIView()
-        uv.translatesAutoresizingMaskIntoConstraints = false
-        uv.backgroundColor = .white
-        uv.layer.cornerRadius = 8
-        uv.layer.shadowColor = UIColor.black.cgColor
-        uv.layer.shadowOpacity = 0.1
-        uv.layer.shadowOffset = CGSize(width: 0, height: 1)
-        uv.layer.shadowRadius = 4
-        
-        return uv
-    }()
-    let weatherIcon: UIImageView = {
-        let icon = UIImageView()
-        icon.translatesAutoresizingMaskIntoConstraints = false
-        let symbol = UIImage(systemName: "sun.max.fill")!
-        icon.image = symbol
-        
-        icon.tintColor = .orange
-        
-        return icon
-    }()
-    let temperatureLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "20°C"
-        label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 13)
-        
-        return label
-    }()
-    lazy var searchTextField: UITextField = {
-        let tf = UITextField()
-        tf.delegate = self
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.placeholder = "검색하기"
-        tf.borderStyle = .roundedRect
-        tf.backgroundColor = .white
-        tf.layer.cornerRadius = 8
-        tf.layer.borderWidth = 1
-        tf.layer.borderColor = UIColor.lightGray.cgColor
-        tf.returnKeyType = .search
-        tf.autocapitalizationType = .none
-        tf.autocorrectionType = .no
-        tf.textColor = .black
-        tf.setLeftPaddingPoints(30)
-        
-        return tf
-    }()
+    let weatherContainer = WeatherContainer(temperature: 20, weatherImage: UIImage(systemName: "sun.max"))
+    let searchTextField = SearchTextField()
     let searchIcon: UIImageView = {
         let icon = UIImageView()
         icon.translatesAutoresizingMaskIntoConstraints = false
@@ -70,6 +24,8 @@ class HomeViewController: UIViewController, MapControllerDelegate {
     let categoryScrollView: UIScrollView = {
         let scroll = UIScrollView()
         scroll.translatesAutoresizingMaskIntoConstraints = false
+        scroll.showsHorizontalScrollIndicator = false
+        scroll.showsVerticalScrollIndicator = false
         
         return scroll
     }()
@@ -120,8 +76,13 @@ class HomeViewController: UIViewController, MapControllerDelegate {
         mapController = KMController(viewContainer: mapContainer!)
         mapController!.delegate = self
         
+        setSubscriber()
         configureUI()
         setupTapGesture()
+    }
+    
+    func setSubscriber() {
+        
     }
     
     func configureUI() {
@@ -130,25 +91,16 @@ class HomeViewController: UIViewController, MapControllerDelegate {
     }
     
     func setWeatherArea() {
+        searchTextField.delegate = self
         view.addSubview(weatherContainer)
         view.addSubview(searchTextField)
-        weatherContainer.addSubview(weatherIcon)
-        weatherContainer.addSubview(temperatureLabel)
         
         weatherContainerWidthConstraint = weatherContainer.widthAnchor.constraint(equalToConstant: view.frame.width / 6.5)
         NSLayoutConstraint.activate([
             weatherContainer.centerYAnchor.constraint(equalTo: searchTextField.centerYAnchor),
             weatherContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
             weatherContainer.heightAnchor.constraint(equalToConstant: 40),
-            weatherContainerWidthConstraint,
-            
-            weatherIcon.centerXAnchor.constraint(equalTo: weatherContainer.centerXAnchor),
-            weatherIcon.centerYAnchor.constraint(equalTo: weatherContainer.centerYAnchor),
-            weatherIcon.heightAnchor.constraint(equalToConstant: 24),
-            weatherIcon.widthAnchor.constraint(equalToConstant: 24),
-            
-            temperatureLabel.leadingAnchor.constraint(equalTo: weatherIcon.trailingAnchor, constant: -15),
-            temperatureLabel.centerYAnchor.constraint(equalTo: weatherContainer.centerYAnchor, constant: 8)
+            weatherContainerWidthConstraint
         ])
         
         view.addSubview(searchIcon)
@@ -173,19 +125,37 @@ class HomeViewController: UIViewController, MapControllerDelegate {
     func setCategoryButtons() {
         view.addSubview(categoryScrollView)
         categoryScrollView.addSubview(categoryContentView)
+        categoryContentView.backgroundColor = .clear
         
         NSLayoutConstraint.activate([
-            categoryScrollView.topAnchor.constraint(equalTo: weatherContainer.bottomAnchor, constant: 20),
-            categoryScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            categoryScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            categoryScrollView.topAnchor.constraint(equalTo: weatherContainer.bottomAnchor, constant: 5),
+            categoryScrollView.leadingAnchor.constraint(equalTo: weatherContainer.leadingAnchor),
+            categoryScrollView.trailingAnchor.constraint(equalTo: searchTextField.trailingAnchor),
             categoryScrollView.heightAnchor.constraint(equalToConstant: 60),
             
             categoryContentView.topAnchor.constraint(equalTo: categoryScrollView.topAnchor),
             categoryContentView.leadingAnchor.constraint(equalTo: categoryScrollView.leadingAnchor),
             categoryContentView.trailingAnchor.constraint(equalTo: categoryScrollView.trailingAnchor),
-            categoryContentView.bottomAnchor.constraint(equalTo: categoryScrollView.bottomAnchor),
-            categoryContentView.widthAnchor.constraint(equalToConstant: 1000)
+            categoryContentView.heightAnchor.constraint(equalToConstant: 50)
         ])
+        var prevTrailingAnchor = categoryContentView.leadingAnchor
+        let btnArr = [("음식점", "sun.max"), ("숙소", "square.and.arrow.up"), ("쇼핑", "pencil"), ("관광", "eraser"), ("화장실", "folder")]
+        btnArr.enumerated().forEach{ (idx, btnInfo) in
+            let btn = CategoryButton(text: btnInfo.0, image: UIImage(systemName: btnInfo.1), color: .green)
+            
+            categoryContentView.addSubview(btn)
+            
+            NSLayoutConstraint.activate([
+                btn.centerYAnchor.constraint(equalTo: categoryContentView.centerYAnchor),
+                btn.leadingAnchor.constraint(equalTo: prevTrailingAnchor, constant: idx == 0 ? 0 : 10)
+            ])
+            
+            if idx == btnArr.count - 1 {
+                btn.trailingAnchor.constraint(equalTo: categoryContentView.trailingAnchor).isActive = true
+            }
+            
+            prevTrailingAnchor = btn.trailingAnchor
+        }
     }
     
     func setupTapGesture() {
@@ -296,7 +266,7 @@ class HomeViewController: UIViewController, MapControllerDelegate {
         
         // 현재 위치 핀 표시
         let manager = view.getLabelManager()
-        let layerOption = LabelLayerOptions(layerID: "PoiLayer", competitionType: .none, competitionUnit: .poi, orderType: .rank, zOrder: 1)
+        let layerOption = LabelLayerOptions(layerID: "PoiLayer", competitionType: .none, competitionUnit: .poi, orderType: .rank, zOrder: 0)
         let _ = manager.addLabelLayer(option: layerOption)
         
         let layer = manager.getLabelLayer(layerID: "PoiLayer")
@@ -306,7 +276,7 @@ class HomeViewController: UIViewController, MapControllerDelegate {
         let poi1 = layer?.addPoi(option:poiOption, at: MapPoint(longitude: 129.0595, latitude: 35.1577))
         
         // MARK: TODO - UIImage 핀같은 이미지로 교체
-        let badge = PoiBadge(badgeID: "noti", image: UIImage(systemName: "sun.max")!, offset: CGPoint(x: 0, y: 0), zOrder: 1)
+        let badge = PoiBadge(badgeID: "noti", image: UIImage(systemName: "sun.max")!, offset: CGPoint(x: 0, y: 0), zOrder: 0)
         poi1?.addBadge(badge)
         poi1?.show()
         poi1?.showBadge(badgeID: "noti")
@@ -396,13 +366,5 @@ extension HomeViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
-    }
-}
-
-extension UITextField {
-    func setLeftPaddingPoints(_ amount: CGFloat) {
-        let emptyView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: self.frame.height))
-        self.leftView = emptyView
-        self.leftViewMode = .always
     }
 }

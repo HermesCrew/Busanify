@@ -24,6 +24,7 @@
 		C2D279CF2C29459000AEAFD1 /* PlaceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279CE2C29459000AEAFD1 /* PlaceType.swift */; };
 		C2D279D32C2945A300AEAFD1 /* TempViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279D22C2945A300AEAFD1 /* TempViewModel.swift */; };
 		C2D279D52C2945B000AEAFD1 /* TempViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279D42C2945B000AEAFD1 /* TempViewController.swift */; };
+		CD0F83DB2C357A85001C04E2 /* CustomViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0F83DA2C357A85001C04E2 /* CustomViews.swift */; };
 		CD89D3522C29A55A00715404 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD89D3502C29A55A00715404 /* HomeViewController.swift */; };
 		CD89D3552C29A56B00715404 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD89D3532C29A56B00715404 /* HomeViewModel.swift */; };
 /* End PBXBuildFile section */
@@ -69,6 +70,7 @@
 		C2D279D42C2945B000AEAFD1 /* TempViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempViewController.swift; sourceTree = "<group>"; };
 		C8C0A080C2DD911068678876 /* Pods-Busanify.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busanify.debug.xcconfig"; path = "Target Support Files/Pods-Busanify/Pods-Busanify.debug.xcconfig"; sourceTree = "<group>"; };
 		C97DAEB9FCE617B8E9F47CEF /* Pods_Busanify.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Busanify.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD0F83DA2C357A85001C04E2 /* CustomViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViews.swift; sourceTree = "<group>"; };
 		CD89D3502C29A55A00715404 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		CD89D3532C29A56B00715404 /* HomeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -270,6 +272,7 @@
 			isa = PBXGroup;
 			children = (
 				CD89D3502C29A55A00715404 /* HomeViewController.swift */,
+				CD0F83DA2C357A85001C04E2 /* CustomViews.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -488,6 +491,7 @@
 				C2D279CB2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift in Sources */,
 				C2D279D52C2945B000AEAFD1 /* TempViewController.swift in Sources */,
 				CD89D3552C29A56B00715404 /* HomeViewModel.swift in Sources */,
+				CD0F83DB2C357A85001C04E2 /* CustomViews.swift in Sources */,
 				CD89D3522C29A55A00715404 /* HomeViewController.swift in Sources */,
 				C296D6FE2C1F16B000691515 /* AppDelegate.swift in Sources */,
 				C2D279CD2C29458800AEAFD1 /* Place.swift in Sources */,
