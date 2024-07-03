@@ -7,10 +7,14 @@
 
 import Foundation
 import CoreLocation
+import Combine
 
 class HomeViewModel {
+    @Published var searchedPlaces: [Place] = []
+    
     private let placeService = PlacesApi()
     private let locationManager = CLLocationManager()
+    private var cancellable = Set<AnyCancellable>()
     var currentLong: CGFloat? = nil
     var currentLat: CGFloat? = nil
     
@@ -24,5 +28,11 @@ class HomeViewModel {
         } else {
             locationManager.requestWhenInUseAuthorization()
         }
+    }
+    
+    func getLocationsBy(keyword: String) {
+        placeService.getPlaces(by: keyword, lang: "eng")
+            .receive(on: DispatchQueue.global())
+            .assign(to: &$searchedPlaces)
     }
 }
