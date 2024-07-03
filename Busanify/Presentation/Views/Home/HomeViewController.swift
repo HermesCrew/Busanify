@@ -82,7 +82,33 @@ class HomeViewController: UIViewController, MapControllerDelegate {
     }
     
     func setSubscriber() {
-        
+        viewModel.$searchedPlaces
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] places in
+                guard let self = self else { return }
+                if places.count > 0 {
+                    print("places >> \(places)")
+                    let view = mapController?.getView("mapview") as! KakaoMap
+                    let manager = view.getLabelManager()
+                    let layerOption = LabelLayerOptions(layerID: "PoiLayer1", competitionType: .none, competitionUnit: .poi, orderType: .rank, zOrder: 0)
+                    let _ = manager.addLabelLayer(option: layerOption)
+                    
+                    let layer = manager.getLabelLayer(layerID: "PoiLayer1")
+                    let poiOption = PoiOptions(styleID: "PerLevelStyle")
+                    poiOption.rank = 0
+                    
+                    print(places.first!.lng, places.first!.lat)
+                    
+                    let poi2 = layer?.addPoi(option:poiOption, at: MapPoint(longitude: places.first!.lng, latitude: places.first!.lat))
+                    
+                    // MARK: TODO - UIImage 핀같은 이미지로 교체
+                    let badge = PoiBadge(badgeID: "noti", image: UIImage(systemName: "sun.max")!, offset: CGPoint(x: 0, y: 0), zOrder: 0)
+                    poi2?.addBadge(badge)
+                    poi2?.show()
+                    poi2?.showBadge(badgeID: "noti")
+                }
+            }
+            .store(in: &cancellable)
     }
     
     func configureUI() {
@@ -131,7 +157,7 @@ class HomeViewController: UIViewController, MapControllerDelegate {
             categoryScrollView.topAnchor.constraint(equalTo: weatherContainer.bottomAnchor, constant: 5),
             categoryScrollView.leadingAnchor.constraint(equalTo: weatherContainer.leadingAnchor),
             categoryScrollView.trailingAnchor.constraint(equalTo: searchTextField.trailingAnchor),
-            categoryScrollView.heightAnchor.constraint(equalToConstant: 60),
+            categoryScrollView.heightAnchor.constraint(equalToConstant: 50),
             
             categoryContentView.topAnchor.constraint(equalTo: categoryScrollView.topAnchor),
             categoryContentView.leadingAnchor.constraint(equalTo: categoryScrollView.leadingAnchor),
@@ -142,6 +168,10 @@ class HomeViewController: UIViewController, MapControllerDelegate {
         let btnArr = [("음식점", "sun.max"), ("숙소", "square.and.arrow.up"), ("쇼핑", "pencil"), ("관광", "eraser"), ("화장실", "folder")]
         btnArr.enumerated().forEach{ (idx, btnInfo) in
             let btn = CategoryButton(text: btnInfo.0, image: UIImage(systemName: btnInfo.1), color: .green)
+            btn.addAction(UIAction{ [weak self] _ in
+                guard let self = self else { return }
+                self.viewModel.getLocationsBy(keyword: btnInfo.0)
+            }, for: .touchUpInside)
             
             categoryContentView.addSubview(btn)
             
@@ -249,7 +279,7 @@ class HomeViewController: UIViewController, MapControllerDelegate {
         let mapviewInfo: MapviewInfo = MapviewInfo(viewName: "mapview",
                                                    viewInfoName: "map",
                                                    defaultPosition: defaultPosition,
-                                                   defaultLevel: 14)
+                                                   defaultLevel: 12)
         
         mapController?.addView(mapviewInfo)
     }
