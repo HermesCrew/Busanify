@@ -51,7 +51,7 @@ final class PlacesApi: HomeViewUseCase, PlaceDetailViewUseCase {
     }
     
     func getPlace(by id: Int, lang: String) -> AnyPublisher<Place, Never> {
-        let urlString = "\(baseURL)/place?id=\(id)&lang=\(lang)"
+        let urlString = "\(baseURL)/places?id=\(id)&lang=\(lang)"
         guard let url = URL(string: urlString) else {
             fatalError("Invalid URL")
         }

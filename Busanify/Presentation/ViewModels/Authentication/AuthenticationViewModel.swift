@@ -8,6 +8,7 @@
 
 import Foundation
 import GoogleSignIn
+import AuthenticationServices
 
 enum State {
     case signedIn(GIDGoogleUser)
@@ -16,6 +17,7 @@ enum State {
 }
 
 final class AuthenticationViewModel {
+    
     static let shared = AuthenticationViewModel(signInApi: SignInApi()) // 싱글톤 패턴
     
     @Published var state: State = .loading
@@ -31,10 +33,10 @@ final class AuthenticationViewModel {
     }
     init(signInApi: SignInApi) {
         self.signInApi = signInApi
-        restorePreviousSignIn()
+        restorePreviousGoogleSignIn()
     }
     
-    func signIn() {
+    func googleSignIn() {
         let scenes = UIApplication.shared.connectedScenes
         let windowScene = scenes.first as? UIWindowScene
         let window = windowScene?.windows.first
@@ -52,18 +54,19 @@ final class AuthenticationViewModel {
             
             guard let idToken = user.idToken?.tokenString else { return }
             
+            print(idToken)
             self.state = .signedIn(user)
             self.signInApi.saveUser(idToken: idToken)
         }
     }
     
-    func signOut() {
+    func googleSignOut() {
         GIDSignIn.sharedInstance.signOut()
         self.state = .signedOut
     }
     
     // 로그인 상태 복원
-    func restorePreviousSignIn() {
+    func restorePreviousGoogleSignIn() {
         GIDSignIn.sharedInstance.restorePreviousSignIn { [weak self] user, error in
             if let user = user {
                 self?.state = .signedIn(user)

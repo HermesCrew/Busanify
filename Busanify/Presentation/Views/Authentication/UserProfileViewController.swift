@@ -55,7 +55,7 @@ class UserProfileViewController: UIViewController {
         configureProfile()
         
         logoutButton.addAction(UIAction { [weak self] _ in
-            self?.viewModel.signOut()
+            self?.viewModel.googleSignOut()
         }, for: .touchUpInside)
     }
     
