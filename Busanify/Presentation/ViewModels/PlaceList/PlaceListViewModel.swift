@@ -8,7 +8,22 @@
 import Foundation
 import Combine
 
+struct PlaceCellViewModel {
+    let title: String
+    let address: String
+    let openTime: String
+    let imageURL: URL?
+
+    init(place: Place) {
+        self.title = place.title
+        self.address = place.address
+        self.openTime = place.openTime ?? "영업시간 정보 없음"
+        self.imageURL = URL(string: place.image)
+    }
+}
+
 final class PlaceListViewModel {
+    @Published var placeCellViewModels: [PlaceCellViewModel] = []
     private var cancellables = Set<AnyCancellable>()
     private let useCase: HomeViewUseCase
     
@@ -21,6 +36,7 @@ final class PlaceListViewModel {
     func fetchPlaces(typeId: PlaceType, lang: String, lat: Double, lng: Double, radius: Double) {
         useCase.getPlaces(by: typeId, lang: lang, lat: lat, lng: lng, radius: radius)
             .map { Array(Set($0)) }
+            .map { places in places.map { PlaceCellViewModel(place: $0) } }
             .receive(on: DispatchQueue.main)
             .sink { completion in
                 switch completion {
@@ -29,15 +45,17 @@ final class PlaceListViewModel {
                 case .failure(let error):
                     print("Error receiving data: \(error)")
                 }
-            } receiveValue: { [weak self] places in
-                print("Received places: \(places.count) items") // 데이터 출력
-                self?.places = places
-            }
+            } receiveValue: { [weak self] cellViewModels in
+                            print("Received places: \(cellViewModels.count) items")
+                            self?.placeCellViewModels = cellViewModels
+                        }
             .store(in: &cancellables)
     }
     
     func fetchPlaces(by title: String, lang: String) {
         useCase.getPlaces(by: title, lang: lang)
+            .map { places in places.map { PlaceCellViewModel(place: $0) } }
+            .receive(on: DispatchQueue.main)
             .sink { completion in
                 switch completion {
                 case .finished:
@@ -45,10 +63,10 @@ final class PlaceListViewModel {
                 case .failure(let error):
                     print("Error receiving data: \(error)")
                 }
-            } receiveValue: { [weak self] places in
-                print("Received places: \(places)") // 데이터 출력
-                self?.places = places
-            }
+            } receiveValue: { [weak self] cellViewModels in
+                            print("Received places: \(cellViewModels.count)")
+                            self?.placeCellViewModels = cellViewModels
+                        }
             .store(in: &cancellables)
     }
 }
