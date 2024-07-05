@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		75304AF32C377A560058FDDE /* PlaceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75304AF22C377A560058FDDE /* PlaceTableViewCell.swift */; };
 		753520A42C326B0E00E439CF /* PlaceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753520A32C326B0E00E439CF /* PlaceListViewModel.swift */; };
 		753520AA2C3286D400E439CF /* PlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753520A92C3286D400E439CF /* PlaceListViewController.swift */; };
 		C296D6FE2C1F16B000691515 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D6FD2C1F16B000691515 /* AppDelegate.swift */; };
@@ -45,6 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		75304AF22C377A560058FDDE /* PlaceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceTableViewCell.swift; sourceTree = "<group>"; };
 		753520A22C2BB2F200E439CF /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		753520A32C326B0E00E439CF /* PlaceListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewModel.swift; sourceTree = "<group>"; };
 		753520A92C3286D400E439CF /* PlaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewController.swift; sourceTree = "<group>"; };
@@ -95,6 +97,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		75304AF12C377A3D0058FDDE /* PlaceList */ = {
+			isa = PBXGroup;
+			children = (
+				753520A92C3286D400E439CF /* PlaceListViewController.swift */,
+				75304AF22C377A560058FDDE /* PlaceTableViewCell.swift */,
+			);
+			path = PlaceList;
+			sourceTree = "<group>";
+		};
+		75304AF42C377A6B0058FDDE /* PlaceList */ = {
+			isa = PBXGroup;
+			children = (
+				753520A32C326B0E00E439CF /* PlaceListViewModel.swift */,
+			);
+			path = PlaceList;
+			sourceTree = "<group>";
+		};
 		C296D6F12C1F16B000691515 = {
 			isa = PBXGroup;
 			children = (
@@ -186,8 +205,8 @@
 		C296D7312C1F2B5000691515 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				75304AF12C377A3D0058FDDE /* PlaceList */,
 				C2D279D12C29459A00AEAFD1 /* Temp */,
-				753520A92C3286D400E439CF /* PlaceListViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -195,7 +214,7 @@
 		C296D7332C1F2B5D00691515 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				753520A32C326B0E00E439CF /* PlaceListViewModel.swift */,
+				75304AF42C377A6B0058FDDE /* PlaceList */,
 				C2D279D02C29459500AEAFD1 /* Temp */,
 			);
 			path = ViewModels;
@@ -379,6 +398,7 @@
 				C2D279C92C29456E00AEAFD1 /* HomeViewUseCase.swift in Sources */,
 				C2D279CF2C29459000AEAFD1 /* PlaceType.swift in Sources */,
 				C2D279C72C29456200AEAFD1 /* PlacesApi.swift in Sources */,
+				75304AF32C377A560058FDDE /* PlaceTableViewCell.swift in Sources */,
 				753520A42C326B0E00E439CF /* PlaceListViewModel.swift in Sources */,
 				C296D7022C1F16B000691515 /* ViewController.swift in Sources */,
 				C2D279D32C2945A300AEAFD1 /* TempViewModel.swift in Sources */,

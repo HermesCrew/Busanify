@@ -26,6 +26,7 @@ class PlaceListViewController: UIViewController {
         super.viewDidLoad()
         setupTableView()
         bindViewModel()
+        fetchPlaces()
     }
     
     private func setupTableView() {
@@ -38,50 +39,40 @@ class PlaceListViewController: UIViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
         
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: "PlaceCell")
         tableView.dataSource = self
+        tableView.delegate = self
+        tableView.rowHeight = 140
+        //tableView.estimatedRowHeight = 120
     }
     
     private func bindViewModel() {
-        viewModel.$places
+        viewModel.$placeCellViewModels
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] places in
-                print("Updating table view with \(places.count) places")
+            .sink { [weak self] _ in
                 self?.tableView.reloadData()
             }
             .store(in: &cancellables)
-        viewModel.fetchPlaces(typeId: .touristAttraction, lang: "eng", lat: 35.07885, lng: 129.04402, radius: 3000) // dummy data
     }
     
-    private func loadImage(from url: URL, completion: @escaping (UIImage?) -> Void) {
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let data = data, let image = UIImage(data: data) {
-                completion(image)
-            } else {
-                completion(nil)
-            }
-        }.resume()
+    private func fetchPlaces() {
+        viewModel.fetchPlaces(typeId: .touristAttraction, lang: "eng", lat: 35.07885, lng: 129.04402, radius: 3000)
     }
 }
 
-extension PlaceListViewController: UITableViewDataSource {
+extension PlaceListViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.places.count
+        return viewModel.placeCellViewModels.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        let place = viewModel.places[indexPath.row]
-        cell.textLabel?.text = place.title
-        
-        if let url = URL(string: place.image) {
-            loadImage(from: url) { image in
-                DispatchQueue.main.async {
-                    cell.imageView?.image = image
-                    cell.setNeedsLayout()
-                }
-            }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "PlaceCell", for: indexPath) as? PlaceTableViewCell else {
+            return UITableViewCell()
         }
+        
+        let cellViewModel = viewModel.placeCellViewModels[indexPath.row]
+        cell.configure(with: cellViewModel)
+        
         return cell
     }
 }
