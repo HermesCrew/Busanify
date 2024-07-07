@@ -277,9 +277,9 @@ class HomeViewController: UIViewController, MapControllerDelegate {
     }
     
     func addViews() {
-        // 임시로 부산이 아닐 때 부산시청의 위,경도 설정
-        var long = 129.0756
-        var lat = 35.1796
+        // 임시로 부산이 아닐 때 서면역의 위,경도 설정
+        var long = 129.0595
+        var lat = 35.1577
         if let currentLong = viewModel.currentLong, let currentLat = viewModel.currentLat {
             if longRange.contains(currentLong) && latRange.contains(currentLat) {
                 long = currentLong

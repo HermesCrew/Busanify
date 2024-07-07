@@ -32,10 +32,7 @@ class HomeViewModel {
     
     func getLocationBy(lat: CGFloat, lng: CGFloat, radius: Double) {
         placeService.getPlaces(by: .shopping, lang: "eng", lat: lat, lng: lng, radius: radius)
-            .debounce(for: 0.8, scheduler: RunLoop.current)
-            .removeDuplicates()
             .receive(on: DispatchQueue.global())
-            .share()
             .assign(to: &$searchedPlaces)
     }
     
