@@ -11,6 +11,10 @@ import Combine
 
 class HomeViewController: UIViewController, MapControllerDelegate {
     
+    // UIComponent
+    private var weatherContainerWidthConstraint: NSLayoutConstraint!
+    private var searchTextFieldLeadingConstraint: NSLayoutConstraint!
+    private var searchTextFieldLeadingConstraintExpanded: NSLayoutConstraint!
     let weatherContainer = WeatherContainer(temperature: 20, weatherImage: UIImage(systemName: "sun.max"))
     let searchTextField = SearchTextField()
     let searchIcon: UIImageView = {
@@ -37,13 +41,12 @@ class HomeViewController: UIViewController, MapControllerDelegate {
         return content
     }()
     
+    // Data
     private var cancellable = Set<AnyCancellable>()
-    private var weatherContainerWidthConstraint: NSLayoutConstraint!
-    private var searchTextFieldLeadingConstraint: NSLayoutConstraint!
-    private var searchTextFieldLeadingConstraintExpanded: NSLayoutConstraint!
     private let latRange = 34.8799083...35.3959361
     private let longRange = 128.7384361...129.3728194
     private let viewModel = HomeViewModel()
+    private var tempPinArr: [Poi?] = []
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         _observerAdded = false
@@ -86,26 +89,29 @@ class HomeViewController: UIViewController, MapControllerDelegate {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] places in
                 guard let self = self else { return }
+                self.tempPinArr.forEach{ pin in
+                    pin?.hide()
+                }
+                self.tempPinArr = []
                 if places.count > 0 {
-                    print("places >> \(places)")
                     let view = mapController?.getView("mapview") as! KakaoMap
                     let manager = view.getLabelManager()
-                    let layerOption = LabelLayerOptions(layerID: "PoiLayer1", competitionType: .none, competitionUnit: .poi, orderType: .rank, zOrder: 0)
+                    manager.removeLabelLayer(layerID: "PoiLayer")
+                    let layerOption = LabelLayerOptions(layerID: "PoiLayer", competitionType: .none, competitionUnit: .poi, orderType: .rank, zOrder: 0)
                     let _ = manager.addLabelLayer(option: layerOption)
-                    
-                    let layer = manager.getLabelLayer(layerID: "PoiLayer1")
+                    let layer = manager.getLabelLayer(layerID: "PoiLayer")
                     let poiOption = PoiOptions(styleID: "PerLevelStyle")
-                    poiOption.rank = 0
                     
-                    print(places.first!.lng, places.first!.lat)
-                    
-                    let poi2 = layer?.addPoi(option:poiOption, at: MapPoint(longitude: places.first!.lng, latitude: places.first!.lat))
-                    
-                    // MARK: TODO - UIImage 핀같은 이미지로 교체
-                    let badge = PoiBadge(badgeID: "noti", image: UIImage(systemName: "sun.max")!, offset: CGPoint(x: 0, y: 0), zOrder: 0)
-                    poi2?.addBadge(badge)
-                    poi2?.show()
-                    poi2?.showBadge(badgeID: "noti")
+                    places.enumerated().forEach{ (i, place) in
+                        poiOption.rank = 0
+                        let poi = layer?.addPoi(option:poiOption, at: MapPoint(longitude: place.lng, latitude: place.lat))
+                        self.tempPinArr.append(poi)
+                        // MARK: TODO - UIImage 핀같은 이미지로 교체
+                        let badge = PoiBadge(badgeID: "noti", image: UIImage(systemName: "sun.max")!.withTintColor(.orange), offset: CGPoint(x: 0, y: 0), zOrder: 0)
+                        poi?.addBadge(badge)
+                        poi?.show()
+                        poi?.showBadge(badgeID: "noti")
+                    }
                 }
             }
             .store(in: &cancellable)
@@ -140,6 +146,7 @@ class HomeViewController: UIViewController, MapControllerDelegate {
             searchTextField.heightAnchor.constraint(equalToConstant: 40)
         ])
         
+        
         NSLayoutConstraint.activate([
             searchIcon.centerYAnchor.constraint(equalTo: searchTextField.centerYAnchor),
             searchIcon.leadingAnchor.constraint(equalTo: searchTextField.leadingAnchor, constant: 8),
@@ -164,13 +171,17 @@ class HomeViewController: UIViewController, MapControllerDelegate {
             categoryContentView.trailingAnchor.constraint(equalTo: categoryScrollView.trailingAnchor),
             categoryContentView.heightAnchor.constraint(equalToConstant: 50)
         ])
+        
         var prevTrailingAnchor = categoryContentView.leadingAnchor
-        let btnArr = [("음식점", "sun.max"), ("숙소", "square.and.arrow.up"), ("쇼핑", "pencil"), ("관광", "eraser"), ("화장실", "folder")]
+        let btnArr = [("관광지", "flag.fill", UIColor.systemRed), ("음식점", "fork.knife", UIColor.systemOrange),
+                      ("숙박", "bed.double.fill", UIColor.systemYellow), ("교통", "bus.fill", UIColor.systemCyan),
+                      ("쇼핑", "handbag.fill", UIColor.systemPurple)]
         btnArr.enumerated().forEach{ (idx, btnInfo) in
-            let btn = CategoryButton(text: btnInfo.0, image: UIImage(systemName: btnInfo.1), color: .green)
+            let btn = CategoryButton(text: btnInfo.0, image: UIImage(systemName: btnInfo.1), color: btnInfo.2)
             btn.addAction(UIAction{ [weak self] _ in
                 guard let self = self else { return }
-                self.viewModel.getLocationsBy(keyword: btnInfo.0)
+//                self.viewModel.getLocationsBy(keyword: btnInfo.0)
+                self.viewModel.getLocationBy(lat: 35.1796, lng: 129.0756, radius: 3000)
             }, for: .touchUpInside)
             
             categoryContentView.addSubview(btn)
@@ -279,7 +290,7 @@ class HomeViewController: UIViewController, MapControllerDelegate {
         let mapviewInfo: MapviewInfo = MapviewInfo(viewName: "mapview",
                                                    viewInfoName: "map",
                                                    defaultPosition: defaultPosition,
-                                                   defaultLevel: 12)
+                                                   defaultLevel: 13)
         
         mapController?.addView(mapviewInfo)
     }
@@ -296,20 +307,23 @@ class HomeViewController: UIViewController, MapControllerDelegate {
         
         // 현재 위치 핀 표시
         let manager = view.getLabelManager()
-        let layerOption = LabelLayerOptions(layerID: "PoiLayer", competitionType: .none, competitionUnit: .poi, orderType: .rank, zOrder: 0)
+        let layerOption = LabelLayerOptions(layerID: "MainLayer", competitionType: .none, competitionUnit: .poi, orderType: .rank, zOrder: 0)
         let _ = manager.addLabelLayer(option: layerOption)
         
-        let layer = manager.getLabelLayer(layerID: "PoiLayer")
+        let layer = manager.getLabelLayer(layerID: "MainLayer")
         let poiOption = PoiOptions(styleID: "PerLevelStyle")
         poiOption.rank = 0
         
-        let poi1 = layer?.addPoi(option:poiOption, at: MapPoint(longitude: 129.0595, latitude: 35.1577))
+        let poi = layer?.addPoi(option:poiOption, at: MapPoint(longitude: 129.0595, latitude: 35.1577))
         
         // MARK: TODO - UIImage 핀같은 이미지로 교체
-        let badge = PoiBadge(badgeID: "noti", image: UIImage(systemName: "sun.max")!, offset: CGPoint(x: 0, y: 0), zOrder: 0)
-        poi1?.addBadge(badge)
-        poi1?.show()
-        poi1?.showBadge(badgeID: "noti")
+        let pinImage = UIImage(systemName: "smallcircle.filled.circle")!.withTintColor(.systemRed)
+        
+        pinImage.withTintColor(.green, renderingMode: .alwaysTemplate)
+        let badge = PoiBadge(badgeID: "noti", image: pinImage, offset: CGPoint(x: 0, y: 0), zOrder: 0)
+        poi?.addBadge(badge)
+        poi?.show()
+        poi?.showBadge(badgeID: "noti")
     }
     
     //Container 뷰가 리사이즈 되었을때 호출된다. 변경된 크기에 맞게 ViewBase들의 크기를 조절할 필요가 있는 경우 여기에서 수행한다.

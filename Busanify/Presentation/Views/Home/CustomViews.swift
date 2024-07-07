@@ -74,23 +74,27 @@ class CategoryButton: UIButton {
     
     convenience init(
         text: String,
-        textSize: CGFloat = 16,
+        textSize: CGFloat = 14,
         image: UIImage?,
         color: UIColor
     ) {
         self.init()
         
         self.setTitle(text, for: .normal)
-        self.titleLabel?.font = UIFont.systemFont(ofSize: textSize, weight: .bold)
-        self.titleLabel?.textColor = .black
+        self.setTitleColor(.black, for: .normal)
         self.setImage(image, for: .normal)
         self.tintColor = color
-        self.backgroundColor = .black
-        self.layer.cornerRadius = 15
-        
+        self.backgroundColor = .white
+        self.titleLabel?.font = UIFont.systemFont(ofSize: textSize, weight: .bold)
+        self.layer.cornerRadius = 20
+        self.layer.shadowColor = UIColor.black.cgColor
+        self.layer.shadowOpacity = 0.7
+        self.layer.shadowOffset = CGSize(width: 3, height: 3)
+        self.layer.shadowRadius = 3
+
         if let title = self.title(for: .normal), let font = self.titleLabel?.font {
             let titleSize = (title as NSString).size(withAttributes: [NSAttributedString.Key.font: font])
-            
+
             self.widthAnchor.constraint(equalToConstant: titleSize.width + 50).isActive = true
             self.heightAnchor.constraint(equalToConstant: titleSize.height + 20).isActive = true
         }
