@@ -16,7 +16,7 @@ protocol WeatherFetcherDelegate: AnyObject {
 
 class WeatherFetcher: NSObject, CLLocationManagerDelegate {
     private let locationManager = CLLocationManager()
-    private let apiKey = "c1af2766a7485834f129e6f5755f1d58"
+    private let apiKey = "API_KEY"
     weak var delegate: WeatherFetcherDelegate?
     private var cancellables = Set<AnyCancellable>()
     
