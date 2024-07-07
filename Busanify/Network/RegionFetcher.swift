@@ -21,7 +21,7 @@
 //}
 //
 //class RegionFetcher {
-//    private let apiKey = "44c065829eb1e67d86b0c84b91e15b10"
+//    private let apiKey = "API_KEY"
 //    private let baseUrl = "https://dapi.kakao.com/v2/local/search/address.json"
 //    
 //    func fetchRegions(for query: String) -> AnyPublisher<[KakaoRegion.Document], Error> {
