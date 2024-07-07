@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B0C87FAD55542F4910C85E04 /* Pods_Busanify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C97DAEB9FCE617B8E9F47CEF /* Pods_Busanify.framework */; };
+		C207F3772C3AFA78007DFA27 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = C207F3762C3AFA78007DFA27 /* GoogleSignIn */; };
 		C296D6FE2C1F16B000691515 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D6FD2C1F16B000691515 /* AppDelegate.swift */; };
 		C296D7002C1F16B000691515 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D6FF2C1F16B000691515 /* SceneDelegate.swift */; };
 		C296D7022C1F16B000691515 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D7012C1F16B000691515 /* ViewController.swift */; };
@@ -27,6 +27,7 @@
 		CD0F83DB2C357A85001C04E2 /* CustomViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0F83DA2C357A85001C04E2 /* CustomViews.swift */; };
 		CD89D3522C29A55A00715404 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD89D3502C29A55A00715404 /* HomeViewController.swift */; };
 		CD89D3552C29A56B00715404 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD89D3532C29A56B00715404 /* HomeViewModel.swift */; };
+		DCC351AEDE79E3FA213766F5 /* Pods_Busanify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC54047A571AE7CCCEC17FDE /* Pods_Busanify.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,7 +48,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		6AFFFE0B6C958425CF4F8A5F /* Pods-Busanify.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busanify.release.xcconfig"; path = "Target Support Files/Pods-Busanify/Pods-Busanify.release.xcconfig"; sourceTree = "<group>"; };
+		A5B5FF36CA65D19775B9B568 /* Pods-Busanify.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busanify.release.xcconfig"; path = "Target Support Files/Pods-Busanify/Pods-Busanify.release.xcconfig"; sourceTree = "<group>"; };
 		C296D6FA2C1F16B000691515 /* Busanify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Busanify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C296D6FD2C1F16B000691515 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C296D6FF2C1F16B000691515 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -68,11 +69,11 @@
 		C2D279CE2C29459000AEAFD1 /* PlaceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceType.swift; sourceTree = "<group>"; };
 		C2D279D22C2945A300AEAFD1 /* TempViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempViewModel.swift; sourceTree = "<group>"; };
 		C2D279D42C2945B000AEAFD1 /* TempViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempViewController.swift; sourceTree = "<group>"; };
-		C8C0A080C2DD911068678876 /* Pods-Busanify.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busanify.debug.xcconfig"; path = "Target Support Files/Pods-Busanify/Pods-Busanify.debug.xcconfig"; sourceTree = "<group>"; };
-		C97DAEB9FCE617B8E9F47CEF /* Pods_Busanify.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Busanify.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD0F83DA2C357A85001C04E2 /* CustomViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViews.swift; sourceTree = "<group>"; };
 		CD89D3502C29A55A00715404 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		CD89D3532C29A56B00715404 /* HomeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		FC54047A571AE7CCCEC17FDE /* Pods_Busanify.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Busanify.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FCF7B5AF299CF594CE3ABDAA /* Pods-Busanify.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busanify.debug.xcconfig"; path = "Target Support Files/Pods-Busanify/Pods-Busanify.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,7 +81,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B0C87FAD55542F4910C85E04 /* Pods_Busanify.framework in Frameworks */,
+				DCC351AEDE79E3FA213766F5 /* Pods_Busanify.framework in Frameworks */,
+				C207F3772C3AFA78007DFA27 /* GoogleSignIn in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,10 +103,10 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		24A4EB452EC3FE9B8316EA57 /* Frameworks */ = {
+		294E1541A7E881C320C437EE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				C97DAEB9FCE617B8E9F47CEF /* Pods_Busanify.framework */,
+				FC54047A571AE7CCCEC17FDE /* Pods_Busanify.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -112,10 +114,24 @@
 		BEFDFFBA458BE9B300E7C88A /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				C8C0A080C2DD911068678876 /* Pods-Busanify.debug.xcconfig */,
-				6AFFFE0B6C958425CF4F8A5F /* Pods-Busanify.release.xcconfig */,
+				FCF7B5AF299CF594CE3ABDAA /* Pods-Busanify.debug.xcconfig */,
+				A5B5FF36CA65D19775B9B568 /* Pods-Busanify.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		C207F3782C3AFB52007DFA27 /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Authentication;
+			sourceTree = "<group>";
+		};
+		C207F3792C3AFB62007DFA27 /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Authentication;
 			sourceTree = "<group>";
 		};
 		C296D6F12C1F16B000691515 = {
@@ -126,7 +142,7 @@
 				C296D71D2C1F16B200691515 /* BusanifyUITests */,
 				C296D6FB2C1F16B000691515 /* Products */,
 				BEFDFFBA458BE9B300E7C88A /* Pods */,
-				24A4EB452EC3FE9B8316EA57 /* Frameworks */,
+				294E1541A7E881C320C437EE /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -210,6 +226,7 @@
 		C296D7312C1F2B5000691515 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C207F3782C3AFB52007DFA27 /* Authentication */,
 				CD89D3512C29A55A00715404 /* Home */,
 				C2D279D12C29459A00AEAFD1 /* Temp */,
 			);
@@ -219,6 +236,7 @@
 		C296D7332C1F2B5D00691515 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				C207F3792C3AFB62007DFA27 /* Authentication */,
 				CD89D3542C29A56B00715404 /* Home */,
 				C2D279D02C29459500AEAFD1 /* Temp */,
 			);
@@ -292,12 +310,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C296D7242C1F16B200691515 /* Build configuration list for PBXNativeTarget "Busanify" */;
 			buildPhases = (
-				087652B80BFA6B6376EEDE2D /* [CP] Check Pods Manifest.lock */,
+				E64A6AAA3217D042486D18E6 /* [CP] Check Pods Manifest.lock */,
 				C296D6F62C1F16B000691515 /* Sources */,
 				C296D6F72C1F16B000691515 /* Frameworks */,
 				C296D6F82C1F16B000691515 /* Resources */,
-				6B44C340F2B2DA69379F63D5 /* [CP] Embed Pods Frameworks */,
-				509D34B8FFE01E5FCF504350 /* [CP] Copy Pods Resources */,
+				E0BEDE5A1ACC8D35A8960EE7 /* [CP] Embed Pods Frameworks */,
+				D214ADAAAFF712400C089767 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -305,6 +323,7 @@
 			);
 			name = Busanify;
 			packageProductDependencies = (
+				C207F3762C3AFA78007DFA27 /* GoogleSignIn */,
 			);
 			productName = Busanify;
 			productReference = C296D6FA2C1F16B000691515 /* Busanify.app */;
@@ -379,7 +398,7 @@
 			);
 			mainGroup = C296D6F12C1F16B000691515;
 			packageReferences = (
-				CD89D3632C29A80D00715404 /* XCRemoteSwiftPackageReference "KakaoMapsSDK-SPM" */,
+				C207F3752C3AFA78007DFA27 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			productRefGroup = C296D6FB2C1F16B000691515 /* Products */;
 			projectDirPath = "";
@@ -420,7 +439,41 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		087652B80BFA6B6376EEDE2D /* [CP] Check Pods Manifest.lock */ = {
+		D214ADAAAFF712400C089767 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E0BEDE5A1ACC8D35A8960EE7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E64A6AAA3217D042486D18E6 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -440,40 +493,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		509D34B8FFE01E5FCF504350 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6B44C340F2B2DA69379F63D5 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -672,7 +691,7 @@
 		};
 		C296D7252C1F16B200691515 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C8C0A080C2DD911068678876 /* Pods-Busanify.debug.xcconfig */;
+			baseConfigurationReference = FCF7B5AF299CF594CE3ABDAA /* Pods-Busanify.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -702,7 +721,7 @@
 		};
 		C296D7262C1F16B200691515 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6AFFFE0B6C958425CF4F8A5F /* Pods-Busanify.release.xcconfig */;
+			baseConfigurationReference = A5B5FF36CA65D19775B9B568 /* Pods-Busanify.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -844,15 +863,23 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		CD89D3632C29A80D00715404 /* XCRemoteSwiftPackageReference "KakaoMapsSDK-SPM" */ = {
+		C207F3752C3AFA78007DFA27 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kakao-mapsSDK/KakaoMapsSDK-SPM.git";
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 2.10.5;
+				minimumVersion = 7.1.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C207F3762C3AFA78007DFA27 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C207F3752C3AFA78007DFA27 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C296D6F22C1F16B000691515 /* Project object */;
 }
