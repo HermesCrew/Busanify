@@ -8,6 +8,11 @@
 import UIKit
 
 class ViewController: UIViewController, WeatherFetcherDelegate {
+    func didFailWithError(_ error: any Error) {
+        print("")
+        
+    }
+    
     
     let weatherButton = UIButton(type: .system)
     let weatherFetcher = WeatherFetcher()

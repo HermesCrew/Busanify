@@ -7,15 +7,18 @@
 
 import Foundation
 import CoreLocation
+import Combine
 
 protocol WeatherFetcherDelegate: AnyObject {
     func didUpdateWeather(_ weatherData: WeatherData)
+    func didFailWithError(_ error: Error)
 }
 
 class WeatherFetcher: NSObject, CLLocationManagerDelegate {
     private let locationManager = CLLocationManager()
-    private let apiKey = "YOUR_APIKEY"
+    private let apiKey = "c1af2766a7485834f129e6f5755f1d58"
     weak var delegate: WeatherFetcherDelegate?
+    private var cancellables = Set<AnyCancellable>()
     
     override init() {
         super.init()
@@ -25,6 +28,37 @@ class WeatherFetcher: NSObject, CLLocationManagerDelegate {
     
     func startFetchingWeather() {
         locationManager.startUpdatingLocation()
+    }
+    
+    func fetchWeather(for region: String) {
+        let urlString = "https://api.openweathermap.org/data/2.5/weather"
+        let parameters: [String: Any] = [
+            "q": region,
+            "appid": apiKey,
+            "units": "metric"
+        ]
+        
+        var urlComponents = URLComponents(string: urlString)!
+        urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: "\($0.value)") }
+        
+        guard let url = urlComponents.url else { return }
+        
+        URLSession.shared.dataTaskPublisher(for: URLRequest(url: url))
+            .map(\.data)
+            .decode(type: WeatherData.self, decoder: JSONDecoder())
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    self.delegate?.didFailWithError(error)
+                }
+            }, receiveValue: { weatherData in
+                DispatchQueue.main.async {
+                    self.delegate?.didUpdateWeather(weatherData)
+                }
+            })
+            .store(in: &cancellables)
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -43,32 +77,25 @@ class WeatherFetcher: NSObject, CLLocationManagerDelegate {
             return
         }
         
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                print("Error fetching weather: \(error)")
-                return
-            }
-            
-            guard let data = data else {
-                print("No data returned")
-                return
-            }
-            
-            do {
-                let weatherData = try JSONDecoder().decode(WeatherData.self, from: data)
+        URLSession.shared.dataTaskPublisher(for: URLRequest(url: url))
+            .map(\.data)
+            .decode(type: WeatherData.self, decoder: JSONDecoder())
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    self.delegate?.didFailWithError(error)
+                }
+            }, receiveValue: { weatherData in
                 DispatchQueue.main.async {
                     self.delegate?.didUpdateWeather(weatherData)
                 }
-            } catch {
-                print("Error parsing JSON: \(error)")
-            }
-        }
-        
-        task.resume()
+            })
+            .store(in: &cancellables)
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Failed to get location: \(error)")
+        delegate?.didFailWithError(error)
     }
 }
-

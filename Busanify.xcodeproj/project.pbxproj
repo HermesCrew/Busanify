@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B8AD94182C353E4B00906BF6 /* RegionFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AD94172C353E4B00906BF6 /* RegionFetcher.swift */; };
 		B8B3AB3A2C2AA94600E4AB7A /* WeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B3AB392C2AA94600E4AB7A /* WeatherData.swift */; };
 		B8B3AB3C2C2AA99500E4AB7A /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B3AB3B2C2AA99500E4AB7A /* WeatherViewController.swift */; };
 		B8B3AB3E2C2B9C0200E4AB7A /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B8B3AB3D2C2B9C0200E4AB7A /* Config.xcconfig */; };
@@ -50,6 +51,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B8AD94172C353E4B00906BF6 /* RegionFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionFetcher.swift; sourceTree = "<group>"; };
 		B8B3AB392C2AA94600E4AB7A /* WeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherData.swift; sourceTree = "<group>"; };
 		B8B3AB3B2C2AA99500E4AB7A /* WeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewController.swift; sourceTree = "<group>"; };
 		B8B3AB3D2C2B9C0200E4AB7A /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 			children = (
 				C2D279C62C29456200AEAFD1 /* PlacesApi.swift */,
 				B8B3AB452C2BFB1200E4AB7A /* WeatherFetcher.swift */,
+				B8AD94172C353E4B00906BF6 /* RegionFetcher.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -392,6 +395,7 @@
 				C2D279C92C29456E00AEAFD1 /* HomeViewUseCase.swift in Sources */,
 				B8B3AB3C2C2AA99500E4AB7A /* WeatherViewController.swift in Sources */,
 				C2D279CF2C29459000AEAFD1 /* PlaceType.swift in Sources */,
+				B8AD94182C353E4B00906BF6 /* RegionFetcher.swift in Sources */,
 				C2D279C72C29456200AEAFD1 /* PlacesApi.swift in Sources */,
 				C296D7022C1F16B000691515 /* ViewController.swift in Sources */,
 				C2D279D32C2945A300AEAFD1 /* TempViewModel.swift in Sources */,
