@@ -14,12 +14,10 @@ import Combine
 class HomeViewController: UIViewController, MapControllerDelegate, WeatherFetcherDelegate, WeatherContainerDelegate {
     
     // UIComponent
-    
     private var weatherContainerWidthConstraint: NSLayoutConstraint!
     private var searchTextFieldLeadingConstraint: NSLayoutConstraint!
     private var searchTextFieldLeadingConstraintExpanded: NSLayoutConstraint!
     let weatherContainer = WeatherContainer()
-//    let weatherContainer = WeatherContainer(temperature: 20, weatherImage: UIImage(systemName: "sun.max"))
     let searchTextField = SearchTextField()
     let searchIcon: UIImageView = {
         let icon = UIImageView()
@@ -51,7 +49,7 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherFetche
     private let longRange = 128.7384361...129.3728194
     private let viewModel = HomeViewModel()
     private var tempPinArr: [Poi?] = []
-    private let weatherFetcher = WeatherFetcher() // WeatherFetcher 초기화
+    private let weatherFetcher = WeatherFetcher()
     
     // WeatherViewController 연결.
     let weatherViewController = WeatherViewController()
@@ -87,10 +85,13 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherFetche
         mapController = KMController(viewContainer: mapContainer!)
         mapController!.delegate = self
         
-        weatherFetcher.delegate = self // WeatherFetcher delegate 설정
-        weatherFetcher.startFetchingWeather() // WeatherFetcher 시작
+        // WeatherFetcher delegate 설정
+        weatherFetcher.delegate = self
+        weatherFetcher.startFetchingWeather()
         
+        // WeatherContainer delegate 설정
         weatherContainer.delegate = self
+        
         
         setSubscriber()
         configureUI()
@@ -101,9 +102,9 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherFetche
     func didTapWeatherButton() {
         print("Navigating to WeatherViewController")
         let weatherVC = WeatherViewController()
-        weatherVC.modalPresentationStyle = .fullScreen // 또는 .pageSheet
-        self.present(weatherVC, animated: true, completion: nil)
+        show(weatherVC, sender: nil)
     }
+
 
     // WeatherFetcherDelegate 메서드 추가
     func didUpdateWeather(_ weatherData: WeatherData) {
