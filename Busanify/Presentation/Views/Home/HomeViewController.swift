@@ -5,17 +5,21 @@
 //  Created by MadCow on 2024/6/24.
 //
 
+// MARK: didupdateWeather, didFailWithError method 를 추가하여 fetcher와 weathcontainer 연결 하였습니다. 감사합니다.
+
 import UIKit
 import KakaoMapsSDK
 import Combine
 
-class HomeViewController: UIViewController, MapControllerDelegate {
+class HomeViewController: UIViewController, MapControllerDelegate, WeatherFetcherDelegate, WeatherContainerDelegate {
     
     // UIComponent
+    
     private var weatherContainerWidthConstraint: NSLayoutConstraint!
     private var searchTextFieldLeadingConstraint: NSLayoutConstraint!
     private var searchTextFieldLeadingConstraintExpanded: NSLayoutConstraint!
-    let weatherContainer = WeatherContainer(temperature: 20, weatherImage: UIImage(systemName: "sun.max"))
+    let weatherContainer = WeatherContainer()
+//    let weatherContainer = WeatherContainer(temperature: 20, weatherImage: UIImage(systemName: "sun.max"))
     let searchTextField = SearchTextField()
     let searchIcon: UIImageView = {
         let icon = UIImageView()
@@ -47,6 +51,10 @@ class HomeViewController: UIViewController, MapControllerDelegate {
     private let longRange = 128.7384361...129.3728194
     private let viewModel = HomeViewModel()
     private var tempPinArr: [Poi?] = []
+    private let weatherFetcher = WeatherFetcher() // WeatherFetcher 초기화
+    
+    // WeatherViewController 연결.
+    let weatherViewController = WeatherViewController()
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         _observerAdded = false
@@ -79,9 +87,51 @@ class HomeViewController: UIViewController, MapControllerDelegate {
         mapController = KMController(viewContainer: mapContainer!)
         mapController!.delegate = self
         
+        weatherFetcher.delegate = self // WeatherFetcher delegate 설정
+        weatherFetcher.startFetchingWeather() // WeatherFetcher 시작
+        
+        weatherContainer.delegate = self
+        
         setSubscriber()
         configureUI()
         setupTapGesture()
+    }
+    
+    // WeatherContainerDelegate 메서드 구현
+    func didTapWeatherButton() {
+        print("Navigating to WeatherViewController")
+        let weatherVC = WeatherViewController()
+        weatherVC.modalPresentationStyle = .fullScreen // 또는 .pageSheet
+        self.present(weatherVC, animated: true, completion: nil)
+    }
+
+    // WeatherFetcherDelegate 메서드 추가
+    func didUpdateWeather(_ weatherData: WeatherData) {
+        let iconUrlString = "https://openweathermap.org/img/wn/\(weatherData.weather.first?.icon ?? "")@2x.png"
+        guard let iconUrl = URL(string: iconUrlString) else {
+            print("Invalid icon URL")
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: iconUrl) { data, response, error in
+            if let error = error {
+                print("Error loading icon image: \(error)")
+                return
+            }
+            
+            guard let data = data, let iconImage = UIImage(data: data) else {
+                print("No icon data returned or data is not an image")
+                return
+            }
+            
+            self.weatherContainer.updateWeather(weatherData: weatherData, weatherImage: iconImage)
+        }
+        
+        task.resume()
+    }
+    
+    func didFailWithError(_ error: Error) {
+        print("Failed to fetch weather: \(error)")
     }
     
     func setSubscriber() {
