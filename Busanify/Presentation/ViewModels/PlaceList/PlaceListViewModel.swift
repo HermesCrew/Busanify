@@ -13,12 +13,14 @@ struct PlaceCellViewModel {
     let address: String
     let openTime: String
     let imageURL: URL?
+    var isBookmarked: Bool
 
-    init(place: Place) {
+    init(place: Place, isBookmarked: Bool = false) {
         self.title = place.title
         self.address = place.address
         self.openTime = place.openTime ?? "영업시간 정보 없음"
         self.imageURL = URL(string: place.image)
+        self.isBookmarked = isBookmarked
     }
 }
 
