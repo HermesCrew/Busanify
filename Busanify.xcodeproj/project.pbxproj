@@ -7,16 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B0C87FAD55542F4910C85E04 /* Pods_Busanify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C97DAEB9FCE617B8E9F47CEF /* Pods_Busanify.framework */; };
 		75304AF32C377A560058FDDE /* PlaceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75304AF22C377A560058FDDE /* PlaceTableViewCell.swift */; };
 		753520A42C326B0E00E439CF /* PlaceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753520A32C326B0E00E439CF /* PlaceListViewModel.swift */; };
 		753520AA2C3286D400E439CF /* PlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753520A92C3286D400E439CF /* PlaceListViewController.swift */; };
+		B0C87FAD55542F4910C85E04 /* Pods_Busanify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C97DAEB9FCE617B8E9F47CEF /* Pods_Busanify.framework */; };
 		C296D6FE2C1F16B000691515 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D6FD2C1F16B000691515 /* AppDelegate.swift */; };
 		C296D7002C1F16B000691515 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D6FF2C1F16B000691515 /* SceneDelegate.swift */; };
 		C296D7022C1F16B000691515 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D7012C1F16B000691515 /* ViewController.swift */; };
 		C296D7052C1F16B000691515 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = C296D7042C1F16B000691515 /* Base */; };
 		C296D7072C1F16B200691515 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C296D7062C1F16B200691515 /* Assets.xcassets */; };
-		C296D70A2C1F16B200691515 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = C296D7092C1F16B200691515 /* Base */; };
+C296D70A2C1F16B200691515 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = C296D7092C1F16B200691515 /* Base */; };
 		C296D7152C1F16B200691515 /* BusanifyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D7142C1F16B200691515 /* BusanifyTests.swift */; };
 		C296D71F2C1F16B200691515 /* BusanifyUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D71E2C1F16B200691515 /* BusanifyUITests.swift */; };
 		C296D7212C1F16B200691515 /* BusanifyUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D7202C1F16B200691515 /* BusanifyUITestsLaunchTests.swift */; };
@@ -116,15 +116,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		BEFDFFBA458BE9B300E7C88A /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				C8C0A080C2DD911068678876 /* Pods-Busanify.debug.xcconfig */,
-				6AFFFE0B6C958425CF4F8A5F /* Pods-Busanify.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		75304AF12C377A3D0058FDDE /* PlaceList */ = {
 			isa = PBXGroup;
 			children = (
@@ -140,6 +131,15 @@
 				753520A32C326B0E00E439CF /* PlaceListViewModel.swift */,
 			);
 			path = PlaceList;
+			sourceTree = "<group>";
+		};
+		BEFDFFBA458BE9B300E7C88A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C8C0A080C2DD911068678876 /* Pods-Busanify.debug.xcconfig */,
+				6AFFFE0B6C958425CF4F8A5F /* Pods-Busanify.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		C296D6F12C1F16B000691515 = {
