@@ -11,13 +11,21 @@ import KakaoMapsSDK
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+    var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        if let clientID = Bundle.main.object(forInfoDictionaryKey: "MAP_KEY") as? String {        
+        if let clientID = Bundle.main.object(forInfoDictionaryKey: "MAP_KEY") as? String {
             SDKInitializer.InitSDK(appKey: clientID)
         }
+        
+//        // 윈도우 설정
+//        window = UIWindow(frame: UIScreen.main.bounds)
+//        let homeViewController = HomeViewController()
+//        let navigationController = UINavigationController(rootViewController: homeViewController)
+//        window?.rootViewController = navigationController
+//        window?.makeKeyAndVisible()
+        
         return true
     }
 

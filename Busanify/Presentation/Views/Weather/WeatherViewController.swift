@@ -5,6 +5,7 @@
 //  Created by 장예진 on 7/8/24.
 //
 
+// MARK: 네비게이션 컨트롤러 Nil인 이슈로 인해 잠깐 모달뷰로 뷰 작업해놓음
 
 // -TODO: 지도 이미지 단순하게 선따기
 // -TODO: 좌표 연결해서 버튼 생성하기
@@ -25,7 +26,6 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
     let weatherIcon = UIImageView()
     let weatherFetcher = WeatherFetcher()
     var cancellables = Set<AnyCancellable>()
-    var weatherData: WeatherData? // 추가: WeatherData 속성
     let mapView = UIImageView()
     
     // 좌표 데이터
@@ -54,7 +54,12 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
         weatherFetcher.delegate = self
         navigationItem.title = "날씨" // 내비게이션 타이틀 설정
         setupUI()
-        addRegionLabels()
+        weatherFetcher.startFetchingWeather() // 날씨 정보 가져오기 시작
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        addRegionButtons() // 이미지 뷰의 크기와 위치가 설정된 후에 버튼 추가
     }
     
     func setupUI() {
@@ -125,42 +130,34 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
         ])
     }
     
-    func addRegionLabels() {
+    func addRegionButtons() {
         for (region, longitude, latitude) in regions {
-            addRegionLabel(x: longitude, y: latitude, region: region)
+            addRegionButton(x: longitude, y: latitude, region: region)
         }
     }
     
-    func addRegionLabel(x: Double, y: Double, region: String) {
-        let label = UILabel()
-        // 지도 이미지의 비율에 맞춰 라벨 위치 조정
+    func addRegionButton(x: Double, y: Double, region: String) {
+        let button = UIButton()
+        button.setTitle(region, for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.backgroundColor = .white
+        button.layer.borderColor = UIColor.black.cgColor
+        button.layer.borderWidth = 1.0
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 12)
+        button.addTarget(self, action: #selector(regionButtonTapped(_:)), for: .touchUpInside)
+        
+        // 지도 이미지의 비율에 맞춰 버튼 위치 조정
         let mapWidth = mapView.frame.size.width
         let mapHeight = mapView.frame.size.height
         let adjustedX = mapWidth * (x - 128.9) / (129.2222873 - 128.9) // 경도 조정
         let adjustedY = mapHeight * (35.3 - y) / (35.3 - 35.08811667) // 위도 조정
         
-        label.frame = CGRect(x: adjustedX, y: adjustedY, width: 80, height: 30)
-        label.backgroundColor = .white
-        label.layer.borderColor = UIColor.black.cgColor
-        label.layer.borderWidth = 1.0
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 12)
-        label.text = region
-        
-        // Tap gesture recognizer 추가
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(regionLabelTapped(_:)))
-        label.isUserInteractionEnabled = true
-        label.addGestureRecognizer(tapGesture)
-        label.tag = region.hashValue
-        
-        mapView.addSubview(label)
+        button.frame = CGRect(x: adjustedX, y: adjustedY, width: 80, height: 30)
+        mapView.addSubview(button)
     }
     
-    @objc func regionLabelTapped(_ sender: UITapGestureRecognizer) {
-        guard let label = sender.view as? UILabel else { return }
-        let region = regions.first { $0.0.hashValue == label.tag }
-        guard let regionName = region?.0 else { return }
-        // 지역구에 따른 날씨 정보 요청 및 모달 뷰 표시
+    @objc func regionButtonTapped(_ sender: UIButton) {
+        guard let regionName = sender.title(for: .normal) else { return }
         fetchWeatherForRegion(regionName: regionName)
     }
     
@@ -168,35 +165,30 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
         weatherFetcher.fetchWeather(for: regionName)
     }
     
-    func showWeatherModal(with weatherData: WeatherData) {
-        let weatherVC = WeatherViewController()
-        weatherVC.weatherData = weatherData // 수정: weatherData 속성 설정
-        weatherVC.modalPresentationStyle = .formSheet
-        present(weatherVC, animated: true, completion: nil)
-    }
-    
     func didUpdateWeather(_ weatherData: WeatherData) {
-        locationLabel.text = weatherData.name
-        temperatureLabel.text = "\(weatherData.main.temp)°C"
-        minTempLabel.text = "Min: \(weatherData.main.temp_min)°C"
-        maxTempLabel.text = "Max: \(weatherData.main.temp_max)°C"
-        descriptionLabel.text = weatherData.weather.first?.description ?? ""
-        
-        let iconUrlString = "https://openweathermap.org/img/wn/\(weatherData.weather.first?.icon ?? "")@2x.png"
-        guard let iconUrl = URL(string: iconUrlString) else {
-            print("Invalid icon URL")
-            return
+        DispatchQueue.main.async {
+            self.locationLabel.text = weatherData.name
+            self.temperatureLabel.text = "\(Int(weatherData.main.temp))°C"
+            self.minTempLabel.text = "Min: \(Int(weatherData.main.temp_min))°C"
+            self.maxTempLabel.text = "Max: \(Int(weatherData.main.temp_max))°C"
+            self.descriptionLabel.text = weatherData.weather.first?.description ?? ""
+            
+            let iconUrlString = "https://openweathermap.org/img/wn/\(weatherData.weather.first?.icon ?? "")@2x.png"
+            guard let iconUrl = URL(string: iconUrlString) else {
+                print("Invalid icon URL")
+                return
+            }
+            
+            URLSession.shared.dataTaskPublisher(for: URLRequest(url: iconUrl))
+                .map(\.data)
+                .compactMap { UIImage(data: $0) }
+                .replaceError(with: UIImage())
+                .receive(on: DispatchQueue.main)
+                .sink(receiveValue: { [weak self] image in
+                    self?.weatherIcon.image = image
+                })
+                .store(in: &self.cancellables)
         }
-        
-        URLSession.shared.dataTaskPublisher(for: URLRequest(url: iconUrl))
-            .map(\.data)
-            .compactMap { UIImage(data: $0) }
-            .replaceError(with: UIImage())
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] image in
-                self?.weatherIcon.image = image
-            })
-            .store(in: &cancellables)
     }
     
     func didFailWithError(_ error: Error) {
