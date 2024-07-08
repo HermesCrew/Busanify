@@ -101,12 +101,22 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherFetche
     // WeatherContainerDelegate 메서드 구현
     func didTapWeatherButton() {
         let weatherVC = WeatherViewController()
+        
         if navigationController == nil {
-            // 현재 ViewController를 NavigationController로 감싸기
+            // 현재 ViewController를 NavigationController로 감싸주기!
             let navController = UINavigationController(rootViewController: self)
-            UIApplication.shared.windows.first?.rootViewController = navController
-            // 새로운 ViewController 푸시
-            navController.pushViewController(weatherVC, animated: true)
+            
+            // UIWindowScene을 사용하여 현재 창을 가져오기
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let window = windowScene.windows.first {
+                window.rootViewController = navController
+                window.makeKeyAndVisible()
+                
+                // 새로운 ViewController push~
+                navController.pushViewController(weatherVC, animated: true)
+            } else {
+                print("No window scene found")
+            }
         } else {
             navigationController?.pushViewController(weatherVC, animated: true)
         }
