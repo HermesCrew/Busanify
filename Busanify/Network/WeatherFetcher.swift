@@ -16,11 +16,15 @@ protocol WeatherFetcherDelegate: AnyObject {
 
 class WeatherFetcher: NSObject, CLLocationManagerDelegate {
     private let locationManager = CLLocationManager()
-    private let apiKey = "WEATHER_KEY"
+    private let apiKey: String
     weak var delegate: WeatherFetcherDelegate?
     private var cancellables = Set<AnyCancellable>()
     
     override init() {
+        guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "WEATHER_KEY") as? String else {
+            fatalError("API Key is missing in Info.plist")
+        }
+        self.apiKey = apiKey
         super.init()
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
