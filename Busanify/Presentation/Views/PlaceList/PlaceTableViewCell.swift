@@ -13,6 +13,7 @@ class PlaceTableViewCell: UITableViewCell {
     let titleLabel = UILabel()
     let addressLabel = UILabel()
     let openTimeLabel = UILabel()
+    let bookmarkButton = UIButton(type: .custom)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -43,7 +44,12 @@ class PlaceTableViewCell: UITableViewCell {
         openTimeLabel.numberOfLines = 0
         contentView.addSubview(openTimeLabel)
         
-        [placeImageView, titleLabel, addressLabel, openTimeLabel].forEach {
+        bookmarkButton.setImage(UIImage(systemName: "bookmark"), for: .normal)
+        bookmarkButton.setImage(UIImage(systemName: "bookmark.fill"), for: .selected)
+        bookmarkButton.addTarget(self, action: #selector(bookmarkTapped), for: .touchUpInside)
+        contentView.addSubview(bookmarkButton)
+        
+        [placeImageView, titleLabel, addressLabel, openTimeLabel, bookmarkButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
@@ -60,11 +66,16 @@ class PlaceTableViewCell: UITableViewCell {
             addressLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             addressLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
             addressLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-        
+            
             openTimeLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             openTimeLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 4),
             openTimeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            openTimeLabel.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -12)
+            openTimeLabel.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -12),
+            
+            bookmarkButton.topAnchor.constraint(equalTo: placeImageView.topAnchor, constant: 5),
+            bookmarkButton.leadingAnchor.constraint(equalTo: placeImageView.leadingAnchor, constant: 5),
+            bookmarkButton.widthAnchor.constraint(equalToConstant: 30),
+            bookmarkButton.heightAnchor.constraint(equalToConstant: 30)
         ])
     }
     
@@ -87,6 +98,11 @@ class PlaceTableViewCell: UITableViewCell {
         }.resume()
     }
     
+    @objc private func bookmarkTapped() {
+        bookmarkButton.isSelected.toggle()
+        // 토글 여부 viewmodel isbookmarked에 반영되어야 함
+    }
+    
     func configure(with viewModel: PlaceCellViewModel) {
         titleLabel.text = viewModel.title
         addressLabel.text = viewModel.address
@@ -98,5 +114,7 @@ class PlaceTableViewCell: UITableViewCell {
         } else {
             placeImageView.image = UIImage(named: "placeholder")
         }
+        
+        bookmarkButton.isSelected = viewModel.isBookmarked
     }
 }
