@@ -11,7 +11,6 @@
 // -TODO: 좌표 연결해서 버튼 생성하기
 // -TODO: 버튼 누르면 날씨 상세 모달뷰 뜨도록
 
-
 import UIKit
 import Combine
 import CoreLocation
@@ -25,6 +24,7 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
     let weatherIcon = UIImageView()
     let weatherFetcher = WeatherFetcher()
     var cancellables = Set<AnyCancellable>()
+    var selectedButton: UIButton? // 선택된 버튼을 저장하는 변수
     
     // 좌표 데이터
     let regions = [
@@ -45,6 +45,7 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
         ("해운대구", 129.1658083, 35.16001944),
         ("기장군", 129.2222873, 35.24477541)
     ]
+    var selectedRegionName: String? // 선택된 지역 이름
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -150,8 +151,15 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
     
     @objc func regionButtonTapped(_ sender: UIButton) {
         guard let regionName = sender.title(for: .normal) else { return }
-        // 버튼 색상 변경
+        
+        // 이전에 선택된 버튼의 색상을 원래대로 되돌리기
+//        selectedButton?.backgroundColor = .white
+        
+        // 새로 선택된 버튼의 색상 변경
         sender.backgroundColor = .gray
+        selectedButton = sender
+        
+        selectedRegionName = regionName // 선택된 지역 이름 저장
         fetchWeatherForRegion(regionName: regionName)
     }
     
@@ -161,7 +169,7 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
     
     func didUpdateWeather(_ weatherData: WeatherData) {
         DispatchQueue.main.async {
-            self.locationLabel.text = weatherData.name
+            self.locationLabel.text = self.selectedRegionName // 선택된 지역 이름 사용
             self.temperatureLabel.text = "\(Int(weatherData.main.temp))°C"
             
             let iconUrlString = "https://openweathermap.org/img/wn/\(weatherData.weather.first?.icon ?? "")@2x.png"
