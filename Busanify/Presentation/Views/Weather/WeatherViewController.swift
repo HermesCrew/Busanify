@@ -18,15 +18,13 @@ import CoreLocation
 
 class WeatherViewController: UIViewController, WeatherFetcherDelegate {
     
+    let mapView = UIImageView()
+    let detailsView = UIView()
     let locationLabel = UILabel()
     let temperatureLabel = UILabel()
-    let minTempLabel = UILabel()
-    let maxTempLabel = UILabel()
-    let descriptionLabel = UILabel()
     let weatherIcon = UIImageView()
     let weatherFetcher = WeatherFetcher()
     var cancellables = Set<AnyCancellable>()
-    let mapView = UIImageView()
     
     // 좌표 데이터
     let regions = [
@@ -68,34 +66,28 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
         mapView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(mapView)
         
+        detailsView.backgroundColor = .white
+        detailsView.layer.cornerRadius = 10
+        detailsView.layer.shadowColor = UIColor.black.cgColor
+        detailsView.layer.shadowOpacity = 0.1
+        detailsView.layer.shadowOffset = CGSize(width: 0, height: 1)
+        detailsView.layer.shadowRadius = 4
+        detailsView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(detailsView)
+        
         locationLabel.translatesAutoresizingMaskIntoConstraints = false
         locationLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         locationLabel.textAlignment = .center
-        view.addSubview(locationLabel)
+        detailsView.addSubview(locationLabel)
         
         temperatureLabel.translatesAutoresizingMaskIntoConstraints = false
         temperatureLabel.font = UIFont.systemFont(ofSize: 48, weight: .bold)
         temperatureLabel.textAlignment = .center
-        view.addSubview(temperatureLabel)
-        
-        minTempLabel.translatesAutoresizingMaskIntoConstraints = false
-        minTempLabel.font = UIFont.systemFont(ofSize: 20)
-        minTempLabel.textAlignment = .center
-        view.addSubview(minTempLabel)
-        
-        maxTempLabel.translatesAutoresizingMaskIntoConstraints = false
-        maxTempLabel.font = UIFont.systemFont(ofSize: 20)
-        maxTempLabel.textAlignment = .center
-        view.addSubview(maxTempLabel)
-        
-        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-        descriptionLabel.font = UIFont.systemFont(ofSize: 20)
-        descriptionLabel.textAlignment = .center
-        view.addSubview(descriptionLabel)
+        detailsView.addSubview(temperatureLabel)
         
         weatherIcon.translatesAutoresizingMaskIntoConstraints = false
         weatherIcon.contentMode = .scaleAspectFit
-        view.addSubview(weatherIcon)
+        detailsView.addSubview(weatherIcon)
         
         NSLayoutConstraint.activate([
             mapView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -103,61 +95,63 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
             mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             mapView.heightAnchor.constraint(equalTo: mapView.widthAnchor, multiplier: 1.0),
             
-            locationLabel.topAnchor.constraint(equalTo: mapView.bottomAnchor, constant: 20),
-            locationLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            locationLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            detailsView.topAnchor.constraint(equalTo: mapView.bottomAnchor, constant: 20),
+            detailsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            detailsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            detailsView.heightAnchor.constraint(equalToConstant: 200),
+            
+            locationLabel.topAnchor.constraint(equalTo: detailsView.topAnchor, constant: 20),
+            locationLabel.leadingAnchor.constraint(equalTo: detailsView.leadingAnchor),
+            locationLabel.trailingAnchor.constraint(equalTo: detailsView.trailingAnchor),
             
             temperatureLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 20),
-            temperatureLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            temperatureLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            temperatureLabel.leadingAnchor.constraint(equalTo: detailsView.leadingAnchor),
+            temperatureLabel.trailingAnchor.constraint(equalTo: detailsView.trailingAnchor),
             
-            maxTempLabel.topAnchor.constraint(equalTo: temperatureLabel.bottomAnchor, constant: 20),
-            maxTempLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            maxTempLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            
-            minTempLabel.topAnchor.constraint(equalTo: maxTempLabel.bottomAnchor, constant: 10),
-            minTempLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            minTempLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            
-            descriptionLabel.topAnchor.constraint(equalTo: minTempLabel.bottomAnchor, constant: 20),
-            descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            
-            weatherIcon.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 20),
-            weatherIcon.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            weatherIcon.widthAnchor.constraint(equalToConstant: 100),
-            weatherIcon.heightAnchor.constraint(equalToConstant: 100)
+            weatherIcon.topAnchor.constraint(equalTo: temperatureLabel.bottomAnchor, constant: 20),
+            weatherIcon.centerXAnchor.constraint(equalTo: detailsView.centerXAnchor),
+            weatherIcon.widthAnchor.constraint(equalToConstant: 50),
+            weatherIcon.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
     
     func addRegionButtons() {
+        var previousButton: UIButton? = nil
+        
         for (region, longitude, latitude) in regions {
-            addRegionButton(x: longitude, y: latitude, region: region)
+            let button = UIButton()
+            button.setTitle(region, for: .normal)
+            button.setTitleColor(.black, for: .normal)
+            button.backgroundColor = .white
+            button.layer.borderColor = UIColor.black.cgColor
+            button.layer.borderWidth = 1.0
+            button.titleLabel?.font = UIFont.systemFont(ofSize: 12)
+            button.addTarget(self, action: #selector(regionButtonTapped(_:)), for: .touchUpInside)
+            
+            // 지도 이미지의 비율에 맞춰 버튼 위치 조정
+            let mapWidth = mapView.frame.size.width
+            let mapHeight = mapView.frame.size.height
+            let adjustedX = mapWidth * (longitude - 128.9) / (129.2222873 - 128.9) // 경도 조정
+            let adjustedY = mapHeight * (35.3 - latitude) / (35.3 - 35.08811667) // 위도 조정
+            
+            button.frame = CGRect(x: adjustedX, y: adjustedY, width: 80, height: 30)
+            
+            // 버튼이 겹치지 않도록 위치 조정
+            if let previousButton = previousButton {
+                if button.frame.intersects(previousButton.frame) {
+                    button.frame.origin.y += 35 // 이전 버튼과 겹칠 경우 y 위치 조정
+                }
+            }
+            
+            previousButton = button
+            mapView.addSubview(button)
         }
-    }
-    
-    func addRegionButton(x: Double, y: Double, region: String) {
-        let button = UIButton()
-        button.setTitle(region, for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.backgroundColor = .white
-        button.layer.borderColor = UIColor.black.cgColor
-        button.layer.borderWidth = 1.0
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 12)
-        button.addTarget(self, action: #selector(regionButtonTapped(_:)), for: .touchUpInside)
-        
-        // 지도 이미지의 비율에 맞춰 버튼 위치 조정
-        let mapWidth = mapView.frame.size.width
-        let mapHeight = mapView.frame.size.height
-        let adjustedX = mapWidth * (x - 128.9) / (129.2222873 - 128.9) // 경도 조정
-        let adjustedY = mapHeight * (35.3 - y) / (35.3 - 35.08811667) // 위도 조정
-        
-        button.frame = CGRect(x: adjustedX, y: adjustedY, width: 80, height: 30)
-        mapView.addSubview(button)
     }
     
     @objc func regionButtonTapped(_ sender: UIButton) {
         guard let regionName = sender.title(for: .normal) else { return }
+        // 버튼 색상 변경
+        sender.backgroundColor = .gray
         fetchWeatherForRegion(regionName: regionName)
     }
     
@@ -169,9 +163,6 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
         DispatchQueue.main.async {
             self.locationLabel.text = weatherData.name
             self.temperatureLabel.text = "\(Int(weatherData.main.temp))°C"
-            self.minTempLabel.text = "Min: \(Int(weatherData.main.temp_min))°C"
-            self.maxTempLabel.text = "Max: \(Int(weatherData.main.temp_max))°C"
-            self.descriptionLabel.text = weatherData.weather.first?.description ?? ""
             
             let iconUrlString = "https://openweathermap.org/img/wn/\(weatherData.weather.first?.icon ?? "")@2x.png"
             guard let iconUrl = URL(string: iconUrlString) else {
