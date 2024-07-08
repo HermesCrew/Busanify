@@ -51,9 +51,28 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
         super.viewDidLoad()
         view.backgroundColor = .white
         weatherFetcher.delegate = self
-        navigationItem.title = "날씨" // 내비게이션 타이틀 설정
+        setupNavigationBar()
         setupUI()
-        weatherFetcher.startFetchingWeather() // 날씨 정보 가져오기 시작
+        weatherFetcher.startFetchingWeather()
+    }
+    
+    private func setupNavigationBar() {
+        // Navigation bar 설정
+        navigationItem.title = "날씨"
+        navigationController?.isNavigationBarHidden = false // 내비게이션 바를 숨기지 않도록 설정
+        
+        // Back 버튼 커스터마이즈 (옵션)
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
+        
+        // 네비게이션 바가 있는지 확인
+        if let navigationController = navigationController {
+            navigationController.navigationBar.tintColor = .black
+            navigationController.navigationBar.barTintColor = .white
+            navigationController.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+        } else {
+            // 네비게이션 컨트롤러가 없는 경우 처리
+            print("No navigation controller found")
+        }
     }
     
     override func viewDidLayoutSubviews() {

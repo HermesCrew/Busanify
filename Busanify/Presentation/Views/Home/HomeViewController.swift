@@ -100,9 +100,16 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherFetche
     
     // WeatherContainerDelegate 메서드 구현
     func didTapWeatherButton() {
-        print("Navigating to WeatherViewController")
         let weatherVC = WeatherViewController()
-        show(weatherVC, sender: nil)
+        if navigationController == nil {
+            // 현재 ViewController를 NavigationController로 감싸기
+            let navController = UINavigationController(rootViewController: self)
+            UIApplication.shared.windows.first?.rootViewController = navController
+            // 새로운 ViewController 푸시
+            navController.pushViewController(weatherVC, animated: true)
+        } else {
+            navigationController?.pushViewController(weatherVC, animated: true)
+        }
     }
 
 
@@ -260,6 +267,11 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherFetche
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        
+        // MARK: navigationbar hidden 추가
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+        
         addObservers()
         _appear = true
         if mapController?.isEnginePrepared == false {
