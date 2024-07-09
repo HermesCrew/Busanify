@@ -8,7 +8,7 @@
 import Foundation
 
 struct Place: Identifiable, Hashable, Codable {
-    let id: Int
+    let id: String
     let typeId: String
     let image: String
     let lat: Double
