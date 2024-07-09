@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		C207F3772C3AFA78007DFA27 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = C207F3762C3AFA78007DFA27 /* GoogleSignIn */; };
+		C207F37B2C3AFC0C007DFA27 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207F37A2C3AFC0C007DFA27 /* SignInViewController.swift */; };
+		C207F37D2C3AFC37007DFA27 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207F37C2C3AFC37007DFA27 /* LoadingViewController.swift */; };
+		C207F37F2C3AFC4D007DFA27 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207F37E2C3AFC4D007DFA27 /* UserProfileViewController.swift */; };
+		C207F3812C3AFC5F007DFA27 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207F3802C3AFC5F007DFA27 /* AuthenticationViewModel.swift */; };
+		C207F3832C3AFC74007DFA27 /* SignInApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207F3822C3AFC74007DFA27 /* SignInApi.swift */; };
+		C207F3852C3AFD32007DFA27 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207F3842C3AFD32007DFA27 /* MainViewController.swift */; };
 		C296D6FE2C1F16B000691515 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D6FD2C1F16B000691515 /* AppDelegate.swift */; };
 		C296D7002C1F16B000691515 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D6FF2C1F16B000691515 /* SceneDelegate.swift */; };
 		C296D7022C1F16B000691515 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D7012C1F16B000691515 /* ViewController.swift */; };
@@ -49,6 +55,12 @@
 
 /* Begin PBXFileReference section */
 		A5B5FF36CA65D19775B9B568 /* Pods-Busanify.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busanify.release.xcconfig"; path = "Target Support Files/Pods-Busanify/Pods-Busanify.release.xcconfig"; sourceTree = "<group>"; };
+		C207F37A2C3AFC0C007DFA27 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
+		C207F37C2C3AFC37007DFA27 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
+		C207F37E2C3AFC4D007DFA27 /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
+		C207F3802C3AFC5F007DFA27 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
+		C207F3822C3AFC74007DFA27 /* SignInApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInApi.swift; sourceTree = "<group>"; };
+		C207F3842C3AFD32007DFA27 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		C296D6FA2C1F16B000691515 /* Busanify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Busanify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C296D6FD2C1F16B000691515 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C296D6FF2C1F16B000691515 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -123,6 +135,10 @@
 		C207F3782C3AFB52007DFA27 /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
+				C207F37A2C3AFC0C007DFA27 /* SignInViewController.swift */,
+				C207F37C2C3AFC37007DFA27 /* LoadingViewController.swift */,
+				C207F37E2C3AFC4D007DFA27 /* UserProfileViewController.swift */,
+				C207F3842C3AFD32007DFA27 /* MainViewController.swift */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -130,6 +146,7 @@
 		C207F3792C3AFB62007DFA27 /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
+				C207F3802C3AFC5F007DFA27 /* AuthenticationViewModel.swift */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -201,6 +218,7 @@
 			isa = PBXGroup;
 			children = (
 				C2D279C62C29456200AEAFD1 /* PlacesApi.swift */,
+				C207F3822C3AFC74007DFA27 /* SignInApi.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -502,16 +520,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C207F37B2C3AFC0C007DFA27 /* SignInViewController.swift in Sources */,
 				C2D279C92C29456E00AEAFD1 /* HomeViewUseCase.swift in Sources */,
+				C207F3812C3AFC5F007DFA27 /* AuthenticationViewModel.swift in Sources */,
+				C207F37D2C3AFC37007DFA27 /* LoadingViewController.swift in Sources */,
 				C2D279CF2C29459000AEAFD1 /* PlaceType.swift in Sources */,
+				C207F3852C3AFD32007DFA27 /* MainViewController.swift in Sources */,
 				C2D279C72C29456200AEAFD1 /* PlacesApi.swift in Sources */,
 				C296D7022C1F16B000691515 /* ViewController.swift in Sources */,
 				C2D279D32C2945A300AEAFD1 /* TempViewModel.swift in Sources */,
 				C2D279CB2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift in Sources */,
 				C2D279D52C2945B000AEAFD1 /* TempViewController.swift in Sources */,
+				C207F37F2C3AFC4D007DFA27 /* UserProfileViewController.swift in Sources */,
 				CD89D3552C29A56B00715404 /* HomeViewModel.swift in Sources */,
 				CD0F83DB2C357A85001C04E2 /* CustomViews.swift in Sources */,
 				CD89D3522C29A55A00715404 /* HomeViewController.swift in Sources */,
+				C207F3832C3AFC74007DFA27 /* SignInApi.swift in Sources */,
 				C296D6FE2C1F16B000691515 /* AppDelegate.swift in Sources */,
 				C2D279CD2C29458800AEAFD1 /* Place.swift in Sources */,
 				C296D7002C1F16B000691515 /* SceneDelegate.swift in Sources */,
