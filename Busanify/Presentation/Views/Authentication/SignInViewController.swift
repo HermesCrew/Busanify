@@ -99,7 +99,7 @@ class SignInViewController: UIViewController, ASAuthorizationControllerDelegate,
     }
     
     private func configureUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         
         let stackView = UIStackView(arrangedSubviews: [googleSignInButton, appleSignInButton])
         stackView.axis = .horizontal
