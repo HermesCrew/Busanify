@@ -13,24 +13,28 @@ import AuthenticationServices
 enum State {
     case signedIn(GIDGoogleUser)
     case signedOut
-    case loading
 }
 
 final class AuthenticationViewModel {
     
     static let shared = AuthenticationViewModel(signInApi: SignInApi()) // 싱글톤 패턴
     
-    @Published var state: State = .loading
+    @Published var state: State = .signedOut
     private let signInApi: SignInApi
     
     var authorizedScopes: [String] {
         switch state {
         case .signedIn(let user):
             return user.grantedScopes ?? []
-        case .signedOut, .loading:
+        case .signedOut:
             return []
         }
     }
+    
+    var currentUser: GIDGoogleUser? {
+        return GIDSignIn.sharedInstance.currentUser
+    }
+    
     init(signInApi: SignInApi) {
         self.signInApi = signInApi
         restorePreviousGoogleSignIn()

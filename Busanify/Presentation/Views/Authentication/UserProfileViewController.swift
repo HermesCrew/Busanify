@@ -56,6 +56,7 @@ class UserProfileViewController: UIViewController {
         
         logoutButton.addAction(UIAction { [weak self] _ in
             self?.viewModel.googleSignOut()
+            self?.navigationController?.popViewController(animated: true)
         }, for: .touchUpInside)
     }
     
@@ -86,7 +87,7 @@ class UserProfileViewController: UIViewController {
     }
     
     private func configureProfile() {
-        guard let userProfile = user?.profile else { return }
+        guard let userProfile = viewModel.currentUser?.profile else { return }
         
         nameLabel.text = userProfile.name
         emailLabel.text = userProfile.email
