@@ -5,7 +5,7 @@
 //  Created by 장예진 on 7/8/24.
 //
 
-// MARK: 네비게이션 컨트롤러 Nil인 이슈로 인해 잠깐 모달뷰로 뷰 작업해놓음
+
 
 // -TODO: 지도 이미지 단순하게 선따기
 // -TODO: 좌표 연결해서 버튼 생성하기
@@ -82,11 +82,11 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
         mapView.isUserInteractionEnabled = true
         mapView.translatesAutoresizingMaskIntoConstraints = false
         
-
+        // 그림자 설정 추가
         mapView.layer.shadowColor = UIColor.black.cgColor
         mapView.layer.shadowOpacity = 0.3
         mapView.layer.shadowOffset = CGSize(width: 0, height: 1)
-        mapView.layer.shadowRadius = 7
+        mapView.layer.shadowRadius = 8
         
         view.addSubview(mapView)
         
@@ -166,42 +166,51 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
     }
     
     func addRegionButtons() {
-        for (region, longitude, latitude) in regions {
+        let buttonPositions: [CGPoint] = [
+            CGPoint(x: 30, y: 50),
+            CGPoint(x: 120, y: 50),
+            CGPoint(x: 210, y: 50),
+            CGPoint(x: 300, y: 50),
+            CGPoint(x: 30, y: 150),
+            CGPoint(x: 120, y: 150),
+            CGPoint(x: 210, y: 150),
+            CGPoint(x: 300, y: 150),
+            CGPoint(x: 30, y: 250),
+            CGPoint(x: 120, y: 250),
+            CGPoint(x: 210, y: 250),
+            CGPoint(x: 300, y: 250),
+            CGPoint(x: 30, y: 350),
+            CGPoint(x: 120, y: 350),
+            CGPoint(x: 210, y: 350),
+            CGPoint(x: 300, y: 350)
+        ]
+        
+        for (index, region) in regions.enumerated() {
             let button = UIButton()
-            button.setTitle(region, for: .normal)
+            button.setTitle(region.0, for: .normal)
             button.setTitleColor(.black, for: .normal)
             button.backgroundColor = .white
             button.layer.borderColor = UIColor.black.cgColor
             button.layer.borderWidth = 1.0
             button.titleLabel?.font = UIFont.systemFont(ofSize: 12)
+            button.layer.cornerRadius = 10 // 둥근 모서리
+            button.layer.shadowColor = UIColor.black.cgColor
+            button.layer.shadowOpacity = 0.2
+            button.layer.shadowOffset = CGSize(width: 0, height: 1)
+            button.layer.shadowRadius = 5
+            
             button.addTarget(self, action: #selector(regionButtonTapped(_:)), for: .touchUpInside)
             
-
-            button.layer.shadowColor = UIColor.black.cgColor
-            button.layer.shadowOpacity = 0.1
-            button.layer.shadowOffset = CGSize(width: 0, height: 1)
-            button.layer.shadowRadius = 2
-            
-
-            button.layer.cornerRadius = 15
-
-            // 지도 이미지의 비율에 맞춰 버튼 위치 조정
-            let mapWidth = mapView.frame.size.width
-            let mapHeight = mapView.frame.size.height
-            let adjustedX = mapWidth * (longitude - 128.9) / (129.2222873 - 128.9) // 경도 조정
-            let adjustedY = mapHeight * (35.3 - latitude) / (35.3 - 35.08811667) // 위도 조정
-            
-            button.frame = CGRect(x: adjustedX, y: adjustedY, width: 80, height: 30)
-            mapView.addSubview(button)
+            let position = buttonPositions[index]
+            button.frame = CGRect(x: position.x, y: position.y, width: 80, height: 30)
+            mapView.addSubview(button) // mapView에 추가하여 이미지 위에 표시
         }
     }
-
     
     @objc func regionButtonTapped(_ sender: UIButton) {
         guard let regionName = sender.title(for: .normal) else { return }
         selectedRegionName = regionName
         print("\(regionName) 버튼이 눌렸습니다.")
-        sender.backgroundColor = UIColor.lightGray
         weatherFetcher.fetchWeather(for: regionName)
     }
     
