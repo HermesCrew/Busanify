@@ -82,11 +82,11 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
         mapView.isUserInteractionEnabled = true
         mapView.translatesAutoresizingMaskIntoConstraints = false
         
-        // 그림자 설정 추가
+
         mapView.layer.shadowColor = UIColor.black.cgColor
         mapView.layer.shadowOpacity = 0.3
         mapView.layer.shadowOffset = CGSize(width: 0, height: 1)
-        mapView.layer.shadowRadius = 8
+        mapView.layer.shadowRadius = 7
         
         view.addSubview(mapView)
         
@@ -176,6 +176,15 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
             button.titleLabel?.font = UIFont.systemFont(ofSize: 12)
             button.addTarget(self, action: #selector(regionButtonTapped(_:)), for: .touchUpInside)
             
+
+            button.layer.shadowColor = UIColor.black.cgColor
+            button.layer.shadowOpacity = 0.1
+            button.layer.shadowOffset = CGSize(width: 0, height: 1)
+            button.layer.shadowRadius = 2
+            
+
+            button.layer.cornerRadius = 15
+
             // 지도 이미지의 비율에 맞춰 버튼 위치 조정
             let mapWidth = mapView.frame.size.width
             let mapHeight = mapView.frame.size.height
@@ -186,11 +195,13 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
             mapView.addSubview(button)
         }
     }
+
     
     @objc func regionButtonTapped(_ sender: UIButton) {
         guard let regionName = sender.title(for: .normal) else { return }
         selectedRegionName = regionName
         print("\(regionName) 버튼이 눌렸습니다.")
+        sender.backgroundColor = UIColor.lightGray
         weatherFetcher.fetchWeather(for: regionName)
     }
     
