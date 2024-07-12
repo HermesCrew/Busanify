@@ -102,7 +102,7 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
         detailsView.addSubview(locationLabel)
         
         temperatureLabel.translatesAutoresizingMaskIntoConstraints = false
-        temperatureLabel.font = UIFont.systemFont(ofSize: 48, weight: .bold)
+        temperatureLabel.font = UIFont.systemFont(ofSize: 45, weight: .bold)
         temperatureLabel.textAlignment = .left
         detailsView.addSubview(temperatureLabel)
         
@@ -145,7 +145,7 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
             temperatureLabel.topAnchor.constraint(equalTo: locationIcon.bottomAnchor, constant: 20),
             
             maxTempLabel.leadingAnchor.constraint(equalTo: detailsView.leadingAnchor, constant: 20),
-            maxTempLabel.bottomAnchor.constraint(equalTo: detailsView.bottomAnchor, constant: -20),
+            maxTempLabel.bottomAnchor.constraint(equalTo: detailsView.bottomAnchor, constant: -40),
 
             rainChanceLabel.leadingAnchor.constraint(equalTo: maxTempLabel.trailingAnchor, constant: 10),
             rainChanceLabel.centerYAnchor.constraint(equalTo: maxTempLabel.centerYAnchor),
