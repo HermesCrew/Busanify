@@ -115,10 +115,12 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
             mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             mapView.heightAnchor.constraint(equalTo: mapView.widthAnchor, multiplier: 1.0),
             
-            detailsView.topAnchor.constraint(equalTo: mapView.bottomAnchor, constant: 20),
+            // Adjusting the spacing between mapView and detailsView
+            detailsView.topAnchor.constraint(equalTo: mapView.bottomAnchor, constant: 100), // increased the constant value
+            
             detailsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             detailsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            detailsView.heightAnchor.constraint(equalToConstant: 200),
+            detailsView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
             
             locationLabel.topAnchor.constraint(equalTo: detailsView.topAnchor, constant: 20),
             locationLabel.leadingAnchor.constraint(equalTo: detailsView.leadingAnchor),
@@ -134,7 +136,7 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
             weatherIcon.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
-    
+
     func addRegionButtons() {
         var previousButton: UIButton? = nil
         
