@@ -78,9 +78,16 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
     }
     
     func setupUI() {
-        mapView.image = UIImage(named: "busan_map")
+        mapView.image = UIImage(named: "busan")
         mapView.isUserInteractionEnabled = true
         mapView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // 그림자 설정 추가
+        mapView.layer.shadowColor = UIColor.black.cgColor
+        mapView.layer.shadowOpacity = 0.3
+        mapView.layer.shadowOffset = CGSize(width: 0, height: 1)
+        mapView.layer.shadowRadius = 8
+        
         view.addSubview(mapView)
         
         detailsView.backgroundColor = .white
@@ -123,10 +130,10 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
         detailsView.addSubview(rainChanceLabel)
         
         NSLayoutConstraint.activate([
-            mapView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            mapView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
             mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            mapView.heightAnchor.constraint(equalTo: mapView.widthAnchor, multiplier: 1.0),
+            mapView.heightAnchor.constraint(equalTo: mapView.widthAnchor, multiplier: 0.8),
             
             detailsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             detailsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
