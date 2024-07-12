@@ -5,8 +5,6 @@
 //  Created by 장예진 on 7/8/24.
 //
 
-
-
 // -TODO: 지도 이미지 단순하게 선따기
 // -TODO: 좌표 연결해서 버튼 생성하기
 // -TODO: 버튼 누르면 날씨 상세 모달뷰 뜨도록
@@ -28,25 +26,27 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
     let weatherFetcher = WeatherFetcher()
     var cancellables = Set<AnyCancellable>()
     var selectedButton: UIButton?
-    
+
+    // 좌표: (x, y, width, height)
     let regions = [
-        ("강서구", 128.9829083, 35.20916389),
-        ("금정구", 129.0943194, 35.24007778),
-        ("남구", 129.0865, 35.13340833),
-        ("동구", 129.059175, 35.13589444),
-        ("동래구", 129.0858556, 35.20187222),
-        ("부산진구", 129.0553194, 35.15995278),
-        ("북구", 128.992475, 35.19418056),
-        ("사상구", 128.9933333, 35.14946667),
-        ("사하구", 128.9770417, 35.10142778),
-        ("서구", 129.0263778, 35.09483611),
-        ("수영구", 129.115375, 35.14246667),
-        ("연제구", 129.082075, 35.17318611),
-        ("영도구", 129.0701861, 35.08811667),
-        ("중구", 129.0345083, 35.10321667),
-        ("해운대구", 129.1658083, 35.16001944),
-        ("기장군", 129.2222873, 35.24477541)
+        ("기장군", 874, 684, 156, 52),
+        ("금정구", 632, 746, 124, 50),
+        ("북구", 482, 858, 106, 40),
+        ("강서구", 168, 1050, 160, 62),
+        ("사하구", 326, 1274, 144, 64),
+        ("사상구", 394, 1050, 94, 56),
+        ("부산진구", 528, 1022, 98, 48),
+        ("서구", 460, 1208, 80, 48),
+        ("동구", 536, 1094, 106, 54),
+        ("중구", 560, 1180, 124, 50),
+        ("영도구", 628, 1304, 148, 48),
+        ("남구", 718, 1138, 104, 42),
+        ("해운대구", 832, 930, 174, 56),
+        ("동래구", 620, 906, 118, 32),
+        ("연제구", 648, 978, 126, 48),
+        ("수영구", 760, 1050, 120, 56)
     ]
+
     var selectedRegionName: String?
     
     override func viewDidLoad() {
@@ -157,7 +157,6 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
             rainChanceLabel.leadingAnchor.constraint(equalTo: maxTempLabel.trailingAnchor, constant: 10),
             rainChanceLabel.centerYAnchor.constraint(equalTo: maxTempLabel.centerYAnchor),
 
-            
             weatherIcon.trailingAnchor.constraint(equalTo: detailsView.trailingAnchor, constant: -20),
             weatherIcon.centerYAnchor.constraint(equalTo: detailsView.centerYAnchor),
             weatherIcon.widthAnchor.constraint(equalToConstant: 100),
@@ -166,26 +165,7 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
     }
     
     func addRegionButtons() {
-        let buttonPositions: [CGPoint] = [
-            CGPoint(x: 30, y: 50),
-            CGPoint(x: 120, y: 50),
-            CGPoint(x: 210, y: 50),
-            CGPoint(x: 300, y: 50),
-            CGPoint(x: 30, y: 150),
-            CGPoint(x: 120, y: 150),
-            CGPoint(x: 210, y: 150),
-            CGPoint(x: 300, y: 150),
-            CGPoint(x: 30, y: 250),
-            CGPoint(x: 120, y: 250),
-            CGPoint(x: 210, y: 250),
-            CGPoint(x: 300, y: 250),
-            CGPoint(x: 30, y: 350),
-            CGPoint(x: 120, y: 350),
-            CGPoint(x: 210, y: 350),
-            CGPoint(x: 300, y: 350)
-        ]
-        
-        for (index, region) in regions.enumerated() {
+        for region in regions {
             let button = UIButton()
             button.setTitle(region.0, for: .normal)
             button.setTitleColor(.black, for: .normal)
@@ -201,9 +181,12 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
             
             button.addTarget(self, action: #selector(regionButtonTapped(_:)), for: .touchUpInside)
             
-            let position = buttonPositions[index]
-            button.frame = CGRect(x: position.x, y: position.y, width: 80, height: 30)
-            mapView.addSubview(button) // mapView에 추가하여 이미지 위에 표시
+            let x = CGFloat(region.1) / 1030 * mapView.frame.size.width
+            let y = CGFloat(region.2) / 1352 * mapView.frame.size.height
+            let width = CGFloat(region.3) / 1030 * mapView.frame.size.width
+            let height = CGFloat(region.4) / 1352 * mapView.frame.size.height
+            button.frame = CGRect(x: x, y: y, width: width, height: height)
+            mapView.addSubview(button)
         }
     }
     
