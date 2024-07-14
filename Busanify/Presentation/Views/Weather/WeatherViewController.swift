@@ -10,6 +10,7 @@
 // -TODO: 버튼 누르면 날씨 상세 모달뷰 뜨도록
 
 import UIKit
+import WebKit
 import Combine
 import CoreLocation
 
@@ -26,6 +27,9 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
     let weatherFetcher = WeatherFetcher()
     var cancellables = Set<AnyCancellable>()
     var selectedButton: UIButton?
+
+    // WKWebView 추가
+    var webView: WKWebView!
 
     // 좌표: (x, y, width, height)
     let regions = [
@@ -56,6 +60,8 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
         setupNavigationBar()
         setupUI()
         weatherFetcher.startFetchingWeather()
+        setupWebView()
+        loadHTMLContent()
     }
     
     private func setupNavigationBar() {
@@ -224,5 +230,30 @@ class WeatherViewController: UIViewController, WeatherFetcherDelegate {
     
     func didFailWithError(_ error: Error) {
         print("Failed to fetch weather: \(error)")
+    }
+
+    // WKWebView 설정
+    private func setupWebView() {
+        webView = WKWebView()
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(webView)
+
+        NSLayoutConstraint.activate([
+            webView.topAnchor.constraint(equalTo: detailsView.bottomAnchor, constant: 20),
+            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            webView.heightAnchor.constraint(equalToConstant: 300)
+        ])
+    }
+
+    // HTML 파일 로드
+    private func loadHTMLContent() {
+        if let htmlPath = Bundle.main.path(forResource: "busan_map", ofType: "html") {
+            let url = URL(fileURLWithPath: htmlPath)
+            let request = URLRequest(url: url)
+            webView.load(request)
+        } else {
+            print("HTML file not found")
+        }
     }
 }
