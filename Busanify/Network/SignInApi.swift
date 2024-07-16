@@ -6,6 +6,13 @@
 //
 
 import Foundation
+import Combine
+
+enum NetworkError: Error {
+    case invalidURL
+    case noData
+    case decodingError
+}
 
 final class SignInApi {
     private let baseURL: String
@@ -37,14 +44,15 @@ final class SignInApi {
         task.resume()
     }
     
-    func saveAppleUser(code: String) {
-        guard let authData = try? JSONEncoder().encode(["authorizationCode": code]) else {
+    func saveAppleUser(code: String, username: String, completion: @escaping (Result<String, NetworkError>) -> Void) {
+        guard let authData = try? JSONEncoder().encode(["authorizationCode": code, "username": username]) else {
             return
         }
         
         let urlString = "\(baseURL)/auth/apple/signin"
         guard let url = URL(string: urlString) else {
-            fatalError("Invalid URL")
+            completion(.failure(.invalidURL))
+            return
         }
         
         var request = URLRequest(url: url)
@@ -53,17 +61,33 @@ final class SignInApi {
         
         let task = URLSession.shared.uploadTask(with: request, from: authData) { data, response, error in
             guard let data = data, error == nil else {
-                print("Error: \(error?.localizedDescription ?? "No data")")
+                completion(.failure(.noData))
                 return
             }
             
-            if let responseJSON = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                print("Response JSON: \(responseJSON)")
+            if let responseJSON = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: String], let accessToken = responseJSON["accessToken"] {
+                completion(.success(accessToken))
             } else {
-                print("Invalid JSON response")
+                completion(.failure(.decodingError))
             }
         }
         
         task.resume()
+    }
+    
+    func getAppleUserProfile(accessToken: String) -> AnyPublisher<UserProfile, Never> {
+        let urlString = "\(baseURL)/auth/apple/profile"
+        guard let url = URL(string: urlString) else {
+            fatalError("Invalid URL")
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map(\.data)
+            .decode(type: UserProfile.self, decoder: JSONDecoder())
+            .replaceError(with: UserProfile(email: "", name: ""))
+            .eraseToAnyPublisher()
     }
 }

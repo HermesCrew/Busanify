@@ -9,7 +9,7 @@ import UIKit
 import Combine
 
 class SettingViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    
+    private let viewModel = AuthenticationViewModel.shared
     private var cancellables = Set<AnyCancellable>()
     
     private lazy var goToLoginView: UITableView = {
@@ -45,7 +45,7 @@ class SettingViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     private func bind() {
-        AuthenticationViewModel.shared.$state
+        viewModel.$state
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.goToLoginView.reloadData()
@@ -61,9 +61,13 @@ class SettingViewController: UIViewController, UITableViewDelegate, UITableViewD
         let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath)
         var content = cell.defaultContentConfiguration()
         
-        switch AuthenticationViewModel.shared.state {
-        case .signedIn:
-            if let userProfile = AuthenticationViewModel.shared.currentUser?.profile {
+        switch viewModel.state {
+        case .googleSignedIn:
+            if let userProfile = viewModel.currentUser?.profile {
+                content.text = userProfile.name
+            }
+        case .appleSignedIn:
+            if let userProfile = viewModel.appleUserProfile {
                 content.text = userProfile.name
             }
         case .signedOut:
@@ -78,12 +82,12 @@ class SettingViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        switch AuthenticationViewModel.shared.state {
-        case .signedIn:
-            let viewController = UserProfileViewController(viewModel: AuthenticationViewModel.shared)
+        switch viewModel.state {
+        case .googleSignedIn, .appleSignedIn:
+            let viewController = UserProfileViewController()
             show(viewController, sender: self)
         case .signedOut:
-            let viewController = SignInViewController(viewModel: AuthenticationViewModel.shared)
+            let viewController = SignInViewController()
             show(viewController, sender: self)
         }
     }

@@ -11,7 +11,7 @@ import Combine
 
 class UserProfileViewController: UIViewController {
     
-    private let viewModel: AuthenticationViewModel
+    private let viewModel = AuthenticationViewModel.shared
     private var cancellables = Set<AnyCancellable>()
     
     private var user: GIDGoogleUser? {
@@ -38,16 +38,6 @@ class UserProfileViewController: UIViewController {
         return logoutButton
     }()
     
-    
-    init(viewModel: AuthenticationViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -55,7 +45,14 @@ class UserProfileViewController: UIViewController {
         configureProfile()
         
         logoutButton.addAction(UIAction { [weak self] _ in
-            self?.viewModel.googleSignOut()
+            switch self?.viewModel.state {
+            case .googleSignedIn:
+                self?.viewModel.googleSignOut()
+            case .appleSignedIn:
+                self?.viewModel.appleSignOut()
+            default:
+                break
+            }
             self?.navigationController?.popViewController(animated: true)
         }, for: .touchUpInside)
     }
@@ -87,9 +84,19 @@ class UserProfileViewController: UIViewController {
     }
     
     private func configureProfile() {
-        guard let userProfile = viewModel.currentUser?.profile else { return }
-        
-        nameLabel.text = userProfile.name
-        emailLabel.text = userProfile.email
+        switch viewModel.state {
+        case .googleSignedIn:
+            if let userProfile = viewModel.currentUser?.profile {
+                nameLabel.text = userProfile.name
+                emailLabel.text = userProfile.email
+            }
+        case .appleSignedIn:
+            if let userProfile = viewModel.appleUserProfile {
+                nameLabel.text = userProfile.name
+                emailLabel.text = userProfile.email
+            }
+        default:
+            break
+        }
     }
 }
