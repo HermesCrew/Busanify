@@ -9,7 +9,7 @@ import UIKit
 import GoogleSignIn
 import AuthenticationServices
 
-class SignInViewController: UIViewController, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+class SignInViewController: UIViewController {
     
     private lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
@@ -42,6 +42,8 @@ class SignInViewController: UIViewController, ASAuthorizationControllerDelegate,
         configuration.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
         button.configuration = configuration
         button.imageView?.contentMode = .scaleAspectFit
+        button.setTitle("Sign in with Google", for: .normal)
+        button.setTitleColor(.black, for: .normal)
         button.tintColor = .clear
         button.backgroundColor = .white
         button.layer.cornerRadius = 12
@@ -66,6 +68,8 @@ class SignInViewController: UIViewController, ASAuthorizationControllerDelegate,
         configuration.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
         button.configuration = configuration
         button.imageView?.contentMode = .scaleAspectFit
+        button.setTitle("Sign in with Apple", for: .normal)
+        button.setTitleColor(.black, for: .normal)
         button.tintColor = .clear
         button.backgroundColor = .white
         button.layer.cornerRadius = 12
@@ -102,7 +106,7 @@ class SignInViewController: UIViewController, ASAuthorizationControllerDelegate,
         view.backgroundColor = .systemBackground
         
         let stackView = UIStackView(arrangedSubviews: [googleSignInButton, appleSignInButton])
-        stackView.axis = .horizontal
+        stackView.axis = .vertical
         stackView.spacing = 8
         stackView.alignment = .fill
         stackView.distribution = .fillEqually
@@ -124,7 +128,9 @@ class SignInViewController: UIViewController, ASAuthorizationControllerDelegate,
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
         ])
     }
-    
+}
+
+extension SignInViewController: ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
     func appleSignIn() {
         let appleIDProvider = ASAuthorizationAppleIDProvider()
         let request = appleIDProvider.createRequest()
@@ -139,5 +145,41 @@ class SignInViewController: UIViewController, ASAuthorizationControllerDelegate,
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return self.view.window!
     }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        //로그인 성공
+        switch authorization.credential {
+        case let appleIDCredential as ASAuthorizationAppleIDCredential:
+            // You can create an account in your system.
+            let userIdentifier = appleIDCredential.user
+            let fullName = appleIDCredential.fullName
+            let email = appleIDCredential.email
+            
+            if  let authorizationCode = appleIDCredential.authorizationCode,
+                let identityToken = appleIDCredential.identityToken,
+                let authCodeString = String(data: authorizationCode, encoding: .utf8),
+                let identifyTokenString = String(data: identityToken, encoding: .utf8) {
+                self.viewModel.appleSignIn(code: authCodeString)
+//                print("authorizationCode: \(authorizationCode)")
+//                print("identityToken: \(identityToken)")
+//                print("authCodeString: \(authCodeString)")
+//                print("identifyTokenString: \(identifyTokenString)")
+            }
+            
+//            print("useridentifier: \(userIdentifier)")
+//            print("fullName: \(fullName)")
+//            print("email: \(email)")
+        default:
+            break
+        }
+    }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        // 로그인 실패(유저의 취소도 포함)
+        print("login failed - \(error.localizedDescription)")
+    }
+    
+    private func didSuccessAppleLogin(_ authorizationCode: Data, _ userIdentifier: String) {
+        let authCodeString = String(data: authorizationCode, encoding: .utf8)
+    }
 }
-
