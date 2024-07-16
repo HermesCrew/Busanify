@@ -62,8 +62,8 @@ class SettingViewController: UIViewController, UITableViewDelegate, UITableViewD
         var content = cell.defaultContentConfiguration()
         
         switch viewModel.state {
-        case .googleSignedIn:
-            if let userProfile = viewModel.currentUser?.profile {
+        case .googleSignedIn(let user):
+            if let userProfile = user.profile {
                 content.text = userProfile.name
             }
         case .appleSignedIn:

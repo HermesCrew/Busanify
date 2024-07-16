@@ -26,4 +26,6 @@ struct Place: Identifiable, Hashable, Codable {
     let menu: String?
     let shopguide: String?
     let restroom: Int?
+    let isBookmarked: Bool
+    let avgRating: Double
 }
