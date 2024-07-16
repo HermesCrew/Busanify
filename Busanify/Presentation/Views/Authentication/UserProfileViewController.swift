@@ -14,10 +14,6 @@ class UserProfileViewController: UIViewController {
     private let viewModel = AuthenticationViewModel.shared
     private var cancellables = Set<AnyCancellable>()
     
-    private var user: GIDGoogleUser? {
-        return GIDSignIn.sharedInstance.currentUser
-    }
-    
     private lazy var nameLabel: UILabel = {
         let nameLabel = UILabel()
         nameLabel.font = UIFont.systemFont(ofSize: 36, weight: .bold)
@@ -85,8 +81,8 @@ class UserProfileViewController: UIViewController {
     
     private func configureProfile() {
         switch viewModel.state {
-        case .googleSignedIn:
-            if let userProfile = viewModel.currentUser?.profile {
+        case .googleSignedIn(let user):
+            if let userProfile = user.profile {
                 nameLabel.text = userProfile.name
                 emailLabel.text = userProfile.email
             }

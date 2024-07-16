@@ -28,23 +28,8 @@ final class AuthenticationViewModel {
     
     var cancellables = Set<AnyCancellable>()
     
-    var authorizedScopes: [String] {
-        switch state {
-        case .googleSignedIn(let user):
-            return user.grantedScopes ?? []
-        case .appleSignedIn, .signedOut:
-            return []
-        }
-    }
-    
-    var currentUser: GIDGoogleUser? {
-        return GIDSignIn.sharedInstance.currentUser
-    }
-    
     init(signInApi: SignInApi) {
         self.signInApi = signInApi
-        restorePreviousGoogleSignIn()
-        restorePreviousAppleSignIn()
     }
     
     func googleSignIn() {
@@ -79,12 +64,15 @@ final class AuthenticationViewModel {
     // 로그인 상태 복원
     func restorePreviousGoogleSignIn() {
         GIDSignIn.sharedInstance.restorePreviousSignIn { [weak self] user, error in
-            if let user = user {
-                self?.state = .googleSignedIn(user)
-            } else {
-                self?.state = .signedOut
-                if let error = error {
-                    print("There was an error restoring the previous sign-in: \(error)")
+            // state 변경 메인 스레드에서
+            DispatchQueue.main.async {
+                if let user = user {
+                    self?.state = .googleSignedIn(user)
+                } else {
+                    self?.state = .signedOut
+                    if let error = error {
+                        print("There was an error restoring the previous sign-in: \(error)")
+                    }
                 }
             }
         }
@@ -121,28 +109,31 @@ final class AuthenticationViewModel {
             print("No valid user ID")
             return
         }
-
+        
         let appleIDProvider = ASAuthorizationAppleIDProvider()
         appleIDProvider.getCredentialState(forUserID: userId) { (credentialState, error) in
-            switch credentialState {
-            case .authorized:
-                print("authorized")
-                DispatchQueue.main.async {
-                    self.getAppleUserProfile()
-                    self.state = .appleSignedIn
+            // state 변경 메인 스레드에서
+            DispatchQueue.main.async {
+                switch credentialState {
+                case .authorized:
+                    print("authorized")
+                    DispatchQueue.main.async {
+                        self.getAppleUserProfile()
+                        self.state = .appleSignedIn
+                    }
+                case .revoked:
+                    print("revoked")
+                    DispatchQueue.main.async {
+                        self.state = .signedOut
+                    }
+                case .notFound:
+                    print("notFound")
+                    DispatchQueue.main.async {
+                        self.state = .signedOut
+                    }
+                default:
+                    break
                 }
-            case .revoked:
-                print("revoked")
-                DispatchQueue.main.async {
-                    self.state = .signedOut
-                }
-            case .notFound:
-                print("notFound")
-                DispatchQueue.main.async {
-                    self.state = .signedOut
-                }
-            default:
-                break
             }
         }
     }
@@ -158,5 +149,23 @@ final class AuthenticationViewModel {
                 self?.appleUserProfile = userProfile
             }
             .store(in: &cancellables)
+    }
+    
+    // 사용자 정보를 확인하여 서버에서 데이터를 요청할때 사용하는 토큰
+    func getToken() -> String? {
+        switch state {
+        case .googleSignedIn(let user):
+            guard let idToken = user.idToken?.tokenString else {
+                return nil
+            }
+            return idToken
+        case .appleSignedIn:
+            guard let accessToken = self.keyChain.read(key: "appleAccessToken") else {
+                return nil
+            }
+            return accessToken
+        case .signedOut:
+            return nil
+        }
     }
 }
