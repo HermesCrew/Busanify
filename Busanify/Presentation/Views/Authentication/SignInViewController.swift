@@ -11,6 +11,8 @@ import AuthenticationServices
 
 class SignInViewController: UIViewController {
     
+    private let viewModel = AuthenticationViewModel.shared
+    
     private lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.text = "BUSANIFY"
@@ -19,20 +21,6 @@ class SignInViewController: UIViewController {
         
         return titleLabel
     }()
-    
-    //    private lazy var googleSignInButton : GIDSignInButton = {
-    //        let signInButton = GIDSignInButton()
-    //        signInButton.style = .standard
-    //        signInButton.colorScheme = .light
-    //
-    //        return signInButton
-    //    }()
-    //
-    //    private lazy var appleSignInButton : ASAuthorizationAppleIDButton = {
-    //        let signInButton = ASAuthorizationAppleIDButton(type: .signIn, style: .white)
-    //        signInButton.cornerRadius = 12
-    //        return signInButton
-    //    }()
     
     private lazy var googleSignInButton: UIButton = {
         let button = UIButton()
@@ -80,21 +68,11 @@ class SignInViewController: UIViewController {
         
         button.addAction(UIAction { [weak self] _ in
             self?.appleSignIn()
+//            self?.navigationController?.popViewController(animated: true) // 이전 뷰로 돌아가는게 안됨..
         }, for: .touchUpInside)
         
         return button
     }()
-    
-    private let viewModel: AuthenticationViewModel
-    
-    init(viewModel: AuthenticationViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -152,23 +130,12 @@ extension SignInViewController: ASAuthorizationControllerDelegate, ASAuthorizati
         case let appleIDCredential as ASAuthorizationAppleIDCredential:
             // You can create an account in your system.
             let userIdentifier = appleIDCredential.user
-            let fullName = appleIDCredential.fullName
-            let email = appleIDCredential.email
+            let fullName = appleIDCredential.fullName ?? PersonNameComponents()
             
-            if  let authorizationCode = appleIDCredential.authorizationCode,
-                let identityToken = appleIDCredential.identityToken,
-                let authCodeString = String(data: authorizationCode, encoding: .utf8),
-                let identifyTokenString = String(data: identityToken, encoding: .utf8) {
-                self.viewModel.appleSignIn(code: authCodeString)
-//                print("authorizationCode: \(authorizationCode)")
-//                print("identityToken: \(identityToken)")
-//                print("authCodeString: \(authCodeString)")
-//                print("identifyTokenString: \(identifyTokenString)")
+            if let authorizationCode = appleIDCredential.authorizationCode,
+                let authCodeString = String(data: authorizationCode, encoding: .utf8) {
+                self.viewModel.appleSignIn(code: authCodeString, username: PersonNameComponentsFormatter().string(from: fullName), userId: userIdentifier)
             }
-            
-//            print("useridentifier: \(userIdentifier)")
-//            print("fullName: \(fullName)")
-//            print("email: \(email)")
         default:
             break
         }
@@ -177,9 +144,5 @@ extension SignInViewController: ASAuthorizationControllerDelegate, ASAuthorizati
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         // 로그인 실패(유저의 취소도 포함)
         print("login failed - \(error.localizedDescription)")
-    }
-    
-    private func didSuccessAppleLogin(_ authorizationCode: Data, _ userIdentifier: String) {
-        let authCodeString = String(data: authorizationCode, encoding: .utf8)
     }
 }
