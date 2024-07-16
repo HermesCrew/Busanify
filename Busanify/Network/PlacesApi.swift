@@ -64,7 +64,7 @@ final class PlacesApi: HomeViewUseCase, PlaceDetailViewUseCase {
                 }
             })
             .decode(type: Place.self, decoder: JSONDecoder())
-            .replaceError(with: Place(id: "", typeId: "", image: "", lat: 0, lng: 0, tel: "", title: "", address: "", openTime: nil, parking: nil, holiday: nil, fee: nil, reservationURL: nil, goodStay: nil, hanok: nil, menu: nil, shopguide: nil, restroom: nil))
+            .replaceError(with: Place(id: "", typeId: "", image: "", lat: 0, lng: 0, tel: "", title: "", address: "", openTime: nil, parking: nil, holiday: nil, fee: nil, reservationURL: nil, goodStay: nil, hanok: nil, menu: nil, shopguide: nil, restroom: nil, isBookmarked: false, avgRating: 0.0))
             .eraseToAnyPublisher()
     }
 }
