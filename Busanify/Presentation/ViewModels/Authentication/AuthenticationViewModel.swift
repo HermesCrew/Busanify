@@ -38,6 +38,7 @@ final class AuthenticationViewModel {
     init(signInApi: SignInApi) {
         self.signInApi = signInApi
         restorePreviousGoogleSignIn()
+        restorePreviousAppleSignIn()
     }
     
     func googleSignIn() {
@@ -60,13 +61,17 @@ final class AuthenticationViewModel {
             
             print(idToken)
             self.state = .signedIn(user)
-            self.signInApi.saveUser(idToken: idToken)
+            self.signInApi.saveGoogleUser(idToken: idToken)
         }
     }
     
     func googleSignOut() {
         GIDSignIn.sharedInstance.signOut()
         self.state = .signedOut
+    }
+    
+    func appleSignIn(code: String) {
+        self.signInApi.saveAppleUser(code: code)
     }
     
     // 로그인 상태 복원
@@ -79,6 +84,22 @@ final class AuthenticationViewModel {
                 if let error = error {
                     print("There was an error restoring the previous sign-in: \(error)")
                 }
+            }
+        }
+    }
+    
+    func restorePreviousAppleSignIn() {
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        appleIDProvider.getCredentialState(forUserID: "000980.f7a9d20e8233436aa3f90c7ec12d4063.0020") { (credentialState, error) in
+            switch credentialState {
+            case .authorized:
+                print("authorized")
+            case .revoked:
+                print("revoked")
+            case .notFound:
+                print("notFound")
+            default:
+                break
             }
         }
     }
