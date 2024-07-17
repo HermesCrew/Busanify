@@ -13,7 +13,7 @@ class TempViewModel {
     private var cancellables = Set<AnyCancellable>()
     private let useCase: PlaceDetailViewUseCase
     
-    @Published var place: Place = Place(id: -1, typeId: "", image: "", lat: 0, lng: 0, tel: "", title: "", address: "", openTime: nil, parking: nil, holiday: nil, fee: nil, reservationURL: nil, goodStay: nil, hanok: nil, menu: nil, shopguide: nil, restroom: nil)
+    @Published var place: Place = Place(id: "", typeId: "", image: "", lat: 0, lng: 0, tel: "", avgRating: 0, title: "", address: "", openTime: nil, parking: nil, holiday: nil, fee: nil, reservationURL: nil, goodStay: nil, hanok: nil, menu: nil, shopguide: nil, restroom: nil, isBookmarked: false)
     
     init(placeId: Int, useCase: PlaceDetailViewUseCase) {
         self.placeId = placeId
