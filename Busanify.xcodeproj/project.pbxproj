@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		B0C87FAD55542F4910C85E04 /* Pods_Busanify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C97DAEB9FCE617B8E9F47CEF /* Pods_Busanify.framework */; };
 		B8789B8B2C3BC082002B3355 /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8789B8A2C3BC082002B3355 /* WeatherViewController.swift */; };
+		B8898BB92C479EE3009DE9F5 /* WeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8898BB82C479EE3009DE9F5 /* WeatherManager.swift */; };
+		B8898BBB2C47AB1A009DE9F5 /* WeatherIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8898BBA2C47AB1A009DE9F5 /* WeatherIcon.swift */; };
 		C296D6FE2C1F16B000691515 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D6FD2C1F16B000691515 /* AppDelegate.swift */; };
 		C296D7002C1F16B000691515 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D6FF2C1F16B000691515 /* SceneDelegate.swift */; };
 		C296D7022C1F16B000691515 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D7012C1F16B000691515 /* ViewController.swift */; };
@@ -51,6 +53,8 @@
 		6AFFFE0B6C958425CF4F8A5F /* Pods-Busanify.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busanify.release.xcconfig"; path = "Target Support Files/Pods-Busanify/Pods-Busanify.release.xcconfig"; sourceTree = "<group>"; };
 		B82365762C43E31500FFACEF /* Busanify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Busanify.entitlements; sourceTree = "<group>"; };
 		B8789B8A2C3BC082002B3355 /* WeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewController.swift; sourceTree = "<group>"; };
+		B8898BB82C479EE3009DE9F5 /* WeatherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherManager.swift; sourceTree = "<group>"; };
+		B8898BBA2C47AB1A009DE9F5 /* WeatherIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherIcon.swift; sourceTree = "<group>"; };
 		C296D6FA2C1F16B000691515 /* Busanify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Busanify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C296D6FD2C1F16B000691515 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C296D6FF2C1F16B000691515 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -116,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				B8789B8A2C3BC082002B3355 /* WeatherViewController.swift */,
+				B8898BBA2C47AB1A009DE9F5 /* WeatherIcon.swift */,
 			);
 			path = Weather;
 			sourceTree = "<group>";
@@ -189,6 +194,7 @@
 		C296D72D2C1F2AA100691515 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				B8898BB82C479EE3009DE9F5 /* WeatherManager.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -501,6 +507,7 @@
 				C2D279C72C29456200AEAFD1 /* PlacesApi.swift in Sources */,
 				B8789B8B2C3BC082002B3355 /* WeatherViewController.swift in Sources */,
 				C296D7022C1F16B000691515 /* ViewController.swift in Sources */,
+				B8898BBB2C47AB1A009DE9F5 /* WeatherIcon.swift in Sources */,
 				C2D279D32C2945A300AEAFD1 /* TempViewModel.swift in Sources */,
 				C2D279CB2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift in Sources */,
 				C2D279D52C2945B000AEAFD1 /* TempViewController.swift in Sources */,
@@ -508,6 +515,7 @@
 				CD0F83DB2C357A85001C04E2 /* CustomViews.swift in Sources */,
 				CD89D3522C29A55A00715404 /* HomeViewController.swift in Sources */,
 				C296D6FE2C1F16B000691515 /* AppDelegate.swift in Sources */,
+				B8898BB92C479EE3009DE9F5 /* WeatherManager.swift in Sources */,
 				C2D279CD2C29458800AEAFD1 /* Place.swift in Sources */,
 				C296D7002C1F16B000691515 /* SceneDelegate.swift in Sources */,
 			);

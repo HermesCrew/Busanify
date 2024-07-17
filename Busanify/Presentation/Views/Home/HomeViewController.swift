@@ -10,8 +10,9 @@
 import UIKit
 import KakaoMapsSDK
 import Combine
+import WeatherKit
 
-class HomeViewController: UIViewController, MapControllerDelegate, WeatherFetcherDelegate, WeatherContainerDelegate {
+class HomeViewController: UIViewController, MapControllerDelegate, WeatherContainerDelegate, WeatherManagerDelegate {
     
     // UIComponent
     private var weatherContainerWidthConstraint: NSLayoutConstraint!
@@ -49,7 +50,7 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherFetche
     private let longRange = 128.7384361...129.3728194
     private let viewModel = HomeViewModel()
     private var tempPinArr: [Poi?] = []
-    private let weatherFetcher = WeatherFetcher()
+    private let weatherManager = WeatherManager()
     
     // WeatherViewController 연결.
     let weatherViewController = WeatherViewController()
@@ -85,13 +86,12 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherFetche
         mapController = KMController(viewContainer: mapContainer!)
         mapController!.delegate = self
         
-        // WeatherFetcher delegate 설정
-        weatherFetcher.delegate = self
-        weatherFetcher.startFetchingWeather()
+        // WeatherManager 설정 및 데이터 요청
+        weatherManager.delegate = self
+        weatherManager.startFetchingWeather()
         
         // WeatherContainer delegate 설정
         weatherContainer.delegate = self
-        
         
         setSubscriber()
         configureUI()
@@ -122,30 +122,11 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherFetche
         }
     }
 
-
-    // WeatherFetcherDelegate 메서드 추가
-    func didUpdateWeather(_ weatherData: WeatherData) {
-        let iconUrlString = "https://openweathermap.org/img/wn/\(weatherData.weather.first?.icon ?? "")@2x.png"
-        guard let iconUrl = URL(string: iconUrlString) else {
-            print("Invalid icon URL")
-            return
-        }
-        
-        let task = URLSession.shared.dataTask(with: iconUrl) { data, response, error in
-            if let error = error {
-                print("Error loading icon image: \(error)")
-                return
-            }
-            
-            guard let data = data, let iconImage = UIImage(data: data) else {
-                print("No icon data returned or data is not an image")
-                return
-            }
-            
-            self.weatherContainer.updateWeather(weatherData: weatherData, weatherImage: iconImage)
-        }
-        
-        task.resume()
+    // WeatherManagerDelegate 메서드 구현
+    func didUpdateWeather(_ weather: Weather) {
+        let temperature = weather.currentWeather.temperature.value
+        let icon = WeatherIcon.getWeatherIcon(for: weather.currentWeather)
+        weatherContainer.updateWeather(temperature: temperature, weatherImage: icon)
     }
     
     func didFailWithError(_ error: Error) {

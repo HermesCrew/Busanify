@@ -12,11 +12,10 @@
 import UIKit
 
 class WeatherViewController: UIViewController {
-
+    private let weatherManager = WeatherManager()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        weatherManager.startFetchingWeather()
     }
-
-
 }
