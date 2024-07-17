@@ -77,10 +77,10 @@ class WeatherContainer: UIView {
         ])
     }
     
-    func updateWeather(weatherData: WeatherData, weatherImage: UIImage?) {
+    func updateWeather(temperature: Double, weatherImage: UIImage?) {
         DispatchQueue.main.async {
             self.icon.image = weatherImage
-            self.label.text = "\(Int(weatherData.main.temp))°C"
+            self.label.text = "\(Int(temperature))°C"
         }
     }
     
