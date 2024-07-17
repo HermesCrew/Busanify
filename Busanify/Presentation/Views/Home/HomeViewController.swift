@@ -275,6 +275,10 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
     }
         
     override func viewWillDisappear(_ animated: Bool) {
+        // add for navigationController
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
+        
         _appear = false
         mapController?.pauseEngine()  //렌더링 중지.
     }
