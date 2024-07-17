@@ -15,9 +15,9 @@ protocol WeatherManagerDelegate: AnyObject {
 }
 
 class WeatherManager: NSObject, CLLocationManagerDelegate {
-    private let locationManager = CLLocationManager()
     private let weatherService = WeatherService.shared
     weak var delegate: WeatherManagerDelegate?
+    let locationManager = CLLocationManager()
     
     override init() {
         super.init()
