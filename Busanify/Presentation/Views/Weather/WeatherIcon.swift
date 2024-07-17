@@ -5,52 +5,58 @@
 //  Created by 장예진 on 7/17/24.
 //
 
+// SF심볼 참조함.
 import UIKit
 import WeatherKit
 
 class WeatherIcon {
     static func getWeatherIcon(for currentWeather: CurrentWeather) -> UIImage? {
+        let symbolName: String
+        
         switch currentWeather.condition {
         case .blowingDust:
-            return UIImage(systemName: "smoke")
+            symbolName = "smoke"
         case .clear:
-            return UIImage(systemName: "sun.max")
+            symbolName = "sun.max"
         case .cloudy, .mostlyCloudy:
-            return UIImage(systemName: "cloud")
+            symbolName = "cloud"
         case .foggy:
-            return UIImage(systemName: "cloud.fog")
+            symbolName = "cloud.fog"
         case .haze:
-            return UIImage(systemName: "sun.haze")
+            symbolName = "sun.haze"
         case .mostlyClear, .partlyCloudy:
-            return UIImage(systemName: "cloud.sun")
+            symbolName = "cloud.sun"
         case .smoky:
-            return UIImage(systemName: "smoke")
+            symbolName = "smoke"
         case .breezy, .windy:
-            return UIImage(systemName: "wind")
+            symbolName = "wind"
         case .drizzle:
-            return UIImage(systemName: "cloud.drizzle")
+            symbolName = "cloud.drizzle"
         case .heavyRain, .rain:
-            return UIImage(systemName: "cloud.rain")
+            symbolName = "cloud.rain"
         case .isolatedThunderstorms, .scatteredThunderstorms, .strongStorms, .thunderstorms:
-            return UIImage(systemName: "cloud.bolt")
+            symbolName = "cloud.bolt"
         case .frigid:
-            return UIImage(systemName: "snow")
+            symbolName = "snow"
         case .hail:
-            return UIImage(systemName: "cloud.hail")
+            symbolName = "cloud.hail"
         case .hot:
-            return UIImage(systemName: "sun.max.fill")
+            symbolName = "sun.max.fill"
         case .flurries, .snow, .sunFlurries:
-            return UIImage(systemName: "cloud.snow")
+            symbolName = "cloud.snow"
         case .sleet, .wintryMix:
-            return UIImage(systemName: "cloud.sleet")
+            symbolName = "cloud.sleet"
         case .blizzard, .blowingSnow, .freezingDrizzle, .freezingRain, .heavySnow:
-            return UIImage(systemName: "cloud.snow.fill")
+            symbolName = "cloud.snow.fill"
         case .hurricane, .tropicalStorm:
-            return UIImage(systemName: "tropicalstorm")
+            symbolName = "tropicalstorm"
         case .sunShowers:
-            return UIImage(systemName: "cloud.sun.rain")
+            symbolName = "cloud.sun.rain"
         default:
-            return UIImage(systemName: "questionmark.circle")
+            symbolName = "questionmark.circle"
         }
+        
+        let config = UIImage.SymbolConfiguration(paletteColors: [.systemBlue, .systemYellow, .systemGray])
+        return UIImage(systemName: symbolName)?.applyingSymbolConfiguration(config)
     }
 }
