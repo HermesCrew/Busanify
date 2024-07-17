@@ -13,7 +13,7 @@ import UIKit
 import WeatherKit
 import CoreLocation
 
-class WeatherViewController: UIViewController, WeatherManagerDelegate {
+class WeatherViewController: UIViewController, WeatherManagerDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     private let weatherManager = WeatherManager()
     private let geocoder = CLGeocoder()
     private let weatherLabel = UILabel()
@@ -21,13 +21,36 @@ class WeatherViewController: UIViewController, WeatherManagerDelegate {
     private let maxMinTempLabel = UILabel()
     private let avgTempLabel = UILabel()
     private let weatherImageView = UIImageView()
-
+    private let regionPickerView = UIPickerView()
+    
+    private let regions: [Region] = [
+        Region(name: "강서구", latitude: 35.20916389, longitude: 128.9829083),
+        Region(name: "금정구", latitude: 35.24007778, longitude: 129.0943194),
+        Region(name: "남구", latitude: 35.13340833, longitude: 129.0865),
+        Region(name: "동구", latitude: 35.13589444, longitude: 129.059175),
+        Region(name: "동래구", latitude: 35.20187222, longitude: 129.0858556),
+        Region(name: "부산진구", latitude: 35.15995278, longitude: 129.0553194),
+        Region(name: "북구", latitude: 35.19418056, longitude: 128.992475),
+        Region(name: "사상구", latitude: 35.14946667, longitude: 128.9933333),
+        Region(name: "사하구", latitude: 35.10142778, longitude: 128.9770417),
+        Region(name: "서구", latitude: 35.09483611, longitude: 129.0263778),
+        Region(name: "수영구", latitude: 35.14246667, longitude: 129.115375),
+        Region(name: "연제구", latitude: 35.17318611, longitude: 129.082075),
+        Region(name: "영도구", latitude: 35.08811667, longitude: 129.0701861),
+        Region(name: "중구", latitude: 35.10321667, longitude: 129.0345083),
+        Region(name: "해운대구", latitude: 35.16001944, longitude: 129.1658083),
+        Region(name: "기장군", latitude: 35.24477541, longitude: 129.2222873)
+    ]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupNavigationBar()
         weatherManager.delegate = self
         weatherManager.startFetchingWeather()
+        
+        regionPickerView.delegate = self
+        regionPickerView.dataSource = self
     }
     
     private func setupNavigationBar() {
@@ -74,6 +97,9 @@ class WeatherViewController: UIViewController, WeatherManagerDelegate {
         weatherImageView.translatesAutoresizingMaskIntoConstraints = false
         weatherImageView.contentMode = .scaleAspectFit
         view.addSubview(weatherImageView)
+
+        regionPickerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(regionPickerView)
         
         NSLayoutConstraint.activate([
             locationLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
@@ -93,7 +119,12 @@ class WeatherViewController: UIViewController, WeatherManagerDelegate {
             maxMinTempLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             avgTempLabel.topAnchor.constraint(equalTo: maxMinTempLabel.bottomAnchor, constant: 20),
-            avgTempLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            avgTempLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            regionPickerView.topAnchor.constraint(equalTo: avgTempLabel.bottomAnchor, constant: 20),
+            regionPickerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            regionPickerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            regionPickerView.heightAnchor.constraint(equalToConstant: 150)
         ])
     }
     
@@ -134,6 +165,33 @@ class WeatherViewController: UIViewController, WeatherManagerDelegate {
             self.maxMinTempLabel.text = ""
             self.avgTempLabel.text = ""
             self.weatherImageView.image = UIImage(systemName: "xmark.octagon")
+        }
+    }
+
+    // UIPickerView DataSource and Delegate methods
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return regions.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return regions[row].name
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        let selectedRegion = regions[row]
+        let location = CLLocation(latitude: selectedRegion.latitude, longitude: selectedRegion.longitude)
+        
+        Task {
+            do {
+                let weather = try await weatherManager.fetchWeather(for: location)
+                self.didUpdateWeather(weather)
+            } catch {
+                self.didFailWithError(error)
+            }
         }
     }
 }

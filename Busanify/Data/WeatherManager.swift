@@ -15,7 +15,7 @@ protocol WeatherManagerDelegate: AnyObject {
 }
 
 class WeatherManager: NSObject, CLLocationManagerDelegate {
-    private let weatherService = WeatherService.shared
+    let weatherService = WeatherService.shared
     weak var delegate: WeatherManagerDelegate?
     let locationManager = CLLocationManager()
     
@@ -29,7 +29,7 @@ class WeatherManager: NSObject, CLLocationManagerDelegate {
         locationManager.startUpdatingLocation()
     }
     
-    private func fetchWeather(for location: CLLocation) async throws -> Weather {
+    func fetchWeather(for location: CLLocation) async throws -> Weather {
         return try await weatherService.weather(for: location)
     }
     
