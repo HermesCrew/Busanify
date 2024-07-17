@@ -10,6 +10,7 @@ import Combine
 
 final class PlacesApi: HomeViewUseCase, PlaceDetailViewUseCase {
     private let baseURL: String
+    var cancellables = Set<AnyCancellable>()
     
     init() {
         guard let baseURL = Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String else {
@@ -50,21 +51,49 @@ final class PlacesApi: HomeViewUseCase, PlaceDetailViewUseCase {
             .eraseToAnyPublisher()
     }
     
-    func getPlace(by id: Int, lang: String) -> AnyPublisher<Place, Never> {
-        let urlString = "\(baseURL)/place?id=\(id)&lang=\(lang)"
+    func getPlace(by id: String, lang: String, token: String?) -> AnyPublisher<Place, Never> {
+        let urlString = "\(baseURL)/places?id=\(id)&lang=\(lang)"
         guard let url = URL(string: urlString) else {
             fatalError("Invalid URL")
         }
         
-        return URLSession.shared.dataTaskPublisher(for: url)
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        if let token = token {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
             .map(\.data)
-            .handleEvents(receiveOutput: { data in
-                if let jsonString = String(data: data, encoding: .utf8) {
-                    print("Response JSON: \(jsonString)")
-                }
+            .handleEvents(receiveCompletion: {
+                print($0)
             })
             .decode(type: Place.self, decoder: JSONDecoder())
-            .replaceError(with: Place(id: "", typeId: "", image: "", lat: 0, lng: 0, tel: "", title: "", address: "", openTime: nil, parking: nil, holiday: nil, fee: nil, reservationURL: nil, goodStay: nil, hanok: nil, menu: nil, shopguide: nil, restroom: nil, isBookmarked: false, avgRating: 0.0))
+            .replaceError(with: Place(id: "", typeId: "", image: "", lat: 0, lng: 0, tel: "", title: "", address: "", openTime: nil, parking: nil, holiday: nil, fee: nil, reservationURL: nil, goodStay: nil, hanok: nil, menu: nil, shopguide: nil, restroom: nil, isBookmarked: false, avgRating: 0.0, reviews: nil))
             .eraseToAnyPublisher()
+    }
+    
+    func toggleBookmark(placeId: String, token: String) {
+        let urlString = "\(baseURL)/bookmarks/toggle"
+        guard let url = URL(string: urlString) else {
+            fatalError("Invalid URL")
+        }
+        
+        let json: [String: String] = ["placeId": placeId]
+        let jsonData = try? JSONSerialization.data(withJSONObject: json)
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.httpBody = jsonData
+        
+        URLSession.shared.dataTaskPublisher(for: request)
+            .sink(receiveCompletion: { _ in
+                print("completion")
+            }, receiveValue: {
+                print($0)
+            })
+            .store(in: &cancellables)
     }
 }
