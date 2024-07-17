@@ -20,6 +20,7 @@ final class PlacesApi: HomeViewUseCase, PlaceDetailViewUseCase {
     
     func getPlaces(by typeId: PlaceType, lang: String, lat: Double, lng: Double, radius: Double) -> AnyPublisher<[Place], Never> {
         let urlString = "\(baseURL)/places/searchByType?typeId=\(typeId.rawValue)&lang=\(lang)&lat=\(lat)&lng=\(lng)&radius=\(radius)"
+        
         guard let url = URL(string: urlString) else {
             fatalError("Invalid URL")
         }
@@ -58,13 +59,9 @@ final class PlacesApi: HomeViewUseCase, PlaceDetailViewUseCase {
         
         return URLSession.shared.dataTaskPublisher(for: url)
             .map(\.data)
-            .handleEvents(receiveOutput: { data in
-                if let jsonString = String(data: data, encoding: .utf8) {
-                    print("Response JSON: \(jsonString)")
-                }
-            })
             .decode(type: Place.self, decoder: JSONDecoder())
-            .replaceError(with: Place(id: -1, typeId: "", image: "", lat: 0, lng: 0, tel: "", title: "", address: "", openTime: nil, parking: nil, holiday: nil, fee: nil, reservationURL: nil, goodStay: nil, hanok: nil, menu: nil, shopguide: nil, restroom: nil))
+            .replaceError(with: Place(id: "", typeId: "", image: "", lat: 0, lng: 0, tel: "", avgRating: 0, title: "", address: "", openTime: nil, parking: nil, holiday: nil, fee: nil, reservationURL: nil, goodStay: nil, hanok: nil, menu: nil, shopguide: nil, restroom: nil, isBookmarked: false))
             .eraseToAnyPublisher()
     }
+    
 }

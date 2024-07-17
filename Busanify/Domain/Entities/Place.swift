@@ -8,12 +8,13 @@
 import Foundation
 
 struct Place: Identifiable, Hashable, Codable {
-    let id: Int
+    let id: String
     let typeId: String
     let image: String
     let lat: Double
     let lng: Double
     let tel: String
+    let avgRating: Int
     let title: String
     let address: String
     let openTime: String?
@@ -26,14 +27,5 @@ struct Place: Identifiable, Hashable, Codable {
     let menu: String?
     let shopguide: String?
     let restroom: Int?
-}
-
-extension Place {
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(title) // 또는 고유성을 보장하는 다른 속성
-    }
-
-    static func == (lhs: Place, rhs: Place) -> Bool {
-        return lhs.title == rhs.title // 또는 동등성을 정확히 판단할 수 있는 다른 속성들
-    }
+    var isBookmarked: Bool
 }

@@ -13,7 +13,10 @@ class PlaceTableViewCell: UITableViewCell {
     let titleLabel = UILabel()
     let addressLabel = UILabel()
     let openTimeLabel = UILabel()
+    let ratingLabel = UILabel()
     let bookmarkButton = UIButton(type: .custom)
+    let ratingStackView = UIStackView()
+    var bookmarkToggleHandler: ((Bool) -> Void)?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -31,7 +34,7 @@ class PlaceTableViewCell: UITableViewCell {
         contentView.addSubview(placeImageView)
         
         titleLabel.font = UIFont.boldSystemFont(ofSize: 16)
-        titleLabel.numberOfLines = 0
+        titleLabel.numberOfLines = 2
         contentView.addSubview(titleLabel)
         
         addressLabel.font = UIFont.systemFont(ofSize: 14)
@@ -44,12 +47,21 @@ class PlaceTableViewCell: UITableViewCell {
         openTimeLabel.numberOfLines = 0
         contentView.addSubview(openTimeLabel)
         
+        ratingLabel.font = UIFont.systemFont(ofSize: 14)
+        ratingLabel.textColor = .systemBlue
+        contentView.addSubview(ratingLabel)
+        
+        ratingStackView.axis = .horizontal
+        ratingStackView.distribution = .fillEqually
+        ratingStackView.spacing = 2
+        contentView.addSubview(ratingStackView)
+        
         bookmarkButton.setImage(UIImage(systemName: "bookmark"), for: .normal)
         bookmarkButton.setImage(UIImage(systemName: "bookmark.fill"), for: .selected)
         bookmarkButton.addTarget(self, action: #selector(bookmarkTapped), for: .touchUpInside)
         contentView.addSubview(bookmarkButton)
         
-        [placeImageView, titleLabel, addressLabel, openTimeLabel, bookmarkButton].forEach {
+        [placeImageView, titleLabel, addressLabel, openTimeLabel, ratingLabel, bookmarkButton, ratingStackView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
@@ -67,8 +79,17 @@ class PlaceTableViewCell: UITableViewCell {
             addressLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
             addressLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
+            ratingLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: 2),
+            ratingLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 4),
+            ratingLabel.widthAnchor.constraint(equalToConstant: 8),
+            
+            ratingStackView.leadingAnchor.constraint(equalTo: ratingLabel.trailingAnchor, constant: 8),
+            ratingStackView.centerYAnchor.constraint(equalTo: ratingLabel.centerYAnchor),
+            ratingStackView.widthAnchor.constraint(equalToConstant: 100),
+            ratingStackView.heightAnchor.constraint(equalToConstant: 20),
+            
             openTimeLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            openTimeLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 4),
+            openTimeLabel.topAnchor.constraint(equalTo: ratingLabel.bottomAnchor, constant: 4),
             openTimeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             openTimeLabel.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -12),
             
@@ -99,14 +120,21 @@ class PlaceTableViewCell: UITableViewCell {
     }
     
     @objc private func bookmarkTapped() {
-        bookmarkButton.isSelected.toggle()
-        // 토글 여부 viewmodel isbookmarked에 반영되어야 함
-    }
+        print("Bookmark button tapped, current state: \(bookmarkButton.isSelected)")
+            bookmarkToggleHandler?(!bookmarkButton.isSelected)
+        }
     
     func configure(with viewModel: PlaceCellViewModel) {
         titleLabel.text = viewModel.title
         addressLabel.text = viewModel.address
-        openTimeLabel.text = viewModel.openTime
+        
+        ratingLabel.text = "\(viewModel.avgRating)"
+        if let openTime = viewModel.openTime {
+            openTimeLabel.text = openTime
+            openTimeLabel.isHidden = false
+        } else {
+            openTimeLabel.isHidden = true
+        }
         
         placeImageView.image = nil
         if let imageURL = viewModel.imageURL {
@@ -116,5 +144,21 @@ class PlaceTableViewCell: UITableViewCell {
         }
         
         bookmarkButton.isSelected = viewModel.isBookmarked
+        setupStarRating(rating: viewModel.avgRating)
+    }
+    
+    private func setupStarRating(rating: Int) {
+        ratingStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        for i in 1...5 {
+            let starImageView = UIImageView()
+            starImageView.contentMode = .scaleAspectFit
+            if i <= rating {
+                starImageView.image = UIImage(systemName: "star.fill")
+            } else {
+                starImageView.image = UIImage(systemName: "star")
+            }
+            starImageView.tintColor = .systemYellow
+            ratingStackView.addArrangedSubview(starImageView)
+        }
     }
 }

@@ -10,13 +10,15 @@
 		75304AF32C377A560058FDDE /* PlaceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75304AF22C377A560058FDDE /* PlaceTableViewCell.swift */; };
 		753520A42C326B0E00E439CF /* PlaceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753520A32C326B0E00E439CF /* PlaceListViewModel.swift */; };
 		753520AA2C3286D400E439CF /* PlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753520A92C3286D400E439CF /* PlaceListViewController.swift */; };
+		757882FC2C4778180078EFAB /* BookmarkApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757882FB2C4778180078EFAB /* BookmarkApi.swift */; };
+		757882FE2C477AC80078EFAB /* BookmarkResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757882FD2C477AC80078EFAB /* BookmarkResponse.swift */; };
 		B0C87FAD55542F4910C85E04 /* Pods_Busanify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C97DAEB9FCE617B8E9F47CEF /* Pods_Busanify.framework */; };
 		C296D6FE2C1F16B000691515 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D6FD2C1F16B000691515 /* AppDelegate.swift */; };
 		C296D7002C1F16B000691515 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D6FF2C1F16B000691515 /* SceneDelegate.swift */; };
 		C296D7022C1F16B000691515 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D7012C1F16B000691515 /* ViewController.swift */; };
 		C296D7052C1F16B000691515 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = C296D7042C1F16B000691515 /* Base */; };
 		C296D7072C1F16B200691515 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C296D7062C1F16B200691515 /* Assets.xcassets */; };
-C296D70A2C1F16B200691515 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = C296D7092C1F16B200691515 /* Base */; };
+		C296D70A2C1F16B200691515 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = C296D7092C1F16B200691515 /* Base */; };
 		C296D7152C1F16B200691515 /* BusanifyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D7142C1F16B200691515 /* BusanifyTests.swift */; };
 		C296D71F2C1F16B200691515 /* BusanifyUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D71E2C1F16B200691515 /* BusanifyUITests.swift */; };
 		C296D7212C1F16B200691515 /* BusanifyUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D7202C1F16B200691515 /* BusanifyUITestsLaunchTests.swift */; };
@@ -55,6 +57,9 @@ C296D70A2C1F16B200691515 /* Base in Resources */ = {isa = PBXBuildFile; fileRef 
 		753520A22C2BB2F200E439CF /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		753520A32C326B0E00E439CF /* PlaceListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewModel.swift; sourceTree = "<group>"; };
 		753520A92C3286D400E439CF /* PlaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewController.swift; sourceTree = "<group>"; };
+		757882F72C43E52A0078EFAB /* Busanify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Busanify.entitlements; sourceTree = "<group>"; };
+		757882FB2C4778180078EFAB /* BookmarkApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkApi.swift; sourceTree = "<group>"; };
+		757882FD2C477AC80078EFAB /* BookmarkResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkResponse.swift; sourceTree = "<group>"; };
 		C296D6FA2C1F16B000691515 /* Busanify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Busanify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C296D6FD2C1F16B000691515 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C296D6FF2C1F16B000691515 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -168,6 +173,7 @@ C296D70A2C1F16B200691515 /* Base in Resources */ = {isa = PBXBuildFile; fileRef 
 		C296D6FC2C1F16B000691515 /* Busanify */ = {
 			isa = PBXGroup;
 			children = (
+				757882F72C43E52A0078EFAB /* Busanify.entitlements */,
 				C296D72F2C1F2B0200691515 /* Application */,
 				C296D72D2C1F2AA100691515 /* Data */,
 				C296D72E2C1F2AB400691515 /* Network */,
@@ -210,6 +216,7 @@ C296D70A2C1F16B200691515 /* Base in Resources */ = {isa = PBXBuildFile; fileRef 
 			isa = PBXGroup;
 			children = (
 				C2D279C62C29456200AEAFD1 /* PlacesApi.swift */,
+				757882FB2C4778180078EFAB /* BookmarkApi.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -266,6 +273,7 @@ C296D70A2C1F16B200691515 /* Base in Resources */ = {isa = PBXBuildFile; fileRef 
 			children = (
 				C2D279CC2C29458800AEAFD1 /* Place.swift */,
 				C2D279CE2C29459000AEAFD1 /* PlaceType.swift */,
+				757882FD2C477AC80078EFAB /* BookmarkResponse.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -519,8 +527,10 @@ C296D70A2C1F16B200691515 /* Base in Resources */ = {isa = PBXBuildFile; fileRef 
 				C296D7022C1F16B000691515 /* ViewController.swift in Sources */,
 				C2D279D32C2945A300AEAFD1 /* TempViewModel.swift in Sources */,
 				C2D279CB2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift in Sources */,
+				757882FC2C4778180078EFAB /* BookmarkApi.swift in Sources */,
 				C2D279D52C2945B000AEAFD1 /* TempViewController.swift in Sources */,
 				CD89D3552C29A56B00715404 /* HomeViewModel.swift in Sources */,
+				757882FE2C477AC80078EFAB /* BookmarkResponse.swift in Sources */,
 				CD0F83DB2C357A85001C04E2 /* CustomViews.swift in Sources */,
 				CD89D3522C29A55A00715404 /* HomeViewController.swift in Sources */,
 				C296D6FE2C1F16B000691515 /* AppDelegate.swift in Sources */,
@@ -708,8 +718,12 @@ C296D70A2C1F16B200691515 /* Base in Resources */ = {isa = PBXBuildFile; fileRef 
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_ENTITLEMENTS = Busanify/Busanify.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = N954XS4D2X;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Busanify/Info.plist;
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "필요하다 너의 위치 정보";
@@ -724,8 +738,10 @@ C296D70A2C1F16B200691515 /* Base in Resources */ = {isa = PBXBuildFile; fileRef 
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.harrylee.Busanify;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Busanify;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Busanify App";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -738,8 +754,12 @@ C296D70A2C1F16B200691515 /* Base in Resources */ = {isa = PBXBuildFile; fileRef 
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_ENTITLEMENTS = Busanify/Busanify.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = N954XS4D2X;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Busanify/Info.plist;
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "필요하다 너의 위치 정보";
@@ -754,8 +774,10 @@ C296D70A2C1F16B200691515 /* Base in Resources */ = {isa = PBXBuildFile; fileRef 
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.harrylee.Busanify;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Busanify;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Busanify App";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
