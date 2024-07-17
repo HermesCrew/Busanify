@@ -20,6 +20,7 @@ class WeatherViewController: UIViewController, WeatherManagerDelegate {
     private let locationLabel = UILabel()
     private let maxMinTempLabel = UILabel()
     private let avgTempLabel = UILabel()
+    private let weatherImageView = UIImageView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,6 +70,10 @@ class WeatherViewController: UIViewController, WeatherManagerDelegate {
         avgTempLabel.translatesAutoresizingMaskIntoConstraints = false
         avgTempLabel.textAlignment = .center
         view.addSubview(avgTempLabel)
+
+        weatherImageView.translatesAutoresizingMaskIntoConstraints = false
+        weatherImageView.contentMode = .scaleAspectFit
+        view.addSubview(weatherImageView)
         
         NSLayoutConstraint.activate([
             locationLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
@@ -79,9 +84,16 @@ class WeatherViewController: UIViewController, WeatherManagerDelegate {
             weatherLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             weatherLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
-            maxMinTempLabel.topAnchor.constraint(equalTo: weatherLabel.bottomAnchor, constant: 20),
+            weatherImageView.topAnchor.constraint(equalTo: weatherLabel.bottomAnchor, constant: 20),
+            weatherImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            weatherImageView.heightAnchor.constraint(equalToConstant: 100),
+            weatherImageView.widthAnchor.constraint(equalToConstant: 100),
+            
+            maxMinTempLabel.topAnchor.constraint(equalTo: weatherImageView.bottomAnchor, constant: 20),
             maxMinTempLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
+            avgTempLabel.topAnchor.constraint(equalTo: maxMinTempLabel.bottomAnchor, constant: 20),
+            avgTempLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
     
@@ -103,7 +115,15 @@ class WeatherViewController: UIViewController, WeatherManagerDelegate {
             let maxTemp = weather.dailyForecast.first?.highTemperature.value ?? 0.0
             let minTemp = weather.dailyForecast.first?.lowTemperature.value ?? 0.0
             self.maxMinTempLabel.text = "Max: \(maxTemp)°C / Min: \(minTemp)°C"
-        
+            
+            let avgTemp = (maxTemp + minTemp) / 2.0
+            self.avgTempLabel.text = "Average: \(avgTemp)°C"
+            
+            if let weatherImage = WeatherIcon.getWeatherIcon(for: weather.currentWeather) {
+                self.weatherImageView.image = weatherImage
+            } else {
+                self.weatherImageView.image = UIImage(systemName: "questionmark.circle")
+            }
         }
     }
     
@@ -112,6 +132,8 @@ class WeatherViewController: UIViewController, WeatherManagerDelegate {
             self.locationLabel.text = "Failed to get location"
             self.weatherLabel.text = "Failed to get weather: \(error.localizedDescription)"
             self.maxMinTempLabel.text = ""
+            self.avgTempLabel.text = ""
+            self.weatherImageView.image = UIImage(systemName: "xmark.octagon")
         }
     }
 }
