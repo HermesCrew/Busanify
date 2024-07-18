@@ -14,7 +14,6 @@ struct Place: Identifiable, Hashable, Codable {
     let lat: Double
     let lng: Double
     let tel: String
-    let avgRating: Int
     let title: String
     let address: String
     let openTime: String?
@@ -27,5 +26,6 @@ struct Place: Identifiable, Hashable, Codable {
     let menu: String?
     let shopguide: String?
     let restroom: Int?
-    var isBookmarked: Bool
+    let isBookmarked: Bool
+    let avgRating: Double
 }
