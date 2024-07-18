@@ -19,6 +19,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(PlaceInfoTableViewCell.self, forCellReuseIdentifier: PlaceInfoTableViewCell.identifier)
+        tableView.register(RatingTableViewCell.self, forCellReuseIdentifier: RatingTableViewCell.identifier)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 100
         
@@ -182,6 +183,13 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
             cell.configure(with: placeInfo)
             cell.selectionStyle = .none
             return cell
+        case 1:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: RatingTableViewCell.identifier, for: indexPath) as? RatingTableViewCell else {
+                return UITableViewCell()
+            }
+            let rating = viewModel.place.avgRating
+            cell.configure(with: rating)
+            return cell
         default:
             return UITableViewCell()
         }
@@ -197,7 +205,9 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
     
 //    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 //        switch indexPath.section {
-//        case 0: return 200
+//        case 0:
+//            return UITableView.automaticDimension
+//        case 1: return 30
 //        default: return UITableView.automaticDimension
 //        }
 //    }
