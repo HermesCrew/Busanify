@@ -39,8 +39,10 @@ final class PlaceInfoTableViewCell: UITableViewCell {
             iconImageView.widthAnchor.constraint(equalToConstant: 24),
             iconImageView.heightAnchor.constraint(equalToConstant: 24),
             
+            infoLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             infoLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: 16),
             infoLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            infoLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
             infoLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }
