@@ -8,7 +8,7 @@
 import Foundation
 
 struct Place: Identifiable, Hashable, Codable {
-    let id: Int
+    let id: String
     let typeId: String
     let image: String
     let lat: Double
@@ -26,4 +26,6 @@ struct Place: Identifiable, Hashable, Codable {
     let menu: String?
     let shopguide: String?
     let restroom: Int?
+    let isBookmarked: Bool
+    let avgRating: Double
 }
