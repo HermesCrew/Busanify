@@ -12,6 +12,14 @@
 		B8898BB92C479EE3009DE9F5 /* WeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8898BB82C479EE3009DE9F5 /* WeatherManager.swift */; };
 		B8898BBB2C47AB1A009DE9F5 /* WeatherIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8898BBA2C47AB1A009DE9F5 /* WeatherIcon.swift */; };
 		B8898BBD2C4804DE009DE9F5 /* Region.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8898BBC2C4804DE009DE9F5 /* Region.swift */; };
+		C207B98B2C45FEFB0088E2D5 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207B98A2C45FEFB0088E2D5 /* Keychain.swift */; };
+		C207B98D2C464E4E0088E2D5 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207B98C2C464E4E0088E2D5 /* UserProfile.swift */; };
+		C207F3772C3AFA78007DFA27 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = C207F3762C3AFA78007DFA27 /* GoogleSignIn */; };
+		C207F37B2C3AFC0C007DFA27 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207F37A2C3AFC0C007DFA27 /* SignInViewController.swift */; };
+		C207F37F2C3AFC4D007DFA27 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207F37E2C3AFC4D007DFA27 /* UserProfileViewController.swift */; };
+		C207F3812C3AFC5F007DFA27 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207F3802C3AFC5F007DFA27 /* AuthenticationViewModel.swift */; };
+		C207F3832C3AFC74007DFA27 /* SignInApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207F3822C3AFC74007DFA27 /* SignInApi.swift */; };
+		C276594D2C3D2897006D0D6C /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C276594C2C3D2897006D0D6C /* SettingViewController.swift */; };
 		C296D6FE2C1F16B000691515 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D6FD2C1F16B000691515 /* AppDelegate.swift */; };
 		C296D7002C1F16B000691515 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D6FF2C1F16B000691515 /* SceneDelegate.swift */; };
 		C296D7022C1F16B000691515 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D7012C1F16B000691515 /* ViewController.swift */; };
@@ -26,11 +34,10 @@
 		C2D279CB2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279CA2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift */; };
 		C2D279CD2C29458800AEAFD1 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279CC2C29458800AEAFD1 /* Place.swift */; };
 		C2D279CF2C29459000AEAFD1 /* PlaceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279CE2C29459000AEAFD1 /* PlaceType.swift */; };
-		C2D279D32C2945A300AEAFD1 /* TempViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279D22C2945A300AEAFD1 /* TempViewModel.swift */; };
-		C2D279D52C2945B000AEAFD1 /* TempViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279D42C2945B000AEAFD1 /* TempViewController.swift */; };
 		CD0F83DB2C357A85001C04E2 /* CustomViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0F83DA2C357A85001C04E2 /* CustomViews.swift */; };
 		CD89D3522C29A55A00715404 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD89D3502C29A55A00715404 /* HomeViewController.swift */; };
 		CD89D3552C29A56B00715404 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD89D3532C29A56B00715404 /* HomeViewModel.swift */; };
+		DCC351AEDE79E3FA213766F5 /* Pods_Busanify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC54047A571AE7CCCEC17FDE /* Pods_Busanify.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +64,14 @@
 		B8898BB82C479EE3009DE9F5 /* WeatherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherManager.swift; sourceTree = "<group>"; };
 		B8898BBA2C47AB1A009DE9F5 /* WeatherIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherIcon.swift; sourceTree = "<group>"; };
 		B8898BBC2C4804DE009DE9F5 /* Region.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Region.swift; sourceTree = "<group>"; };
+		A5B5FF36CA65D19775B9B568 /* Pods-Busanify.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busanify.release.xcconfig"; path = "Target Support Files/Pods-Busanify/Pods-Busanify.release.xcconfig"; sourceTree = "<group>"; };
+		C207B98A2C45FEFB0088E2D5 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
+		C207B98C2C464E4E0088E2D5 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		C207F37A2C3AFC0C007DFA27 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
+		C207F37E2C3AFC4D007DFA27 /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
+		C207F3802C3AFC5F007DFA27 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
+		C207F3822C3AFC74007DFA27 /* SignInApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInApi.swift; sourceTree = "<group>"; };
+		C276594C2C3D2897006D0D6C /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		C296D6FA2C1F16B000691515 /* Busanify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Busanify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C296D6FD2C1F16B000691515 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C296D6FF2C1F16B000691515 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -75,13 +90,12 @@
 		C2D279CA2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailViewUseCase.swift; sourceTree = "<group>"; };
 		C2D279CC2C29458800AEAFD1 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
 		C2D279CE2C29459000AEAFD1 /* PlaceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceType.swift; sourceTree = "<group>"; };
-		C2D279D22C2945A300AEAFD1 /* TempViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempViewModel.swift; sourceTree = "<group>"; };
-		C2D279D42C2945B000AEAFD1 /* TempViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempViewController.swift; sourceTree = "<group>"; };
-		C8C0A080C2DD911068678876 /* Pods-Busanify.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busanify.debug.xcconfig"; path = "Target Support Files/Pods-Busanify/Pods-Busanify.debug.xcconfig"; sourceTree = "<group>"; };
-		C97DAEB9FCE617B8E9F47CEF /* Pods_Busanify.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Busanify.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C2D2A2142C43E3330081D3E8 /* Busanify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Busanify.entitlements; sourceTree = "<group>"; };
 		CD0F83DA2C357A85001C04E2 /* CustomViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViews.swift; sourceTree = "<group>"; };
 		CD89D3502C29A55A00715404 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		CD89D3532C29A56B00715404 /* HomeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		FC54047A571AE7CCCEC17FDE /* Pods_Busanify.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Busanify.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FCF7B5AF299CF594CE3ABDAA /* Pods-Busanify.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busanify.debug.xcconfig"; path = "Target Support Files/Pods-Busanify/Pods-Busanify.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,7 +103,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B0C87FAD55542F4910C85E04 /* Pods_Busanify.framework in Frameworks */,
+				DCC351AEDE79E3FA213766F5 /* Pods_Busanify.framework in Frameworks */,
+				C207F3772C3AFA78007DFA27 /* GoogleSignIn in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -110,10 +125,10 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		24A4EB452EC3FE9B8316EA57 /* Frameworks */ = {
+		294E1541A7E881C320C437EE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				C97DAEB9FCE617B8E9F47CEF /* Pods_Busanify.framework */,
+				FC54047A571AE7CCCEC17FDE /* Pods_Busanify.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -130,10 +145,36 @@
 		BEFDFFBA458BE9B300E7C88A /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				C8C0A080C2DD911068678876 /* Pods-Busanify.debug.xcconfig */,
-				6AFFFE0B6C958425CF4F8A5F /* Pods-Busanify.release.xcconfig */,
+				FCF7B5AF299CF594CE3ABDAA /* Pods-Busanify.debug.xcconfig */,
+				A5B5FF36CA65D19775B9B568 /* Pods-Busanify.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		C207F3782C3AFB52007DFA27 /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				C207F37A2C3AFC0C007DFA27 /* SignInViewController.swift */,
+				C207F37E2C3AFC4D007DFA27 /* UserProfileViewController.swift */,
+			);
+			path = Authentication;
+			sourceTree = "<group>";
+		};
+		C207F3792C3AFB62007DFA27 /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				C207F3802C3AFC5F007DFA27 /* AuthenticationViewModel.swift */,
+				C207B98A2C45FEFB0088E2D5 /* Keychain.swift */,
+			);
+			path = Authentication;
+			sourceTree = "<group>";
+		};
+		C276594B2C3D2882006D0D6C /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				C276594C2C3D2897006D0D6C /* SettingViewController.swift */,
+			);
+			path = Setting;
 			sourceTree = "<group>";
 		};
 		C296D6F12C1F16B000691515 = {
@@ -144,7 +185,7 @@
 				C296D71D2C1F16B200691515 /* BusanifyUITests */,
 				C296D6FB2C1F16B000691515 /* Products */,
 				BEFDFFBA458BE9B300E7C88A /* Pods */,
-				24A4EB452EC3FE9B8316EA57 /* Frameworks */,
+				294E1541A7E881C320C437EE /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -161,7 +202,7 @@
 		C296D6FC2C1F16B000691515 /* Busanify */ = {
 			isa = PBXGroup;
 			children = (
-				B82365762C43E31500FFACEF /* Busanify.entitlements */,
+				C2D2A2142C43E3330081D3E8 /* Busanify.entitlements */,
 				C296D72F2C1F2B0200691515 /* Application */,
 				C296D72D2C1F2AA100691515 /* Data */,
 				C296D72E2C1F2AB400691515 /* Network */,
@@ -206,6 +247,7 @@
 			children = (
 				C2D279C62C29456200AEAFD1 /* PlacesApi.swift */,
 				B8898BBC2C4804DE009DE9F5 /* Region.swift */,
+				C207F3822C3AFC74007DFA27 /* SignInApi.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -232,8 +274,9 @@
 			isa = PBXGroup;
 			children = (
 				B8789B892C3BC070002B3355 /* Weather */,
+				C276594B2C3D2882006D0D6C /* Setting */,
+				C207F3782C3AFB52007DFA27 /* Authentication */,
 				CD89D3512C29A55A00715404 /* Home */,
-				C2D279D12C29459A00AEAFD1 /* Temp */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -241,8 +284,8 @@
 		C296D7332C1F2B5D00691515 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				C207F3792C3AFB62007DFA27 /* Authentication */,
 				CD89D3542C29A56B00715404 /* Home */,
-				C2D279D02C29459500AEAFD1 /* Temp */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -261,6 +304,7 @@
 			children = (
 				C2D279CC2C29458800AEAFD1 /* Place.swift */,
 				C2D279CE2C29459000AEAFD1 /* PlaceType.swift */,
+				C207B98C2C464E4E0088E2D5 /* UserProfile.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -272,22 +316,6 @@
 				C2D279CA2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift */,
 			);
 			path = Usecases;
-			sourceTree = "<group>";
-		};
-		C2D279D02C29459500AEAFD1 /* Temp */ = {
-			isa = PBXGroup;
-			children = (
-				C2D279D22C2945A300AEAFD1 /* TempViewModel.swift */,
-			);
-			path = Temp;
-			sourceTree = "<group>";
-		};
-		C2D279D12C29459A00AEAFD1 /* Temp */ = {
-			isa = PBXGroup;
-			children = (
-				C2D279D42C2945B000AEAFD1 /* TempViewController.swift */,
-			);
-			path = Temp;
 			sourceTree = "<group>";
 		};
 		CD89D3512C29A55A00715404 /* Home */ = {
@@ -314,12 +342,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C296D7242C1F16B200691515 /* Build configuration list for PBXNativeTarget "Busanify" */;
 			buildPhases = (
-				087652B80BFA6B6376EEDE2D /* [CP] Check Pods Manifest.lock */,
+				E64A6AAA3217D042486D18E6 /* [CP] Check Pods Manifest.lock */,
 				C296D6F62C1F16B000691515 /* Sources */,
 				C296D6F72C1F16B000691515 /* Frameworks */,
 				C296D6F82C1F16B000691515 /* Resources */,
-				6B44C340F2B2DA69379F63D5 /* [CP] Embed Pods Frameworks */,
-				509D34B8FFE01E5FCF504350 /* [CP] Copy Pods Resources */,
+				E0BEDE5A1ACC8D35A8960EE7 /* [CP] Embed Pods Frameworks */,
+				D214ADAAAFF712400C089767 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -327,6 +355,7 @@
 			);
 			name = Busanify;
 			packageProductDependencies = (
+				C207F3762C3AFA78007DFA27 /* GoogleSignIn */,
 			);
 			productName = Busanify;
 			productReference = C296D6FA2C1F16B000691515 /* Busanify.app */;
@@ -401,7 +430,7 @@
 			);
 			mainGroup = C296D6F12C1F16B000691515;
 			packageReferences = (
-				CD89D3632C29A80D00715404 /* XCRemoteSwiftPackageReference "KakaoMapsSDK-SPM" */,
+				C207F3752C3AFA78007DFA27 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			productRefGroup = C296D6FB2C1F16B000691515 /* Products */;
 			projectDirPath = "";
@@ -442,7 +471,41 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		087652B80BFA6B6376EEDE2D /* [CP] Check Pods Manifest.lock */ = {
+		D214ADAAAFF712400C089767 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E0BEDE5A1ACC8D35A8960EE7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E64A6AAA3217D042486D18E6 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -464,40 +527,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		509D34B8FFE01E5FCF504350 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6B44C340F2B2DA69379F63D5 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -505,8 +534,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C207F37B2C3AFC0C007DFA27 /* SignInViewController.swift in Sources */,
 				C2D279C92C29456E00AEAFD1 /* HomeViewUseCase.swift in Sources */,
 				B8898BBD2C4804DE009DE9F5 /* Region.swift in Sources */,
+				C207F3812C3AFC5F007DFA27 /* AuthenticationViewModel.swift in Sources */,
 				C2D279CF2C29459000AEAFD1 /* PlaceType.swift in Sources */,
 				C2D279C72C29456200AEAFD1 /* PlacesApi.swift in Sources */,
 				B8789B8B2C3BC082002B3355 /* WeatherViewController.swift in Sources */,
@@ -514,10 +545,14 @@
 				B8898BBB2C47AB1A009DE9F5 /* WeatherIcon.swift in Sources */,
 				C2D279D32C2945A300AEAFD1 /* TempViewModel.swift in Sources */,
 				C2D279CB2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift in Sources */,
-				C2D279D52C2945B000AEAFD1 /* TempViewController.swift in Sources */,
+				C207F37F2C3AFC4D007DFA27 /* UserProfileViewController.swift in Sources */,
 				CD89D3552C29A56B00715404 /* HomeViewModel.swift in Sources */,
 				CD0F83DB2C357A85001C04E2 /* CustomViews.swift in Sources */,
+				C207B98B2C45FEFB0088E2D5 /* Keychain.swift in Sources */,
+				C207B98D2C464E4E0088E2D5 /* UserProfile.swift in Sources */,
 				CD89D3522C29A55A00715404 /* HomeViewController.swift in Sources */,
+				C276594D2C3D2897006D0D6C /* SettingViewController.swift in Sources */,
+				C207F3832C3AFC74007DFA27 /* SignInApi.swift in Sources */,
 				C296D6FE2C1F16B000691515 /* AppDelegate.swift in Sources */,
 				B8898BB92C479EE3009DE9F5 /* WeatherManager.swift in Sources */,
 				C2D279CD2C29458800AEAFD1 /* Place.swift in Sources */,
@@ -698,11 +733,12 @@
 		};
 		C296D7252C1F16B200691515 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C8C0A080C2DD911068678876 /* Pods-Busanify.debug.xcconfig */;
+			baseConfigurationReference = FCF7B5AF299CF594CE3ABDAA /* Pods-Busanify.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Busanify/Busanify.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
@@ -734,11 +770,12 @@
 		};
 		C296D7262C1F16B200691515 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6AFFFE0B6C958425CF4F8A5F /* Pods-Busanify.release.xcconfig */;
+			baseConfigurationReference = A5B5FF36CA65D19775B9B568 /* Pods-Busanify.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Busanify/Busanify.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
@@ -882,15 +919,23 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		CD89D3632C29A80D00715404 /* XCRemoteSwiftPackageReference "KakaoMapsSDK-SPM" */ = {
+		C207F3752C3AFA78007DFA27 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kakao-mapsSDK/KakaoMapsSDK-SPM.git";
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 2.10.5;
+				minimumVersion = 7.1.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C207F3762C3AFA78007DFA27 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C207F3752C3AFA78007DFA27 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C296D6F22C1F16B000691515 /* Project object */;
 }
