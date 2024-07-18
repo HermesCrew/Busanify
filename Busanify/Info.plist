@@ -4,6 +4,17 @@
 <dict>
 	<key>BASE_URL</key>
 	<string>$(BASE_URL)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.97793035945-1lbbvsisi2i3sklrkrkqj8jtgrg4ulal</string>
+			</array>
+		</dict>
+	</array>
+	<key>GIDClientID</key>
+	<string>97793035945-1lbbvsisi2i3sklrkrkqj8jtgrg4ulal.apps.googleusercontent.com</string>
 	<key>MAP_KEY</key>
 	<string>$(MAP_KEY)</string>
 	<key>NSAppTransportSecurity</key>
