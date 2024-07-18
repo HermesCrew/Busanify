@@ -20,6 +20,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
         tableView.dataSource = self
         tableView.register(PlaceInfoTableViewCell.self, forCellReuseIdentifier: PlaceInfoTableViewCell.identifier)
         tableView.register(RatingTableViewCell.self, forCellReuseIdentifier: RatingTableViewCell.identifier)
+        tableView.register(ReviewTableViewCell.self, forCellReuseIdentifier: ReviewTableViewCell.identifier)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 100
         
@@ -55,7 +56,9 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
         let button = UIButton()
         button.setImage(UIImage(systemName: "bookmark"), for: .normal)
         button.setImage(UIImage(systemName: "bookmark.fill"), for: .selected)
-        button.addTarget(self, action: #selector(bookmarkTapped), for: .touchUpInside)
+        button.addAction(UIAction { [weak self] _ in
+            self?.bookmarkTapped()
+        }, for: .touchUpInside)
         button.tintColor = .white
         
         return button
@@ -114,7 +117,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     
-    @objc func bookmarkTapped() {
+    private func bookmarkTapped() {
         viewModel.toggleBookmarkPlace(token: authViewModel.getToken())
         bookmarkButton.isSelected.toggle()
     }
@@ -162,13 +165,14 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        2
+        3
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0: return placeInfos.count
         case 1: return 1
+        case 2: return 3
         default: return 0
         }
     }
@@ -189,6 +193,16 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
             }
             let rating = viewModel.place.avgRating
             cell.configure(with: rating)
+            cell.selectionStyle = .none
+            return cell
+        case 2:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ReviewTableViewCell.identifier, for: indexPath) as? ReviewTableViewCell else {
+                return UITableViewCell()
+            }
+            if let reviews = viewModel.place.reviews {
+                cell.configure(with: reviews[indexPath.item])
+            }
+            cell.selectionStyle = .none
             return cell
         default:
             return UITableViewCell()
@@ -198,11 +212,10 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
 //        headerView.backgroundColor = .lightGray
-        
+    
         return headerView
     }
-    
-    
+
 //    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 //        switch indexPath.section {
 //        case 0:
