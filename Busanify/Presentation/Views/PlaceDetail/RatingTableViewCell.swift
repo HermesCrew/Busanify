@@ -23,7 +23,7 @@ class RatingTableViewCell: UITableViewCell {
         return stackView
     }()
     
-    private lazy var starRatingStackView: UIStackView = {
+    private lazy var starStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.spacing = 0
@@ -31,6 +31,17 @@ class RatingTableViewCell: UITableViewCell {
         stackView.distribution = .fillEqually
         
         return stackView
+    }()
+    
+    private lazy var addReviewButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "plus.circle"), for: .normal)
+        button.addAction(UIAction { [weak self] _ in
+            // 버튼 클릭시 리뷰 작성 뷰로 이동
+            
+        }, for: .touchUpInside)
+        
+        return button
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -48,27 +59,30 @@ class RatingTableViewCell: UITableViewCell {
         
         contentView.addSubview(ratingLabel)
         contentView.addSubview(starBackgroundStackView)
-        contentView.addSubview(starRatingStackView)
+        contentView.addSubview(starStackView)
+        contentView.addSubview(addReviewButton)
         
         ratingLabel.translatesAutoresizingMaskIntoConstraints = false
         starBackgroundStackView.translatesAutoresizingMaskIntoConstraints = false
-        starRatingStackView.translatesAutoresizingMaskIntoConstraints = false
+        starStackView.translatesAutoresizingMaskIntoConstraints = false
+        addReviewButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             ratingLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             ratingLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             ratingLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
-            ratingLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             
             starBackgroundStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             starBackgroundStackView.leadingAnchor.constraint(equalTo: ratingLabel.trailingAnchor, constant: 16),
             starBackgroundStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
-            starBackgroundStackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             
-            starRatingStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            starRatingStackView.leadingAnchor.constraint(equalTo: ratingLabel.trailingAnchor, constant: 16),
-            starRatingStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
-            starRatingStackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            starStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            starStackView.leadingAnchor.constraint(equalTo: ratingLabel.trailingAnchor, constant: 16),
+            starStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+            
+            addReviewButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            addReviewButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            addReviewButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
         ])
     }
     
@@ -86,7 +100,7 @@ class RatingTableViewCell: UITableViewCell {
             let starImageView = StarImageView(image: UIImage(systemName: "star.fill"))
             starImageView.contentMode = .scaleAspectFit
             starImageView.tintColor = .black
-            starRatingStackView.addArrangedSubview(starImageView)
+            starStackView.addArrangedSubview(starImageView)
         }
         
         var rating = rating
@@ -102,7 +116,7 @@ class RatingTableViewCell: UITableViewCell {
     }
     
     private func updateStarFill(at index: Int, percentage: CGFloat) {
-        guard let starImageView = starRatingStackView.arrangedSubviews[index] as? StarImageView else { return }
+        guard let starImageView = starStackView.arrangedSubviews[index] as? StarImageView else { return }
         starImageView.fillPercentage = percentage
     }
     
