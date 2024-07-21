@@ -5,9 +5,10 @@
 //  Created by 장예진 on 7/8/24.
 //
 
-// -TODO: 지도 이미지 단순하게 선따기
-// -TODO: 좌표 연결해서 버튼 생성하기
-// -TODO: 버튼 누르면 날씨 상세 모달뷰 뜨도록
+// TODO: 뷰 레퍼런스 탐색
+// TODO:  좌표 별로 버튼 탭 하면 구별로 업데이트 가능하도록 하기
+// TODO: 주 별 날씨 넣기
+// TODO: 모달로  상세뷰 뜨게하기 ?
 
 import UIKit
 import WeatherKit

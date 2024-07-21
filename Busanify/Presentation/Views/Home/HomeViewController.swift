@@ -5,7 +5,6 @@
 //  Created by MadCow on 2024/6/24.
 //
 
-// MARK: didupdateWeather, didFailWithError method 를 추가하여 fetcher와 weathcontainer 연결 하였습니다. 감사합니다.
 
 import UIKit
 import KakaoMapsSDK
