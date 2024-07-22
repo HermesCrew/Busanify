@@ -92,8 +92,8 @@ final class PlacesApi: HomeViewUseCase, PlaceDetailViewUseCase {
                     .eraseToAnyPublisher()
     }
     
-    func getBookmarkedPlaces(token: String) -> AnyPublisher<[Place], Error> {
-        let urlString = "\(baseURL)/bookmarks/user"
+    func getBookmarkedPlaces(token: String, lang: String) -> AnyPublisher<[Bookmark], Error> {
+        let urlString = "\(baseURL)/bookmarks/user?lang=\(lang)"
         guard let url = URL(string: urlString) else {
             return Fail(error: NetworkError.invalidURL).eraseToAnyPublisher()
         }
@@ -109,7 +109,7 @@ final class PlacesApi: HomeViewUseCase, PlaceDetailViewUseCase {
                 }
             })
             .map(\.data)
-            .decode(type: [Place].self, decoder: JSONDecoder())
+            .decode(type: [Bookmark].self, decoder: JSONDecoder())
             .eraseToAnyPublisher()
     }
 }

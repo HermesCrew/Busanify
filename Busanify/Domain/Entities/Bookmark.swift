@@ -15,3 +15,12 @@ struct BookmarkResponse: Codable {
         return !deleted
     }
 }
+
+struct Bookmark: Codable {
+    let id: String
+    let typeId: String
+    let image: String
+    let avgRating: Double
+    let reviewCount: Int
+    let title: String
+}
