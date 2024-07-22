@@ -11,9 +11,21 @@ class ReviewTableViewCell: UITableViewCell {
     
     static let identifier = "review"
     
-    private let nicknameLabel = UILabel()
+    private lazy var profileImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "person.crop.circle")
+        
+        return imageView
+    }()
+    
+    private lazy var nicknameLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        
+        return label
+    }()
+    
     private let contentLabel = UILabel()
-    private let dateLabel = UILabel()
     
     private lazy var starBackgroundStackView: UIStackView = {
         let stackView = UIStackView()
@@ -35,6 +47,14 @@ class ReviewTableViewCell: UITableViewCell {
         return stackView
     }()
     
+    private lazy var dateLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 10, weight: .light)
+        label.textColor = .gray
+    
+        return label
+    }()
+    
     private lazy var moreButton: UIButton = {
         let button = UIButton()
         return button
@@ -51,6 +71,7 @@ class ReviewTableViewCell: UITableViewCell {
     }
     
     private func configureUI() {
+        contentView.addSubview(profileImage)
         contentView.addSubview(nicknameLabel)
         contentView.addSubview(starBackgroundStackView)
         contentView.addSubview(starStackView)
@@ -58,6 +79,7 @@ class ReviewTableViewCell: UITableViewCell {
         contentView.addSubview(dateLabel)
         contentView.addSubview(moreButton)
         
+        profileImage.translatesAutoresizingMaskIntoConstraints = false
         nicknameLabel.translatesAutoresizingMaskIntoConstraints = false
         starBackgroundStackView.translatesAutoresizingMaskIntoConstraints = false
         starStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -66,14 +88,37 @@ class ReviewTableViewCell: UITableViewCell {
         moreButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-    
+            
+            profileImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            profileImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            
+            nicknameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            nicknameLabel.leadingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: 8),
+            
+            starBackgroundStackView.topAnchor.constraint(equalTo: nicknameLabel.bottomAnchor, constant: 8),
+            starBackgroundStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            starBackgroundStackView.widthAnchor.constraint(equalToConstant: 50),
+            
+            starStackView.topAnchor.constraint(equalTo: nicknameLabel.bottomAnchor, constant: 8),
+            starStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            starStackView.widthAnchor.constraint(equalToConstant: 50),
+            
+            contentLabel.topAnchor.constraint(equalTo: starStackView.bottomAnchor, constant: 8),
+            contentLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            
+            dateLabel.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 8),
+            dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            dateLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
         ])
     }
     
     func configure(with review: Review) {
+        // 리뷰에 user image 추가
+//        profileImage.image =
         nicknameLabel.text = review.username
         contentLabel.text = review.content
         dateLabel.text = review.createdAt
+        
         setUpStars(rating: review.rating)
     }
     
