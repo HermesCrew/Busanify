@@ -9,7 +9,7 @@ import UIKit
 import Combine
 
 class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    private let viewModel: PlaceDetailViewModel
+    private let viewModel: PlaceDetailViewModel = PlaceDetailViewModel(placeId: "BS_FOOD_102", useCase: PlacesApi())
     private let authViewModel = AuthenticationViewModel.shared
     private var cancellables = Set<AnyCancellable>()
     private var placeInfos: [(label: String, icon: String)] = []
@@ -64,14 +64,14 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
         return button
     }()
     
-    init(viewModel: PlaceDetailViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+//    init(viewModel: PlaceDetailViewModel) {
+//        self.viewModel = viewModel
+//        super.init(nibName: nil, bundle: nil)
+//    }
+//    
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -118,8 +118,14 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
     
     
     private func bookmarkTapped() {
-        viewModel.toggleBookmarkPlace(token: authViewModel.getToken())
-        bookmarkButton.isSelected.toggle()
+        switch authViewModel.state {
+        case .googleSignedIn, .appleSignedIn:
+            viewModel.toggleBookmarkPlace(token: authViewModel.getToken())
+            bookmarkButton.isSelected.toggle()
+        case .signedOut:
+            let viewController = SignInViewController()
+            show(viewController, sender: self)
+        }
     }
     
     private func bind() {
@@ -128,6 +134,13 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
             .sink { [weak self] place in
                 self?.configureViewContents(place: place)
                 self?.tableView.reloadData()
+            }
+            .store(in: &cancellables)
+        
+        authViewModel.$state
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.viewModel.fetchPlace(token: self?.authViewModel.getToken())
             }
             .store(in: &cancellables)
     }
@@ -172,7 +185,9 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
         switch section {
         case 0: return placeInfos.count
         case 1: return 1
-        case 2: return 3
+        case 2:
+            guard let reviews = viewModel.place.reviews else { return 0 }
+            return reviews.isEmpty ? 0 : 3 // 리뷰 하나도 없을때 표시할 default 메세지 필요
         default: return 0
         }
     }
