@@ -8,5 +8,10 @@
 import Foundation
 
 struct BookmarkResponse: Codable {
-    let isBookmarked: Bool
+    let id: Int
+    let deleted: Bool
+    
+    var isBookmarked: Bool {
+        return !deleted
+    }
 }

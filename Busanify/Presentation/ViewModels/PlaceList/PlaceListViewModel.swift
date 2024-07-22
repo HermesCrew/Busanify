@@ -15,8 +15,8 @@ struct PlaceCellViewModel {
     let openTime: String?
     let imageURL: URL?
     var isBookmarked: Bool
-    let avgRating: Int
-
+    let avgRating: Double
+    
     init(place: Place) {
         self.id = place.id
         self.title = place.title
@@ -32,84 +32,75 @@ final class PlaceListViewModel {
     @Published var placeCellViewModels: [PlaceCellViewModel] = []
     private var cancellables = Set<AnyCancellable>()
     private let useCase: HomeViewUseCase
-    private let bookmarkApi: BookmarkApiProtocol
     
-    @Published var places: [Place] = []
-    
-    init(useCase: HomeViewUseCase, bookmarkApi: BookmarkApiProtocol) {
-            self.useCase = useCase
-            self.bookmarkApi = bookmarkApi
-        }
+    init(useCase: HomeViewUseCase) {
+        self.useCase = useCase
+    }
     
     func fetchPlaces(typeId: PlaceType, lang: String, lat: Double, lng: Double, radius: Double) {
         useCase.getPlaces(by: typeId, lang: lang, lat: lat, lng: lng, radius: radius)
-            .map { Array(Set($0)) }
             .map { places in places.map { PlaceCellViewModel(place: $0) } }
             .receive(on: DispatchQueue.main)
             .sink { completion in
-                switch completion {
-                case .finished:
-                    print("Successfully received data")
-                case .failure(let error):
-                    print("Error receiving data: \(error)")
+                if case .failure(let error) = completion {
+                    print("Error fetching places: \(error)")
                 }
             } receiveValue: { [weak self] cellViewModels in
-                print("Received places: \(cellViewModels.count) items")
-                        for (index, viewModel) in cellViewModels.enumerated() {
-                            print("Place \(index): ID = \(viewModel.id), isBookmarked = \(viewModel.isBookmarked)")
-                        }
-                        self?.placeCellViewModels = cellViewModels
-                        }
-            .store(in: &cancellables)
-    }
-    
-    func fetchPlaces(by title: String, lang: String) {
-        useCase.getPlaces(by: title, lang: lang)
-            .map { places in places.map { PlaceCellViewModel(place: $0) } }
-            .receive(on: DispatchQueue.main)
-            .sink { completion in
-                switch completion {
-                case .finished:
-                    print("Successfully received data")
-                case .failure(let error):
-                    print("Error receiving data: \(error)")
-                }
-            } receiveValue: { [weak self] cellViewModels in
-                            //print("Received places: \(cellViewModels.count)")
-                            self?.placeCellViewModels = cellViewModels
-                        }
+                self?.placeCellViewModels = cellViewModels
+                self?.syncBookmarksWithServer()
+            }
             .store(in: &cancellables)
     }
     
     func toggleBookmark(at index: Int) {
-        print("toggleBookmark called with index: \(index)")
-        guard index < placeCellViewModels.count else {
-            print("Index out of range: \(index), placeCellViewModels count: \(placeCellViewModels.count)")
+        guard index < placeCellViewModels.count,
+              let token = AuthenticationViewModel.shared.getToken() else { return }
+        
+        let placeId = placeCellViewModels[index].id
+        
+        guard let placesApi = useCase as? PlacesApi else { return }
+        
+        placeCellViewModels[index].isBookmarked.toggle()
+        
+        placesApi.toggleBookmark(placeId: placeId, token: token)
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                if case .failure(let error) = completion {
+                    print("Error syncing bookmarks: \(error)")
+                    self.placeCellViewModels[index].isBookmarked.toggle()
+                }
+            } receiveValue: { [weak self] isBookmarked in
+                self?.placeCellViewModels[index].isBookmarked = isBookmarked
+            }
+            .store(in: &cancellables)
+    }
+    
+    func syncBookmarksWithServer() {
+        guard let token = AuthenticationViewModel.shared.getToken() else { return }
+        
+        guard let placesApi = useCase as? PlacesApi else {
+            print("Error: UseCase is not PlacesApi")
             return
         }
-        let placeId = placeCellViewModels[index].id
-        let currentIsBookmarked = placeCellViewModels[index].isBookmarked
         
-        print("Toggling bookmark for placeId: \(placeId), current state: \(currentIsBookmarked)")
-        
-        bookmarkApi.toggleBookmark(placeId: placeId)
-                .receive(on: DispatchQueue.main)
-                .sink { completion in
-                    if case .failure(let error) = completion {
-                        print("Error toggling bookmark: \(error)")
-                    }
-                } receiveValue: { [weak self] serverIsBookmarked in
-                    print("Server confirmed bookmark state: \(serverIsBookmarked)")
-                    let newIsBookmarked = !currentIsBookmarked
-                    print("Local bookmark state changed to: \(newIsBookmarked)")
-                    if serverIsBookmarked == newIsBookmarked {
-                        print("Server and local state are in sync")
-                    } else {
-                        print("Warning: Server and local state are out of sync")
-                    }
-                    self?.placeCellViewModels[index].isBookmarked = newIsBookmarked
-                    //self?.objectWillChange.send()
+        placesApi.getBookmarkedPlaces(token: token)
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                if case .failure(let error) = completion {
+                    print("Error syncing bookmarks: \(error)")
                 }
-                .store(in: &cancellables)
+            } receiveValue: { [weak self] bookmarkedPlaces in
+                self?.updateBookmarkStatus(with: bookmarkedPlaces)
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func updateBookmarkStatus(with bookmarkedPlaces: [Place]) {
+        let bookmarkedIds = Set(bookmarkedPlaces.map { $0.id })
+        placeCellViewModels = placeCellViewModels.map { viewModel in
+            var updatedViewModel = viewModel
+            updatedViewModel.isBookmarked = bookmarkedIds.contains(viewModel.id)
+            return updatedViewModel
+        }
     }
 }

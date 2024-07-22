@@ -64,4 +64,52 @@ final class PlacesApi: HomeViewUseCase, PlaceDetailViewUseCase {
             .eraseToAnyPublisher()
     }
     
+    func toggleBookmark(placeId: String, token: String) -> AnyPublisher<Bool, Never> {
+        let urlString = "\(baseURL)/bookmarks/toggle"
+        guard let url = URL(string: urlString) else {
+            fatalError("Invalid URL")
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        let body = ["placeId": placeId]
+        request.httpBody = try? JSONEncoder().encode(body)
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+                    .map(\.data)
+                    .handleEvents(receiveOutput: { data in
+                        print("Received raw data from server: \(String(data: data, encoding: .utf8) ?? "")")
+                    })
+                    .decode(type: BookmarkResponse.self, decoder: JSONDecoder())
+                    .handleEvents(receiveOutput: { response in
+                        print("Server response for bookmark toggle: \(response.isBookmarked)")
+                    })
+                    .map { $0.isBookmarked }
+                    .replaceError(with: false)
+                    .eraseToAnyPublisher()
+    }
+    
+    func getBookmarkedPlaces(token: String) -> AnyPublisher<[Place], Error> {
+        let urlString = "\(baseURL)/bookmarks/user"
+        guard let url = URL(string: urlString) else {
+            return Fail(error: NetworkError.invalidURL).eraseToAnyPublisher()
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .handleEvents(receiveOutput: { output in
+                if let jsonString = String(data: output.data, encoding: .utf8) {
+                    print("Received JSON: \(jsonString)")
+                }
+            })
+            .map(\.data)
+            .decode(type: [Place].self, decoder: JSONDecoder())
+            .eraseToAnyPublisher()
+    }
 }
