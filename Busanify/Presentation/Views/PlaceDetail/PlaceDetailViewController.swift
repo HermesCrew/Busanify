@@ -233,9 +233,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
 
 //    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 //        switch indexPath.section {
-//        case 0:
-//            return UITableView.automaticDimension
-//        case 1: return 30
+//        case 2: return 200
 //        default: return UITableView.automaticDimension
 //        }
 //    }
