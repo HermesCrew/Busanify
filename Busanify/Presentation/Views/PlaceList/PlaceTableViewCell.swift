@@ -47,7 +47,7 @@ class PlaceTableViewCell: UITableViewCell {
         openTimeLabel.numberOfLines = 0
         contentView.addSubview(openTimeLabel)
         
-        ratingLabel.font = UIFont.systemFont(ofSize: 14)
+        ratingLabel.font = UIFont.systemFont(ofSize: 15)
         ratingLabel.textColor = .systemBlue
         contentView.addSubview(ratingLabel)
         
@@ -80,13 +80,13 @@ class PlaceTableViewCell: UITableViewCell {
             addressLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
             ratingLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: 2),
-            ratingLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 4),
-            ratingLabel.widthAnchor.constraint(equalToConstant: 8),
+            ratingLabel.centerYAnchor.constraint(equalTo: ratingStackView.centerYAnchor),
+            ratingLabel.widthAnchor.constraint(equalToConstant: 22),
             
-            ratingStackView.leadingAnchor.constraint(equalTo: ratingLabel.trailingAnchor, constant: 8),
-            ratingStackView.centerYAnchor.constraint(equalTo: ratingLabel.centerYAnchor),
-            ratingStackView.widthAnchor.constraint(equalToConstant: 100),
-            ratingStackView.heightAnchor.constraint(equalToConstant: 20),
+            //ratingStackView.topAnchor.constraint(equalTo: ratingLabel.topAnchor),
+            //ratingStackView.bottomAnchor.constraint(equalTo: ratingLabel.bottomAnchor),
+            ratingStackView.leadingAnchor.constraint(equalTo: ratingLabel.trailingAnchor, constant: 3),
+            ratingStackView.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 4),
             
             openTimeLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             openTimeLabel.topAnchor.constraint(equalTo: ratingLabel.bottomAnchor, constant: 4),
@@ -120,15 +120,15 @@ class PlaceTableViewCell: UITableViewCell {
     }
     
     @objc private func bookmarkTapped() {
-        print("Bookmark button tapped, current state: \(bookmarkButton.isSelected)")
-            bookmarkToggleHandler?(!bookmarkButton.isSelected)
-        }
+        bookmarkToggleHandler?(!bookmarkButton.isSelected)
+    }
     
     func configure(with viewModel: PlaceCellViewModel) {
         titleLabel.text = viewModel.title
         addressLabel.text = viewModel.address
         
-        ratingLabel.text = "\(viewModel.avgRating)"
+        ratingLabel.text = String(format: "%.1f", viewModel.avgRating)
+        
         if let openTime = viewModel.openTime {
             openTimeLabel.text = openTime
             openTimeLabel.isHidden = false
@@ -147,18 +147,42 @@ class PlaceTableViewCell: UITableViewCell {
         setupStarRating(rating: viewModel.avgRating)
     }
     
-    private func setupStarRating(rating: Int) {
+    private func setupStarRating(rating: Double) {
         ratingStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        for i in 1...5 {
+        
+        for i in 0..<5 {
             let starImageView = UIImageView()
             starImageView.contentMode = .scaleAspectFit
-            if i <= rating {
-                starImageView.image = UIImage(systemName: "star.fill")
-            } else {
-                starImageView.image = UIImage(systemName: "star")
-            }
-            starImageView.tintColor = .systemYellow
+            
+            let fillRatio = min(max(rating - Double(i), 0), 1)
+            
+            let filledStarImage = drawPartialStar(fillRatio: CGFloat(fillRatio))
+            starImageView.image = filledStarImage
+            
             ratingStackView.addArrangedSubview(starImageView)
+            
+            starImageView.widthAnchor.constraint(equalTo: starImageView.heightAnchor).isActive = true
+            starImageView.heightAnchor.constraint(equalToConstant: 14).isActive = true
+        }
+    }
+    
+    private func drawPartialStar(fillRatio: CGFloat) -> UIImage? {
+        let size = CGSize(width: 24, height: 22)
+        let renderer = UIGraphicsImageRenderer(size: size)
+        
+        return renderer.image { context in
+            let rect = CGRect(origin: .zero, size: size)
+            
+            let emptyStarImage = UIImage(systemName: "star")?.withRenderingMode(.alwaysTemplate)
+            UIColor.systemYellow.setFill()
+            emptyStarImage?.draw(in: rect)
+            
+            let filledStarImage = UIImage(systemName: "star.fill")?.withRenderingMode(.alwaysTemplate)
+            context.cgContext.saveGState()
+            context.cgContext.clip(to: CGRect(x: 0, y: 0, width: size.width * fillRatio, height: size.height))
+            UIColor.systemYellow.setFill()
+            filledStarImage?.draw(in: rect)
+            context.cgContext.restoreGState()
         }
     }
 }
