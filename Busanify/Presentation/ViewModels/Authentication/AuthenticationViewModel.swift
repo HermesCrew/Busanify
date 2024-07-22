@@ -11,7 +11,7 @@ import GoogleSignIn
 import AuthenticationServices
 import Combine
 
-enum State {
+enum State: Equatable {
     case googleSignedIn(GIDGoogleUser)
     case appleSignedIn
     case signedOut
