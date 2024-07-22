@@ -10,7 +10,7 @@
 		75304AF32C377A560058FDDE /* PlaceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75304AF22C377A560058FDDE /* PlaceTableViewCell.swift */; };
 		753520A42C326B0E00E439CF /* PlaceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753520A32C326B0E00E439CF /* PlaceListViewModel.swift */; };
 		753520AA2C3286D400E439CF /* PlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753520A92C3286D400E439CF /* PlaceListViewController.swift */; };
-		757882FE2C477AC80078EFAB /* BookmarkResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757882FD2C477AC80078EFAB /* BookmarkResponse.swift */; };
+		757882FE2C477AC80078EFAB /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757882FD2C477AC80078EFAB /* Bookmark.swift */; };
 		75D78A352C4C63D700E3259B /* BookmarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D78A342C4C63D700E3259B /* BookmarkViewController.swift */; };
 		75D78A372C4C6E6C00E3259B /* BookmarkGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D78A362C4C6E6C00E3259B /* BookmarkGridCell.swift */; };
 		C207B98B2C45FEFB0088E2D5 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207B98A2C45FEFB0088E2D5 /* Keychain.swift */; };
@@ -64,7 +64,7 @@
 		753520A32C326B0E00E439CF /* PlaceListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewModel.swift; sourceTree = "<group>"; };
 		753520A92C3286D400E439CF /* PlaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewController.swift; sourceTree = "<group>"; };
 		757882F72C43E52A0078EFAB /* Busanify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Busanify.entitlements; sourceTree = "<group>"; };
-		757882FD2C477AC80078EFAB /* BookmarkResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkResponse.swift; sourceTree = "<group>"; };
+		757882FD2C477AC80078EFAB /* Bookmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
 		75D78A342C4C63D700E3259B /* BookmarkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkViewController.swift; sourceTree = "<group>"; };
 		75D78A362C4C6E6C00E3259B /* BookmarkGridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkGridCell.swift; sourceTree = "<group>"; };
 		A5B5FF36CA65D19775B9B568 /* Pods-Busanify.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busanify.release.xcconfig"; path = "Target Support Files/Pods-Busanify/Pods-Busanify.release.xcconfig"; sourceTree = "<group>"; };
@@ -332,7 +332,7 @@
 			children = (
 				C2D279CC2C29458800AEAFD1 /* Place.swift */,
 				C2D279CE2C29459000AEAFD1 /* PlaceType.swift */,
-				757882FD2C477AC80078EFAB /* BookmarkResponse.swift */,
+				757882FD2C477AC80078EFAB /* Bookmark.swift */,
 				C207B98C2C464E4E0088E2D5 /* UserProfile.swift */,
 			);
 			path = Entities;
@@ -577,7 +577,7 @@
 				C2D279CB2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift in Sources */,
 				C207F37F2C3AFC4D007DFA27 /* UserProfileViewController.swift in Sources */,
 				CD89D3552C29A56B00715404 /* HomeViewModel.swift in Sources */,
-				757882FE2C477AC80078EFAB /* BookmarkResponse.swift in Sources */,
+				757882FE2C477AC80078EFAB /* Bookmark.swift in Sources */,
 				CD0F83DB2C357A85001C04E2 /* CustomViews.swift in Sources */,
 				C207B98B2C45FEFB0088E2D5 /* Keychain.swift in Sources */,
 				C207B98D2C464E4E0088E2D5 /* UserProfile.swift in Sources */,
