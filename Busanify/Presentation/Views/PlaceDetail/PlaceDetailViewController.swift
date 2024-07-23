@@ -21,6 +21,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
         tableView.register(PlaceInfoTableViewCell.self, forCellReuseIdentifier: PlaceInfoTableViewCell.identifier)
         tableView.register(RatingTableViewCell.self, forCellReuseIdentifier: RatingTableViewCell.identifier)
         tableView.register(ReviewTableViewCell.self, forCellReuseIdentifier: ReviewTableViewCell.identifier)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "reviewList")
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 100
         
@@ -63,7 +64,6 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
         
         return button
     }()
-    
 //    init(viewModel: PlaceDetailViewModel) {
 //        self.viewModel = viewModel
 //        super.init(nibName: nil, bundle: nil)
@@ -178,17 +178,22 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        3
+        4
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 0: return placeInfos.count
-        case 1: return 1
+        case 0: 
+            return placeInfos.count
+        case 1:
+            return 1
         case 2:
             guard let reviews = viewModel.place.reviews else { return 0 }
             return reviews.isEmpty ? 0 : 3 // 리뷰 하나도 없을때 표시할 default 메세지 필요
-        default: return 0
+        case 3: 
+            return 1
+        default: 
+            return 0
         }
     }
     
@@ -219,24 +224,29 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
             }
             cell.selectionStyle = .none
             return cell
+        case 3:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "reviewList", for: indexPath)
+            var content = cell.defaultContentConfiguration()
+            content.text = "View all reviews"
+            content.textProperties.color = .systemBlue
+            content.textProperties.alignment = .center
+            
+            cell.contentConfiguration = content
+            cell.selectionStyle = .none
+            
+            return cell
         default:
             return UITableViewCell()
         }
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = UIView()
-//        headerView.backgroundColor = .lightGray
-    
-        return headerView
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch section {
+        case 0: return "Info"
+        case 1: return "Review"
+        default: return nil
+        }
     }
-
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        switch indexPath.section {
-//        case 2: return 200
-//        default: return UITableView.automaticDimension
-//        }
-//    }
     
     private func updatePlaceInfos(place: Place) {
         var infos = [String]()
