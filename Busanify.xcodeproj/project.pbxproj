@@ -13,6 +13,7 @@
 		757882FE2C477AC80078EFAB /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757882FD2C477AC80078EFAB /* Bookmark.swift */; };
 		75D78A352C4C63D700E3259B /* BookmarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D78A342C4C63D700E3259B /* BookmarkViewController.swift */; };
 		75D78A372C4C6E6C00E3259B /* BookmarkGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D78A362C4C6E6C00E3259B /* BookmarkGridCell.swift */; };
+		75D78A392C4E539C00E3259B /* BookmarkListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D78A382C4E539C00E3259B /* BookmarkListCell.swift */; };
 		C207B98B2C45FEFB0088E2D5 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207B98A2C45FEFB0088E2D5 /* Keychain.swift */; };
 		C207B98D2C464E4E0088E2D5 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207B98C2C464E4E0088E2D5 /* UserProfile.swift */; };
 		C207F3772C3AFA78007DFA27 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = C207F3762C3AFA78007DFA27 /* GoogleSignIn */; };
@@ -67,6 +68,7 @@
 		757882FD2C477AC80078EFAB /* Bookmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
 		75D78A342C4C63D700E3259B /* BookmarkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkViewController.swift; sourceTree = "<group>"; };
 		75D78A362C4C6E6C00E3259B /* BookmarkGridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkGridCell.swift; sourceTree = "<group>"; };
+		75D78A382C4E539C00E3259B /* BookmarkListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkListCell.swift; sourceTree = "<group>"; };
 		A5B5FF36CA65D19775B9B568 /* Pods-Busanify.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busanify.release.xcconfig"; path = "Target Support Files/Pods-Busanify/Pods-Busanify.release.xcconfig"; sourceTree = "<group>"; };
 		C207B98A2C45FEFB0088E2D5 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		C207B98C2C464E4E0088E2D5 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 			children = (
 				75D78A342C4C63D700E3259B /* BookmarkViewController.swift */,
 				75D78A362C4C6E6C00E3259B /* BookmarkGridCell.swift */,
+				75D78A382C4E539C00E3259B /* BookmarkListCell.swift */,
 			);
 			path = Bookmark;
 			sourceTree = "<group>";
@@ -568,6 +571,7 @@
 				C207F37B2C3AFC0C007DFA27 /* SignInViewController.swift in Sources */,
 				C2D279C92C29456E00AEAFD1 /* HomeViewUseCase.swift in Sources */,
 				C207F3812C3AFC5F007DFA27 /* AuthenticationViewModel.swift in Sources */,
+				75D78A392C4E539C00E3259B /* BookmarkListCell.swift in Sources */,
 				75D78A352C4C63D700E3259B /* BookmarkViewController.swift in Sources */,
 				C2D279CF2C29459000AEAFD1 /* PlaceType.swift in Sources */,
 				C2D279C72C29456200AEAFD1 /* PlacesApi.swift in Sources */,

@@ -1,42 +1,39 @@
 //
-//  BookmarkGridCell.swift
+//  BookmarkListCell.swift
 //  Busanify
 //
-//  Created by seokyung on 7/20/24.
+//  Created by seokyung on 7/22/24.
 //
-// 아이템 크기랑 위치 고민
+// 리뷰카운팅이 0이라 별점이 0인 경우에는 hidden 처리하는 게 사용자에게 좋을까
 import Foundation
 import UIKit
 
-class BookmarkGridCell: UICollectionViewCell {
-    let gridImageView = UIImageView()
+class BookmarkListCell: UITableViewCell {
+    let listImageView = UIImageView()
     let titleLabel = UILabel()
     let ratingLabel = UILabel()
     let ratingStackView = UIStackView()
-    //let reviewCountLabel = UILabel()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    let reviewCountLabel = UILabel()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
     }
-
+    
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupUI()
+        fatalError("init(coder:) has not been implemented")
     }
-
+    
     private func setupUI() {
-        gridImageView.contentMode = .scaleAspectFill
-        gridImageView.clipsToBounds = true
-        gridImageView.layer.cornerRadius = 8
-        contentView.addSubview(gridImageView)
-
-        titleLabel.textAlignment = .left
+        listImageView.contentMode = .scaleAspectFill
+        listImageView.clipsToBounds = true
+        listImageView.layer.cornerRadius = 8
+        contentView.addSubview(listImageView)
+        
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 16)
         titleLabel.numberOfLines = 2
-        titleLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         contentView.addSubview(titleLabel)
-
-        ratingLabel.textAlignment = .left
+        
         ratingLabel.font = UIFont.systemFont(ofSize: 13)
         contentView.addSubview(ratingLabel)
         
@@ -45,53 +42,52 @@ class BookmarkGridCell: UICollectionViewCell {
         ratingStackView.spacing = 2
         contentView.addSubview(ratingStackView)
         
-//        reviewCountLabel.font = UIFont.systemFont(ofSize: 14)
-//        reviewCountLabel.textColor = .darkGray
-//        contentView.addSubview(reviewCountLabel)
+        reviewCountLabel.font = UIFont.systemFont(ofSize: 14)
+        reviewCountLabel.textColor = .darkGray
+        contentView.addSubview(reviewCountLabel)
         
-        [gridImageView, titleLabel, ratingLabel, ratingStackView].forEach {
+        [listImageView, titleLabel, ratingLabel, ratingStackView, reviewCountLabel].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
-
+        
         NSLayoutConstraint.activate([
-            gridImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            gridImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
-            gridImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
-            gridImageView.heightAnchor.constraint(equalToConstant: 110),
-            gridImageView.widthAnchor.constraint(equalToConstant: 110),
-
-            titleLabel.topAnchor.constraint(equalTo: gridImageView.bottomAnchor, constant: 4),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
-
-            ratingLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 2),
-            ratingLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
+            listImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            listImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            listImageView.widthAnchor.constraint(equalToConstant: 110),
+            listImageView.heightAnchor.constraint(equalToConstant: 110),
+            
+            titleLabel.leadingAnchor.constraint(equalTo: listImageView.trailingAnchor, constant: 16),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            
+            ratingLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            ratingLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
             
             ratingStackView.leadingAnchor.constraint(equalTo: ratingLabel.trailingAnchor, constant: 4),
-            ratingStackView.topAnchor.constraint(equalTo: ratingLabel.topAnchor),
+            ratingStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
             ratingStackView.heightAnchor.constraint(equalToConstant: 14),
             
-//            reviewCountLabel.leadingAnchor.constraint(equalTo: ratingStackView.trailingAnchor, constant: 4),
-//            reviewCountLabel.topAnchor.constraint(equalTo: ratingStackView.topAnchor),
-//            reviewCountLabel.bottomAnchor.constraint(lessThanOrEqualTo: ratingStackView.bottomAnchor)
+            reviewCountLabel.leadingAnchor.constraint(equalTo: ratingStackView.trailingAnchor, constant: 4),
+            reviewCountLabel.topAnchor.constraint(equalTo: ratingStackView.topAnchor),
+            reviewCountLabel.bottomAnchor.constraint(lessThanOrEqualTo: ratingStackView.bottomAnchor)
         ])
     }
-
+    
     func configure(with bookmark: Bookmark) {
         titleLabel.text = bookmark.title
-        ratingLabel.text = "\(bookmark.avgRating)"
-        //reviewCountLabel.text = "(\(bookmark.reviewCount))"
+        ratingLabel.text = String(bookmark.avgRating)
+        reviewCountLabel.text = "(\(bookmark.reviewCount))"
         
-        gridImageView.image = nil
+        listImageView.image = nil
         if let imageURL = URL(string: bookmark.image) {
             loadImage(from: imageURL)
         } else {
-            gridImageView.image = UIImage(named: "placeholder")
+            listImageView.image = UIImage(named: "placeholder")
         }
         
         setupStarRating(rating: bookmark.avgRating)
     }
-
+    
     private func loadImage(from url: URL) {
         URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
             guard let self = self else { return }
@@ -106,7 +102,7 @@ class BookmarkGridCell: UICollectionViewCell {
             }
             
             DispatchQueue.main.async {
-                self.gridImageView.image = image
+                self.listImageView.image = image
             }
         }.resume()
     }
