@@ -48,7 +48,7 @@ class PlaceTableViewCell: UITableViewCell {
         openTimeLabel.numberOfLines = 0
         contentView.addSubview(openTimeLabel)
         
-        ratingLabel.font = UIFont.systemFont(ofSize: 15)
+        ratingLabel.font = UIFont.systemFont(ofSize: 14)
         ratingLabel.textColor = .systemBlue
         contentView.addSubview(ratingLabel)
         
@@ -57,7 +57,7 @@ class PlaceTableViewCell: UITableViewCell {
         ratingStackView.spacing = 2
         contentView.addSubview(ratingStackView)
         
-        reviewCountLabel.font = UIFont.systemFont(ofSize: 14)
+        reviewCountLabel.font = UIFont.systemFont(ofSize: 13)
         reviewCountLabel.textColor = .darkGray
         contentView.addSubview(reviewCountLabel)
         
@@ -85,8 +85,9 @@ class PlaceTableViewCell: UITableViewCell {
             addressLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
             ratingLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: 2),
-            ratingLabel.centerYAnchor.constraint(equalTo: ratingStackView.centerYAnchor),
             ratingLabel.widthAnchor.constraint(equalToConstant: 22),
+            ratingLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 4),
+            ratingLabel.bottomAnchor.constraint(equalTo: ratingStackView.bottomAnchor),
             
             ratingStackView.leadingAnchor.constraint(equalTo: ratingLabel.trailingAnchor, constant: 3),
             ratingStackView.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 4),
@@ -134,7 +135,7 @@ class PlaceTableViewCell: UITableViewCell {
         titleLabel.text = viewModel.title
         addressLabel.text = viewModel.address
         ratingLabel.text = String(format: "%.1f", viewModel.avgRating)
-        //reviewCountLabel.text = viewModel.reviewCount
+        reviewCountLabel.text = "(\(viewModel.reviewCount))"
         
         if let openTime = viewModel.openTime {
             openTimeLabel.text = openTime
