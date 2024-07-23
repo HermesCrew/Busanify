@@ -16,18 +16,19 @@ class PlaceTableViewCell: UITableViewCell {
     let ratingLabel = UILabel()
     let bookmarkButton = UIButton(type: .custom)
     let ratingStackView = UIStackView()
+    let reviewCountLabel = UILabel()
     var bookmarkToggleHandler: ((Bool) -> Void)?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupViews()
+        setupUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupViews() {
+    private func setupUI() {
         placeImageView.contentMode = .scaleAspectFill
         placeImageView.clipsToBounds = true
         placeImageView.layer.cornerRadius = 8
@@ -56,12 +57,16 @@ class PlaceTableViewCell: UITableViewCell {
         ratingStackView.spacing = 2
         contentView.addSubview(ratingStackView)
         
+        reviewCountLabel.font = UIFont.systemFont(ofSize: 14)
+        reviewCountLabel.textColor = .darkGray
+        contentView.addSubview(reviewCountLabel)
+        
         bookmarkButton.setImage(UIImage(systemName: "bookmark"), for: .normal)
         bookmarkButton.setImage(UIImage(systemName: "bookmark.fill"), for: .selected)
         bookmarkButton.addTarget(self, action: #selector(bookmarkTapped), for: .touchUpInside)
         contentView.addSubview(bookmarkButton)
         
-        [placeImageView, titleLabel, addressLabel, openTimeLabel, ratingLabel, bookmarkButton, ratingStackView].forEach {
+        [placeImageView, titleLabel, addressLabel, openTimeLabel, ratingLabel, bookmarkButton, ratingStackView, reviewCountLabel].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
@@ -83,10 +88,12 @@ class PlaceTableViewCell: UITableViewCell {
             ratingLabel.centerYAnchor.constraint(equalTo: ratingStackView.centerYAnchor),
             ratingLabel.widthAnchor.constraint(equalToConstant: 22),
             
-            //ratingStackView.topAnchor.constraint(equalTo: ratingLabel.topAnchor),
-            //ratingStackView.bottomAnchor.constraint(equalTo: ratingLabel.bottomAnchor),
             ratingStackView.leadingAnchor.constraint(equalTo: ratingLabel.trailingAnchor, constant: 3),
             ratingStackView.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 4),
+            
+            reviewCountLabel.leadingAnchor.constraint(equalTo: ratingStackView.trailingAnchor, constant: 4),
+            reviewCountLabel.topAnchor.constraint(equalTo: ratingStackView.topAnchor),
+            reviewCountLabel.bottomAnchor.constraint(lessThanOrEqualTo: ratingStackView.bottomAnchor),
             
             openTimeLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             openTimeLabel.topAnchor.constraint(equalTo: ratingLabel.bottomAnchor, constant: 4),
@@ -126,8 +133,8 @@ class PlaceTableViewCell: UITableViewCell {
     func configure(with viewModel: PlaceCellViewModel) {
         titleLabel.text = viewModel.title
         addressLabel.text = viewModel.address
-        
         ratingLabel.text = String(format: "%.1f", viewModel.avgRating)
+        //reviewCountLabel.text = viewModel.reviewCount
         
         if let openTime = viewModel.openTime {
             openTimeLabel.text = openTime
