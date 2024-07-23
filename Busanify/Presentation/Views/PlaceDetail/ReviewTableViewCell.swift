@@ -14,11 +14,13 @@ class ReviewTableViewCell: UITableViewCell {
     private lazy var profileImage: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person.crop.circle")
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         
         return imageView
     }()
     
-    private lazy var nicknameLabel: UILabel = {
+    private lazy var usernameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         
@@ -71,8 +73,9 @@ class ReviewTableViewCell: UITableViewCell {
     }
     
     private func configureUI() {
+//        profileImage.layer.cornerRadius = 15
         contentView.addSubview(profileImage)
-        contentView.addSubview(nicknameLabel)
+        contentView.addSubview(usernameLabel)
         contentView.addSubview(starBackgroundStackView)
         contentView.addSubview(starStackView)
         contentView.addSubview(contentLabel)
@@ -80,7 +83,7 @@ class ReviewTableViewCell: UITableViewCell {
         contentView.addSubview(moreButton)
         
         profileImage.translatesAutoresizingMaskIntoConstraints = false
-        nicknameLabel.translatesAutoresizingMaskIntoConstraints = false
+        usernameLabel.translatesAutoresizingMaskIntoConstraints = false
         starBackgroundStackView.translatesAutoresizingMaskIntoConstraints = false
         starStackView.translatesAutoresizingMaskIntoConstraints = false
         contentLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -91,31 +94,36 @@ class ReviewTableViewCell: UITableViewCell {
             
             profileImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             profileImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            profileImage.widthAnchor.constraint(equalTo: usernameLabel.heightAnchor),
+            profileImage.heightAnchor.constraint(equalTo: usernameLabel.heightAnchor),
             
-            nicknameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            nicknameLabel.leadingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: 8),
+            usernameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            usernameLabel.leadingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: 8),
             
-            starBackgroundStackView.topAnchor.constraint(equalTo: nicknameLabel.bottomAnchor, constant: 8),
+            starBackgroundStackView.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 8),
             starBackgroundStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             starBackgroundStackView.widthAnchor.constraint(equalToConstant: 50),
             
-            starStackView.topAnchor.constraint(equalTo: nicknameLabel.bottomAnchor, constant: 8),
-            starStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            starStackView.widthAnchor.constraint(equalToConstant: 50),
+            starStackView.topAnchor.constraint(equalTo: starBackgroundStackView.topAnchor),
+            starStackView.leadingAnchor.constraint(equalTo: starBackgroundStackView.leadingAnchor),
+            starStackView.trailingAnchor.constraint(equalTo: starBackgroundStackView.trailingAnchor),
+            starStackView.bottomAnchor.constraint(equalTo: starBackgroundStackView.bottomAnchor),
             
-            contentLabel.topAnchor.constraint(equalTo: starStackView.bottomAnchor, constant: 8),
+            contentLabel.topAnchor.constraint(equalTo: starBackgroundStackView.bottomAnchor, constant: 8),
             contentLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             
             dateLabel.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 8),
             dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            dateLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
+            dateLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
         ])
     }
     
+    
+    
     func configure(with review: Review) {
         // 리뷰에 user image 추가
-//        profileImage.image =
-        nicknameLabel.text = review.username
+        profileImage.image = UIImage(data: review.userProfileImage)
+        usernameLabel.text = review.username
         contentLabel.text = review.content
         dateLabel.text = review.createdAt
         
@@ -123,6 +131,8 @@ class ReviewTableViewCell: UITableViewCell {
     }
     
     private func backgroundStars() {
+        starBackgroundStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        
         for _ in 0..<5 {
             let starImageView = UIImageView(image: UIImage(systemName: "star.fill"))
             starImageView.contentMode = .scaleAspectFit
@@ -132,27 +142,25 @@ class ReviewTableViewCell: UITableViewCell {
     }
     
     private func setUpStars(rating: Double) {
-        for _ in 0..<5 {
-            let starImageView = StarImageView(image: UIImage(systemName: "star.fill"))
-            starImageView.contentMode = .scaleAspectFit
-            starImageView.tintColor = .black
-            starStackView.addArrangedSubview(starImageView)
-        }
+        starStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
         var rating = rating
         for i in 0..<5 {
-            if rating < 0 {
-                break
-            }
+            let starImageView = StarImageView(image: UIImage(systemName: "star.fill"))
+            starImageView.contentMode = .scaleAspectFit
+            starStackView.addArrangedSubview(starImageView)
             
-            let percentage = min(rating, 1)
-            updateStarFill(at: i, percentage: percentage)
-            rating -= percentage
+            if rating > 0 {
+                let percentage = min(rating, 1)
+                updateStarFill(at: i, percentage: percentage)
+                rating -= percentage
+            }
         }
     }
     
     private func updateStarFill(at index: Int, percentage: CGFloat) {
         guard let starImageView = starStackView.arrangedSubviews[index] as? StarImageView else { return }
         starImageView.fillPercentage = percentage
+        starImageView.tintColor = .black
     }
 }
