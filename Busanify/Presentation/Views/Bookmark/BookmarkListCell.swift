@@ -34,7 +34,7 @@ class BookmarkListCell: UITableViewCell {
         titleLabel.numberOfLines = 2
         contentView.addSubview(titleLabel)
         
-        ratingLabel.font = UIFont.systemFont(ofSize: 13)
+        ratingLabel.font = UIFont.systemFont(ofSize: 14)
         contentView.addSubview(ratingLabel)
         
         ratingStackView.axis = .horizontal
@@ -42,7 +42,7 @@ class BookmarkListCell: UITableViewCell {
         ratingStackView.spacing = 2
         contentView.addSubview(ratingStackView)
         
-        reviewCountLabel.font = UIFont.systemFont(ofSize: 14)
+        reviewCountLabel.font = UIFont.systemFont(ofSize: 13)
         reviewCountLabel.textColor = .darkGray
         contentView.addSubview(reviewCountLabel)
         
@@ -62,6 +62,7 @@ class BookmarkListCell: UITableViewCell {
             
             ratingLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             ratingLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
+            ratingLabel.bottomAnchor.constraint(equalTo: ratingStackView.bottomAnchor),
             
             ratingStackView.leadingAnchor.constraint(equalTo: ratingLabel.trailingAnchor, constant: 4),
             ratingStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),

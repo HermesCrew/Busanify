@@ -16,6 +16,7 @@ struct PlaceCellViewModel {
     let imageURL: URL?
     var isBookmarked: Bool
     let avgRating: Double
+    let reviewCount: Int
     
     init(place: Place) {
         self.id = place.id
@@ -25,6 +26,7 @@ struct PlaceCellViewModel {
         self.imageURL = URL(string: place.image)
         self.isBookmarked = place.isBookmarked
         self.avgRating = place.avgRating
+        self.reviewCount = place.reviewCount
     }
 }
 
