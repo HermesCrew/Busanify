@@ -54,7 +54,7 @@ class HourlyForecastCell: UICollectionViewCell {
         let now = Date()
         let calendar = Calendar.current
         
-        if calendar.isDate(now, equalTo: forecast.date, toGranularity: .hour) {
+        if calendar.isDate(forecast.date, equalTo: now, toGranularity: .hour) {
             timeLabel.text = "지금"
         } else {
             let dateFormatter = DateFormatter()
