@@ -134,9 +134,7 @@ class WeatherViewController: UIViewController {
         
         hourlyForecastCollectionView.translatesAutoresizingMaskIntoConstraints = false
         hourlyForecastCollectionView.register(HourlyForecastCell.self, forCellWithReuseIdentifier: "HourlyForecastCell")
-        hourlyForecastCollectionView.showsVerticalScrollIndicator = false
-        hourlyForecastCollectionView.isPagingEnabled = true
-        hourlyForecastCollectionView.alwaysBounceVertical = true
+        hourlyForecastCollectionView.showsHorizontalScrollIndicator = false
         contentView.addSubview(hourlyForecastCollectionView)
         
         dailyForecastTableView.translatesAutoresizingMaskIntoConstraints = false
@@ -250,7 +248,7 @@ extension WeatherViewController: UICollectionViewDataSource, UICollectionViewDel
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = collectionView.frame.width / 6 // 한 줄에 표시할 셀의 개수에 맞게 조정
+        let width = collectionView.frame.width / 5 // 한 줄에 표시할 셀의 개수에 맞게 조정
         let height = collectionView.frame.height
         return CGSize(width: width, height: height)
     }
