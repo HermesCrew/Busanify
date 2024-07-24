@@ -30,6 +30,9 @@
 		C2D279CD2C29458800AEAFD1 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279CC2C29458800AEAFD1 /* Place.swift */; };
 		C2D279CF2C29459000AEAFD1 /* PlaceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279CE2C29459000AEAFD1 /* PlaceType.swift */; };
 		CD0F83DB2C357A85001C04E2 /* CustomViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0F83DA2C357A85001C04E2 /* CustomViews.swift */; };
+		CD3251972C4C07E7006CB590 /* PlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3251962C4C07E7006CB590 /* PlaceListViewController.swift */; };
+		CD32519A2C4C0816006CB590 /* PlaceListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3251992C4C0816006CB590 /* PlaceListTableViewCell.swift */; };
+		CD32519C2C4C14E1006CB590 /* PlaceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD32519B2C4C14E1006CB590 /* PlaceListViewModel.swift */; };
 		CD89D3522C29A55A00715404 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD89D3502C29A55A00715404 /* HomeViewController.swift */; };
 		CD89D3552C29A56B00715404 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD89D3532C29A56B00715404 /* HomeViewModel.swift */; };
 		DCC351AEDE79E3FA213766F5 /* Pods_Busanify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC54047A571AE7CCCEC17FDE /* Pods_Busanify.framework */; };
@@ -81,6 +84,9 @@
 		C2D279CE2C29459000AEAFD1 /* PlaceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceType.swift; sourceTree = "<group>"; };
 		C2D2A2142C43E3330081D3E8 /* Busanify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Busanify.entitlements; sourceTree = "<group>"; };
 		CD0F83DA2C357A85001C04E2 /* CustomViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViews.swift; sourceTree = "<group>"; };
+		CD3251962C4C07E7006CB590 /* PlaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewController.swift; sourceTree = "<group>"; };
+		CD3251992C4C0816006CB590 /* PlaceListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListTableViewCell.swift; sourceTree = "<group>"; };
+		CD32519B2C4C14E1006CB590 /* PlaceListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewModel.swift; sourceTree = "<group>"; };
 		CD89D3502C29A55A00715404 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		CD89D3532C29A56B00715404 /* HomeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		FC54047A571AE7CCCEC17FDE /* Pods_Busanify.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Busanify.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -295,11 +301,21 @@
 			path = Usecases;
 			sourceTree = "<group>";
 		};
+		CD3251982C4C080B006CB590 /* cell */ = {
+			isa = PBXGroup;
+			children = (
+				CD3251992C4C0816006CB590 /* PlaceListTableViewCell.swift */,
+			);
+			path = cell;
+			sourceTree = "<group>";
+		};
 		CD89D3512C29A55A00715404 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				CD3251982C4C080B006CB590 /* cell */,
 				CD89D3502C29A55A00715404 /* HomeViewController.swift */,
 				CD0F83DA2C357A85001C04E2 /* CustomViews.swift */,
+				CD3251962C4C07E7006CB590 /* PlaceListViewController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -308,6 +324,7 @@
 			isa = PBXGroup;
 			children = (
 				CD89D3532C29A56B00715404 /* HomeViewModel.swift */,
+				CD32519B2C4C14E1006CB590 /* PlaceListViewModel.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -514,6 +531,7 @@
 				C207F37B2C3AFC0C007DFA27 /* SignInViewController.swift in Sources */,
 				C2D279C92C29456E00AEAFD1 /* HomeViewUseCase.swift in Sources */,
 				C207F3812C3AFC5F007DFA27 /* AuthenticationViewModel.swift in Sources */,
+				CD32519A2C4C0816006CB590 /* PlaceListTableViewCell.swift in Sources */,
 				C2D279CF2C29459000AEAFD1 /* PlaceType.swift in Sources */,
 				C2D279C72C29456200AEAFD1 /* PlacesApi.swift in Sources */,
 				C296D7022C1F16B000691515 /* ViewController.swift in Sources */,
@@ -521,6 +539,7 @@
 				C207F37F2C3AFC4D007DFA27 /* UserProfileViewController.swift in Sources */,
 				CD89D3552C29A56B00715404 /* HomeViewModel.swift in Sources */,
 				CD0F83DB2C357A85001C04E2 /* CustomViews.swift in Sources */,
+				CD32519C2C4C14E1006CB590 /* PlaceListViewModel.swift in Sources */,
 				C207B98B2C45FEFB0088E2D5 /* Keychain.swift in Sources */,
 				C207B98D2C464E4E0088E2D5 /* UserProfile.swift in Sources */,
 				CD89D3522C29A55A00715404 /* HomeViewController.swift in Sources */,
@@ -528,6 +547,7 @@
 				C207F3832C3AFC74007DFA27 /* SignInApi.swift in Sources */,
 				C296D6FE2C1F16B000691515 /* AppDelegate.swift in Sources */,
 				C2D279CD2C29458800AEAFD1 /* Place.swift in Sources */,
+				CD3251972C4C07E7006CB590 /* PlaceListViewController.swift in Sources */,
 				C296D7002C1F16B000691515 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

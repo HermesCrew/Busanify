@@ -17,6 +17,7 @@ class HomeViewController: UIViewController, MapControllerDelegate {
     private var searchTextFieldLeadingConstraintExpanded: NSLayoutConstraint!
     let weatherContainer = WeatherContainer(temperature: 20, weatherImage: UIImage(systemName: "sun.max"))
     let searchTextField = SearchTextField()
+    let listView = PlaceListViewController()
     let searchIcon: UIImageView = {
         let icon = UIImageView()
         icon.translatesAutoresizingMaskIntoConstraints = false
@@ -43,10 +44,10 @@ class HomeViewController: UIViewController, MapControllerDelegate {
     
     // Data
     private var cancellable = Set<AnyCancellable>()
-    private let latRange = 34.8799083...35.3959361
-    private let longRange = 128.7384361...129.3728194
     private let viewModel = HomeViewModel()
-    private var tempPinArr: [Poi?] = []
+    private var minimumDetent = UISheetPresentationController.Detent.custom(resolver: { context in
+        return 130
+    })
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         _observerAdded = false
@@ -77,6 +78,7 @@ class HomeViewController: UIViewController, MapControllerDelegate {
         
         //KMController 생성.
         mapController = KMController(viewContainer: mapContainer!)
+        mapController?.proMotionSupport = true;
         mapController!.delegate = self
         
         setSubscriber()
@@ -84,33 +86,41 @@ class HomeViewController: UIViewController, MapControllerDelegate {
         setupTapGesture()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        addObservers()
+        _appear = true
+        if mapController?.isEnginePrepared == false {
+            mapController?.prepareEngine()
+        }
+        
+        if mapController?.isEngineActive == false {
+            mapController?.activateEngine()
+        }
+    }
+    
     func setSubscriber() {
         viewModel.$searchedPlaces
             .receive(on: DispatchQueue.main)
             .sink { [weak self] places in
-                guard let self = self else { return }
-                self.tempPinArr.forEach{ pin in
-                    pin?.hide()
-                }
-                self.tempPinArr = []
+                guard let self = self, let mapController = self.mapController, let view = mapController.getView("mapview") as? KakaoMap else { return }
+                let manager = view.getLabelManager()
+                manager.removeLabelLayer(layerID: "PoiLayer")
+                
                 if places.count > 0 {
-                    let view = mapController?.getView("mapview") as! KakaoMap
-                    let manager = view.getLabelManager()
-                    manager.removeLabelLayer(layerID: "PoiLayer")
+                    listView.placeViewModel.setPlaces(places: places)
                     let layerOption = LabelLayerOptions(layerID: "PoiLayer", competitionType: .none, competitionUnit: .poi, orderType: .rank, zOrder: 0)
                     let _ = manager.addLabelLayer(option: layerOption)
                     let layer = manager.getLabelLayer(layerID: "PoiLayer")
                     let poiOption = PoiOptions(styleID: "PerLevelStyle")
                     
-                    places.enumerated().forEach{ (i, place) in
-                        poiOption.rank = 0
-                        let poi = layer?.addPoi(option:poiOption, at: MapPoint(longitude: place.lng, latitude: place.lat))
-                        self.tempPinArr.append(poi)
-                        // MARK: TODO - UIImage 핀같은 이미지로 교체
-                        let badge = PoiBadge(badgeID: "noti", image: UIImage(systemName: "sun.max")!.withTintColor(.orange), offset: CGPoint(x: 0, y: 0), zOrder: 0)
-                        poi?.addBadge(badge)
-                        poi?.show()
-                        poi?.showBadge(badgeID: "noti")
+                    let badge = PoiBadge(badgeID: "noti", image: UIImage(named: "pin_green")!, offset: CGPoint(x: 0, y: 0), zOrder: 0)
+                    let mapPoints = places.map{ MapPoint(longitude: $0.lng, latitude: $0.lat) }
+                    let pois = layer?.addPois(option: poiOption, at: mapPoints)
+                    
+                    pois?.forEach{ poi in
+                        poi.addBadge(badge)
+                        poi.show()
+                        poi.showBadge(badgeID: "noti")
                     }
                 }
             }
@@ -120,6 +130,7 @@ class HomeViewController: UIViewController, MapControllerDelegate {
     func configureUI() {
         setWeatherArea()
         setCategoryButtons()
+        setCompassButton()
     }
     
     func setWeatherArea() {
@@ -161,28 +172,45 @@ class HomeViewController: UIViewController, MapControllerDelegate {
         categoryContentView.backgroundColor = .clear
         
         NSLayoutConstraint.activate([
-            categoryScrollView.topAnchor.constraint(equalTo: weatherContainer.bottomAnchor, constant: 5),
-            categoryScrollView.leadingAnchor.constraint(equalTo: weatherContainer.leadingAnchor),
-            categoryScrollView.trailingAnchor.constraint(equalTo: searchTextField.trailingAnchor),
+            categoryScrollView.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 5),
+            categoryScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            categoryScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             categoryScrollView.heightAnchor.constraint(equalToConstant: 50),
             
             categoryContentView.topAnchor.constraint(equalTo: categoryScrollView.topAnchor),
             categoryContentView.leadingAnchor.constraint(equalTo: categoryScrollView.leadingAnchor),
             categoryContentView.trailingAnchor.constraint(equalTo: categoryScrollView.trailingAnchor),
+            categoryContentView.bottomAnchor.constraint(equalTo: categoryScrollView.bottomAnchor),
             categoryContentView.heightAnchor.constraint(equalToConstant: 50)
         ])
         
         var prevTrailingAnchor = categoryContentView.leadingAnchor
-        let btnArr = [("관광지", "flag.fill", UIColor.systemRed), ("음식점", "fork.knife", UIColor.systemOrange),
-                      ("숙박", "bed.double.fill", UIColor.systemYellow), ("교통", "bus.fill", UIColor.systemCyan),
-                      ("쇼핑", "handbag.fill", UIColor.systemPurple)]
-        btnArr.enumerated().forEach{ (idx, btnInfo) in
-            let btn = CategoryButton(text: btnInfo.0, image: UIImage(systemName: btnInfo.1), color: btnInfo.2)
-            btn.addAction(UIAction{ [weak self] _ in
-                guard let self = self else { return }
-//                self.viewModel.getLocationsBy(keyword: btnInfo.0)
-                self.viewModel.getLocationBy(lat: 35.1796, lng: 129.0756, radius: 3000)
-            }, for: .touchUpInside)
+        PlaceType.allCases.enumerated().forEach{ (idx, btnInfo) in
+            let btn = CategoryButton(text: btnInfo.placeInfo.0,
+                                     image: UIImage(systemName: btnInfo.placeInfo.1),
+                                     color: btnInfo.placeInfo.2)
+//            btn.addAction(UIAction{ [weak self] _ in
+//                guard let self = self else { return }
+//                self.viewModel.getLocationBy(typeId: btnInfo,
+//                                             lat: viewModel.currentLat,
+//                                             lng: viewModel.currentLong,
+//                                             radius: 1000)
+//                
+//                listView.locationDelegate = self
+//                listView.modalPresentationStyle = .pageSheet
+//                listView.sheetPresentationController?.preferredCornerRadius = 25
+//                listView.sheetPresentationController?.detents = [minimumDetent, .medium(), .large()]
+//                listView.sheetPresentationController?.largestUndimmedDetentIdentifier = .large
+//                listView.sheetPresentationController?.prefersScrollingExpandsWhenScrolledToEdge = false
+//                listView.sheetPresentationController?.prefersEdgeAttachedInCompactHeight = true
+//                listView.sheetPresentationController?.widthFollowsPreferredContentSizeWhenEdgeAttached = true
+//                listView.sheetPresentationController?.prefersGrabberVisible = true
+//                if self.presentedViewController == nil {
+//                    // MARK: present 할 때 tabbar를 숨김?
+//                    // 캐러셀로
+//                    present(listView, animated: true)
+//                }
+//            }, for: .touchUpInside)
             
             categoryContentView.addSubview(btn)
             
@@ -191,12 +219,64 @@ class HomeViewController: UIViewController, MapControllerDelegate {
                 btn.leadingAnchor.constraint(equalTo: prevTrailingAnchor, constant: idx == 0 ? 0 : 10)
             ])
             
-            if idx == btnArr.count - 1 {
+            if idx == PlaceType.allCases.count - 1 {
                 btn.trailingAnchor.constraint(equalTo: categoryContentView.trailingAnchor).isActive = true
             }
             
             prevTrailingAnchor = btn.trailingAnchor
         }
+    }
+    
+    func setCompassButton() {
+        let compassButton = UIButton(type: .custom)
+        compassButton.translatesAutoresizingMaskIntoConstraints = false
+        compassButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        compassButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        compassButton.backgroundColor = .white
+        
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.isUserInteractionEnabled = false
+        stackView.axis = .vertical
+        stackView.alignment = .center
+        stackView.spacing = 2
+        
+        if let triangleImage = UIImage(systemName: "triangle.fill") {
+            let triangleImageView = UIImageView(image: triangleImage)
+            triangleImageView.widthAnchor.constraint(equalToConstant: 15).isActive = true
+            triangleImageView.heightAnchor.constraint(equalToConstant: 15).isActive = true
+            triangleImageView.tintColor = .red
+            stackView.addArrangedSubview(triangleImageView)
+        }
+        
+        let label = UILabel()
+        label.text = "N"
+        label.textColor = .black
+        label.font = UIFont.systemFont(ofSize: 12)
+        stackView.addArrangedSubview(label)
+        
+        compassButton.layer.cornerRadius = 20
+        compassButton.layer.borderWidth = 0.5
+        compassButton.layer.masksToBounds = true
+        
+        compassButton.addSubview(stackView)
+        
+        NSLayoutConstraint.activate([
+            stackView.centerXAnchor.constraint(equalTo: compassButton.centerXAnchor),
+            stackView.centerYAnchor.constraint(equalTo: compassButton.centerYAnchor)
+        ])
+        view.addSubview(compassButton)
+        
+        NSLayoutConstraint.activate([
+            compassButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            compassButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10)
+        ])
+        
+        compassButton.addAction(UIAction { [weak self] _ in
+            print("compass button tapped")
+            let view = self?.mapController?.getView("mapview") as! KakaoMap
+            view.resetCameraOrientation()
+        }, for: .touchUpInside)
     }
     
     func setupTapGesture() {
@@ -206,18 +286,6 @@ class HomeViewController: UIViewController, MapControllerDelegate {
     
     @objc func dismissKeyboard() {
         view.endEditing(true)
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        addObservers()
-        _appear = true
-        if mapController?.isEnginePrepared == false {
-            mapController?.prepareEngine()
-        }
-        
-        if mapController?.isEngineActive == false {
-            mapController?.activateEngine()
-        }
     }
         
     override func viewWillDisappear(_ animated: Bool) {
@@ -278,19 +346,11 @@ class HomeViewController: UIViewController, MapControllerDelegate {
     
     func addViews() {
         // 임시로 부산이 아닐 때 서면역의 위,경도 설정
-        var long = 129.0595
-        var lat = 35.1577
-        if let currentLong = viewModel.currentLong, let currentLat = viewModel.currentLat {
-            if longRange.contains(currentLong) && latRange.contains(currentLat) {
-                long = currentLong
-                lat = currentLat
-            }
-        }
-        let defaultPosition: MapPoint = MapPoint(longitude: long, latitude: lat)
+        let defaultPosition: MapPoint = MapPoint(longitude: viewModel.currentLong, latitude: viewModel.currentLat)
         let mapviewInfo: MapviewInfo = MapviewInfo(viewName: "mapview",
                                                    viewInfoName: "map",
                                                    defaultPosition: defaultPosition,
-                                                   defaultLevel: 13)
+                                                   defaultLevel: 15)
         
         mapController?.addView(mapviewInfo)
     }
@@ -298,11 +358,23 @@ class HomeViewController: UIViewController, MapControllerDelegate {
     //addView 성공 이벤트 delegate. 추가적으로 수행할 작업을 진행한다.
     func addViewSucceeded(_ viewName: String, viewInfoName: String) {
         let view = mapController?.getView("mapview") as! KakaoMap
+        view.setLanguage(.english)
+        view.setGestureEnable(type: .doubleTapZoomIn, enable: true)
+        view.setGestureEnable(type: .longTapAndDrag, enable: true)
         
-        // 지도에 나침반 표시
-        view.setCompassPosition(origin: GuiAlignment(vAlign: .bottom, hAlign: .left), position: CGPoint(x: 10.0, y: 100.0))
-        view.showCompass()
-        view.setLanguage("en")
+        // 카메라 이동 event
+        let _ = view.addCameraStoppedEventHandler(target: view) { map in
+            return { [weak self] _ in
+                guard let self = self else { return }
+                let position = map.getPosition(CGPoint(x: 0.1, y: 0.1))
+                let movedLong = position.wgsCoord.longitude
+                let movedLat = position.wgsCoord.latitude
+                // MARK: 카메라 이동하고 위, 경도 조정이 잘 안되는거같음
+                viewModel.currentLong = movedLong + 0.025// - movedLong
+                viewModel.currentLat = movedLat - 0.05
+            }
+        }
+        
         view.viewRect = mapContainer!.bounds    //뷰 add 도중에 resize 이벤트가 발생한 경우 이벤트를 받지 못했을 수 있음. 원하는 뷰 사이즈로 재조정.
         
         // 현재 위치 핀 표시
@@ -312,18 +384,23 @@ class HomeViewController: UIViewController, MapControllerDelegate {
         
         let layer = manager.getLabelLayer(layerID: "MainLayer")
         let poiOption = PoiOptions(styleID: "PerLevelStyle")
-        poiOption.rank = 0
+        poiOption.rank = 4
         
-        let poi = layer?.addPoi(option:poiOption, at: MapPoint(longitude: 129.0595, latitude: 35.1577))
-        
-        // MARK: TODO - UIImage 핀같은 이미지로 교체
-        let pinImage = UIImage(systemName: "smallcircle.filled.circle")!.withTintColor(.systemRed)
-        
-        pinImage.withTintColor(.green, renderingMode: .alwaysTemplate)
-        let badge = PoiBadge(badgeID: "noti", image: pinImage, offset: CGPoint(x: 0, y: 0), zOrder: 0)
+        let poi = layer?.addPoi(option:poiOption, at: MapPoint(longitude: viewModel.currentLong, latitude: viewModel.currentLat))
+        let badge = PoiBadge(badgeID: "noti", image: UIImage(named: "map_ico_marker")!, offset: CGPoint(x: 0, y: 0), zOrder: 4)
         poi?.addBadge(badge)
         poi?.show()
         poi?.showBadge(badgeID: "noti")
+        
+        // 지도에 나침반 표시
+//        let _ = view.addCompassTappedEventHandler(target: self, handler: HomeViewController.compassTappedHanlder)
+//        let _ = view.addCompassTappedEventHandler(target: self, handler: HomeViewController.compassDidTapped(kakaoMap:))
+//        view.setCompassPosition(origin: GuiAlignment(vAlign: .bottom, hAlign: .right), position: CGPoint(x: 10, y: 100))
+//        view.showCompass()
+    }
+    
+    func compassTappedHanlder(_ kakaoMap: KakaoMap) {
+        kakaoMap.resetCameraOrientation()
     }
     
     //Container 뷰가 리사이즈 되었을때 호출된다. 변경된 크기에 맞게 ViewBase들의 크기를 조절할 필요가 있는 경우 여기에서 수행한다.
@@ -410,5 +487,21 @@ extension HomeViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+}
+
+extension HomeViewController: MoveToMapLocation {
+    func moveTo(lat: CGFloat, lng: CGFloat) {
+        let view = mapController?.getView("mapview") as? KakaoMap
+        
+        self.listView.sheetPresentationController?.animateChanges {
+            self.listView.sheetPresentationController?.selectedDetentIdentifier = minimumDetent.identifier
+        }
+        view?.animateCamera(cameraUpdate: .make(cameraPosition: .init(target: MapPoint(longitude: lng, latitude: lat),
+                                                                      zoomLevel: 17,
+                                                                      rotation: view!.rotationAngle,
+                                                                      tilt: view!.tiltAngle)),
+                            options: CameraAnimationOptions.init(autoElevation: true, consecutive: true, durationInMillis: 200))
+        
     }
 }
