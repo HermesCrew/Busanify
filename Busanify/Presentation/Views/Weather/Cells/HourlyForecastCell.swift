@@ -51,8 +51,18 @@ class HourlyForecastCell: UICollectionViewCell {
     }
 
     func configure(with forecast: HourWeather) {
-        let hour = Calendar.current.component(.hour, from: forecast.date)
-        timeLabel.text = "\(hour)시"
+        let now = Date()
+        let calendar = Calendar.current
+        
+        if calendar.isDate(now, equalTo: forecast.date, toGranularity: .hour) {
+            timeLabel.text = "지금"
+        } else {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "a h시"
+            dateFormatter.locale = Locale(identifier: "ko_KR")
+            timeLabel.text = dateFormatter.string(from: forecast.date)
+        }
+        
         temperatureLabel.text = "\(Int(forecast.temperature.value))°"
         iconImageView.image = WeatherIcon.getWeatherIcon(for: forecast)
     }
