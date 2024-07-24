@@ -220,8 +220,8 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
         
         let temperature = Int(weather.currentWeather.temperature.value)
         weatherLabel.text = "\(temperature)°"
-        conditionLabel.text = weather.currentWeather.condition.rawValue
-        maxMinTempLabel.text = "H: \(Int(weather.dailyForecast.first?.highTemperature.value ?? 0))° L: \(Int(weather.dailyForecast.first?.lowTemperature.value ?? 0))°"
+//        conditionLabel.text = weather.currentWeather.condition.rawValue
+        maxMinTempLabel.text = "최고: \(Int(weather.dailyForecast.first?.highTemperature.value ?? 0))° 최저: \(Int(weather.dailyForecast.first?.lowTemperature.value ?? 0))°"
         
         if let weatherImage = WeatherIcon.getWeatherIcon(for: weather.currentWeather) {
             weatherImageView.image = weatherImage
