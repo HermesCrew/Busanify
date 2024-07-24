@@ -50,8 +50,18 @@ class DailyForecastCell: UITableViewCell {
     }
 
     func configure(with forecast: DayWeather) {
-        let day = Calendar.current.component(.day, from: forecast.date)
-        dayLabel.text = "Day \(day)"
+        let now = Date()
+        let calendar = Calendar.current
+        
+        if calendar.isDate(now, inSameDayAs: forecast.date) {
+            dayLabel.text = "오늘"
+        } else {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "M/d(E)"
+            dateFormatter.locale = Locale(identifier: "ko_KR")
+            dayLabel.text = dateFormatter.string(from: forecast.date)
+        }
+        
         temperatureLabel.text = "\(Int(forecast.highTemperature.value))° / \(Int(forecast.lowTemperature.value))°"
         iconImageView.image = WeatherIcon.getWeatherIcon(for: forecast)
     }
