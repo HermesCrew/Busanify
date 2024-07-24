@@ -14,35 +14,50 @@ import UIKit
 import WeatherKit
 import CoreLocation
 
-class WeatherViewController: UIViewController, WeatherManagerDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
+class WeatherViewController: UIViewController, WeatherManagerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource {
+    
     private let weatherManager = WeatherManager()
     private let geocoder = CLGeocoder()
     private let weatherLabel = UILabel()
     private let locationLabel = UILabel()
     private let maxMinTempLabel = UILabel()
-    private let avgTempLabel = UILabel()
+    private let hourlyForecastCollectionView: UICollectionView
+    private let dailyForecastTableView = UITableView()
     private let weatherImageView = UIImageView()
     private let regionPickerView = UIPickerView()
     
     private let regions: [Region] = [
-        Region(name: "강서구", latitude: 35.20916389, longitude: 128.9829083),
-        Region(name: "금정구", latitude: 35.24007778, longitude: 129.0943194),
-        Region(name: "남구", latitude: 35.13340833, longitude: 129.0865),
-        Region(name: "동구", latitude: 35.13589444, longitude: 129.059175),
-        Region(name: "동래구", latitude: 35.20187222, longitude: 129.0858556),
-        Region(name: "부산진구", latitude: 35.15995278, longitude: 129.0553194),
-        Region(name: "북구", latitude: 35.19418056, longitude: 128.992475),
-        Region(name: "사상구", latitude: 35.14946667, longitude: 128.9933333),
-        Region(name: "사하구", latitude: 35.10142778, longitude: 128.9770417),
-        Region(name: "서구", latitude: 35.09483611, longitude: 129.0263778),
-        Region(name: "수영구", latitude: 35.14246667, longitude: 129.115375),
-        Region(name: "연제구", latitude: 35.17318611, longitude: 129.082075),
-        Region(name: "영도구", latitude: 35.08811667, longitude: 129.0701861),
-        Region(name: "중구", latitude: 35.10321667, longitude: 129.0345083),
-        Region(name: "해운대구", latitude: 35.16001944, longitude: 129.1658083),
-        Region(name: "기장군", latitude: 35.24477541, longitude: 129.2222873)
-    ]
+         Region(name: "강서구", latitude: 35.20916389, longitude: 128.9829083),
+         Region(name: "금정구", latitude: 35.24007778, longitude: 129.0943194),
+         Region(name: "남구", latitude: 35.13340833, longitude: 129.0865),
+         Region(name: "동구", latitude: 35.13589444, longitude: 129.059175),
+         Region(name: "동래구", latitude: 35.20187222, longitude: 129.0858556),
+         Region(name: "부산진구", latitude: 35.15995278, longitude: 129.0553194),
+         Region(name: "북구", latitude: 35.19418056, longitude: 128.992475),
+         Region(name: "사상구", latitude: 35.14946667, longitude: 128.9933333),
+         Region(name: "사하구", latitude: 35.10142778, longitude: 128.9770417),
+         Region(name: "서구", latitude: 35.09483611, longitude: 129.0263778),
+         Region(name: "수영구", latitude: 35.14246667, longitude: 129.115375),
+         Region(name: "연제구", latitude: 35.17318611, longitude: 129.082075),
+         Region(name: "영도구", latitude: 35.08811667, longitude: 129.0701861),
+         Region(name: "중구", latitude: 35.10321667, longitude: 129.0345083),
+         Region(name: "해운대구", latitude: 35.16001944, longitude: 129.1658083),
+         Region(name: "기장군", latitude: 35.24477541, longitude: 129.2222873)
+     ]
     
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 0
+        hourlyForecastCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -50,6 +65,10 @@ class WeatherViewController: UIViewController, WeatherManagerDelegate, UIPickerV
         weatherManager.delegate = self
         weatherManager.startFetchingWeather()
         
+        hourlyForecastCollectionView.delegate = self
+        hourlyForecastCollectionView.dataSource = self
+        dailyForecastTableView.delegate = self
+        dailyForecastTableView.dataSource = self
         regionPickerView.delegate = self
         regionPickerView.dataSource = self
     }
@@ -91,14 +110,18 @@ class WeatherViewController: UIViewController, WeatherManagerDelegate, UIPickerV
         maxMinTempLabel.textAlignment = .center
         view.addSubview(maxMinTempLabel)
         
-        avgTempLabel.translatesAutoresizingMaskIntoConstraints = false
-        avgTempLabel.textAlignment = .center
-        view.addSubview(avgTempLabel)
-
         weatherImageView.translatesAutoresizingMaskIntoConstraints = false
         weatherImageView.contentMode = .scaleAspectFit
         view.addSubview(weatherImageView)
-
+        
+        hourlyForecastCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        hourlyForecastCollectionView.register(HourlyForecastCell.self, forCellWithReuseIdentifier: "HourlyForecastCell")
+        view.addSubview(hourlyForecastCollectionView)
+        
+        dailyForecastTableView.translatesAutoresizingMaskIntoConstraints = false
+        dailyForecastTableView.register(DailyForecastCell.self, forCellReuseIdentifier: "DailyForecastCell")
+        view.addSubview(dailyForecastTableView)
+        
         regionPickerView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(regionPickerView)
         
@@ -119,12 +142,19 @@ class WeatherViewController: UIViewController, WeatherManagerDelegate, UIPickerV
             maxMinTempLabel.topAnchor.constraint(equalTo: weatherImageView.bottomAnchor, constant: 20),
             maxMinTempLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            avgTempLabel.topAnchor.constraint(equalTo: maxMinTempLabel.bottomAnchor, constant: 20),
-            avgTempLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            hourlyForecastCollectionView.topAnchor.constraint(equalTo: maxMinTempLabel.bottomAnchor, constant: 20),
+            hourlyForecastCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            hourlyForecastCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            hourlyForecastCollectionView.heightAnchor.constraint(equalToConstant: 100),
             
-            regionPickerView.topAnchor.constraint(equalTo: avgTempLabel.bottomAnchor, constant: 20),
+            dailyForecastTableView.topAnchor.constraint(equalTo: hourlyForecastCollectionView.bottomAnchor, constant: 20),
+            dailyForecastTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            dailyForecastTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            dailyForecastTableView.bottomAnchor.constraint(equalTo: regionPickerView.topAnchor, constant: -20),
+            
             regionPickerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             regionPickerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            regionPickerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             regionPickerView.heightAnchor.constraint(equalToConstant: 150)
         ])
     }
@@ -141,21 +171,15 @@ class WeatherViewController: UIViewController, WeatherManagerDelegate, UIPickerV
                 }
             }
             
-            let temperature = weather.currentWeather.temperature.value
-            self.weatherLabel.text = "Temperature: \(temperature)°C"
+            let temperature = Int(weather.currentWeather.temperature.value)
+            self.weatherLabel.text = "\(temperature)°"
+            self.weatherLabel.font = UIFont.systemFont(ofSize: 80, weight: .light)
             
-            let maxTemp = weather.dailyForecast.first?.highTemperature.value ?? 0.0
-            let minTemp = weather.dailyForecast.first?.lowTemperature.value ?? 0.0
-            self.maxMinTempLabel.text = "Max: \(maxTemp)°C / Min: \(minTemp)°C"
+            self.weatherLabel.text = weather.currentWeather.condition.rawValue
+            self.maxMinTempLabel.text = "H: \(Int(weather.dailyForecast.first?.highTemperature.value ?? 0))° L: \(Int(weather.dailyForecast.first?.lowTemperature.value ?? 0))°"
             
-            let avgTemp = (maxTemp + minTemp) / 2.0
-            self.avgTempLabel.text = "Average: \(avgTemp)°C"
-            
-            if let weatherImage = WeatherIcon.getWeatherIcon(for: weather.currentWeather) {
-                self.weatherImageView.image = weatherImage
-            } else {
-                self.weatherImageView.image = UIImage(systemName: "questionmark.circle")
-            }
+            self.hourlyForecastCollectionView.reloadData()
+            self.dailyForecastTableView.reloadData()
         }
     }
     
@@ -164,11 +188,10 @@ class WeatherViewController: UIViewController, WeatherManagerDelegate, UIPickerV
             self.locationLabel.text = "Failed to get location"
             self.weatherLabel.text = "Failed to get weather: \(error.localizedDescription)"
             self.maxMinTempLabel.text = ""
-            self.avgTempLabel.text = ""
             self.weatherImageView.image = UIImage(systemName: "xmark.octagon")
         }
     }
-
+    
     // UIPickerView DataSource and Delegate methods
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -194,5 +217,33 @@ class WeatherViewController: UIViewController, WeatherManagerDelegate, UIPickerV
                 self.didFailWithError(error)
             }
         }
+    }
+    
+    // UICollectionView DataSource and Delegate methods
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return weatherManager.currentWeather?.hourlyForecast.count ?? 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HourlyForecastCell", for: indexPath) as! HourlyForecastCell
+        if let weather = weatherManager.currentWeather {
+            let hourlyForecast = weather.hourlyForecast[indexPath.item]
+            cell.configure(with: hourlyForecast)
+        }
+        return cell
+    }
+    
+    // UITableView DataSource and Delegate methods
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return weatherManager.currentWeather?.dailyForecast.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "DailyForecastCell", for: indexPath) as! DailyForecastCell
+        if let weather = weatherManager.currentWeather {
+            let dailyForecast = weather.dailyForecast[indexPath.row]
+            cell.configure(with: dailyForecast)
+        }
+        return cell
     }
 }
