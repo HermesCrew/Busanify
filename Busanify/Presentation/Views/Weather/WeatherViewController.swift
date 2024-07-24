@@ -18,13 +18,15 @@ class WeatherViewController: UIViewController {
     
     private let scrollView = UIScrollView()
     private let contentView = UIView()
+    private let cityLabel = UILabel()
+    private let districtLabel = UILabel()
     private let weatherLabel = UILabel()
-    private let locationLabel = UILabel()
     private let conditionLabel = UILabel()
     private let maxMinTempLabel = UILabel()
     private let weatherImageView = UIImageView()
     private let hourlyForecastCollectionView: UICollectionView
     private let dailyForecastTableView = UITableView()
+    private let locationSymbolButton = UIButton()
     
     private var regions: [Region] = Regions.all
     
@@ -97,7 +99,8 @@ class WeatherViewController: UIViewController {
 
     private func selectRegion(_ region: Region) {
         let location = CLLocation(latitude: region.latitude, longitude: region.longitude)
-        viewModel.fetchWeather(for: location)
+        viewModel.fetchWeather(for: location, isCurrentLocation: false)
+        viewModel.selectedRegion = region.name
     }
 
     private func setupUI() {
@@ -109,11 +112,24 @@ class WeatherViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
-        locationLabel.translatesAutoresizingMaskIntoConstraints = false
-        locationLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
-        locationLabel.textAlignment = .center
-        locationLabel.text = "Loading..."
-        contentView.addSubview(locationLabel)
+        cityLabel.translatesAutoresizingMaskIntoConstraints = false
+        cityLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        cityLabel.textAlignment = .center
+        cityLabel.text = "부산광역시"
+        contentView.addSubview(cityLabel)
+
+        districtLabel.translatesAutoresizingMaskIntoConstraints = false
+        districtLabel.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        districtLabel.textAlignment = .center
+        districtLabel.text = "Loading..."
+        contentView.addSubview(districtLabel)
+        
+        locationSymbolButton.translatesAutoresizingMaskIntoConstraints = false
+        locationSymbolButton.setImage(UIImage(systemName: "location.fill"), for: .normal)
+        locationSymbolButton.tintColor = .gray
+        locationSymbolButton.isHidden = true
+        locationSymbolButton.addTarget(self, action: #selector(locationSymbolTapped), for: .touchUpInside)
+        contentView.addSubview(locationSymbolButton)
         
         weatherLabel.translatesAutoresizingMaskIntoConstraints = false
         weatherLabel.textAlignment = .center
@@ -153,10 +169,18 @@ class WeatherViewController: UIViewController {
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             
-            locationLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            locationLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            cityLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            cityLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+
+            districtLabel.topAnchor.constraint(equalTo: cityLabel.bottomAnchor, constant: 5),
+            districtLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
-            weatherImageView.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 20),
+            locationSymbolButton.centerYAnchor.constraint(equalTo: districtLabel.centerYAnchor),
+            locationSymbolButton.trailingAnchor.constraint(equalTo: districtLabel.leadingAnchor, constant: -5),
+            locationSymbolButton.widthAnchor.constraint(equalToConstant: 20),
+            locationSymbolButton.heightAnchor.constraint(equalToConstant: 20),
+            
+            weatherImageView.topAnchor.constraint(equalTo: districtLabel.bottomAnchor, constant: 20),
             weatherImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             weatherImageView.heightAnchor.constraint(equalToConstant: 100),
             weatherImageView.widthAnchor.constraint(equalToConstant: 100),
@@ -191,10 +215,10 @@ class WeatherViewController: UIViewController {
             }
             .store(in: &cancellables)
         
-        viewModel.$locationName
+        viewModel.$selectedRegion
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] locationName in
-                self?.locationLabel.text = locationName
+            .sink { [weak self] region in
+                self?.districtLabel.text = region
             }
             .store(in: &cancellables)
         
@@ -206,6 +230,17 @@ class WeatherViewController: UIViewController {
                 }
             }
             .store(in: &cancellables)
+        
+        viewModel.$isCurrentLocation
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isCurrentLocation in
+                self?.locationSymbolButton.isHidden = !isCurrentLocation
+            }
+            .store(in: &cancellables)
+    }
+    
+    @objc private func locationSymbolTapped() {
+        viewModel.updateToCurrentLocation()
     }
     
     private func updateWeather() {
@@ -235,15 +270,16 @@ class WeatherViewController: UIViewController {
 // MARK: - UICollectionView DataSource and Delegate methods
 extension WeatherViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return min(viewModel.currentWeather?.hourlyForecast.count ?? 0, 24) // 최대 24시간
+        return viewModel.sortedHourlyForecast.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HourlyForecastCell", for: indexPath) as! HourlyForecastCell
-        if let weather = viewModel.currentWeather {
-            let hourlyForecast = weather.hourlyForecast[indexPath.item]
-            cell.configure(with: hourlyForecast)
-        }
+        let hourlyForecast = viewModel.sortedHourlyForecast[indexPath.item]
+        
+        print("Configuring cell at index \(indexPath.item): date = \(hourlyForecast.date)")
+        
+        cell.configure(with: hourlyForecast)
         return cell
     }
     
