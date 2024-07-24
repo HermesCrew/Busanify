@@ -23,6 +23,10 @@ class DailyForecastCell: UITableViewCell {
     }
 
     private func setupUI() {
+        contentView.backgroundColor = UIColor(white: 0.95, alpha: 1)
+        contentView.layer.cornerRadius = 10
+        contentView.layer.masksToBounds = true
+        
         contentView.addSubview(dayLabel)
         contentView.addSubview(temperatureLabel)
         contentView.addSubview(iconImageView)

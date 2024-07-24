@@ -23,6 +23,10 @@ class HourlyForecastCell: UICollectionViewCell {
     }
 
     private func setupUI() {
+        contentView.backgroundColor = UIColor(white: 0.95, alpha: 1)
+        contentView.layer.cornerRadius = 10
+        contentView.layer.masksToBounds = true
+        
         contentView.addSubview(timeLabel)
         contentView.addSubview(temperatureLabel)
         contentView.addSubview(iconImageView)
@@ -32,7 +36,7 @@ class HourlyForecastCell: UICollectionViewCell {
         iconImageView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            timeLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
+            timeLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             timeLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
 
             iconImageView.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 5),
@@ -41,7 +45,8 @@ class HourlyForecastCell: UICollectionViewCell {
             iconImageView.widthAnchor.constraint(equalToConstant: 30),
 
             temperatureLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: 5),
-            temperatureLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
+            temperatureLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            temperatureLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
         ])
     }
 

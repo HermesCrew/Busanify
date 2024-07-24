@@ -20,12 +20,15 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
     private var viewModel = WeatherViewModel()
     private var cancellables = Set<AnyCancellable>()
     
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
     private let weatherLabel = UILabel()
     private let locationLabel = UILabel()
+    private let conditionLabel = UILabel()
     private let maxMinTempLabel = UILabel()
+    private let weatherImageView = UIImageView()
     private let hourlyForecastCollectionView: UICollectionView
     private let dailyForecastTableView = UITableView()
-    private let weatherImageView = UIImageView()
     private let regionPickerView = UIPickerView()
     
     private let regions: [Region] = [
@@ -95,70 +98,95 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
 
     private func setupUI() {
         view.backgroundColor = .white
-
+        
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        
         locationLabel.translatesAutoresizingMaskIntoConstraints = false
         locationLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         locationLabel.textAlignment = .center
         locationLabel.text = "Loading..."
-        view.addSubview(locationLabel)
+        contentView.addSubview(locationLabel)
         
         weatherLabel.translatesAutoresizingMaskIntoConstraints = false
         weatherLabel.textAlignment = .center
-        weatherLabel.numberOfLines = 0
-        view.addSubview(weatherLabel)
+        weatherLabel.font = UIFont.systemFont(ofSize: 80, weight: .light)
+        contentView.addSubview(weatherLabel)
+        
+        conditionLabel.translatesAutoresizingMaskIntoConstraints = false
+        conditionLabel.textAlignment = .center
+        contentView.addSubview(conditionLabel)
         
         maxMinTempLabel.translatesAutoresizingMaskIntoConstraints = false
         maxMinTempLabel.textAlignment = .center
-        view.addSubview(maxMinTempLabel)
+        contentView.addSubview(maxMinTempLabel)
         
         weatherImageView.translatesAutoresizingMaskIntoConstraints = false
         weatherImageView.contentMode = .scaleAspectFit
-        view.addSubview(weatherImageView)
+        contentView.addSubview(weatherImageView)
         
         hourlyForecastCollectionView.translatesAutoresizingMaskIntoConstraints = false
         hourlyForecastCollectionView.register(HourlyForecastCell.self, forCellWithReuseIdentifier: "HourlyForecastCell")
-        view.addSubview(hourlyForecastCollectionView)
+        hourlyForecastCollectionView.showsVerticalScrollIndicator = false
+        hourlyForecastCollectionView.isPagingEnabled = true
+        hourlyForecastCollectionView.alwaysBounceVertical = true
+        contentView.addSubview(hourlyForecastCollectionView)
         
         dailyForecastTableView.translatesAutoresizingMaskIntoConstraints = false
         dailyForecastTableView.register(DailyForecastCell.self, forCellReuseIdentifier: "DailyForecastCell")
-        view.addSubview(dailyForecastTableView)
+        contentView.addSubview(dailyForecastTableView)
         
         regionPickerView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(regionPickerView)
+        contentView.addSubview(regionPickerView)
         
         NSLayoutConstraint.activate([
-            locationLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            locationLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            weatherLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 20),
-            weatherLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            weatherLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            weatherLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             
-            weatherImageView.topAnchor.constraint(equalTo: weatherLabel.bottomAnchor, constant: 20),
-            weatherImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            locationLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            locationLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            
+            regionPickerView.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 10),
+            regionPickerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            
+            weatherImageView.topAnchor.constraint(equalTo: regionPickerView.bottomAnchor, constant: 20),
+            weatherImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             weatherImageView.heightAnchor.constraint(equalToConstant: 100),
             weatherImageView.widthAnchor.constraint(equalToConstant: 100),
             
-            maxMinTempLabel.topAnchor.constraint(equalTo: weatherImageView.bottomAnchor, constant: 20),
-            maxMinTempLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            weatherLabel.topAnchor.constraint(equalTo: weatherImageView.bottomAnchor, constant: 20),
+            weatherLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            
+            conditionLabel.topAnchor.constraint(equalTo: weatherLabel.bottomAnchor, constant: 10),
+            conditionLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            
+            maxMinTempLabel.topAnchor.constraint(equalTo: conditionLabel.bottomAnchor, constant: 10),
+            maxMinTempLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
             hourlyForecastCollectionView.topAnchor.constraint(equalTo: maxMinTempLabel.bottomAnchor, constant: 20),
-            hourlyForecastCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            hourlyForecastCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            hourlyForecastCollectionView.heightAnchor.constraint(equalToConstant: 100),
+            hourlyForecastCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            hourlyForecastCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            hourlyForecastCollectionView.heightAnchor.constraint(equalToConstant: 120),
             
             dailyForecastTableView.topAnchor.constraint(equalTo: hourlyForecastCollectionView.bottomAnchor, constant: 20),
-            dailyForecastTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            dailyForecastTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            dailyForecastTableView.bottomAnchor.constraint(equalTo: regionPickerView.topAnchor, constant: -20),
-            
-            regionPickerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            regionPickerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            regionPickerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            regionPickerView.heightAnchor.constraint(equalToConstant: 150)
+            dailyForecastTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            dailyForecastTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            dailyForecastTableView.heightAnchor.constraint(equalToConstant: 400),
+            dailyForecastTableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
     }
+
     
     private func setupBindings() {
         viewModel.$currentWeather
@@ -193,10 +221,14 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
         
         let temperature = Int(weather.currentWeather.temperature.value)
         weatherLabel.text = "\(temperature)°"
-        weatherLabel.font = UIFont.systemFont(ofSize: 80, weight: .light)
-        
-        weatherLabel.text = weather.currentWeather.condition.rawValue
+        conditionLabel.text = weather.currentWeather.condition.rawValue
         maxMinTempLabel.text = "H: \(Int(weather.dailyForecast.first?.highTemperature.value ?? 0))° L: \(Int(weather.dailyForecast.first?.lowTemperature.value ?? 0))°"
+        
+        if let weatherImage = WeatherIcon.getWeatherIcon(for: weather.currentWeather) {
+            weatherImageView.image = weatherImage
+        } else {
+            weatherImageView.image = UIImage(systemName: "questionmark.circle")
+        }
         
         hourlyForecastCollectionView.reloadData()
         dailyForecastTableView.reloadData()
@@ -223,7 +255,7 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     // UICollectionView DataSource and Delegate methods
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.currentWeather?.hourlyForecast.count ?? 0
+        return min(viewModel.currentWeather?.hourlyForecast.count ?? 0, 24) // 최대 24시간
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -249,4 +281,3 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
         return cell
     }
 }
-
