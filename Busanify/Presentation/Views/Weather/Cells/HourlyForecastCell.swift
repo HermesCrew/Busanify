@@ -49,6 +49,6 @@ class HourlyForecastCell: UICollectionViewCell {
         let hour = Calendar.current.component(.hour, from: forecast.date)
         timeLabel.text = "\(hour)시"
         temperatureLabel.text = "\(Int(forecast.temperature.value))°"
-        iconImageView.image = UIImage(systemName: "cloud.sun.fill") // Example icon
+        iconImageView.image = WeatherIcon.getWeatherIcon(for: forecast)
     }
 }

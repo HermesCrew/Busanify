@@ -49,6 +49,6 @@ class DailyForecastCell: UITableViewCell {
         let day = Calendar.current.component(.day, from: forecast.date)
         dayLabel.text = "Day \(day)"
         temperatureLabel.text = "\(Int(forecast.highTemperature.value))° / \(Int(forecast.lowTemperature.value))°"
-        iconImageView.image = UIImage(systemName: "cloud.sun.fill") // Example icon
+        iconImageView.image = WeatherIcon.getWeatherIcon(for: forecast)
     }
 }

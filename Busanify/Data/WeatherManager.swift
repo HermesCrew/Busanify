@@ -54,3 +54,4 @@ class WeatherManager: NSObject, CLLocationManagerDelegate {
         delegate?.didFailWithError(error)
     }
 }
+
