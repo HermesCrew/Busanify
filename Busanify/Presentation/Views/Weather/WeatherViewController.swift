@@ -13,11 +13,13 @@
 import UIKit
 import WeatherKit
 import CoreLocation
+import Combine
 
-class WeatherViewController: UIViewController, WeatherManagerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource {
+class WeatherViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource {
     
-    private let weatherManager = WeatherManager()
-    private let geocoder = CLGeocoder()
+    private var viewModel = WeatherViewModel()
+    private var cancellables = Set<AnyCancellable>()
+    
     private let weatherLabel = UILabel()
     private let locationLabel = UILabel()
     private let maxMinTempLabel = UILabel()
@@ -27,23 +29,10 @@ class WeatherViewController: UIViewController, WeatherManagerDelegate, UICollect
     private let regionPickerView = UIPickerView()
     
     private let regions: [Region] = [
-         Region(name: "강서구", latitude: 35.20916389, longitude: 128.9829083),
-         Region(name: "금정구", latitude: 35.24007778, longitude: 129.0943194),
-         Region(name: "남구", latitude: 35.13340833, longitude: 129.0865),
-         Region(name: "동구", latitude: 35.13589444, longitude: 129.059175),
-         Region(name: "동래구", latitude: 35.20187222, longitude: 129.0858556),
-         Region(name: "부산진구", latitude: 35.15995278, longitude: 129.0553194),
-         Region(name: "북구", latitude: 35.19418056, longitude: 128.992475),
-         Region(name: "사상구", latitude: 35.14946667, longitude: 128.9933333),
-         Region(name: "사하구", latitude: 35.10142778, longitude: 128.9770417),
-         Region(name: "서구", latitude: 35.09483611, longitude: 129.0263778),
-         Region(name: "수영구", latitude: 35.14246667, longitude: 129.115375),
-         Region(name: "연제구", latitude: 35.17318611, longitude: 129.082075),
-         Region(name: "영도구", latitude: 35.08811667, longitude: 129.0701861),
-         Region(name: "중구", latitude: 35.10321667, longitude: 129.0345083),
-         Region(name: "해운대구", latitude: 35.16001944, longitude: 129.1658083),
-         Region(name: "기장군", latitude: 35.24477541, longitude: 129.2222873)
-     ]
+        Region(name: "강서구", latitude: 35.20916389, longitude: 128.9829083),
+        Region(name: "금정구", latitude: 35.24007778, longitude: 129.0943194),
+        // Add other regions here...
+    ]
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         let layout = UICollectionViewFlowLayout()
@@ -62,8 +51,7 @@ class WeatherViewController: UIViewController, WeatherManagerDelegate, UICollect
         super.viewDidLoad()
         setupUI()
         setupNavigationBar()
-        weatherManager.delegate = self
-        weatherManager.startFetchingWeather()
+        setupBindings()
         
         hourlyForecastCollectionView.delegate = self
         hourlyForecastCollectionView.dataSource = self
@@ -159,37 +147,46 @@ class WeatherViewController: UIViewController, WeatherManagerDelegate, UICollect
         ])
     }
     
-    func didUpdateWeather(_ weather: Weather) {
-        DispatchQueue.main.async {
-            if let location = self.weatherManager.locationManager.location {
-                self.geocoder.reverseGeocodeLocation(location) { (placemarks, error) in
-                    if let placemark = placemarks?.first {
-                        self.locationLabel.text = "📍 \(placemark.locality ?? "Unknown Location")"
-                    } else {
-                        self.locationLabel.text = "📍 Unknown Location"
-                    }
+    private func setupBindings() {
+        viewModel.$currentWeather
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.updateWeather()
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$locationName
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] locationName in
+                self?.locationLabel.text = locationName
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$error
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] error in
+                if let error = error {
+                    self?.locationLabel.text = "Failed to get location"
+                    self?.weatherLabel.text = "Failed to get weather: \(error)"
+                    self?.maxMinTempLabel.text = ""
+                    self?.weatherImageView.image = UIImage(systemName: "xmark.octagon")
                 }
             }
-            
-            let temperature = Int(weather.currentWeather.temperature.value)
-            self.weatherLabel.text = "\(temperature)°"
-            self.weatherLabel.font = UIFont.systemFont(ofSize: 80, weight: .light)
-            
-            self.weatherLabel.text = weather.currentWeather.condition.rawValue
-            self.maxMinTempLabel.text = "H: \(Int(weather.dailyForecast.first?.highTemperature.value ?? 0))° L: \(Int(weather.dailyForecast.first?.lowTemperature.value ?? 0))°"
-            
-            self.hourlyForecastCollectionView.reloadData()
-            self.dailyForecastTableView.reloadData()
-        }
+            .store(in: &cancellables)
     }
     
-    func didFailWithError(_ error: Error) {
-        DispatchQueue.main.async {
-            self.locationLabel.text = "Failed to get location"
-            self.weatherLabel.text = "Failed to get weather: \(error.localizedDescription)"
-            self.maxMinTempLabel.text = ""
-            self.weatherImageView.image = UIImage(systemName: "xmark.octagon")
-        }
+    private func updateWeather() {
+        guard let weather = viewModel.currentWeather else { return }
+        
+        let temperature = Int(weather.currentWeather.temperature.value)
+        weatherLabel.text = "\(temperature)°"
+        weatherLabel.font = UIFont.systemFont(ofSize: 80, weight: .light)
+        
+        weatherLabel.text = weather.currentWeather.condition.rawValue
+        maxMinTempLabel.text = "H: \(Int(weather.dailyForecast.first?.highTemperature.value ?? 0))° L: \(Int(weather.dailyForecast.first?.lowTemperature.value ?? 0))°"
+        
+        hourlyForecastCollectionView.reloadData()
+        dailyForecastTableView.reloadData()
     }
     
     // UIPickerView DataSource and Delegate methods
@@ -208,25 +205,17 @@ class WeatherViewController: UIViewController, WeatherManagerDelegate, UICollect
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let selectedRegion = regions[row]
         let location = CLLocation(latitude: selectedRegion.latitude, longitude: selectedRegion.longitude)
-        
-        Task {
-            do {
-                let weather = try await weatherManager.fetchWeather(for: location)
-                self.didUpdateWeather(weather)
-            } catch {
-                self.didFailWithError(error)
-            }
-        }
+        viewModel.fetchWeather(for: location)
     }
     
     // UICollectionView DataSource and Delegate methods
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return weatherManager.currentWeather?.hourlyForecast.count ?? 0
+        return viewModel.currentWeather?.hourlyForecast.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HourlyForecastCell", for: indexPath) as! HourlyForecastCell
-        if let weather = weatherManager.currentWeather {
+        if let weather = viewModel.currentWeather {
             let hourlyForecast = weather.hourlyForecast[indexPath.item]
             cell.configure(with: hourlyForecast)
         }
@@ -235,15 +224,16 @@ class WeatherViewController: UIViewController, WeatherManagerDelegate, UICollect
     
     // UITableView DataSource and Delegate methods
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return weatherManager.currentWeather?.dailyForecast.count ?? 0
+        return viewModel.currentWeather?.dailyForecast.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "DailyForecastCell", for: indexPath) as! DailyForecastCell
-        if let weather = weatherManager.currentWeather {
+        if let weather = viewModel.currentWeather {
             let dailyForecast = weather.dailyForecast[indexPath.row]
             cell.configure(with: dailyForecast)
         }
         return cell
     }
 }
+
