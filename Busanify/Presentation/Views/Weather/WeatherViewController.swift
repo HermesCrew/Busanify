@@ -15,7 +15,7 @@ import WeatherKit
 import CoreLocation
 import Combine
 
-class WeatherViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource {
+class WeatherViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource, UICollectionViewDelegateFlowLayout {
     
     private var viewModel = WeatherViewModel()
     private var cancellables = Set<AnyCancellable>()
@@ -32,28 +32,28 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
     private let regionPickerView = UIPickerView()
     
     private let regions: [Region] = [
-        Region(name: "강서구", latitude: 35.20916389, longitude: 128.9829083),
-        Region(name: "금정구", latitude: 35.24007778, longitude: 129.0943194),
-        Region(name: "남구", latitude: 35.13340833, longitude: 129.0865),
-        Region(name: "동구", latitude: 35.13589444, longitude: 129.059175),
-        Region(name: "동래구", latitude: 35.20187222, longitude: 129.0858556),
-        Region(name: "부산진구", latitude: 35.15995278, longitude: 129.0553194),
-        Region(name: "북구", latitude: 35.19418056, longitude: 128.992475),
-        Region(name: "사상구", latitude: 35.14946667, longitude: 128.9933333),
-        Region(name: "사하구", latitude: 35.10142778, longitude: 128.9770417),
-        Region(name: "서구", latitude: 35.09483611, longitude: 129.0263778),
-        Region(name: "수영구", latitude: 35.14246667, longitude: 129.115375),
-        Region(name: "연제구", latitude: 35.17318611, longitude: 129.082075),
-        Region(name: "영도구", latitude: 35.08811667, longitude: 129.0701861),
-        Region(name: "중구", latitude: 35.10321667, longitude: 129.0345083),
-        Region(name: "해운대구", latitude: 35.16001944, longitude: 129.1658083),
-        Region(name: "기장군", latitude: 35.24477541, longitude: 129.2222873)
-    ]
+           Region(name: "강서구", latitude: 35.20916389, longitude: 128.9829083),
+           Region(name: "금정구", latitude: 35.24007778, longitude: 129.0943194),
+           Region(name: "남구", latitude: 35.13340833, longitude: 129.0865),
+           Region(name: "동구", latitude: 35.13589444, longitude: 129.059175),
+           Region(name: "동래구", latitude: 35.20187222, longitude: 129.0858556),
+           Region(name: "부산진구", latitude: 35.15995278, longitude: 129.0553194),
+           Region(name: "북구", latitude: 35.19418056, longitude: 128.992475),
+           Region(name: "사상구", latitude: 35.14946667, longitude: 128.9933333),
+           Region(name: "사하구", latitude: 35.10142778, longitude: 128.9770417),
+           Region(name: "서구", latitude: 35.09483611, longitude: 129.0263778),
+           Region(name: "수영구", latitude: 35.14246667, longitude: 129.115375),
+           Region(name: "연제구", latitude: 35.17318611, longitude: 129.082075),
+           Region(name: "영도구", latitude: 35.08811667, longitude: 129.0701861),
+           Region(name: "중구", latitude: 35.10321667, longitude: 129.0345083),
+           Region(name: "해운대구", latitude: 35.16001944, longitude: 129.1658083),
+           Region(name: "기장군", latitude: 35.24477541, longitude: 129.2222873)
+       ]
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = 0
+        layout.minimumLineSpacing = 10
         hourlyForecastCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -187,7 +187,6 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
         ])
     }
 
-    
     private func setupBindings() {
         viewModel.$currentWeather
             .receive(on: DispatchQueue.main)
@@ -265,6 +264,13 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
             cell.configure(with: hourlyForecast)
         }
         return cell
+    }
+    
+    // UICollectionViewDelegateFlowLayout method
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = collectionView.frame.width / 6 // 한 줄에 표시할 셀의 개수에 맞게 조정
+        let height = collectionView.frame.height
+        return CGSize(width: width, height: height)
     }
     
     // UITableView DataSource and Delegate methods
