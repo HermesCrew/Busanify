@@ -18,7 +18,8 @@ class WeatherManager: NSObject, CLLocationManagerDelegate {
     let weatherService = WeatherService.shared
     weak var delegate: WeatherManagerDelegate?
     let locationManager = CLLocationManager()
-    
+    var currentWeather: Weather?
+
     override init() {
         super.init()
         locationManager.delegate = self
@@ -30,7 +31,9 @@ class WeatherManager: NSObject, CLLocationManagerDelegate {
     }
     
     func fetchWeather(for location: CLLocation) async throws -> Weather {
-        return try await weatherService.weather(for: location)
+        let weather = try await weatherService.weather(for: location)
+        currentWeather = weather
+        return weather
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
