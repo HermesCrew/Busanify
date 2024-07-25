@@ -10,11 +10,15 @@ import UIKit
 class ReviewTableViewCell: UITableViewCell {
     
     static let identifier = "review"
+    private let authViewModel = AuthenticationViewModel.shared
+    private let keyChain = Keychain()
+    
+    weak var delegate: ReviewTableViewCellDelegate?
     
     private lazy var profileImage: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person.crop.circle")
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         
         return imageView
@@ -59,6 +63,9 @@ class ReviewTableViewCell: UITableViewCell {
     
     private lazy var moreButton: UIButton = {
         let button = UIButton()
+        button.setImage(UIImage(systemName: "ellipsis"), for: .normal)
+        button.showsMenuAsPrimaryAction = true
+        
         return button
     }()
     
@@ -73,7 +80,7 @@ class ReviewTableViewCell: UITableViewCell {
     }
     
     private func configureUI() {
-//        profileImage.layer.cornerRadius = 15
+        profileImage.layer.cornerRadius = 15
         contentView.addSubview(profileImage)
         contentView.addSubview(usernameLabel)
         contentView.addSubview(starBackgroundStackView)
@@ -94,13 +101,18 @@ class ReviewTableViewCell: UITableViewCell {
             
             profileImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             profileImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            profileImage.widthAnchor.constraint(equalTo: usernameLabel.heightAnchor),
-            profileImage.heightAnchor.constraint(equalTo: usernameLabel.heightAnchor),
+            profileImage.widthAnchor.constraint(equalToConstant: 30),
+            profileImage.heightAnchor.constraint(equalToConstant: 30),
             
             usernameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             usernameLabel.leadingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: 8),
+            usernameLabel.centerYAnchor.constraint(equalTo: profileImage.centerYAnchor),
             
-            starBackgroundStackView.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 8),
+            moreButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            moreButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            moreButton.centerYAnchor.constraint(equalTo: profileImage.centerYAnchor),
+            
+            starBackgroundStackView.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 8),
             starBackgroundStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             starBackgroundStackView.widthAnchor.constraint(equalToConstant: 50),
             
@@ -118,14 +130,44 @@ class ReviewTableViewCell: UITableViewCell {
         ])
     }
     
-    
-    
     func configure(with review: Review) {
-        // 리뷰에 user image 추가
-        profileImage.image = UIImage(data: review.userProfileImage)
-        usernameLabel.text = review.username
+        profileImage.image = UIImage(data: review.user.profileImage)
+        usernameLabel.text = review.user.name
         contentLabel.text = review.content
         dateLabel.text = review.createdAt
+        
+        var menuItems: [UIAction] = [UIAction(title: "Report", image: UIImage(systemName: "exclamationmark.triangle"), handler: { _ in })]
+        
+        switch authViewModel.state {
+        case .googleSignedIn(let user):
+            if review.user.id == user.userID {
+                menuItems = [
+                    UIAction(title: "Modify", image: UIImage(systemName: "pencil"), handler: { _ in }),
+                    UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
+                        self?.delegate?.didDeleteReview(review)
+                    })
+                ]
+            }
+        case .appleSignedIn:
+            guard let userId = self.keyChain.read(key: "appleUserId") else {
+                print("No valid user ID")
+                return
+            }
+            
+            if review.user.id == userId {
+                menuItems = [
+                    UIAction(title: "Modify", image: UIImage(systemName: "pencil"), handler: { _ in }),
+                    UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
+                        self?.delegate?.didDeleteReview(review)
+                    })
+                ]
+            }
+        default:
+            break
+        }
+        
+        let menu = UIMenu(title: "", image: nil, options: [], children: menuItems)
+        moreButton.menu = menu
         
         setUpStars(rating: review.rating)
     }
@@ -163,4 +205,8 @@ class ReviewTableViewCell: UITableViewCell {
         starImageView.fillPercentage = percentage
         starImageView.tintColor = .black
     }
+}
+
+protocol ReviewTableViewCellDelegate: NSObject {
+    func didDeleteReview(_ review: Review)
 }

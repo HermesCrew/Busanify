@@ -31,4 +31,16 @@ final class PlaceDetailViewModel {
         
         useCase.toggleBookmark(placeId: placeId, token: token)
     }
+    
+    func deleteReview(id: Int, token: String?) {
+        guard let token = token else { return }
+        
+        useCase.deleteReview(by: id, token: token) { success in
+            if success {
+                self.fetchPlace(token: token)
+            } else {
+                print("Delete fail")
+            }
+        }
+    }
 }
