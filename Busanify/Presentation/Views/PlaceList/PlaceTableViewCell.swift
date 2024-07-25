@@ -148,7 +148,7 @@ class PlaceTableViewCell: UITableViewCell {
         if let imageURL = viewModel.imageURL {
             loadImage(from: imageURL)
         } else {
-            placeImageView.image = UIImage(named: "placeholder")
+            placeImageView.image = UIImage(systemName: "photo.fill")
         }
         
         bookmarkButton.isSelected = viewModel.isBookmarked

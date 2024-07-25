@@ -154,13 +154,6 @@
 			path = PlaceList;
 			sourceTree = "<group>";
 		};
-		757883502C4C49830078EFAB /* Bookmark */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Bookmark;
-			sourceTree = "<group>";
-		};
 		75D78A312C4C634200E3259B /* Bookmark */ = {
 			isa = PBXGroup;
 			children = (
@@ -313,7 +306,6 @@
 		C296D7332C1F2B5D00691515 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				757883502C4C49830078EFAB /* Bookmark */,
 				C207F3792C3AFB62007DFA27 /* Authentication */,
 				CD89D3542C29A56B00715404 /* Home */,
 				75304AF42C377A6B0058FDDE /* PlaceList */,
