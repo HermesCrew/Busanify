@@ -4,7 +4,6 @@
 //
 //  Created by seokyung on 7/22/24.
 //
-// 리뷰카운팅이 0이라 별점이 0인 경우에는 hidden 처리하는 게 사용자에게 좋을까
 import Foundation
 import UIKit
 
@@ -83,7 +82,7 @@ class BookmarkListCell: UITableViewCell {
         if let imageURL = URL(string: bookmark.image) {
             loadImage(from: imageURL)
         } else {
-            listImageView.image = UIImage(named: "placeholder")
+            listImageView.image = UIImage(systemName: "photo.fill")
         }
         
         setupStarRating(rating: bookmark.avgRating)

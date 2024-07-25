@@ -87,7 +87,7 @@ class BookmarkGridCell: UICollectionViewCell {
         if let imageURL = URL(string: bookmark.image) {
             loadImage(from: imageURL)
         } else {
-            gridImageView.image = UIImage(named: "placeholder")
+            gridImageView.image = UIImage(systemName: "photo.fill")
         }
         
         setupStarRating(rating: bookmark.avgRating)
