@@ -9,7 +9,7 @@ import UIKit
 import Combine
 
 class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    private let viewModel: PlaceDetailViewModel = PlaceDetailViewModel(placeId: "BS_FOOD_102", useCase: PlacesApi())
+    private let viewModel: PlaceDetailViewModel
     private let authViewModel = AuthenticationViewModel.shared
     private var cancellables = Set<AnyCancellable>()
     private var placeInfos: [(label: String, icon: String)] = []
@@ -64,14 +64,15 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
         
         return button
     }()
-//    init(viewModel: PlaceDetailViewModel) {
-//        self.viewModel = viewModel
-//        super.init(nibName: nil, bundle: nil)
-//    }
-//    
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
+    
+    init(viewModel: PlaceDetailViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,7 +116,6 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
             titleLabel.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 16),
         ])
     }
-    
     
     private func bookmarkTapped() {
         switch authViewModel.state {
@@ -183,15 +183,16 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 0: 
+        case 0: // 장소 정보
             return placeInfos.count
-        case 1:
+        case 1: // 리뷰 정보
             return 1
-        case 2:
+        case 2: // 리뷰들
             guard let reviews = viewModel.place.reviews else { return 0 }
-            return reviews.isEmpty ? 0 : 3 // 리뷰 하나도 없을때 표시할 default 메세지 필요
-        case 3: 
-            return 1
+            return min(reviews.count, 3) // 리뷰 하나도 없을때 표시할 default 메세지 필요
+        case 3:
+            guard let reviews = viewModel.place.reviews else { return 0 }
+            return reviews.isEmpty ? 0 : 1
         default: 
             return 0
         }
@@ -221,6 +222,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
             }
             if let reviews = viewModel.place.reviews {
                 cell.configure(with: reviews[indexPath.item])
+                cell.delegate = self
             }
             cell.selectionStyle = .none
             return cell
@@ -230,7 +232,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
             content.text = "View all reviews"
             content.textProperties.color = .systemBlue
             content.textProperties.alignment = .center
-            
+        
             cell.contentConfiguration = content
             cell.selectionStyle = .none
             
@@ -279,5 +281,11 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
                     return nil
                 }
             }
+    }
+}
+
+extension PlaceDetailViewController: ReviewTableViewCellDelegate {
+    func didDeleteReview(_ review: Review) {
+        viewModel.deleteReview(id: review.id, token: self.authViewModel.getToken())
     }
 }

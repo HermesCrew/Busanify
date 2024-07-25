@@ -75,7 +75,7 @@ final class SignInApi {
         task.resume()
     }
     
-    func getAppleUserProfile(accessToken: String) -> AnyPublisher<UserProfile, Never> {
+    func getAppleUserProfile(accessToken: String) -> AnyPublisher<User, Never> {
         let urlString = "\(baseURL)/auth/apple/profile"
         guard let url = URL(string: urlString) else {
             fatalError("Invalid URL")
@@ -86,8 +86,8 @@ final class SignInApi {
         
         return URLSession.shared.dataTaskPublisher(for: request)
             .map(\.data)
-            .decode(type: UserProfile.self, decoder: JSONDecoder())
-            .replaceError(with: UserProfile(email: "", name: ""))
+            .decode(type: User.self, decoder: JSONDecoder())
+            .replaceError(with: User(id: "", email: "", name: "", profileImage: Data()))
             .eraseToAnyPublisher()
     }
 }

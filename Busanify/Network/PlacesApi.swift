@@ -96,4 +96,35 @@ final class PlacesApi: HomeViewUseCase, PlaceDetailViewUseCase {
             })
             .store(in: &cancellables)
     }
+    
+    func deleteReview(by id: Int, token: String, completion: @escaping (Bool) -> Void) {
+        let urlString = "\(baseURL)/reviews"
+        
+        guard let url = URL(string: urlString) else {
+            fatalError("Invalid URL")
+        }
+        
+        let json: [String: Int] = ["id": id]
+        let jsonData = try? JSONSerialization.data(withJSONObject: json)
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.httpBody = jsonData
+        
+        URLSession.shared.dataTaskPublisher(for: request)
+            .sink(receiveCompletion: { completionResult in
+                switch completionResult {
+                case .finished:
+                    completion(true)
+                case .failure(let error):
+                    print("Error: \(error)")
+                    completion(false)
+                }
+            }, receiveValue: {
+                print($0)
+            })
+            .store(in: &cancellables)
+    }
 }
