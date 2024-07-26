@@ -177,6 +177,9 @@ class WeatherViewController: UIViewController {
         
         dailyForecastTableView.translatesAutoresizingMaskIntoConstraints = false
         dailyForecastTableView.register(DailyForecastCell.self, forCellReuseIdentifier: "DailyForecastCell")
+        
+        dailyForecastTableView.allowsSelection = false
+
         contentView.addSubview(dailyForecastTableView)
         
         NSLayoutConstraint.activate([
