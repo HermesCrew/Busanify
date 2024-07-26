@@ -146,6 +146,7 @@ class WeatherViewController: UIViewController {
         let tempStackView = UIStackView()
         tempStackView.axis = .vertical
         tempStackView.alignment = .center
+        tempStackView.spacing = 10
         currentWeatherStackView.addArrangedSubview(tempStackView)
 
         temperatureLabel.font = UIFont.systemFont(ofSize: 50, weight: .light)
@@ -158,15 +159,13 @@ class WeatherViewController: UIViewController {
         precipitationStackView.axis = .horizontal
         precipitationStackView.alignment = .center
         precipitationStackView.spacing = 5
-        tempStackView.addArrangedSubview(precipitationStackView)
 
         precipitationIconImageView.contentMode = .scaleAspectFit
-        precipitationIconImageView.tintColor = .systemPurple
+        precipitationIconImageView.tintColor = .purple
         precipitationStackView.addArrangedSubview(precipitationIconImageView)
-
-        precipitationProbabilityLabel.font = UIFont.systemFont(ofSize: 16)
         precipitationStackView.addArrangedSubview(precipitationProbabilityLabel)
-        
+        tempStackView.addArrangedSubview(precipitationStackView)
+
         hourlyForecastCollectionView.translatesAutoresizingMaskIntoConstraints = false
         hourlyForecastCollectionView.register(HourlyForecastCell.self, forCellWithReuseIdentifier: "HourlyForecastCell")
         hourlyForecastCollectionView.showsHorizontalScrollIndicator = false
@@ -199,15 +198,15 @@ class WeatherViewController: UIViewController {
             locationSymbolButton.widthAnchor.constraint(equalToConstant: 20),
             locationSymbolButton.heightAnchor.constraint(equalToConstant: 20),
             
-            currentWeatherStackView.topAnchor.constraint(equalTo: districtLabel.bottomAnchor, constant: 20),
+            currentWeatherStackView.topAnchor.constraint(equalTo: districtLabel.bottomAnchor, constant: 50),
             currentWeatherStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             currentWeatherStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            currentWeatherStackView.heightAnchor.constraint(equalToConstant: 120),
+            currentWeatherStackView.heightAnchor.constraint(equalToConstant: 150),
 
             weatherImageView.widthAnchor.constraint(equalToConstant: 100),
             weatherImageView.heightAnchor.constraint(equalToConstant: 100),
             
-            hourlyForecastCollectionView.topAnchor.constraint(equalTo: currentWeatherStackView.bottomAnchor, constant: 20),
+            hourlyForecastCollectionView.topAnchor.constraint(equalTo: currentWeatherStackView.bottomAnchor, constant: 40),
             hourlyForecastCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             hourlyForecastCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             hourlyForecastCollectionView.heightAnchor.constraint(equalToConstant: 120),
@@ -218,6 +217,7 @@ class WeatherViewController: UIViewController {
             dailyForecastTableView.heightAnchor.constraint(equalToConstant: 400),
             dailyForecastTableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
+
     }
 
     private func setupBindings() {
