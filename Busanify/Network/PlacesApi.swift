@@ -80,13 +80,7 @@ final class PlacesApi: HomeViewUseCase, PlaceDetailViewUseCase {
         
         return URLSession.shared.dataTaskPublisher(for: request)
                     .map(\.data)
-                    .handleEvents(receiveOutput: { data in
-                        print("Received raw data from server: \(String(data: data, encoding: .utf8) ?? "")")
-                    })
                     .decode(type: BookmarkResponse.self, decoder: JSONDecoder())
-                    .handleEvents(receiveOutput: { response in
-                        print("Server response for bookmark toggle: \(response.isBookmarked)")
-                    })
                     .map { $0.isBookmarked }
                     .replaceError(with: false)
                     .eraseToAnyPublisher()
@@ -103,11 +97,6 @@ final class PlacesApi: HomeViewUseCase, PlaceDetailViewUseCase {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
         return URLSession.shared.dataTaskPublisher(for: request)
-            .handleEvents(receiveOutput: { output in
-                if let jsonString = String(data: output.data, encoding: .utf8) {
-                    print("Received JSON: \(jsonString)")
-                }
-            })
             .map(\.data)
             .decode(type: [Bookmark].self, decoder: JSONDecoder())
             .eraseToAnyPublisher()

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		73F9F2D23A91813BBF545E57 /* Pods_Busanify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEFB0607F885ABD0E382C23B /* Pods_Busanify.framework */; };
 		75304AF32C377A560058FDDE /* PlaceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75304AF22C377A560058FDDE /* PlaceTableViewCell.swift */; };
 		753520A42C326B0E00E439CF /* PlaceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753520A32C326B0E00E439CF /* PlaceListViewModel.swift */; };
 		753520AA2C3286D400E439CF /* PlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753520A92C3286D400E439CF /* PlaceListViewController.swift */; };
@@ -36,7 +37,6 @@
 		CD0F83DB2C357A85001C04E2 /* CustomViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0F83DA2C357A85001C04E2 /* CustomViews.swift */; };
 		CD89D3522C29A55A00715404 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD89D3502C29A55A00715404 /* HomeViewController.swift */; };
 		CD89D3552C29A56B00715404 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD89D3532C29A56B00715404 /* HomeViewModel.swift */; };
-		DCC351AEDE79E3FA213766F5 /* Pods_Busanify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC54047A571AE7CCCEC17FDE /* Pods_Busanify.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,7 +63,8 @@
 		753520A92C3286D400E439CF /* PlaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewController.swift; sourceTree = "<group>"; };
 		757882F72C43E52A0078EFAB /* Busanify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Busanify.entitlements; sourceTree = "<group>"; };
 		757882FD2C477AC80078EFAB /* Bookmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
-		A5B5FF36CA65D19775B9B568 /* Pods-Busanify.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busanify.release.xcconfig"; path = "Target Support Files/Pods-Busanify/Pods-Busanify.release.xcconfig"; sourceTree = "<group>"; };
+		90A686BAD126AABE23FE1EC1 /* Pods-Busanify.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busanify.release.xcconfig"; path = "Target Support Files/Pods-Busanify/Pods-Busanify.release.xcconfig"; sourceTree = "<group>"; };
+		AEFB0607F885ABD0E382C23B /* Pods_Busanify.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Busanify.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C207B98A2C45FEFB0088E2D5 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		C207B98C2C464E4E0088E2D5 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		C207F37A2C3AFC0C007DFA27 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
@@ -92,8 +93,7 @@
 		CD0F83DA2C357A85001C04E2 /* CustomViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViews.swift; sourceTree = "<group>"; };
 		CD89D3502C29A55A00715404 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		CD89D3532C29A56B00715404 /* HomeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
-		FC54047A571AE7CCCEC17FDE /* Pods_Busanify.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Busanify.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		FCF7B5AF299CF594CE3ABDAA /* Pods-Busanify.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busanify.debug.xcconfig"; path = "Target Support Files/Pods-Busanify/Pods-Busanify.debug.xcconfig"; sourceTree = "<group>"; };
+		F8291F42EC69F9AA5802389C /* Pods-Busanify.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busanify.debug.xcconfig"; path = "Target Support Files/Pods-Busanify/Pods-Busanify.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,8 +101,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DCC351AEDE79E3FA213766F5 /* Pods_Busanify.framework in Frameworks */,
 				C207F3772C3AFA78007DFA27 /* GoogleSignIn in Frameworks */,
+				73F9F2D23A91813BBF545E57 /* Pods_Busanify.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -123,10 +123,10 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		294E1541A7E881C320C437EE /* Frameworks */ = {
+		393F9CAAFA31CE009CC48C16 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FC54047A571AE7CCCEC17FDE /* Pods_Busanify.framework */,
+				AEFB0607F885ABD0E382C23B /* Pods_Busanify.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -151,8 +151,8 @@
 		BEFDFFBA458BE9B300E7C88A /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				FCF7B5AF299CF594CE3ABDAA /* Pods-Busanify.debug.xcconfig */,
-				A5B5FF36CA65D19775B9B568 /* Pods-Busanify.release.xcconfig */,
+				F8291F42EC69F9AA5802389C /* Pods-Busanify.debug.xcconfig */,
+				90A686BAD126AABE23FE1EC1 /* Pods-Busanify.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -192,7 +192,7 @@
 				C296D71D2C1F16B200691515 /* BusanifyUITests */,
 				C296D6FB2C1F16B000691515 /* Products */,
 				BEFDFFBA458BE9B300E7C88A /* Pods */,
-				294E1541A7E881C320C437EE /* Frameworks */,
+				393F9CAAFA31CE009CC48C16 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -349,12 +349,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C296D7242C1F16B200691515 /* Build configuration list for PBXNativeTarget "Busanify" */;
 			buildPhases = (
-				E64A6AAA3217D042486D18E6 /* [CP] Check Pods Manifest.lock */,
+				C93848B9CDAD043726DC0C9D /* [CP] Check Pods Manifest.lock */,
 				C296D6F62C1F16B000691515 /* Sources */,
 				C296D6F72C1F16B000691515 /* Frameworks */,
 				C296D6F82C1F16B000691515 /* Resources */,
-				E0BEDE5A1ACC8D35A8960EE7 /* [CP] Embed Pods Frameworks */,
-				D214ADAAAFF712400C089767 /* [CP] Copy Pods Resources */,
+				4AF15051E3822689D788E2E0 /* [CP] Embed Pods Frameworks */,
+				45107528443A3C07DB1DA04A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -478,7 +478,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		D214ADAAAFF712400C089767 /* [CP] Copy Pods Resources */ = {
+		45107528443A3C07DB1DA04A /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -495,7 +495,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E0BEDE5A1ACC8D35A8960EE7 /* [CP] Embed Pods Frameworks */ = {
+		4AF15051E3822689D788E2E0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -512,7 +512,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E64A6AAA3217D042486D18E6 /* [CP] Check Pods Manifest.lock */ = {
+		C93848B9CDAD043726DC0C9D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -741,7 +741,7 @@
 		};
 		C296D7252C1F16B200691515 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FCF7B5AF299CF594CE3ABDAA /* Pods-Busanify.debug.xcconfig */;
+			baseConfigurationReference = F8291F42EC69F9AA5802389C /* Pods-Busanify.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -778,7 +778,7 @@
 		};
 		C296D7262C1F16B200691515 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A5B5FF36CA65D19775B9B568 /* Pods-Busanify.release.xcconfig */;
+			baseConfigurationReference = 90A686BAD126AABE23FE1EC1 /* Pods-Busanify.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
