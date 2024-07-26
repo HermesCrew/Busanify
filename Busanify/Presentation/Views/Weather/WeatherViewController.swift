@@ -20,13 +20,16 @@ class WeatherViewController: UIViewController {
     private let contentView = UIView()
     private let cityLabel = UILabel()
     private let districtLabel = UILabel()
-    private let weatherLabel = UILabel()
-    private let conditionLabel = UILabel()
+    private let currentWeatherStackView = UIStackView()
+    private let temperatureLabel = UILabel()
     private let maxMinTempLabel = UILabel()
+    private let weatherDescriptionLabel = UILabel()
     private let weatherImageView = UIImageView()
     private let hourlyForecastCollectionView: UICollectionView
     private let dailyForecastTableView = UITableView()
     private let locationSymbolButton = UIButton()
+    private let precipitationIconImageView = UIImageView()
+    private let precipitationProbabilityLabel = UILabel()
     
     private var regions: [Region] = Regions.all
     
@@ -131,22 +134,38 @@ class WeatherViewController: UIViewController {
         locationSymbolButton.addTarget(self, action: #selector(locationSymbolTapped), for: .touchUpInside)
         contentView.addSubview(locationSymbolButton)
         
-        weatherLabel.translatesAutoresizingMaskIntoConstraints = false
-        weatherLabel.textAlignment = .center
-        weatherLabel.font = UIFont.systemFont(ofSize: 80, weight: .light)
-        contentView.addSubview(weatherLabel)
-        
-        conditionLabel.translatesAutoresizingMaskIntoConstraints = false
-        conditionLabel.textAlignment = .center
-        contentView.addSubview(conditionLabel)
-        
-        maxMinTempLabel.translatesAutoresizingMaskIntoConstraints = false
-        maxMinTempLabel.textAlignment = .center
-        contentView.addSubview(maxMinTempLabel)
-        
-        weatherImageView.translatesAutoresizingMaskIntoConstraints = false
+        currentWeatherStackView.axis = .horizontal
+        currentWeatherStackView.alignment = .center
+        currentWeatherStackView.distribution = .fillEqually
+        currentWeatherStackView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(currentWeatherStackView)
+
         weatherImageView.contentMode = .scaleAspectFit
-        contentView.addSubview(weatherImageView)
+        currentWeatherStackView.addArrangedSubview(weatherImageView)
+
+        let tempStackView = UIStackView()
+        tempStackView.axis = .vertical
+        tempStackView.alignment = .center
+        currentWeatherStackView.addArrangedSubview(tempStackView)
+
+        temperatureLabel.font = UIFont.systemFont(ofSize: 50, weight: .light)
+        tempStackView.addArrangedSubview(temperatureLabel)
+
+        maxMinTempLabel.font = UIFont.systemFont(ofSize: 16)
+        tempStackView.addArrangedSubview(maxMinTempLabel)
+
+        let precipitationStackView = UIStackView()
+        precipitationStackView.axis = .horizontal
+        precipitationStackView.alignment = .center
+        precipitationStackView.spacing = 5
+        tempStackView.addArrangedSubview(precipitationStackView)
+
+        precipitationIconImageView.contentMode = .scaleAspectFit
+        precipitationIconImageView.tintColor = .systemPurple
+        precipitationStackView.addArrangedSubview(precipitationIconImageView)
+
+        precipitationProbabilityLabel.font = UIFont.systemFont(ofSize: 16)
+        precipitationStackView.addArrangedSubview(precipitationProbabilityLabel)
         
         hourlyForecastCollectionView.translatesAutoresizingMaskIntoConstraints = false
         hourlyForecastCollectionView.register(HourlyForecastCell.self, forCellWithReuseIdentifier: "HourlyForecastCell")
@@ -180,21 +199,15 @@ class WeatherViewController: UIViewController {
             locationSymbolButton.widthAnchor.constraint(equalToConstant: 20),
             locationSymbolButton.heightAnchor.constraint(equalToConstant: 20),
             
-            weatherImageView.topAnchor.constraint(equalTo: districtLabel.bottomAnchor, constant: 20),
-            weatherImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            weatherImageView.heightAnchor.constraint(equalToConstant: 100),
+            currentWeatherStackView.topAnchor.constraint(equalTo: districtLabel.bottomAnchor, constant: 20),
+            currentWeatherStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            currentWeatherStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            currentWeatherStackView.heightAnchor.constraint(equalToConstant: 120),
+
             weatherImageView.widthAnchor.constraint(equalToConstant: 100),
+            weatherImageView.heightAnchor.constraint(equalToConstant: 100),
             
-            weatherLabel.topAnchor.constraint(equalTo: weatherImageView.bottomAnchor, constant: 20),
-            weatherLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            
-            conditionLabel.topAnchor.constraint(equalTo: weatherLabel.bottomAnchor, constant: 10),
-            conditionLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            
-            maxMinTempLabel.topAnchor.constraint(equalTo: conditionLabel.bottomAnchor, constant: 10),
-            maxMinTempLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            
-            hourlyForecastCollectionView.topAnchor.constraint(equalTo: maxMinTempLabel.bottomAnchor, constant: 20),
+            hourlyForecastCollectionView.topAnchor.constraint(equalTo: currentWeatherStackView.bottomAnchor, constant: 20),
             hourlyForecastCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             hourlyForecastCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             hourlyForecastCollectionView.heightAnchor.constraint(equalToConstant: 120),
@@ -247,8 +260,21 @@ class WeatherViewController: UIViewController {
         guard let weather = viewModel.currentWeather else { return }
         
         let temperature = Int(weather.currentWeather.temperature.value)
-        weatherLabel.text = "\(temperature)°"
-        maxMinTempLabel.text = "최고: \(Int(weather.dailyForecast.first?.highTemperature.value ?? 0))° 최저: \(Int(weather.dailyForecast.first?.lowTemperature.value ?? 0))°"
+        temperatureLabel.text = "\(temperature)°C"
+        
+        let highTemp = Int(weather.dailyForecast.first?.highTemperature.value ?? 0)
+        let lowTemp = Int(weather.dailyForecast.first?.lowTemperature.value ?? 0)
+        maxMinTempLabel.text = "최고 \(highTemp)° / 최저 \(lowTemp)°"
+        
+        // 강수 확률 설정
+        if let precipitationChance = weather.hourlyForecast.first?.precipitationChance {
+            let probability = Int(precipitationChance * 100)
+            precipitationProbabilityLabel.text = "\(probability)%"
+            precipitationIconImageView.image = UIImage(systemName: "umbrella.fill")
+        } else {
+            precipitationProbabilityLabel.text = "N/A"
+            precipitationIconImageView.image = nil
+        }
         
         if let weatherImage = WeatherIcon.getWeatherIcon(for: weather.currentWeather) {
             weatherImageView.image = weatherImage
