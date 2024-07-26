@@ -72,7 +72,7 @@ class WeatherViewController: UIViewController {
         let backBarButtonItem = UIBarButtonItem(customView: backButton)
         self.navigationItem.leftBarButtonItem = backBarButtonItem
         
-        let menuButton = UIBarButtonItem(title: "Menu", style: .plain, target: self, action: #selector(menuButtonTapped))
+        let menuButton = UIBarButtonItem(title: "select", style: .plain, target: self, action: #selector(menuButtonTapped))
         self.navigationItem.rightBarButtonItem = menuButton
     }
     
