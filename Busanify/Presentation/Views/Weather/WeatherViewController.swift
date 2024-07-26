@@ -150,6 +150,7 @@ class WeatherViewController: UIViewController {
         currentWeatherStackView.addArrangedSubview(tempStackView)
 
         temperatureLabel.font = UIFont.systemFont(ofSize: 50, weight: .light)
+        temperatureLabel.textColor = .systemBlue // 온도 글자 색상을 파란색으로 설정
         tempStackView.addArrangedSubview(temperatureLabel)
 
         maxMinTempLabel.font = UIFont.systemFont(ofSize: 16)
@@ -161,8 +162,11 @@ class WeatherViewController: UIViewController {
         precipitationStackView.spacing = 5
 
         precipitationIconImageView.contentMode = .scaleAspectFit
-        precipitationIconImageView.tintColor = .purple
+        precipitationIconImageView.tintColor = UIColor.systemPurple.withAlphaComponent(0.8) // 밝은 보라색으로 설정
         precipitationStackView.addArrangedSubview(precipitationIconImageView)
+
+        precipitationProbabilityLabel.font = UIFont.systemFont(ofSize: 16)
+        precipitationProbabilityLabel.textColor = UIColor.systemPurple.withAlphaComponent(0.8) // 밝은 보라색으로 설정
         precipitationStackView.addArrangedSubview(precipitationProbabilityLabel)
         tempStackView.addArrangedSubview(precipitationStackView)
 
@@ -217,8 +221,8 @@ class WeatherViewController: UIViewController {
             dailyForecastTableView.heightAnchor.constraint(equalToConstant: 400),
             dailyForecastTableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
-
     }
+
 
     private func setupBindings() {
         viewModel.$currentWeather
