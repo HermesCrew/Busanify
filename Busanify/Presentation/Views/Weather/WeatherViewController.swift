@@ -149,8 +149,8 @@ class WeatherViewController: UIViewController {
         tempStackView.spacing = 10
         currentWeatherStackView.addArrangedSubview(tempStackView)
 
-        temperatureLabel.font = UIFont.systemFont(ofSize: 50, weight: .light)
-        temperatureLabel.textColor = .systemBlue // 온도 글자 색상을 파란색으로 설정
+        temperatureLabel.font = UIFont.systemFont(ofSize: 50, weight: .semibold)
+        temperatureLabel.textColor = .systemBlue
         tempStackView.addArrangedSubview(temperatureLabel)
 
         maxMinTempLabel.font = UIFont.systemFont(ofSize: 16)
@@ -162,11 +162,11 @@ class WeatherViewController: UIViewController {
         precipitationStackView.spacing = 5
 
         precipitationIconImageView.contentMode = .scaleAspectFit
-        precipitationIconImageView.tintColor = UIColor.systemPurple.withAlphaComponent(0.8) // 밝은 보라색으로 설정
+        precipitationIconImageView.tintColor = UIColor.systemPurple.withAlphaComponent(0.8) // 밝은 보라색
         precipitationStackView.addArrangedSubview(precipitationIconImageView)
 
         precipitationProbabilityLabel.font = UIFont.systemFont(ofSize: 16)
-        precipitationProbabilityLabel.textColor = UIColor.systemPurple.withAlphaComponent(0.8) // 밝은 보라색으로 설정
+        precipitationProbabilityLabel.textColor = UIColor.systemPurple.withAlphaComponent(0.8) // 밝은 보라색
         precipitationStackView.addArrangedSubview(precipitationProbabilityLabel)
         tempStackView.addArrangedSubview(precipitationStackView)
 
@@ -202,7 +202,7 @@ class WeatherViewController: UIViewController {
             locationSymbolButton.widthAnchor.constraint(equalToConstant: 20),
             locationSymbolButton.heightAnchor.constraint(equalToConstant: 20),
             
-            currentWeatherStackView.topAnchor.constraint(equalTo: districtLabel.bottomAnchor, constant: 50),
+            currentWeatherStackView.topAnchor.constraint(equalTo: districtLabel.bottomAnchor, constant: 25),
             currentWeatherStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             currentWeatherStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             currentWeatherStackView.heightAnchor.constraint(equalToConstant: 150),
