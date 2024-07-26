@@ -5,19 +5,17 @@
 //  Created by MadCow on 2024/6/24.
 //
 
-
 import UIKit
 import KakaoMapsSDK
 import Combine
-import WeatherKit
 
-class HomeViewController: UIViewController, MapControllerDelegate, WeatherContainerDelegate, WeatherManagerDelegate {
+class HomeViewController: UIViewController, MapControllerDelegate {
     
     // UIComponent
     private var weatherContainerWidthConstraint: NSLayoutConstraint!
     private var searchTextFieldLeadingConstraint: NSLayoutConstraint!
     private var searchTextFieldLeadingConstraintExpanded: NSLayoutConstraint!
-    let weatherContainer = WeatherContainer()
+    let weatherContainer = WeatherContainer(temperature: 20, weatherImage: UIImage(systemName: "sun.max"))
     let searchTextField = SearchTextField()
     let searchIcon: UIImageView = {
         let icon = UIImageView()
@@ -49,10 +47,6 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
     private let longRange = 128.7384361...129.3728194
     private let viewModel = HomeViewModel()
     private var tempPinArr: [Poi?] = []
-    private let weatherManager = WeatherManager()
-    
-    // WeatherViewController 연결.
-    let weatherViewController = WeatherViewController()
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         _observerAdded = false
@@ -85,51 +79,9 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
         mapController = KMController(viewContainer: mapContainer!)
         mapController!.delegate = self
         
-        // WeatherManager 설정 및 데이터 요청
-        weatherManager.delegate = self
-        weatherManager.startFetchingWeather()
-        
-        // WeatherContainer delegate 설정
-        weatherContainer.delegate = self
-        
         setSubscriber()
         configureUI()
         setupTapGesture()
-    }
-    
-    // WeatherContainerDelegate 메서드 구현
-    func didTapWeatherButton() {
-        let weatherVC = WeatherViewController()
-        
-        if navigationController == nil {
-            // 현재 ViewController를 NavigationController로 감싸주기!
-            let navController = UINavigationController(rootViewController: self)
-            
-            // UIWindowScene을 사용하여 현재 창을 가져오기
-            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-               let window = windowScene.windows.first {
-                window.rootViewController = navController
-                window.makeKeyAndVisible()
-                
-                // 새로운 ViewController push~
-                navController.pushViewController(weatherVC, animated: true)
-            } else {
-                print("No window scene found")
-            }
-        } else {
-            navigationController?.pushViewController(weatherVC, animated: true)
-        }
-    }
-
-    // WeatherManagerDelegate 메서드 구현
-    func didUpdateWeather(_ weather: Weather) {
-        let temperature = weather.currentWeather.temperature.value
-        let icon = WeatherIcon.getWeatherIcon(for: weather.currentWeather)
-        weatherContainer.updateWeather(temperature: temperature, weatherImage: icon)
-    }
-    
-    func didFailWithError(_ error: Error) {
-        print("Failed to fetch weather: \(error)")
     }
     
     func setSubscriber() {
@@ -257,11 +209,6 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        
-        // MARK: navigationbar hidden 추가
-        super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: animated)
-        
         addObservers()
         _appear = true
         if mapController?.isEnginePrepared == false {
@@ -274,10 +221,6 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
     }
         
     override func viewWillDisappear(_ animated: Bool) {
-        // add for navigationController
-        super.viewWillDisappear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: animated)
-        
         _appear = false
         mapController?.pauseEngine()  //렌더링 중지.
     }

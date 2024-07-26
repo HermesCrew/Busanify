@@ -5,35 +5,49 @@
 //  Created by MadCow on 2024/7/3.
 //
 
-// -MARK: weatherFetcher를 사용하여 날씨 정보 업데이트 가능하도록 weathercontainer수정
-// -MARK: weather버튼 추가 , 화면 넘어갈수있도록 delegate 추가
-
 import UIKit
 
-protocol WeatherContainerDelegate: AnyObject {
-    func didTapWeatherButton()
-}
-
 class WeatherContainer: UIView {
-    weak var delegate: WeatherContainerDelegate?
-    let icon = UIImageView()
-    let label = UILabel()
-    let button = UIButton(type: .system)
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureContainer()
-        configureSubviews()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         configureContainer()
-        configureSubviews()
     }
     
-    convenience init() {
-        self.init(frame: .zero)
+    convenience init(
+        temperature: Int,
+        weatherImage: UIImage?
+    ) {
+        self.init()
+        
+        let icon = UIImageView()
+        icon.translatesAutoresizingMaskIntoConstraints = false
+        let symbol = weatherImage
+        icon.image = symbol
+        icon.tintColor = .orange
+        
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "\(temperature)°C"
+        label.textColor = .black
+        label.font = UIFont.systemFont(ofSize: 13)
+        
+        self.addSubview(icon)
+        self.addSubview(label)
+        
+        NSLayoutConstraint.activate([
+            icon.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            icon.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            icon.heightAnchor.constraint(equalToConstant: 24),
+            icon.widthAnchor.constraint(equalToConstant: 24),
+            
+            label.leadingAnchor.constraint(equalTo: icon.trailingAnchor, constant: -15),
+            label.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 8)
+        ])
     }
     
     func configureContainer() {
@@ -44,49 +58,6 @@ class WeatherContainer: UIView {
         self.layer.shadowOpacity = 0.1
         self.layer.shadowOffset = CGSize(width: 0, height: 1)
         self.layer.shadowRadius = 4
-    }
-    
-    func configureSubviews() {
-        icon.translatesAutoresizingMaskIntoConstraints = false
-        icon.tintColor = .orange
-        addSubview(icon)
-        
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 13)
-        addSubview(label)
-        
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("", for: .normal) // 버튼 제목은 숨기기
-        button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
-        addSubview(button)
-        
-        NSLayoutConstraint.activate([
-            icon.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            icon.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            icon.heightAnchor.constraint(equalToConstant: 24),
-            icon.widthAnchor.constraint(equalToConstant: 24),
-            
-            label.leadingAnchor.constraint(equalTo: icon.trailingAnchor, constant: -15),
-            label.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 8),
-            
-            button.topAnchor.constraint(equalTo: self.topAnchor),
-            button.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            button.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            button.trailingAnchor.constraint(equalTo: self.trailingAnchor)
-        ])
-    }
-    
-    func updateWeather(temperature: Double, weatherImage: UIImage?) {
-        DispatchQueue.main.async {
-            self.icon.image = weatherImage
-            self.label.text = "\(Int(temperature))°C"
-        }
-    }
-    
-    @objc private func buttonTapped() {
-        print("Weather button tapped") // 로그 추가
-        delegate?.didTapWeatherButton()
     }
 }
 
