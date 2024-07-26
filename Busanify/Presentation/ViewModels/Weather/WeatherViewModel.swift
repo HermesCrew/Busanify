@@ -5,6 +5,7 @@
 //  Created by 장예진 on 7/26/24.
 //
 
+
 import Foundation
 import CoreLocation
 import WeatherKit
@@ -56,6 +57,7 @@ class WeatherViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
             }
         }
     }
+    
     
     private func sortHourlyForecast() {
         guard let weather = currentWeather else { return }
