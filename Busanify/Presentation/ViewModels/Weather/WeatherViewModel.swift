@@ -71,8 +71,7 @@ class WeatherViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         
         // 현재 시간대에 있는 예보를 찾아 "지금"으로 표시하고 맨 앞으로 이동
         if let nowIndex = sorted.firstIndex(where: { calendar.isDate($0.date, equalTo: now, toGranularity: .hour) }) {
-            var nowForecast = sorted.remove(at: nowIndex)
-//            nowForecast.customLabel = "지금"?
+            let nowForecast = sorted.remove(at: nowIndex)
             sorted.insert(nowForecast, at: 0)
         }
         
