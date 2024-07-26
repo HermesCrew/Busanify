@@ -64,14 +64,15 @@ class WeatherViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         let calendar = Calendar.current
         
         let filtered = weather.hourlyForecast.filter { forecast in
-            return forecast.date >= now && forecast.date < calendar.date(byAdding: .hour, value: 24, to: now)!
+            return forecast.date >= now.addingTimeInterval(-3600) && forecast.date < calendar.date(byAdding: .hour, value: 24, to: now)!
         }
         
         var sorted = filtered.sorted { $0.date < $1.date }
         
-        // 현재 시간대에 있는 예보를 찾아 "지금"으로 표시하고 맨 앞으로 이동
-        if let nowIndex = sorted.firstIndex(where: { calendar.isDate($0.date, equalTo: now, toGranularity: .hour) }) {
-            let nowForecast = sorted.remove(at: nowIndex)
+        // 현재 시간과 가장 가까운 예보를 찾아 "지금"으로 표시하고 맨 앞으로 sorting
+        let closestForecast = sorted.min(by: { abs($0.date.timeIntervalSince(now)) < abs($1.date.timeIntervalSince(now)) })
+        if let closestIndex = sorted.firstIndex(where: { $0.date == closestForecast?.date }) {
+            let nowForecast = sorted.remove(at: closestIndex)
             sorted.insert(nowForecast, at: 0)
         }
         

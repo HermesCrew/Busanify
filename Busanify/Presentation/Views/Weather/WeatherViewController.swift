@@ -277,9 +277,7 @@ extension WeatherViewController: UICollectionViewDataSource, UICollectionViewDel
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HourlyForecastCell", for: indexPath) as! HourlyForecastCell
         let hourlyForecast = viewModel.sortedHourlyForecast[indexPath.item]
         
-        print("Configuring cell at index \(indexPath.item): date = \(hourlyForecast.date)")
-        
-        cell.configure(with: hourlyForecast)
+        cell.configure(with: hourlyForecast, isNow: indexPath.item == 0)
         return cell
     }
     
