@@ -11,22 +11,13 @@ import GoogleSignIn
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-    var window: UIWindow?
     private let authenticationViewModel = AuthenticationViewModel.shared
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        if let clientID = Bundle.main.object(forInfoDictionaryKey: "MAP_KEY") as? String {
+        if let clientID = Bundle.main.object(forInfoDictionaryKey: "MAP_KEY") as? String {        
             SDKInitializer.InitSDK(appKey: clientID)
         }
-        
-//        // 윈도우 설정
-//        window = UIWindow(frame: UIScreen.main.bounds)
-//        let homeViewController = HomeViewController()
-//        let navigationController = UINavigationController(rootViewController: homeViewController)
-//        window?.rootViewController = navigationController
-//        window?.makeKeyAndVisible()
         
         // 소셜로그인 유저 로그인 유지
         authenticationViewModel.restorePreviousGoogleSignIn()
