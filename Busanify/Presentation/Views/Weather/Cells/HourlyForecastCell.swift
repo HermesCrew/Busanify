@@ -50,11 +50,8 @@ class HourlyForecastCell: UICollectionViewCell {
         ])
     }
     
-    func configure(with forecast: HourWeather) {
-        let now = Date()
-        let calendar = Calendar.current
-        
-        if calendar.isDate(forecast.date, equalTo: now, toGranularity: .hour) {
+    func configure(with forecast: HourWeather, isNow: Bool) {
+        if isNow {
             timeLabel.text = "지금"
         } else {
             let dateFormatter = DateFormatter()
