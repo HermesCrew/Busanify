@@ -307,7 +307,8 @@ extension WeatherViewController: UICollectionViewDataSource, UICollectionViewDel
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HourlyForecastCell", for: indexPath) as! HourlyForecastCell
         let hourlyForecast = viewModel.sortedHourlyForecast[indexPath.item]
         
-        cell.configure(with: hourlyForecast, isNow: indexPath.item == 0)
+        let isNow = indexPath.item == 0 && Calendar.current.isDateInToday(hourlyForecast.date) && Calendar.current.component(.hour, from: hourlyForecast.date) == Calendar.current.component(.hour, from: Date())
+        cell.configure(with: hourlyForecast, isNow: isNow)
         return cell
     }
     
