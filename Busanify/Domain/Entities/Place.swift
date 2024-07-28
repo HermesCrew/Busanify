@@ -29,4 +29,5 @@ struct Place: Identifiable, Hashable, Codable {
     let isBookmarked: Bool
     let avgRating: Double
     let reviews: [Review]?
+    let reviewCount: Int
 }
