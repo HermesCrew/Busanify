@@ -19,7 +19,7 @@ class PlaceListViewController: UIViewController {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -55,6 +55,13 @@ class PlaceListViewController: UIViewController {
                 self?.tableView.reloadData()
             }
             .store(in: &cancellables)
+        
+        authViewModel.$state
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.fetchPlaces()
+            }
+            .store(in: &cancellables)
     }
     
     private func fetchPlaces() {
@@ -64,19 +71,19 @@ class PlaceListViewController: UIViewController {
     private func showLoginAlert() {
         let alert = UIAlertController(title: "로그인 필요", message: "북마크 기능을 사용하려면 로그인이 필요합니다.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "로그인", style: .default, handler: { [weak self] _ in
-            self?.moveToSettingsView()
+            self?.moveToSignInView()
         }))
         alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
         present(alert, animated: true)
     }
     
-    private func moveToSettingsView() {
-        let settingVC = SettingViewController()
-        navigationController?.pushViewController(settingVC, animated: true)
+    private func moveToSignInView() {
+        let signInVC = SignInViewController()
+        navigationController?.pushViewController(signInVC, animated: true)
     }
 }
 
-extension PlaceListViewController: UITableViewDataSource, UITableViewDelegate {
+extension PlaceListViewController: UITableViewDataSource, UITableViewDelegate, DetailViewControllerDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.placeCellViewModels.count
     }
@@ -88,22 +95,33 @@ extension PlaceListViewController: UITableViewDataSource, UITableViewDelegate {
         
         let cellViewModel = viewModel.placeCellViewModels[indexPath.row]
         cell.configure(with: cellViewModel)
+        cell.selectionStyle = .none
         
         cell.bookmarkToggleHandler = { [weak self] _ in
             guard let self = self else { return }
             switch self.authViewModel.state {
             case .googleSignedIn, .appleSignedIn:
                 self.viewModel.toggleBookmark(at: indexPath.row)
-                DispatchQueue.main.async {
-                    if indexPath.row < self.viewModel.placeCellViewModels.count {
-                        let updatedViewModel = self.viewModel.placeCellViewModels[indexPath.row]
-                        cell.configure(with: updatedViewModel)
-                    }
-                }
+                cell.bookmarkButton.isSelected.toggle()
             case .signedOut:
                 self.showLoginAlert()
             }
         }
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedId = viewModel.placeCellViewModels[indexPath.row].id
+        let viewModel = PlaceDetailViewModel(
+            placeId: selectedId,
+            useCase: PlacesApi()
+        )
+        let viewController = PlaceDetailViewController(viewModel: viewModel)
+        viewController.delegate = self
+        show(viewController, sender: self)
+    }
+    
+    func didUpdateData() {
+        fetchPlaces()
     }
 }
