@@ -33,16 +33,6 @@ class ReviewTableViewCell: UITableViewCell {
     
     private let contentLabel = UILabel()
     
-    private lazy var starBackgroundStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.spacing = 0
-        stackView.alignment = .fill
-        stackView.distribution = .fillEqually
-        
-        return stackView
-    }()
-    
     private lazy var starStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
@@ -72,7 +62,6 @@ class ReviewTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureUI()
-        backgroundStars()
     }
     
     required init?(coder: NSCoder) {
@@ -83,7 +72,6 @@ class ReviewTableViewCell: UITableViewCell {
         profileImage.layer.cornerRadius = 15
         contentView.addSubview(profileImage)
         contentView.addSubview(usernameLabel)
-        contentView.addSubview(starBackgroundStackView)
         contentView.addSubview(starStackView)
         contentView.addSubview(contentLabel)
         contentView.addSubview(dateLabel)
@@ -91,7 +79,6 @@ class ReviewTableViewCell: UITableViewCell {
         
         profileImage.translatesAutoresizingMaskIntoConstraints = false
         usernameLabel.translatesAutoresizingMaskIntoConstraints = false
-        starBackgroundStackView.translatesAutoresizingMaskIntoConstraints = false
         starStackView.translatesAutoresizingMaskIntoConstraints = false
         contentLabel.translatesAutoresizingMaskIntoConstraints = false
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -112,16 +99,11 @@ class ReviewTableViewCell: UITableViewCell {
             moreButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             moreButton.centerYAnchor.constraint(equalTo: profileImage.centerYAnchor),
             
-            starBackgroundStackView.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 8),
-            starBackgroundStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            starBackgroundStackView.widthAnchor.constraint(equalToConstant: 50),
+            starStackView.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 8),
+            starStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            starStackView.widthAnchor.constraint(equalToConstant: 50),
             
-            starStackView.topAnchor.constraint(equalTo: starBackgroundStackView.topAnchor),
-            starStackView.leadingAnchor.constraint(equalTo: starBackgroundStackView.leadingAnchor),
-            starStackView.trailingAnchor.constraint(equalTo: starBackgroundStackView.trailingAnchor),
-            starStackView.bottomAnchor.constraint(equalTo: starBackgroundStackView.bottomAnchor),
-            
-            contentLabel.topAnchor.constraint(equalTo: starBackgroundStackView.bottomAnchor, constant: 8),
+            contentLabel.topAnchor.constraint(equalTo: starStackView.bottomAnchor, constant: 8),
             contentLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             
             dateLabel.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 8),
@@ -169,41 +151,43 @@ class ReviewTableViewCell: UITableViewCell {
         let menu = UIMenu(title: "", image: nil, options: [], children: menuItems)
         moreButton.menu = menu
         
-        setUpStars(rating: review.rating)
+        setupStarRating(rating: review.rating)
     }
     
-    private func backgroundStars() {
-        starBackgroundStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        
-        for _ in 0..<5 {
-            let starImageView = UIImageView(image: UIImage(systemName: "star.fill"))
-            starImageView.contentMode = .scaleAspectFit
-            starImageView.tintColor = .gray
-            starBackgroundStackView.addArrangedSubview(starImageView)
-        }
-    }
-    
-    private func setUpStars(rating: Double) {
+    private func setupStarRating(rating: Double) {
         starStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
-        var rating = rating
         for i in 0..<5 {
-            let starImageView = StarImageView(image: UIImage(systemName: "star.fill"))
+            let starImageView = UIImageView()
             starImageView.contentMode = .scaleAspectFit
-            starStackView.addArrangedSubview(starImageView)
             
-            if rating > 0 {
-                let percentage = min(rating, 1)
-                updateStarFill(at: i, percentage: percentage)
-                rating -= percentage
-            }
+            let fillRatio = min(max(rating - Double(i), 0), 1)
+            
+            let filledStarImage = drawPartialStar(fillRatio: CGFloat(fillRatio))
+            starImageView.image = filledStarImage
+            
+            starStackView.addArrangedSubview(starImageView)
         }
     }
     
-    private func updateStarFill(at index: Int, percentage: CGFloat) {
-        guard let starImageView = starStackView.arrangedSubviews[index] as? StarImageView else { return }
-        starImageView.fillPercentage = percentage
-        starImageView.tintColor = .black
+    private func drawPartialStar(fillRatio: CGFloat) -> UIImage? {
+        let size = CGSize(width: 24, height: 22)
+        let renderer = UIGraphicsImageRenderer(size: size)
+        
+        return renderer.image { context in
+            let rect = CGRect(origin: .zero, size: size)
+            
+            let emptyStarImage = UIImage(systemName: "star")?.withRenderingMode(.alwaysTemplate)
+            UIColor.systemYellow.setFill()
+            emptyStarImage?.draw(in: rect)
+            
+            let filledStarImage = UIImage(systemName: "star.fill")?.withRenderingMode(.alwaysTemplate)
+            context.cgContext.saveGState()
+            context.cgContext.clip(to: CGRect(x: 0, y: 0, width: size.width * fillRatio, height: size.height))
+            UIColor.systemYellow.setFill()
+            filledStarImage?.draw(in: rect)
+            context.cgContext.restoreGState()
+        }
     }
 }
 
