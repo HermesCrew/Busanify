@@ -122,9 +122,22 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
             bookmarkButton.isSelected.toggle() // isBookmarked를 값을 매번 가져오지않고 화면 내에서 바뀌도록
             delegate?.didUpdateData() // 디테일 뷰에서 이전 뷰로 돌아갈때 변경사항을 업데이트해줌
         case .signedOut:
-            let viewController = SignInViewController()
-            show(viewController, sender: self)
+            showLoginAlert()
         }
+    }
+    
+    private func showLoginAlert() {
+        let alert = UIAlertController(title: "로그인 필요", message: "북마크 기능을 사용하려면 로그인이 필요합니다.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "로그인", style: .default, handler: { [weak self] _ in
+            self?.moveToSignInView()
+        }))
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        present(alert, animated: true)
+    }
+    
+    private func moveToSignInView() {
+        let signInVC = SignInViewController()
+        show(signInVC, sender: self)
     }
     
     private func bind() {
