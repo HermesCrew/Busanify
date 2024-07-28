@@ -11,5 +11,5 @@ import Combine
 protocol PlaceDetailViewUseCase {
     func getPlace(by id: String, lang: String, token: String?) -> AnyPublisher<Place, Never>
     func toggleBookmark(placeId: String, token: String)
-    func deleteReview(by id: Int, token: String, completion: @escaping (Bool) -> Void)
+    func deleteReview(by id: Int, token: String) async throws
 }

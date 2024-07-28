@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-final class PlacesApi: HomeViewUseCase, PlaceDetailViewUseCase {
+final class PlacesApi: HomeViewUseCase, PlaceDetailViewUseCase, PlaceListViewUseCase {
     private let baseURL: String
     var cancellables = Set<AnyCancellable>()
     
@@ -70,30 +70,8 @@ final class PlacesApi: HomeViewUseCase, PlaceDetailViewUseCase {
                 print($0)
             })
             .decode(type: Place.self, decoder: JSONDecoder())
-            .replaceError(with: Place(id: "", typeId: "", image: "", lat: 0, lng: 0, tel: "", title: "", address: "", openTime: nil, parking: nil, holiday: nil, fee: nil, reservationURL: nil, goodStay: nil, hanok: nil, menu: nil, shopguide: nil, restroom: nil, isBookmarked: false, avgRating: 0.0, reviewCount: 0))
+            .replaceError(with: Place(id: "", typeId: "", image: "", lat: 0, lng: 0, tel: "", title: "", address: "", openTime: nil, parking: nil, holiday: nil, fee: nil, reservationURL: nil, goodStay: nil, hanok: nil, menu: nil, shopguide: nil, restroom: nil, isBookmarked: false, avgRating: 0.0, reviews: nil, reviewCount: nil))
             .eraseToAnyPublisher()
-    }
-    
-    func toggleBookmark(placeId: String, token: String) -> AnyPublisher<Bool, Never> {
-        let urlString = "\(baseURL)/bookmarks/toggle"
-        guard let url = URL(string: urlString) else {
-            fatalError("Invalid URL")
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        
-        let body = ["placeId": placeId]
-        request.httpBody = try? JSONEncoder().encode(body)
-        
-        return URLSession.shared.dataTaskPublisher(for: request)
-                    .map(\.data)
-                    .decode(type: BookmarkResponse.self, decoder: JSONDecoder())
-                    .map { $0.isBookmarked }
-                    .replaceError(with: false)
-                    .eraseToAnyPublisher()
     }
     
     func getBookmarkedPlaces(token: String, lang: String) -> AnyPublisher<[Bookmark], Error> {
@@ -136,7 +114,7 @@ final class PlacesApi: HomeViewUseCase, PlaceDetailViewUseCase {
             .store(in: &cancellables)
     }
     
-    func deleteReview(by id: Int, token: String, completion: @escaping (Bool) -> Void) {
+    func deleteReview(by id: Int, token: String) async throws {
         let urlString = "\(baseURL)/reviews"
         
         guard let url = URL(string: urlString) else {
@@ -152,18 +130,6 @@ final class PlacesApi: HomeViewUseCase, PlaceDetailViewUseCase {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.httpBody = jsonData
         
-        URLSession.shared.dataTaskPublisher(for: request)
-            .sink(receiveCompletion: { completionResult in
-                switch completionResult {
-                case .finished:
-                    completion(true)
-                case .failure(let error):
-                    print("Error: \(error)")
-                    completion(false)
-                }
-            }, receiveValue: {
-                print($0)
-            })
-            .store(in: &cancellables)
+        let (_, _) = try await URLSession.shared.data(for: request)
     }
 }

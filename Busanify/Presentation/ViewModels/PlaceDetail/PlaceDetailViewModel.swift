@@ -13,7 +13,7 @@ final class PlaceDetailViewModel {
     private var cancellables = Set<AnyCancellable>()
     private let useCase: PlaceDetailViewUseCase
     
-    @Published var place: Place = Place(id: "", typeId: "", image: "", lat: 0, lng: 0, tel: "", title: "", address: "", openTime: nil, parking: nil, holiday: nil, fee: nil, reservationURL: nil, goodStay: nil, hanok: nil, menu: nil, shopguide: nil, restroom: nil, isBookmarked: false, avgRating: 0.0, reviews: nil)
+    @Published var place: Place = Place(id: "", typeId: "", image: "", lat: 0, lng: 0, tel: "", title: "", address: "", openTime: nil, parking: nil, holiday: nil, fee: nil, reservationURL: nil, goodStay: nil, hanok: nil, menu: nil, shopguide: nil, restroom: nil, isBookmarked: false, avgRating: 0.0, reviews: nil, reviewCount: nil)
     
     init(placeId: String, useCase: PlaceDetailViewUseCase) {
         self.placeId = placeId
@@ -32,15 +32,10 @@ final class PlaceDetailViewModel {
         useCase.toggleBookmark(placeId: placeId, token: token)
     }
     
-    func deleteReview(id: Int, token: String?) {
+    func deleteReview(id: Int, token: String?) async throws {
         guard let token = token else { return }
         
-        useCase.deleteReview(by: id, token: token) { success in
-            if success {
-                self.fetchPlace(token: token)
-            } else {
-                print("Delete fail")
-            }
-        }
+        try await useCase.deleteReview(by: id, token: token)
+        fetchPlace(token: token)
     }
 }

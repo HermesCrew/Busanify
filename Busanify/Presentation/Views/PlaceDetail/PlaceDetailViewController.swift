@@ -13,6 +13,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
     private let authViewModel = AuthenticationViewModel.shared
     private var cancellables = Set<AnyCancellable>()
     private var placeInfos: [(label: String, icon: String)] = []
+    weak var delegate: DetailViewControllerDelegate?
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -60,7 +61,6 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
         button.addAction(UIAction { [weak self] _ in
             self?.bookmarkTapped()
         }, for: .touchUpInside)
-        button.tintColor = .white
         
         return button
     }()
@@ -111,9 +111,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
             bookmarkButton.trailingAnchor.constraint(equalTo: placeImageView.trailingAnchor, constant: -10),
 
             stackView.widthAnchor.constraint(equalTo: tableView.widthAnchor),
-            stackView.heightAnchor.constraint(equalToConstant: 300),
-            
-            titleLabel.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 16),
+            stackView.heightAnchor.constraint(equalToConstant: 300)
         ])
     }
     
@@ -121,7 +119,8 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
         switch authViewModel.state {
         case .googleSignedIn, .appleSignedIn:
             viewModel.toggleBookmarkPlace(token: authViewModel.getToken())
-            bookmarkButton.isSelected.toggle()
+            bookmarkButton.isSelected.toggle() // isBookmarked를 값을 매번 가져오지않고 화면 내에서 바뀌도록
+            delegate?.didUpdateData() // 디테일 뷰에서 이전 뷰로 돌아갈때 변경사항을 업데이트해줌
         case .signedOut:
             let viewController = SignInViewController()
             show(viewController, sender: self)
@@ -286,6 +285,17 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
 
 extension PlaceDetailViewController: ReviewTableViewCellDelegate {
     func didDeleteReview(_ review: Review) {
-        viewModel.deleteReview(id: review.id, token: self.authViewModel.getToken())
+        Task {
+            do {
+                try await viewModel.deleteReview(id: review.id, token: self.authViewModel.getToken()!)
+                self.delegate?.didUpdateData()
+            } catch {
+                print("Failed to delete review: \(error)")
+            }
+        }
     }
+}
+
+protocol DetailViewControllerDelegate: NSObject {
+    func didUpdateData()
 }
