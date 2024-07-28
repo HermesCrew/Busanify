@@ -18,7 +18,7 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
     private var searchTextFieldLeadingConstraintExpanded: NSLayoutConstraint!
     let weatherContainer = WeatherContainer()
     let searchTextField = SearchTextField()
-    let listView = PlaceListViewController()
+    let listView = SelectedPlaceListViewController()
     let searchIcon: UIImageView = {
         let icon = UIImageView()
         icon.translatesAutoresizingMaskIntoConstraints = false
@@ -286,7 +286,24 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
     }
     
     func setMovieToCurrentLocationButton() {
+        let currentButton = CustomLocationButton(type: .custom)
+        view.addSubview(currentButton)
         
+        NSLayoutConstraint.activate([
+            currentButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            currentButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+        ])
+        
+        currentButton.addAction(UIAction { [weak self] _ in
+            guard let self = self else { return }
+            let view = mapController?.getView("mapview") as? KakaoMap
+            let currentLocation = self.viewModel.getCurrentLocation()
+            view?.animateCamera(cameraUpdate: .make(cameraPosition: .init(target: MapPoint(longitude: currentLocation.0, latitude: currentLocation.1),
+                                                                          zoomLevel: 17,
+                                                                          rotation: view!.rotationAngle,
+                                                                          tilt: view!.tiltAngle)),
+                                options: CameraAnimationOptions.init(autoElevation: true, consecutive: true, durationInMillis: 200))
+        }, for: .touchUpInside)
     }
     
     func setupTapGesture() {

@@ -179,7 +179,7 @@ class CustomCompass: UIButton {
         configureButton()
     }
     
-    func configureButton() {        
+    func configureButton() {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.widthAnchor.constraint(equalToConstant: 40).isActive = true
         self.heightAnchor.constraint(equalToConstant: 40).isActive = true
@@ -215,6 +215,40 @@ class CustomCompass: UIButton {
         NSLayoutConstraint.activate([
             stackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             stackView.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+        ])
+    }
+}
+
+class CustomLocationButton: UIButton {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        configureButton()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        configureButton()
+    }
+    
+    func configureButton() {
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        self.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        self.backgroundColor = .white
+        self.layer.cornerRadius = 20
+        self.layer.borderWidth = 0.5
+        self.layer.masksToBounds = true
+        
+        let triangleImageView = UIImageView(image: UIImage(systemName: "dot.scope"))
+        triangleImageView.translatesAutoresizingMaskIntoConstraints = false
+        triangleImageView.widthAnchor.constraint(equalToConstant: 25).isActive = true
+        triangleImageView.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        
+        self.addSubview(triangleImageView)
+        
+        NSLayoutConstraint.activate([
+            triangleImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            triangleImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor)
         ])
     }
 }

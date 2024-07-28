@@ -8,10 +8,10 @@
 import UIKit
 import Combine
 
-class PlaceListTableViewCell: UITableViewCell {
+class SelectedPlaceListTableViewCell: UITableViewCell {
     
     private var cancellable = Set<AnyCancellable>()
-    private let viewModel = PlaceListViewModel()
+    private let viewModel = SelectedPlaceListViewModel()
     lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 15, weight: .bold)
