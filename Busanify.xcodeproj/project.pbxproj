@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		73F9F2D23A91813BBF545E57 /* Pods_Busanify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEFB0607F885ABD0E382C23B /* Pods_Busanify.framework */; };
+		75304AF32C377A560058FDDE /* PlaceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75304AF22C377A560058FDDE /* PlaceTableViewCell.swift */; };
+		753520A42C326B0E00E439CF /* PlaceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753520A32C326B0E00E439CF /* PlaceListViewModel.swift */; };
+		753520AA2C3286D400E439CF /* PlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753520A92C3286D400E439CF /* PlaceListViewController.swift */; };
+		757882FE2C477AC80078EFAB /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757882FD2C477AC80078EFAB /* Bookmark.swift */; };
 		B8AB3C392C539B7B00E41BF7 /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AB3C382C539B7B00E41BF7 /* WeatherViewModel.swift */; };
 		B8F89BCC2C5386A800332FE2 /* WeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F89BCB2C5386A800332FE2 /* WeatherManager.swift */; };
 		B8F89BCE2C5386C100332FE2 /* Region.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F89BCD2C5386C100332FE2 /* Region.swift */; };
@@ -43,7 +48,6 @@
 		CD7C5F512C56278300CACD6A /* Extension+KakaoMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7C5F502C56278300CACD6A /* Extension+KakaoMap.swift */; };
 		CD89D3522C29A55A00715404 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD89D3502C29A55A00715404 /* HomeViewController.swift */; };
 		CD89D3552C29A56B00715404 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD89D3532C29A56B00715404 /* HomeViewModel.swift */; };
-		DCC351AEDE79E3FA213766F5 /* Pods_Busanify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC54047A571AE7CCCEC17FDE /* Pods_Busanify.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,7 +68,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A5B5FF36CA65D19775B9B568 /* Pods-Busanify.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busanify.release.xcconfig"; path = "Target Support Files/Pods-Busanify/Pods-Busanify.release.xcconfig"; sourceTree = "<group>"; };
+		75304AF22C377A560058FDDE /* PlaceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceTableViewCell.swift; sourceTree = "<group>"; };
+		753520A22C2BB2F200E439CF /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		753520A32C326B0E00E439CF /* PlaceListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewModel.swift; sourceTree = "<group>"; };
+		753520A92C3286D400E439CF /* PlaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewController.swift; sourceTree = "<group>"; };
+		757882F72C43E52A0078EFAB /* Busanify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Busanify.entitlements; sourceTree = "<group>"; };
+		757882FD2C477AC80078EFAB /* Bookmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
+		90A686BAD126AABE23FE1EC1 /* Pods-Busanify.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busanify.release.xcconfig"; path = "Target Support Files/Pods-Busanify/Pods-Busanify.release.xcconfig"; sourceTree = "<group>"; };
+		AEFB0607F885ABD0E382C23B /* Pods_Busanify.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Busanify.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8AB3C382C539B7B00E41BF7 /* WeatherViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherViewModel.swift; sourceTree = "<group>"; };
 		B8F89BCB2C5386A800332FE2 /* WeatherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherManager.swift; sourceTree = "<group>"; };
 		B8F89BCD2C5386C100332FE2 /* Region.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Region.swift; sourceTree = "<group>"; };
@@ -82,7 +93,7 @@
 		C296D6FA2C1F16B000691515 /* Busanify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Busanify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C296D6FD2C1F16B000691515 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C296D6FF2C1F16B000691515 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		C296D7012C1F16B000691515 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		C296D7012C1F16B000691515 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = Presentation/ViewController.swift; sourceTree = "<group>"; };
 		C296D7042C1F16B000691515 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C296D7062C1F16B200691515 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C296D7092C1F16B200691515 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -103,10 +114,10 @@
 		CD3251992C4C0816006CB590 /* SelectedPlaceListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedPlaceListTableViewCell.swift; sourceTree = "<group>"; };
 		CD32519B2C4C14E1006CB590 /* SelectedPlaceListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedPlaceListViewModel.swift; sourceTree = "<group>"; };
 		CD7C5F502C56278300CACD6A /* Extension+KakaoMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Extension+KakaoMap.swift"; sourceTree = "<group>"; };
+		CD0F83DA2C357A85001C04E2 /* CustomViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViews.swift; sourceTree = "<group>"; };
 		CD89D3502C29A55A00715404 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		CD89D3532C29A56B00715404 /* HomeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
-		FC54047A571AE7CCCEC17FDE /* Pods_Busanify.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Busanify.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		FCF7B5AF299CF594CE3ABDAA /* Pods-Busanify.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busanify.debug.xcconfig"; path = "Target Support Files/Pods-Busanify/Pods-Busanify.debug.xcconfig"; sourceTree = "<group>"; };
+		F8291F42EC69F9AA5802389C /* Pods-Busanify.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busanify.debug.xcconfig"; path = "Target Support Files/Pods-Busanify/Pods-Busanify.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,8 +125,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DCC351AEDE79E3FA213766F5 /* Pods_Busanify.framework in Frameworks */,
 				C207F3772C3AFA78007DFA27 /* GoogleSignIn in Frameworks */,
+				73F9F2D23A91813BBF545E57 /* Pods_Busanify.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,12 +147,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		294E1541A7E881C320C437EE /* Frameworks */ = {
+		393F9CAAFA31CE009CC48C16 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FC54047A571AE7CCCEC17FDE /* Pods_Busanify.framework */,
+				AEFB0607F885ABD0E382C23B /* Pods_Busanify.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		75304AF12C377A3D0058FDDE /* PlaceList */ = {
+			isa = PBXGroup;
+			children = (
+				753520A92C3286D400E439CF /* PlaceListViewController.swift */,
+				75304AF22C377A560058FDDE /* PlaceTableViewCell.swift */,
+			);
+			path = PlaceList;
+			sourceTree = "<group>";
+		};
+		75304AF42C377A6B0058FDDE /* PlaceList */ = {
+			isa = PBXGroup;
+			children = (
+				753520A32C326B0E00E439CF /* PlaceListViewModel.swift */,
+			);
+			path = PlaceList;
 			sourceTree = "<group>";
 		};
 		B8F89BCF2C5386D800332FE2 /* Weather */ = {
@@ -182,8 +210,8 @@
 		BEFDFFBA458BE9B300E7C88A /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				FCF7B5AF299CF594CE3ABDAA /* Pods-Busanify.debug.xcconfig */,
-				A5B5FF36CA65D19775B9B568 /* Pods-Busanify.release.xcconfig */,
+				F8291F42EC69F9AA5802389C /* Pods-Busanify.debug.xcconfig */,
+				90A686BAD126AABE23FE1EC1 /* Pods-Busanify.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -217,12 +245,13 @@
 		C296D6F12C1F16B000691515 = {
 			isa = PBXGroup;
 			children = (
+				753520A22C2BB2F200E439CF /* Config.xcconfig */,
 				C296D6FC2C1F16B000691515 /* Busanify */,
 				C296D7132C1F16B200691515 /* BusanifyTests */,
 				C296D71D2C1F16B200691515 /* BusanifyUITests */,
 				C296D6FB2C1F16B000691515 /* Products */,
 				BEFDFFBA458BE9B300E7C88A /* Pods */,
-				294E1541A7E881C320C437EE /* Frameworks */,
+				393F9CAAFA31CE009CC48C16 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -239,7 +268,7 @@
 		C296D6FC2C1F16B000691515 /* Busanify */ = {
 			isa = PBXGroup;
 			children = (
-				C2D2A2142C43E3330081D3E8 /* Busanify.entitlements */,
+				757882F72C43E52A0078EFAB /* Busanify.entitlements */,
 				C296D72F2C1F2B0200691515 /* Application */,
 				C296D72D2C1F2AA100691515 /* Data */,
 				C296D72E2C1F2AB400691515 /* Network */,
@@ -313,6 +342,7 @@
 				C276594B2C3D2882006D0D6C /* Setting */,
 				C207F3782C3AFB52007DFA27 /* Authentication */,
 				CD89D3512C29A55A00715404 /* Home */,
+				75304AF12C377A3D0058FDDE /* PlaceList */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -323,6 +353,7 @@
 				B8F89BCF2C5386D800332FE2 /* Weather */,
 				C207F3792C3AFB62007DFA27 /* Authentication */,
 				CD89D3542C29A56B00715404 /* Home */,
+				75304AF42C377A6B0058FDDE /* PlaceList */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -341,6 +372,7 @@
 			children = (
 				C2D279CC2C29458800AEAFD1 /* Place.swift */,
 				C2D279CE2C29459000AEAFD1 /* PlaceType.swift */,
+				757882FD2C477AC80078EFAB /* Bookmark.swift */,
 				C207B98C2C464E4E0088E2D5 /* UserProfile.swift */,
 				B8F89BCD2C5386C100332FE2 /* Region.swift */,
 			);
@@ -392,12 +424,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C296D7242C1F16B200691515 /* Build configuration list for PBXNativeTarget "Busanify" */;
 			buildPhases = (
-				E64A6AAA3217D042486D18E6 /* [CP] Check Pods Manifest.lock */,
+				C93848B9CDAD043726DC0C9D /* [CP] Check Pods Manifest.lock */,
 				C296D6F62C1F16B000691515 /* Sources */,
 				C296D6F72C1F16B000691515 /* Frameworks */,
 				C296D6F82C1F16B000691515 /* Resources */,
-				E0BEDE5A1ACC8D35A8960EE7 /* [CP] Embed Pods Frameworks */,
-				D214ADAAAFF712400C089767 /* [CP] Copy Pods Resources */,
+				4AF15051E3822689D788E2E0 /* [CP] Embed Pods Frameworks */,
+				45107528443A3C07DB1DA04A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -521,7 +553,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		D214ADAAAFF712400C089767 /* [CP] Copy Pods Resources */ = {
+		45107528443A3C07DB1DA04A /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -538,7 +570,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E0BEDE5A1ACC8D35A8960EE7 /* [CP] Embed Pods Frameworks */ = {
+		4AF15051E3822689D788E2E0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -555,7 +587,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Busanify/Pods-Busanify-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E64A6AAA3217D042486D18E6 /* [CP] Check Pods Manifest.lock */ = {
+		C93848B9CDAD043726DC0C9D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -584,6 +616,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				753520AA2C3286D400E439CF /* PlaceListViewController.swift in Sources */,
 				C207F37B2C3AFC0C007DFA27 /* SignInViewController.swift in Sources */,
 				C2D279C92C29456E00AEAFD1 /* HomeViewUseCase.swift in Sources */,
 				C207F3812C3AFC5F007DFA27 /* AuthenticationViewModel.swift in Sources */,
@@ -593,6 +626,8 @@
 				B8F89BDA2C53881D00332FE2 /* HourlyForecastCell.swift in Sources */,
 				C2D279C72C29456200AEAFD1 /* PlacesApi.swift in Sources */,
 				CD7C5F512C56278300CACD6A /* Extension+KakaoMap.swift in Sources */,
+				75304AF32C377A560058FDDE /* PlaceTableViewCell.swift in Sources */,
+				753520A42C326B0E00E439CF /* PlaceListViewModel.swift in Sources */,
 				B8F89BD62C5387CC00332FE2 /* DailyForecastCell.swift in Sources */,
 				C296D7022C1F16B000691515 /* ViewController.swift in Sources */,
 				C2D279CB2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift in Sources */,
@@ -600,6 +635,7 @@
 				CD89D3552C29A56B00715404 /* HomeViewModel.swift in Sources */,
 				CD0F83DB2C357A85001C04E2 /* Extension+UIVIew.swift in Sources */,
 				CD32519C2C4C14E1006CB590 /* SelectedPlaceListViewModel.swift in Sources */,
+				757882FE2C477AC80078EFAB /* Bookmark.swift in Sources */,
 				C207B98B2C45FEFB0088E2D5 /* Keychain.swift in Sources */,
 				C207B98D2C464E4E0088E2D5 /* UserProfile.swift in Sources */,
 				B8F89BDC2C53883000332FE2 /* WeatherIcon.swift in Sources */,
@@ -670,6 +706,7 @@
 /* Begin XCBuildConfiguration section */
 		C296D7222C1F16B200691515 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 753520A22C2BB2F200E439CF /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -733,6 +770,7 @@
 		};
 		C296D7232C1F16B200691515 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 753520A22C2BB2F200E439CF /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -789,7 +827,7 @@
 		};
 		C296D7252C1F16B200691515 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FCF7B5AF299CF594CE3ABDAA /* Pods-Busanify.debug.xcconfig */;
+			baseConfigurationReference = F8291F42EC69F9AA5802389C /* Pods-Busanify.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -826,7 +864,7 @@
 		};
 		C296D7262C1F16B200691515 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A5B5FF36CA65D19775B9B568 /* Pods-Busanify.release.xcconfig */;
+			baseConfigurationReference = 90A686BAD126AABE23FE1EC1 /* Pods-Busanify.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
