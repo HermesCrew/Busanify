@@ -38,6 +38,16 @@ class HomeViewModel {
         }
     }
     
+    func getCurrentLocation() -> (CGFloat, CGFloat) {
+        guard let location = locationManager.location else { return (0, 0) }
+        if longRange.contains(location.coordinate.longitude),
+           latRange.contains(location.coordinate.latitude) {
+            return (location.coordinate.longitude, location.coordinate.latitude)
+        } else {
+            return (129.0595, 35.1577)
+        }
+    }
+    
     func getLocationBy(typeId: PlaceType, lat: CGFloat, lng: CGFloat, radius: Double) {
         placeService.getPlaces(by: typeId, lang: "eng", lat: lat, lng: lng, radius: radius)
             .receive(on: DispatchQueue.global())

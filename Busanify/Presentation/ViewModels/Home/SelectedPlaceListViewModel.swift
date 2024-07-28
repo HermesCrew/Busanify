@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class PlaceListViewModel {
+class SelectedPlaceListViewModel {
     @Published private var places: [Place] = []
     @Published private var thumbnailImage: UIImage?
     

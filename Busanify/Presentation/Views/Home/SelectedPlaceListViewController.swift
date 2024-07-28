@@ -1,5 +1,5 @@
 //
-//  PlaceListViewController.swift
+//  SelectedPlaceListViewController.swift
 //  Busanify
 //
 //  Created by MadCow on 2024/7/20.
@@ -8,10 +8,10 @@
 import UIKit
 import Combine
 
-class PlaceListViewController: UIViewController {
+class SelectedPlaceListViewController: UIViewController {
     
     private var cancellable = Set<AnyCancellable>()
-    var placeViewModel = PlaceListViewModel()
+    var placeViewModel = SelectedPlaceListViewModel()
     var locationDelegate: MoveToMapLocation?
     
     private lazy var placeListTableView: UITableView = {
@@ -19,7 +19,7 @@ class PlaceListViewController: UIViewController {
         table.translatesAutoresizingMaskIntoConstraints = false
         table.delegate = self
         table.dataSource = self
-        table.register(PlaceListTableViewCell.self, forCellReuseIdentifier: "PlaceListTableViewCell")
+        table.register(SelectedPlaceListTableViewCell.self, forCellReuseIdentifier: "SelectedPlaceListTableViewCell")
         
         return table
     }()
@@ -53,14 +53,14 @@ class PlaceListViewController: UIViewController {
     }
 }
 
-extension PlaceListViewController: UITableViewDelegate, UITableViewDataSource {
+extension SelectedPlaceListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         return self.placeViewModel.getPlaces().count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "PlaceListTableViewCell", for: indexPath) as? PlaceListTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "SelectedPlaceListTableViewCell", for: indexPath) as? SelectedPlaceListTableViewCell else {
             return UITableViewCell()
         }
         
