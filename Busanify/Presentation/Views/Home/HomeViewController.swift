@@ -8,14 +8,15 @@
 import UIKit
 import KakaoMapsSDK
 import Combine
+import WeatherKit
 
-class HomeViewController: UIViewController, MapControllerDelegate {
+class HomeViewController: UIViewController, MapControllerDelegate, WeatherContainerDelegate, WeatherManagerDelegate {
     
     // UIComponent
     private var weatherContainerWidthConstraint: NSLayoutConstraint!
     private var searchTextFieldLeadingConstraint: NSLayoutConstraint!
     private var searchTextFieldLeadingConstraintExpanded: NSLayoutConstraint!
-    let weatherContainer = WeatherContainer(temperature: 20, weatherImage: UIImage(systemName: "sun.max"))
+    let weatherContainer = WeatherContainer()
     let searchTextField = SearchTextField()
     let listView = PlaceListViewController()
     let searchIcon: UIImageView = {
@@ -48,6 +49,10 @@ class HomeViewController: UIViewController, MapControllerDelegate {
     private var minimumDetent = UISheetPresentationController.Detent.custom(resolver: { context in
         return 130
     })
+    private let weatherManager = WeatherManager()
+    
+    // WeatherViewController 연결.
+    let weatherViewController = WeatherViewController()
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         _observerAdded = false
@@ -81,12 +86,24 @@ class HomeViewController: UIViewController, MapControllerDelegate {
         mapController?.proMotionSupport = true;
         mapController!.delegate = self
         
+        // WeatherManager 설정 및 데이터 요청
+        weatherManager.delegate = self
+        weatherManager.startFetchingWeather()
+        
+        // WeatherContainer delegate 설정
+        weatherContainer.delegate = self
+        
         setSubscriber()
         configureUI()
         setupTapGesture()
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        // MARK: navigationbar hidden 추가
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+        
         addObservers()
         _appear = true
         if mapController?.isEnginePrepared == false {
@@ -98,31 +115,54 @@ class HomeViewController: UIViewController, MapControllerDelegate {
         }
     }
     
+    // WeatherContainerDelegate 메서드 구현
+    func didTapWeatherButton() {
+        let weatherVC = WeatherViewController()
+        
+        if navigationController == nil {
+            // 현재 ViewController를 NavigationController로 감싸주기!
+            let navController = UINavigationController(rootViewController: self)
+            
+            // UIWindowScene을 사용하여 현재 창을 가져오기
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let window = windowScene.windows.first {
+                window.rootViewController = navController
+                window.makeKeyAndVisible()
+                
+                // 새로운 ViewController push~
+                navController.pushViewController(weatherVC, animated: true)
+            } else {
+                print("No window scene found")
+            }
+        } else {
+            navigationController?.pushViewController(weatherVC, animated: true)
+        }
+    }
+
+    // WeatherManagerDelegate 메서드 구현
+    func didUpdateWeather(_ weather: Weather) {
+        let temperature = weather.currentWeather.temperature.value
+        let icon = WeatherIcon.getWeatherIcon(for: weather.currentWeather)
+        weatherContainer.updateWeather(temperature: temperature, weatherImage: icon)
+    }
+    
+    func didFailWithError(_ error: Error) {
+        print("Failed to fetch weather: \(error)")
+    }
+    
     func setSubscriber() {
         viewModel.$searchedPlaces
             .receive(on: DispatchQueue.main)
             .sink { [weak self] places in
                 guard let self = self, let mapController = self.mapController, let view = mapController.getView("mapview") as? KakaoMap else { return }
                 let manager = view.getLabelManager()
-                manager.removeLabelLayer(layerID: "PoiLayer")
-                
+                manager.removeLabelLayer(layerID: "LocationLayer")
                 if places.count > 0 {
                     listView.placeViewModel.setPlaces(places: places)
-                    let layerOption = LabelLayerOptions(layerID: "PoiLayer", competitionType: .none, competitionUnit: .poi, orderType: .rank, zOrder: 0)
-                    let _ = manager.addLabelLayer(option: layerOption)
-                    let layer = manager.getLabelLayer(layerID: "PoiLayer")
-                    let poiOption = PoiOptions(styleID: "PoiStyle")
-                    poiOption.rank = 0
-                    poiOption.clickable = true
-                    let badge = PoiBadge(badgeID: "pinNoti", image: UIImage(named: "pin_green")!, offset: CGPoint(x: 0, y: 0), zOrder: 0)
-                    let mapPoints = places.map{ MapPoint(longitude: $0.lng, latitude: $0.lat) }
-                    let pois = layer?.addPois(option: poiOption, at: mapPoints)
-                    
-                    pois?.forEach{ poi in
-                        poi.addBadge(badge)
-                        poi.show()
-                        poi.showBadge(badgeID: "pinNoti")
-                        let _ = poi.addPoiTappedEventHandler(target: self, handler: HomeViewController.poiTabbed)
+                    createLabelLayer(layerID: "LocationLayer")
+                    createPoiStyle(styleID: "LocationStyle")
+                    places.forEach{
+                        self.createPois(layerID: "LocationLayer", styleID: "LocationStyle", lng: $0.lng, lat: $0.lat)
                     }
                 }
             }
@@ -133,6 +173,7 @@ class HomeViewController: UIViewController, MapControllerDelegate {
         setWeatherArea()
         setCategoryButtons()
         setCompassButton()
+        setMovieToCurrentLocationButton()
     }
     
     func setWeatherArea() {
@@ -244,6 +285,10 @@ class HomeViewController: UIViewController, MapControllerDelegate {
         }, for: .touchUpInside)
     }
     
+    func setMovieToCurrentLocationButton() {
+        
+    }
+    
     func setupTapGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
@@ -254,6 +299,10 @@ class HomeViewController: UIViewController, MapControllerDelegate {
     }
         
     override func viewWillDisappear(_ animated: Bool) {
+        // add for navigationController
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
+        
         _appear = false
         mapController?.pauseEngine()  //렌더링 중지.
     }
@@ -279,9 +328,9 @@ class HomeViewController: UIViewController, MapControllerDelegate {
         let view = mapController?.getView("mapview") as! KakaoMap
         
         // 현재 위치 pin
-        createLabelLayer()
-        createPoiStyle()
-        createPois()
+        createLabelLayer(layerID: "PoiLayer")
+        createPoiStyle(styleID: "PerLevelStyle", currentLocation: true)
+        createPois(layerID: "PoiLayer", styleID: "PerLevelStyle", lng: viewModel.currentLong, lat: viewModel.currentLat)
         
         // 카메라 이동 event
         let _ = view.addCameraStoppedEventHandler(target: view) { map in
