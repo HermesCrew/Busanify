@@ -11,3 +11,7 @@ import Combine
 protocol PlaceDetailViewUseCase {
     func getPlace(by id: Int, lang: String) -> AnyPublisher<Place, Never>
 }
+
+protocol MoveToMapLocation {
+    func moveTo(lat: CGFloat, lng: CGFloat)
+}
