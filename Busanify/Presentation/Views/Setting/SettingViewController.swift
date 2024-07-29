@@ -84,11 +84,11 @@ class SettingViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         switch viewModel.state {
         case .googleSignedIn, .appleSignedIn:
-            let viewController = UserProfileViewController()
-            show(viewController, sender: self)
+            let userProfileVC = UserProfileViewController()
+            show(userProfileVC, sender: self)
         case .signedOut:
-            let viewController = SignInViewController()
-            show(viewController, sender: self)
+            let signInVC = SignInViewController()
+            show(signInVC, sender: self)
         }
     }
 }

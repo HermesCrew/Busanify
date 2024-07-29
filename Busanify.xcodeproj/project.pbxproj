@@ -19,13 +19,17 @@
 		B8F89BD82C5387EC00332FE2 /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F89BD72C5387EC00332FE2 /* WeatherViewController.swift */; };
 		B8F89BDA2C53881D00332FE2 /* HourlyForecastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F89BD92C53881D00332FE2 /* HourlyForecastCell.swift */; };
 		B8F89BDC2C53883000332FE2 /* WeatherIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F89BDB2C53883000332FE2 /* WeatherIcon.swift */; };
+		C20637F92C51F0ED00089D74 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20637F82C51F0ED00089D74 /* User.swift */; };
 		C207B98B2C45FEFB0088E2D5 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207B98A2C45FEFB0088E2D5 /* Keychain.swift */; };
-		C207B98D2C464E4E0088E2D5 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207B98C2C464E4E0088E2D5 /* UserProfile.swift */; };
 		C207F3772C3AFA78007DFA27 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = C207F3762C3AFA78007DFA27 /* GoogleSignIn */; };
 		C207F37B2C3AFC0C007DFA27 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207F37A2C3AFC0C007DFA27 /* SignInViewController.swift */; };
 		C207F37F2C3AFC4D007DFA27 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207F37E2C3AFC4D007DFA27 /* UserProfileViewController.swift */; };
 		C207F3812C3AFC5F007DFA27 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207F3802C3AFC5F007DFA27 /* AuthenticationViewModel.swift */; };
 		C207F3832C3AFC74007DFA27 /* SignInApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207F3822C3AFC74007DFA27 /* SignInApi.swift */; };
+		C2695D322C4788AC00375BA6 /* PlaceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2695D312C4788AC00375BA6 /* PlaceDetailViewController.swift */; };
+		C2695D342C4788B400375BA6 /* PlaceDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2695D332C4788B400375BA6 /* PlaceDetailViewModel.swift */; };
+		C26E7CC82C480B60004996FE /* PlaceInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26E7CC72C480B60004996FE /* PlaceInfoTableViewCell.swift */; };
+		C26E7CCA2C482CDF004996FE /* RatingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26E7CC92C482CDF004996FE /* RatingTableViewCell.swift */; };
 		C276594D2C3D2897006D0D6C /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C276594C2C3D2897006D0D6C /* SettingViewController.swift */; };
 		C296D6FE2C1F16B000691515 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D6FD2C1F16B000691515 /* AppDelegate.swift */; };
 		C296D7002C1F16B000691515 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D6FF2C1F16B000691515 /* SceneDelegate.swift */; };
@@ -36,11 +40,15 @@
 		C296D7152C1F16B200691515 /* BusanifyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D7142C1F16B200691515 /* BusanifyTests.swift */; };
 		C296D71F2C1F16B200691515 /* BusanifyUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D71E2C1F16B200691515 /* BusanifyUITests.swift */; };
 		C296D7212C1F16B200691515 /* BusanifyUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D7202C1F16B200691515 /* BusanifyUITestsLaunchTests.swift */; };
+		C2AB7AB82C563B0D00A7BDE1 /* PlaceListViewUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2AB7AB72C563B0D00A7BDE1 /* PlaceListViewUseCase.swift */; };
+		C2B869B72C4F425000E4FEBD /* StarImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B869B62C4F425000E4FEBD /* StarImageView.swift */; };
 		C2D279C72C29456200AEAFD1 /* PlacesApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279C62C29456200AEAFD1 /* PlacesApi.swift */; };
 		C2D279C92C29456E00AEAFD1 /* HomeViewUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279C82C29456E00AEAFD1 /* HomeViewUseCase.swift */; };
 		C2D279CB2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279CA2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift */; };
 		C2D279CD2C29458800AEAFD1 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279CC2C29458800AEAFD1 /* Place.swift */; };
 		C2D279CF2C29459000AEAFD1 /* PlaceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279CE2C29459000AEAFD1 /* PlaceType.swift */; };
+		C2F5776D2C479C1E00B2365F /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F5776C2C479C1E00B2365F /* Review.swift */; };
+		C2FFD2B92C494AD90032C902 /* ReviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FFD2B82C494AD90032C902 /* ReviewTableViewCell.swift */; };
 		CD0F83DB2C357A85001C04E2 /* CustomViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0F83DA2C357A85001C04E2 /* CustomViews.swift */; };
 		CD89D3522C29A55A00715404 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD89D3502C29A55A00715404 /* HomeViewController.swift */; };
 		CD89D3552C29A56B00715404 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD89D3532C29A56B00715404 /* HomeViewModel.swift */; };
@@ -65,7 +73,6 @@
 
 /* Begin PBXFileReference section */
 		75304AF22C377A560058FDDE /* PlaceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceTableViewCell.swift; sourceTree = "<group>"; };
-		753520A22C2BB2F200E439CF /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		753520A32C326B0E00E439CF /* PlaceListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewModel.swift; sourceTree = "<group>"; };
 		753520A92C3286D400E439CF /* PlaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewController.swift; sourceTree = "<group>"; };
 		757882F72C43E52A0078EFAB /* Busanify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Busanify.entitlements; sourceTree = "<group>"; };
@@ -79,12 +86,16 @@
 		B8F89BD72C5387EC00332FE2 /* WeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewController.swift; sourceTree = "<group>"; };
 		B8F89BD92C53881D00332FE2 /* HourlyForecastCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyForecastCell.swift; sourceTree = "<group>"; };
 		B8F89BDB2C53883000332FE2 /* WeatherIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherIcon.swift; sourceTree = "<group>"; };
+		C20637F82C51F0ED00089D74 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		C207B98A2C45FEFB0088E2D5 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
-		C207B98C2C464E4E0088E2D5 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		C207F37A2C3AFC0C007DFA27 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		C207F37E2C3AFC4D007DFA27 /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		C207F3802C3AFC5F007DFA27 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
 		C207F3822C3AFC74007DFA27 /* SignInApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInApi.swift; sourceTree = "<group>"; };
+		C2695D312C4788AC00375BA6 /* PlaceDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceDetailViewController.swift; sourceTree = "<group>"; };
+		C2695D332C4788B400375BA6 /* PlaceDetailViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceDetailViewModel.swift; sourceTree = "<group>"; };
+		C26E7CC72C480B60004996FE /* PlaceInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceInfoTableViewCell.swift; sourceTree = "<group>"; };
+		C26E7CC92C482CDF004996FE /* RatingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingTableViewCell.swift; sourceTree = "<group>"; };
 		C276594C2C3D2897006D0D6C /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		C296D6FA2C1F16B000691515 /* Busanify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Busanify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C296D6FD2C1F16B000691515 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -99,11 +110,15 @@
 		C296D71A2C1F16B200691515 /* BusanifyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BusanifyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C296D71E2C1F16B200691515 /* BusanifyUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusanifyUITests.swift; sourceTree = "<group>"; };
 		C296D7202C1F16B200691515 /* BusanifyUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusanifyUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		C2AB7AB72C563B0D00A7BDE1 /* PlaceListViewUseCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceListViewUseCase.swift; sourceTree = "<group>"; };
+		C2B869B62C4F425000E4FEBD /* StarImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarImageView.swift; sourceTree = "<group>"; };
 		C2D279C62C29456200AEAFD1 /* PlacesApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesApi.swift; sourceTree = "<group>"; };
 		C2D279C82C29456E00AEAFD1 /* HomeViewUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewUseCase.swift; sourceTree = "<group>"; };
 		C2D279CA2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailViewUseCase.swift; sourceTree = "<group>"; };
 		C2D279CC2C29458800AEAFD1 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
 		C2D279CE2C29459000AEAFD1 /* PlaceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceType.swift; sourceTree = "<group>"; };
+		C2F5776C2C479C1E00B2365F /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
+		C2FFD2B82C494AD90032C902 /* ReviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewTableViewCell.swift; sourceTree = "<group>"; };
 		CD0F83DA2C357A85001C04E2 /* CustomViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViews.swift; sourceTree = "<group>"; };
 		CD89D3502C29A55A00715404 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		CD89D3532C29A56B00715404 /* HomeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
@@ -224,6 +239,26 @@
 			path = Authentication;
 			sourceTree = "<group>";
 		};
+		C2695D2F2C47889900375BA6 /* PlaceDetail */ = {
+			isa = PBXGroup;
+			children = (
+				C2695D332C4788B400375BA6 /* PlaceDetailViewModel.swift */,
+			);
+			path = PlaceDetail;
+			sourceTree = "<group>";
+		};
+		C2695D302C47889F00375BA6 /* PlaceDetail */ = {
+			isa = PBXGroup;
+			children = (
+				C2695D312C4788AC00375BA6 /* PlaceDetailViewController.swift */,
+				C26E7CC72C480B60004996FE /* PlaceInfoTableViewCell.swift */,
+				C26E7CC92C482CDF004996FE /* RatingTableViewCell.swift */,
+				C2FFD2B82C494AD90032C902 /* ReviewTableViewCell.swift */,
+				C2B869B62C4F425000E4FEBD /* StarImageView.swift */,
+			);
+			path = PlaceDetail;
+			sourceTree = "<group>";
+		};
 		C276594B2C3D2882006D0D6C /* Setting */ = {
 			isa = PBXGroup;
 			children = (
@@ -235,7 +270,6 @@
 		C296D6F12C1F16B000691515 = {
 			isa = PBXGroup;
 			children = (
-				753520A22C2BB2F200E439CF /* Config.xcconfig */,
 				C296D6FC2C1F16B000691515 /* Busanify */,
 				C296D7132C1F16B200691515 /* BusanifyTests */,
 				C296D71D2C1F16B200691515 /* BusanifyUITests */,
@@ -328,6 +362,7 @@
 		C296D7312C1F2B5000691515 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C2695D302C47889F00375BA6 /* PlaceDetail */,
 				B8F89BD22C53873F00332FE2 /* Weather */,
 				C276594B2C3D2882006D0D6C /* Setting */,
 				C207F3782C3AFB52007DFA27 /* Authentication */,
@@ -340,6 +375,7 @@
 		C296D7332C1F2B5D00691515 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				C2695D2F2C47889900375BA6 /* PlaceDetail */,
 				B8F89BCF2C5386D800332FE2 /* Weather */,
 				C207F3792C3AFB62007DFA27 /* Authentication */,
 				CD89D3542C29A56B00715404 /* Home */,
@@ -360,10 +396,11 @@
 		C296D7352C1F2B9200691515 /* Entities */ = {
 			isa = PBXGroup;
 			children = (
+				C20637F82C51F0ED00089D74 /* User.swift */,
 				C2D279CC2C29458800AEAFD1 /* Place.swift */,
 				C2D279CE2C29459000AEAFD1 /* PlaceType.swift */,
+				C2F5776C2C479C1E00B2365F /* Review.swift */,
 				757882FD2C477AC80078EFAB /* Bookmark.swift */,
-				C207B98C2C464E4E0088E2D5 /* UserProfile.swift */,
 				B8F89BCD2C5386C100332FE2 /* Region.swift */,
 			);
 			path = Entities;
@@ -374,6 +411,7 @@
 			children = (
 				C2D279C82C29456E00AEAFD1 /* HomeViewUseCase.swift */,
 				C2D279CA2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift */,
+				C2AB7AB72C563B0D00A7BDE1 /* PlaceListViewUseCase.swift */,
 			);
 			path = Usecases;
 			sourceTree = "<group>";
@@ -594,14 +632,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C20637F92C51F0ED00089D74 /* User.swift in Sources */,
 				753520AA2C3286D400E439CF /* PlaceListViewController.swift in Sources */,
 				C207F37B2C3AFC0C007DFA27 /* SignInViewController.swift in Sources */,
+				C2AB7AB82C563B0D00A7BDE1 /* PlaceListViewUseCase.swift in Sources */,
+				C2FFD2B92C494AD90032C902 /* ReviewTableViewCell.swift in Sources */,
 				C2D279C92C29456E00AEAFD1 /* HomeViewUseCase.swift in Sources */,
+				C2F5776D2C479C1E00B2365F /* Review.swift in Sources */,
 				C207F3812C3AFC5F007DFA27 /* AuthenticationViewModel.swift in Sources */,
+				C2695D342C4788B400375BA6 /* PlaceDetailViewModel.swift in Sources */,
+				C2B869B72C4F425000E4FEBD /* StarImageView.swift in Sources */,
+				C26E7CCA2C482CDF004996FE /* RatingTableViewCell.swift in Sources */,
 				B8F89BCE2C5386C100332FE2 /* Region.swift in Sources */,
 				C2D279CF2C29459000AEAFD1 /* PlaceType.swift in Sources */,
 				B8F89BDA2C53881D00332FE2 /* HourlyForecastCell.swift in Sources */,
 				C2D279C72C29456200AEAFD1 /* PlacesApi.swift in Sources */,
+				C26E7CC82C480B60004996FE /* PlaceInfoTableViewCell.swift in Sources */,
 				75304AF32C377A560058FDDE /* PlaceTableViewCell.swift in Sources */,
 				753520A42C326B0E00E439CF /* PlaceListViewModel.swift in Sources */,
 				B8F89BD62C5387CC00332FE2 /* DailyForecastCell.swift in Sources */,
@@ -611,8 +657,8 @@
 				CD89D3552C29A56B00715404 /* HomeViewModel.swift in Sources */,
 				757882FE2C477AC80078EFAB /* Bookmark.swift in Sources */,
 				CD0F83DB2C357A85001C04E2 /* CustomViews.swift in Sources */,
+				C2695D322C4788AC00375BA6 /* PlaceDetailViewController.swift in Sources */,
 				C207B98B2C45FEFB0088E2D5 /* Keychain.swift in Sources */,
-				C207B98D2C464E4E0088E2D5 /* UserProfile.swift in Sources */,
 				B8F89BDC2C53883000332FE2 /* WeatherIcon.swift in Sources */,
 				B8F89BD82C5387EC00332FE2 /* WeatherViewController.swift in Sources */,
 				CD89D3522C29A55A00715404 /* HomeViewController.swift in Sources */,
@@ -680,7 +726,6 @@
 /* Begin XCBuildConfiguration section */
 		C296D7222C1F16B200691515 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 753520A22C2BB2F200E439CF /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -744,7 +789,6 @@
 		};
 		C296D7232C1F16B200691515 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 753520A22C2BB2F200E439CF /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
