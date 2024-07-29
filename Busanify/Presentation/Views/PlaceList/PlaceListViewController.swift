@@ -112,13 +112,13 @@ extension PlaceListViewController: UITableViewDataSource, UITableViewDelegate, D
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedId = viewModel.placeCellViewModels[indexPath.row].id
-        let viewModel = PlaceDetailViewModel(
+        let placeDetailViewModel = PlaceDetailViewModel(
             placeId: selectedId,
             useCase: PlacesApi()
         )
-        let viewController = PlaceDetailViewController(viewModel: viewModel)
-        viewController.delegate = self
-        show(viewController, sender: self)
+        let placeDetailVC = PlaceDetailViewController(viewModel: placeDetailViewModel)
+        placeDetailVC.delegate = self
+        show(placeDetailVC, sender: self)
     }
     
     func didUpdateData() {

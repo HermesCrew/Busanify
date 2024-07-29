@@ -9,7 +9,7 @@ import UIKit
 import Combine
 
 class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    private let viewModel: PlaceDetailViewModel
+    private let placeDetailViewModel: PlaceDetailViewModel
     private let authViewModel = AuthenticationViewModel.shared
     private var cancellables = Set<AnyCancellable>()
     private var placeInfos: [(label: String, icon: String)] = []
@@ -66,7 +66,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
     }()
     
     init(viewModel: PlaceDetailViewModel) {
-        self.viewModel = viewModel
+        self.placeDetailViewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -80,7 +80,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
         configureUI()
         bind()
         
-        viewModel.fetchPlace(token: authViewModel.getToken())
+        placeDetailViewModel.fetchPlace(token: authViewModel.getToken())
     }
     
     func configureUI() {
@@ -118,7 +118,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
     private func bookmarkTapped() {
         switch authViewModel.state {
         case .googleSignedIn, .appleSignedIn:
-            viewModel.toggleBookmarkPlace(token: authViewModel.getToken())
+            placeDetailViewModel.toggleBookmarkPlace(token: authViewModel.getToken())
             bookmarkButton.isSelected.toggle() // isBookmarked를 값을 매번 가져오지않고 화면 내에서 바뀌도록
             delegate?.didUpdateData() // 디테일 뷰에서 이전 뷰로 돌아갈때 변경사항을 업데이트해줌
         case .signedOut:
@@ -141,7 +141,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     private func bind() {
-        viewModel.$place
+        placeDetailViewModel.$place
             .receive(on: DispatchQueue.main)
             .sink { [weak self] place in
                 self?.configureViewContents(place: place)
@@ -152,7 +152,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
         authViewModel.$state
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                self?.viewModel.fetchPlace(token: self?.authViewModel.getToken())
+                self?.placeDetailViewModel.fetchPlace(token: self?.authViewModel.getToken())
             }
             .store(in: &cancellables)
     }
@@ -200,10 +200,10 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
         case 1: // 리뷰 정보
             return 1
         case 2: // 리뷰들
-            guard let reviews = viewModel.place.reviews else { return 0 }
-            return min(reviews.count, 3) // 리뷰 하나도 없을때 표시할 default 메세지 필요
+            guard let reviews = placeDetailViewModel.place.reviews else { return 0 }
+            return min(reviews.count, 3)
         case 3:
-            guard let reviews = viewModel.place.reviews else { return 0 }
+            guard let reviews = placeDetailViewModel.place.reviews else { return 0 }
             return reviews.isEmpty ? 0 : 1
         default: 
             return 0
@@ -224,7 +224,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
             guard let cell = tableView.dequeueReusableCell(withIdentifier: RatingTableViewCell.identifier, for: indexPath) as? RatingTableViewCell else {
                 return UITableViewCell()
             }
-            let rating = viewModel.place.avgRating
+            let rating = placeDetailViewModel.place.avgRating
             cell.configure(with: rating)
             cell.selectionStyle = .none
             return cell
@@ -232,7 +232,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ReviewTableViewCell.identifier, for: indexPath) as? ReviewTableViewCell else {
                 return UITableViewCell()
             }
-            if let reviews = viewModel.place.reviews {
+            if let reviews = placeDetailViewModel.place.reviews {
                 cell.configure(with: reviews[indexPath.item])
                 cell.delegate = self
             }
@@ -300,7 +300,7 @@ extension PlaceDetailViewController: ReviewTableViewCellDelegate {
     func didDeleteReview(_ review: Review) {
         Task {
             do {
-                try await viewModel.deleteReview(id: review.id, token: self.authViewModel.getToken()!)
+                try await placeDetailViewModel.deleteReview(id: review.id, token: self.authViewModel.getToken()!)
                 self.delegate?.didUpdateData()
             } catch {
                 print("Failed to delete review: \(error)")
