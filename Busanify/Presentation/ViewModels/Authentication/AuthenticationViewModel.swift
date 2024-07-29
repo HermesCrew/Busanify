@@ -11,7 +11,7 @@ import GoogleSignIn
 import AuthenticationServices
 import Combine
 
-enum State {
+enum State: Equatable {
     case googleSignedIn(GIDGoogleUser)
     case appleSignedIn
     case signedOut
@@ -22,7 +22,7 @@ final class AuthenticationViewModel {
     static let shared = AuthenticationViewModel(signInApi: SignInApi()) // 싱글톤 패턴
     
     @Published var state: State = .signedOut
-    @Published var appleUserProfile: UserProfile?
+    @Published var appleUserProfile: User?
     private let signInApi: SignInApi
     private let keyChain = Keychain()
     
