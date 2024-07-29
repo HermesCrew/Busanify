@@ -40,6 +40,7 @@
 		C296D7152C1F16B200691515 /* BusanifyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D7142C1F16B200691515 /* BusanifyTests.swift */; };
 		C296D71F2C1F16B200691515 /* BusanifyUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D71E2C1F16B200691515 /* BusanifyUITests.swift */; };
 		C296D7212C1F16B200691515 /* BusanifyUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D7202C1F16B200691515 /* BusanifyUITestsLaunchTests.swift */; };
+		C2AB7AB82C563B0D00A7BDE1 /* PlaceListViewUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2AB7AB72C563B0D00A7BDE1 /* PlaceListViewUseCase.swift */; };
 		C2B869B72C4F425000E4FEBD /* StarImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B869B62C4F425000E4FEBD /* StarImageView.swift */; };
 		C2D279C72C29456200AEAFD1 /* PlacesApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279C62C29456200AEAFD1 /* PlacesApi.swift */; };
 		C2D279C92C29456E00AEAFD1 /* HomeViewUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279C82C29456E00AEAFD1 /* HomeViewUseCase.swift */; };
@@ -109,6 +110,7 @@
 		C296D71A2C1F16B200691515 /* BusanifyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BusanifyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C296D71E2C1F16B200691515 /* BusanifyUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusanifyUITests.swift; sourceTree = "<group>"; };
 		C296D7202C1F16B200691515 /* BusanifyUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusanifyUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		C2AB7AB72C563B0D00A7BDE1 /* PlaceListViewUseCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceListViewUseCase.swift; sourceTree = "<group>"; };
 		C2B869B62C4F425000E4FEBD /* StarImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarImageView.swift; sourceTree = "<group>"; };
 		C2D279C62C29456200AEAFD1 /* PlacesApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesApi.swift; sourceTree = "<group>"; };
 		C2D279C82C29456E00AEAFD1 /* HomeViewUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewUseCase.swift; sourceTree = "<group>"; };
@@ -409,6 +411,7 @@
 			children = (
 				C2D279C82C29456E00AEAFD1 /* HomeViewUseCase.swift */,
 				C2D279CA2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift */,
+				C2AB7AB72C563B0D00A7BDE1 /* PlaceListViewUseCase.swift */,
 			);
 			path = Usecases;
 			sourceTree = "<group>";
@@ -632,6 +635,7 @@
 				C20637F92C51F0ED00089D74 /* User.swift in Sources */,
 				753520AA2C3286D400E439CF /* PlaceListViewController.swift in Sources */,
 				C207F37B2C3AFC0C007DFA27 /* SignInViewController.swift in Sources */,
+				C2AB7AB82C563B0D00A7BDE1 /* PlaceListViewUseCase.swift in Sources */,
 				C2FFD2B92C494AD90032C902 /* ReviewTableViewCell.swift in Sources */,
 				C2D279C92C29456E00AEAFD1 /* HomeViewUseCase.swift in Sources */,
 				C2F5776D2C479C1E00B2365F /* Review.swift in Sources */,
