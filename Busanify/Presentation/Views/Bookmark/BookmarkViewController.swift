@@ -40,10 +40,10 @@ class BookmarkViewController: UIViewController {
         view.addSubview(switchLayoutButton)
         
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             
-            switchLayoutButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            switchLayoutButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             switchLayoutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
         ])
     }
@@ -59,7 +59,7 @@ class BookmarkViewController: UIViewController {
         tableView.rowHeight = 140
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
+            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -137,7 +137,7 @@ class BookmarkViewController: UIViewController {
     }
 }
 
-extension BookmarkViewController: UITableViewDataSource, UITableViewDelegate {
+extension BookmarkViewController: UITableViewDataSource, UITableViewDelegate, DetailViewControllerDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return bookmarks.count
     }
@@ -151,7 +151,20 @@ extension BookmarkViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let selectedId = bookmarks[indexPath.row].id
+        let placeDetailViewModel = PlaceDetailViewModel(
+            placeId: selectedId,
+            useCase: PlacesApi()
+        )
+        let placeDetailVC = PlaceDetailViewController(viewModel: placeDetailViewModel)
+        placeDetailVC.delegate = self
+        show(placeDetailVC, sender: self)
     }
+    
+    func didUpdateData() {
+        loadBookmarks()
+    }
+    
 }
 
 extension BookmarkViewController: UICollectionViewDataSource, UICollectionViewDelegate {
@@ -164,5 +177,16 @@ extension BookmarkViewController: UICollectionViewDataSource, UICollectionViewDe
         let bookmark = bookmarks[indexPath.item]
         cell.configure(with: bookmark)
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedId = bookmarks[indexPath.row].id
+        let placeDetailViewModel = PlaceDetailViewModel(
+            placeId: selectedId,
+            useCase: PlacesApi()
+        )
+        let placeDetailVC = PlaceDetailViewController(viewModel: placeDetailViewModel)
+        placeDetailVC.delegate = self
+        show(placeDetailVC, sender: self)
     }
 }
