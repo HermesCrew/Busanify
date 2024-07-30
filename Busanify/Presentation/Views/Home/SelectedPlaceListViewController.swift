@@ -45,7 +45,7 @@ class SelectedPlaceListViewController: UIViewController {
         self.view.addSubview(placeListTableView)
         
         NSLayoutConstraint.activate([
-            placeListTableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            placeListTableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 20),
             placeListTableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             placeListTableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
             placeListTableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)

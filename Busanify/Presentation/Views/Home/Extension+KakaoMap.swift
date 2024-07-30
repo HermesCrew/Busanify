@@ -9,11 +9,11 @@ import UIKit
 import KakaoMapsSDK
 
 // Manage Poi
-extension HomeViewController {
+extension HomeViewController: KakaoMapEventDelegate {
     func createLabelLayer(layerID: String) {
         let view = mapController?.getView("mapview") as! KakaoMap
         let manager = view.getLabelManager()
-        let layerOption = LabelLayerOptions(layerID: layerID, competitionType: .none, competitionUnit: .symbolFirst, orderType: .rank, zOrder: 0)
+        let layerOption = LabelLayerOptions(layerID: layerID, competitionType: .none, competitionUnit: .poi, orderType: .rank, zOrder: 100000)
         let _ = manager.addLabelLayer(option: layerOption)
     }
     
@@ -22,8 +22,11 @@ extension HomeViewController {
         let manager = view.getLabelManager()
         // PoiBadge는 스타일에도 추가될 수 있다. 이렇게 추가된 Badge는 해당 스타일이 적용될 때 함께 그려진다.
 //        let noti1 = PoiBadge(badgeID: "badge1", image: UIImage(named: "noti.png"), offset: CGPoint(x: 0.9, y: 0.1), zOrder: 0)
-        let iconStyle1 = PoiIconStyle(symbol: UIImage(named: currentLocation ? "map_ico_marker" : "pin_green.png"), anchorPoint: CGPoint(x: 0.0, y: 0.5), badges: [/*noti1*/])
-    
+        let iconStyle1 = PoiIconStyle(symbol: UIImage(named: currentLocation ? "map_ico_marker" : "pin_green.png"), 
+                                      anchorPoint: CGPoint(x: 0, y: 0),
+                                      transition: PoiTransition(entrance: .scale, exit: .scale)
+                                      /*badges: [noti1]*/)
+        
         // 5~11, 12~21 에 표출될 스타일을 지정한다.
         let poiStyle = PoiStyle(styleID: styleID, styles: [
             PerLevelPoiStyle(iconStyle: iconStyle1, level: 5)
@@ -31,22 +34,27 @@ extension HomeViewController {
         manager.addPoiStyle(poiStyle)
     }
     
-    func createPois(layerID: String, styleID: String, lng: CGFloat, lat: CGFloat) {
+    func createPois(layerID: String, styleID: String, poiID: String, mapPoints: [MapPoint]) {
         let view = mapController?.getView("mapview") as! KakaoMap
         let manager = view.getLabelManager()
         let layer = manager.getLabelLayer(layerID: layerID)
-        let poiOption = PoiOptions(styleID: styleID)
-        poiOption.rank = 0
-        poiOption.clickable = true
+        layer?.visible = true
+        let poiOption1 = PoiOptions(styleID: styleID)
+        poiOption1.rank = 0
+        poiOption1.clickable = true
         
-        let poi1 = layer?.addPoi(option:poiOption, at: MapPoint(longitude: lng, latitude: lat))
-        poi1?.clickable = true
-        poi1?.show()
-        let _ = poi1?.addPoiTappedEventHandler(target: self, handler: HomeViewController.poiTabbed)
+        let pois = layer?.addPois(option: poiOption1, at: mapPoints)
+        
+        guard let pois = pois else { return }
+        for poi in pois {
+            let _ = poi.addPoiTappedEventHandler(target: self, handler: HomeViewController.poiTappedHandler)
+        }
+        layer?.showAllPois()
     }
     
-    func poiTabbed(_ param: PoiInteractionEventParam) {
-        print("poi tab!")
+    // POI 탭 이벤트가 발생하고, 표시하고 있던 Poi를 숨긴다.
+    func poiTappedHandler(_ param: PoiInteractionEventParam) {
+        print(param.poiItem.itemID)
     }
 }
 

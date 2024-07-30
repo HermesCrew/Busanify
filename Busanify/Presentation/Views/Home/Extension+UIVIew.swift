@@ -40,10 +40,10 @@ class WeatherContainer: UIView {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundColor = .white
         self.layer.cornerRadius = 8
-        self.layer.shadowColor = UIColor.black.cgColor
-        self.layer.shadowOpacity = 0.1
-        self.layer.shadowOffset = CGSize(width: 0, height: 1)
-        self.layer.shadowRadius = 4
+//        self.layer.shadowColor = UIColor.black.cgColor
+//        self.layer.shadowOpacity = 0.1
+//        self.layer.shadowOffset = CGSize(width: 0, height: 1)
+//        self.layer.shadowRadius = 4
     }
     
     func configureSubviews() {
@@ -116,10 +116,10 @@ class CategoryButton: UIButton {
         self.backgroundColor = .white
         self.titleLabel?.font = UIFont.systemFont(ofSize: textSize, weight: .bold)
         self.layer.cornerRadius = 20
-        self.layer.shadowColor = UIColor.black.cgColor
-        self.layer.shadowOpacity = 0.7
-        self.layer.shadowOffset = CGSize(width: 3, height: 3)
-        self.layer.shadowRadius = 3
+//        self.layer.shadowColor = UIColor.black.cgColor
+//        self.layer.shadowOpacity = 0.7
+//        self.layer.shadowOffset = CGSize(width: 3, height: 3)
+//        self.layer.shadowRadius = 3
 
         if let title = self.title(for: .normal), let font = self.titleLabel?.font {
             let titleSize = (title as NSString).size(withAttributes: [NSAttributedString.Key.font: font])
