@@ -47,7 +47,7 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
     let viewModel = HomeViewModel()
     private var cancellable = Set<AnyCancellable>()
     private var minimumDetent = UISheetPresentationController.Detent.custom(resolver: { context in
-        return 130
+        return 140
     })
     private let weatherManager = WeatherManager()
     
@@ -158,12 +158,13 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
                 let manager = view.getLabelManager()
                 manager.removeLabelLayer(layerID: "LocationLayer")
                 if places.count > 0 {
-                    listView.placeViewModel.setPlaces(places: places)
-                    createLabelLayer(layerID: "LocationLayer")
-                    createPoiStyle(styleID: "LocationStyle")
-                    places.forEach{
-                        self.createPois(layerID: "LocationLayer", styleID: "LocationStyle", lng: $0.lng, lat: $0.lat)
+                    self.listView.placeViewModel.setPlaces(places: places)
+                    self.createLabelLayer(layerID: "LocationLayer")
+                    self.createPoiStyle(styleID: "LocationStyle")
+                    let mapPoints = places.map {
+                        return MapPoint(longitude: $0.lng, latitude: $0.lat)
                     }
+                    self.createPois(layerID: "LocationLayer", styleID: "LocationStyle", poiID: "", mapPoints: mapPoints)
                 }
             }
             .store(in: &cancellable)
@@ -172,7 +173,6 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
     func configureUI() {
         setWeatherArea()
         setCategoryButtons()
-        setCompassButton()
         setMovieToCurrentLocationButton()
     }
     
@@ -236,22 +236,22 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
                 self.viewModel.getLocationBy(typeId: btnInfo,
                                              lat: viewModel.currentLat,
                                              lng: viewModel.currentLong,
-                                             radius: 300)
+                                             radius: 1000)
                 
-//                listView.locationDelegate = self
-//                listView.modalPresentationStyle = .pageSheet
+                listView.locationDelegate = self
+                listView.modalPresentationStyle = .pageSheet
 //                listView.sheetPresentationController?.preferredCornerRadius = 25
-//                listView.sheetPresentationController?.detents = [minimumDetent, .medium(), .large()]
-//                listView.sheetPresentationController?.largestUndimmedDetentIdentifier = .large
+                listView.sheetPresentationController?.detents = [minimumDetent, .medium(), .large()]
+                listView.sheetPresentationController?.largestUndimmedDetentIdentifier = minimumDetent.identifier
 //                listView.sheetPresentationController?.prefersScrollingExpandsWhenScrolledToEdge = false
 //                listView.sheetPresentationController?.prefersEdgeAttachedInCompactHeight = true
 //                listView.sheetPresentationController?.widthFollowsPreferredContentSizeWhenEdgeAttached = true
-//                listView.sheetPresentationController?.prefersGrabberVisible = true
-//                if self.presentedViewController == nil {
-//                    // MARK: present 할 때 tabbar를 숨김?
-//                    // 캐러셀로
-//                    present(listView, animated: true)
-//                }
+                listView.sheetPresentationController?.prefersGrabberVisible = true
+                if self.presentedViewController == nil {
+                    // MARK: present 할 때 tabbar를 숨김?
+                    // 캐러셀로
+                    present(listView, animated: false)
+                }
             }, for: .touchUpInside)
             
             categoryContentView.addSubview(btn)
@@ -267,22 +267,6 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
             
             prevTrailingAnchor = btn.trailingAnchor
         }
-    }
-    
-    func setCompassButton() {
-        let compassButton = CustomCompass(type: .custom)
-        view.addSubview(compassButton)
-        
-        NSLayoutConstraint.activate([
-            compassButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            compassButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20)
-        ])
-        
-        compassButton.addAction(UIAction { [weak self] _ in
-            guard let self = self else { return }
-            let view = self.mapController?.getView("mapview") as! KakaoMap
-            view.resetCameraOrientation()
-        }, for: .touchUpInside)
     }
     
     func setMovieToCurrentLocationButton() {
@@ -340,6 +324,10 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
         mapController?.addView(mapviewInfo)
     }
     
+    func viewInit(viewName: String) {
+        print("OK")
+    }
+    
     //addView 성공 이벤트 delegate. 추가적으로 수행할 작업을 진행한다.
     func addViewSucceeded(_ viewName: String, viewInfoName: String) {
         let view = mapController?.getView("mapview") as! KakaoMap
@@ -347,22 +335,29 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
         // 현재 위치 pin
         createLabelLayer(layerID: "PoiLayer")
         createPoiStyle(styleID: "PerLevelStyle", currentLocation: true)
-        createPois(layerID: "PoiLayer", styleID: "PerLevelStyle", lng: viewModel.currentLong, lat: viewModel.currentLat)
+        createPois(layerID: "PoiLayer",
+                   styleID: "PerLevelStyle",
+                   poiID: "mainPoi",
+                   mapPoints: [MapPoint(longitude: viewModel.currentLong, latitude: viewModel.currentLat)])
         
         // 카메라 이동 event
         let _ = view.addCameraStoppedEventHandler(target: view) { map in
             return { [weak self] _ in
                 guard let self = self else { return }
-                let position = map.getPosition(CGPoint(x: 0.1, y: 0.1))
+                let position = map.getPosition(CGPoint(x: 0, y: 0))
                 let movedLong = position.wgsCoord.longitude
                 let movedLat = position.wgsCoord.latitude
                 // MARK: 카메라 이동하고 위, 경도 조정이 잘 안되는거같음
-                viewModel.currentLong = movedLong + 0.025
-                viewModel.currentLat = movedLat - 0.05
+                viewModel.currentLong = movedLong + 0.003
+                viewModel.currentLat = movedLat - 0.0015
             }
         }
         
+        view.setCompassPosition(origin: GuiAlignment(vAlign: .bottom, hAlign: .left), position: CGPoint(x: 10.0, y: 100.0))
+        view.showCompass()
+        
         view.viewRect = mapContainer!.bounds    //뷰 add 도중에 resize 이벤트가 발생한 경우 이벤트를 받지 못했을 수 있음. 원하는 뷰 사이즈로 재조정.
+        viewInit(viewName: viewName)
     }
     
     //Container 뷰가 리사이즈 되었을때 호출된다. 변경된 크기에 맞게 ViewBase들의 크기를 조절할 필요가 있는 경우 여기에서 수행한다.
