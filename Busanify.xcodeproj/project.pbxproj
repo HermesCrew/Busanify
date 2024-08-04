@@ -12,7 +12,10 @@
 		753520A42C326B0E00E439CF /* PlaceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753520A32C326B0E00E439CF /* PlaceListViewModel.swift */; };
 		753520AA2C3286D400E439CF /* PlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753520A92C3286D400E439CF /* PlaceListViewController.swift */; };
 		7566B2E72C5F8FD600BDF142 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 7566B2E62C5F8FD600BDF142 /* Config.xcconfig */; };
-		757882FE2C477AC80078EFAB /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757882FD2C477AC80078EFAB /* Bookmark.swift */; };
+		758FB83B2C57DF430029EBAA /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758FB83A2C57DF430029EBAA /* Bookmark.swift */; };
+		75D78A3C2C4F84FC00E3259B /* BookmarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D78A3B2C4F84FC00E3259B /* BookmarkViewController.swift */; };
+		75D78A3E2C4F851900E3259B /* BookmarkGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D78A3D2C4F851900E3259B /* BookmarkGridCell.swift */; };
+		75D78A402C4F852900E3259B /* BookmarkListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D78A3F2C4F852900E3259B /* BookmarkListCell.swift */; };
 		B8AB3C392C539B7B00E41BF7 /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AB3C382C539B7B00E41BF7 /* WeatherViewModel.swift */; };
 		B8F89BCC2C5386A800332FE2 /* WeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F89BCB2C5386A800332FE2 /* WeatherManager.swift */; };
 		B8F89BCE2C5386C100332FE2 /* Region.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F89BCD2C5386C100332FE2 /* Region.swift */; };
@@ -82,7 +85,11 @@
 		753520A92C3286D400E439CF /* PlaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewController.swift; sourceTree = "<group>"; };
 		7566B2E62C5F8FD600BDF142 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		757882F72C43E52A0078EFAB /* Busanify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Busanify.entitlements; sourceTree = "<group>"; };
-		757882FD2C477AC80078EFAB /* Bookmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
+		758FB83A2C57DF430029EBAA /* Bookmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
+		75D78A3B2C4F84FC00E3259B /* BookmarkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkViewController.swift; sourceTree = "<group>"; };
+		75D78A3D2C4F851900E3259B /* BookmarkGridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkGridCell.swift; sourceTree = "<group>"; };
+		75D78A3F2C4F852900E3259B /* BookmarkListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkListCell.swift; sourceTree = "<group>"; };
+		75D78A432C4F85EC00E3259B /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		90A686BAD126AABE23FE1EC1 /* Pods-Busanify.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busanify.release.xcconfig"; path = "Target Support Files/Pods-Busanify/Pods-Busanify.release.xcconfig"; sourceTree = "<group>"; };
 		AEFB0607F885ABD0E382C23B /* Pods_Busanify.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Busanify.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8AB3C382C539B7B00E41BF7 /* WeatherViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherViewModel.swift; sourceTree = "<group>"; };
@@ -187,6 +194,16 @@
 			path = PlaceList;
 			sourceTree = "<group>";
 		};
+		75D78A3A2C4F84E800E3259B /* Bookmark */ = {
+			isa = PBXGroup;
+			children = (
+				75D78A3B2C4F84FC00E3259B /* BookmarkViewController.swift */,
+				75D78A3D2C4F851900E3259B /* BookmarkGridCell.swift */,
+				75D78A3F2C4F852900E3259B /* BookmarkListCell.swift */,
+			);
+			path = Bookmark;
+			sourceTree = "<group>";
+		};
 		B8F89BCF2C5386D800332FE2 /* Weather */ = {
 			isa = PBXGroup;
 			children = (
@@ -280,6 +297,7 @@
 		C296D6F12C1F16B000691515 = {
 			isa = PBXGroup;
 			children = (
+				75D78A432C4F85EC00E3259B /* Config.xcconfig */,
 				7566B2E62C5F8FD600BDF142 /* Config.xcconfig */,
 				C296D6FC2C1F16B000691515 /* Busanify */,
 				C296D7132C1F16B200691515 /* BusanifyTests */,
@@ -375,6 +393,7 @@
 			children = (
 				C2695D302C47889F00375BA6 /* PlaceDetail */,
 				B8F89BD22C53873F00332FE2 /* Weather */,
+				75D78A3A2C4F84E800E3259B /* Bookmark */,
 				C276594B2C3D2882006D0D6C /* Setting */,
 				C207F3782C3AFB52007DFA27 /* Authentication */,
 				CD89D3512C29A55A00715404 /* Home */,
@@ -411,8 +430,8 @@
 				C2D279CC2C29458800AEAFD1 /* Place.swift */,
 				C2D279CE2C29459000AEAFD1 /* PlaceType.swift */,
 				C2F5776C2C479C1E00B2365F /* Review.swift */,
-				757882FD2C477AC80078EFAB /* Bookmark.swift */,
 				B8F89BCD2C5386C100332FE2 /* Region.swift */,
+				758FB83A2C57DF430029EBAA /* Bookmark.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -659,9 +678,11 @@
 				C20637F92C51F0ED00089D74 /* User.swift in Sources */,
 				753520AA2C3286D400E439CF /* PlaceListViewController.swift in Sources */,
 				C207F37B2C3AFC0C007DFA27 /* SignInViewController.swift in Sources */,
+				75D78A3E2C4F851900E3259B /* BookmarkGridCell.swift in Sources */,
 				C2AB7AB82C563B0D00A7BDE1 /* PlaceListViewUseCase.swift in Sources */,
 				C2FFD2B92C494AD90032C902 /* ReviewTableViewCell.swift in Sources */,
 				C2D279C92C29456E00AEAFD1 /* HomeViewUseCase.swift in Sources */,
+				75D78A402C4F852900E3259B /* BookmarkListCell.swift in Sources */,
 				C2F5776D2C479C1E00B2365F /* Review.swift in Sources */,
 				C207F3812C3AFC5F007DFA27 /* AuthenticationViewModel.swift in Sources */,
 				CD32519A2C4C0816006CB590 /* SelectedPlaceListTableViewCell.swift in Sources */,
@@ -669,6 +690,8 @@
 				C2B869B72C4F425000E4FEBD /* StarImageView.swift in Sources */,
 				C26E7CCA2C482CDF004996FE /* RatingTableViewCell.swift in Sources */,
 				B8F89BCE2C5386C100332FE2 /* Region.swift in Sources */,
+				75D78A3C2C4F84FC00E3259B /* BookmarkViewController.swift in Sources */,
+				758FB83B2C57DF430029EBAA /* Bookmark.swift in Sources */,
 				C2D279CF2C29459000AEAFD1 /* PlaceType.swift in Sources */,
 				B8F89BDA2C53881D00332FE2 /* HourlyForecastCell.swift in Sources */,
 				C2D279C72C29456200AEAFD1 /* PlacesApi.swift in Sources */,
@@ -681,6 +704,7 @@
 				C2D279CB2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift in Sources */,
 				C207F37F2C3AFC4D007DFA27 /* UserProfileViewController.swift in Sources */,
 				CD89D3552C29A56B00715404 /* HomeViewModel.swift in Sources */,
+				CD0F83DB2C357A85001C04E2 /* CustomViews.swift in Sources */,
 				CD32519C2C4C14E1006CB590 /* SelectedPlaceListViewModel.swift in Sources */,
 				757882FE2C477AC80078EFAB /* Bookmark.swift in Sources */,
 				C2695D322C4788AC00375BA6 /* PlaceDetailViewController.swift in Sources */,
@@ -754,7 +778,7 @@
 /* Begin XCBuildConfiguration section */
 		C296D7222C1F16B200691515 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7566B2E62C5F8FD600BDF142 /* Config.xcconfig */;
+			baseConfigurationReference = 75D78A432C4F85EC00E3259B /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -818,7 +842,7 @@
 		};
 		C296D7232C1F16B200691515 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7566B2E62C5F8FD600BDF142 /* Config.xcconfig */;
+			baseConfigurationReference = 75D78A432C4F85EC00E3259B /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
