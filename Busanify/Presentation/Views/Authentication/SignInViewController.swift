@@ -42,7 +42,7 @@ class SignInViewController: UIViewController {
         
         button.addAction(UIAction { [weak self] _ in
             self?.viewModel.googleSignIn()
-            self?.navigationController?.popViewController(animated: true)
+            self?.navigationController?.popViewController(animated: true) // 로그인 후에 처리되도록 해야할듯. 지금은 비동기처리됨
         }, for: .touchUpInside)
         
         return button
