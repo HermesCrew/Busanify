@@ -40,10 +40,10 @@ class WeatherContainer: UIView {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundColor = .white
         self.layer.cornerRadius = 8
-        self.layer.shadowColor = UIColor.black.cgColor
-        self.layer.shadowOpacity = 0.1
-        self.layer.shadowOffset = CGSize(width: 0, height: 1)
-        self.layer.shadowRadius = 4
+//        self.layer.shadowColor = UIColor.black.cgColor
+//        self.layer.shadowOpacity = 0.1
+//        self.layer.shadowOffset = CGSize(width: 0, height: 1)
+//        self.layer.shadowRadius = 4
     }
     
     func configureSubviews() {
@@ -116,10 +116,10 @@ class CategoryButton: UIButton {
         self.backgroundColor = .white
         self.titleLabel?.font = UIFont.systemFont(ofSize: textSize, weight: .bold)
         self.layer.cornerRadius = 20
-        self.layer.shadowColor = UIColor.black.cgColor
-        self.layer.shadowOpacity = 0.7
-        self.layer.shadowOffset = CGSize(width: 3, height: 3)
-        self.layer.shadowRadius = 3
+//        self.layer.shadowColor = UIColor.black.cgColor
+//        self.layer.shadowOpacity = 0.7
+//        self.layer.shadowOffset = CGSize(width: 3, height: 3)
+//        self.layer.shadowRadius = 3
 
         if let title = self.title(for: .normal), let font = self.titleLabel?.font {
             let titleSize = (title as NSString).size(withAttributes: [NSAttributedString.Key.font: font])
@@ -165,5 +165,90 @@ class SearchTextField: UITextField {
         let emptyView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: self.frame.height))
         self.leftView = emptyView
         self.leftViewMode = .always
+    }
+}
+
+class CustomCompass: UIButton {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        configureButton()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        configureButton()
+    }
+    
+    func configureButton() {
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        self.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        self.backgroundColor = .white
+        
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.isUserInteractionEnabled = false
+        stackView.axis = .vertical
+        stackView.alignment = .center
+        stackView.spacing = 2
+        
+        if let triangleImage = UIImage(systemName: "triangle.fill") {
+            let triangleImageView = UIImageView(image: triangleImage)
+            triangleImageView.widthAnchor.constraint(equalToConstant: 15).isActive = true
+            triangleImageView.heightAnchor.constraint(equalToConstant: 15).isActive = true
+            triangleImageView.tintColor = .red
+            stackView.addArrangedSubview(triangleImageView)
+        }
+        
+        let label = UILabel()
+        label.text = "N"
+        label.textColor = .black
+        label.font = UIFont.systemFont(ofSize: 12)
+        stackView.addArrangedSubview(label)
+        
+        self.layer.cornerRadius = 20
+        self.layer.borderWidth = 0.5
+        self.layer.masksToBounds = true
+        
+        self.addSubview(stackView)
+        
+        NSLayoutConstraint.activate([
+            stackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            stackView.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+        ])
+    }
+}
+
+class CustomLocationButton: UIButton {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        configureButton()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        configureButton()
+    }
+    
+    func configureButton() {
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        self.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        self.backgroundColor = .white
+        self.layer.cornerRadius = 20
+        self.layer.borderWidth = 0.5
+        self.layer.masksToBounds = true
+        
+        let triangleImageView = UIImageView(image: UIImage(systemName: "dot.scope"))
+        triangleImageView.translatesAutoresizingMaskIntoConstraints = false
+        triangleImageView.widthAnchor.constraint(equalToConstant: 25).isActive = true
+        triangleImageView.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        
+        self.addSubview(triangleImageView)
+        
+        NSLayoutConstraint.activate([
+            triangleImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            triangleImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+        ])
     }
 }
