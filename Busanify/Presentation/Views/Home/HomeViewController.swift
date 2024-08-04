@@ -18,7 +18,8 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
     private var searchTextFieldLeadingConstraintExpanded: NSLayoutConstraint!
     let weatherContainer = WeatherContainer()
     let searchTextField = SearchTextField()
-    let listView = SelectedPlaceListViewController()
+//    let listView = SelectedPlaceListViewController()
+    let listView = PlaceListViewController()
     let searchIcon: UIImageView = {
         let icon = UIImageView()
         icon.translatesAutoresizingMaskIntoConstraints = false
@@ -95,7 +96,7 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
         
         setSubscriber()
         configureUI()
-        setupTapGesture()
+//        setupTapGesture()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -158,7 +159,6 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
                 let manager = view.getLabelManager()
                 manager.removeLabelLayer(layerID: "LocationLayer")
                 if places.count > 0 {
-                    self.listView.placeViewModel.setPlaces(places: places)
                     self.createLabelLayer(layerID: "LocationLayer")
                     self.createPoiStyle(styleID: "LocationStyle")
                     let mapPoints = places.map {
@@ -238,14 +238,12 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
                                              lng: viewModel.currentLong,
                                              radius: 1000)
                 
-                listView.locationDelegate = self
+//                listView.locationDelegate = self
+                self.listView.fetchPlaces(type: btnInfo, lat: viewModel.currentLat, lng: viewModel.currentLong)
                 listView.modalPresentationStyle = .pageSheet
 //                listView.sheetPresentationController?.preferredCornerRadius = 25
                 listView.sheetPresentationController?.detents = [minimumDetent, .medium(), .large()]
                 listView.sheetPresentationController?.largestUndimmedDetentIdentifier = minimumDetent.identifier
-//                listView.sheetPresentationController?.prefersScrollingExpandsWhenScrolledToEdge = false
-//                listView.sheetPresentationController?.prefersEdgeAttachedInCompactHeight = true
-//                listView.sheetPresentationController?.widthFollowsPreferredContentSizeWhenEdgeAttached = true
                 listView.sheetPresentationController?.prefersGrabberVisible = true
                 if self.presentedViewController == nil {
                     // MARK: present 할 때 tabbar를 숨김?
@@ -319,7 +317,7 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
         let mapviewInfo: MapviewInfo = MapviewInfo(viewName: "mapview",
                                                    viewInfoName: "map",
                                                    defaultPosition: defaultPosition,
-                                                   defaultLevel: 16)
+                                                   defaultLevel: 15)
         
         mapController?.addView(mapviewInfo)
     }
@@ -344,12 +342,18 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
         let _ = view.addCameraStoppedEventHandler(target: view) { map in
             return { [weak self] _ in
                 guard let self = self else { return }
-                let position = map.getPosition(CGPoint(x: 0, y: 0))
-                let movedLong = position.wgsCoord.longitude
-                let movedLat = position.wgsCoord.latitude
+                let mapPosition = map.getPosition(CGPoint(x: self.view.frame.width / 2, y: self.view.frame.height / 2))
+                
+                let movedLong = mapPosition.wgsCoord.longitude
+                let movedLat = mapPosition.wgsCoord.latitude
                 // MARK: 카메라 이동하고 위, 경도 조정이 잘 안되는거같음
-                viewModel.currentLong = movedLong + 0.003
-                viewModel.currentLat = movedLat - 0.0015
+                viewModel.currentLong = movedLong
+                viewModel.currentLat = movedLat + 0.001
+                
+//                let rndNumber = Int.random(in: 1...200)
+//                createLabelLayer(layerID: "location\(rndNumber)")
+//                createPoiStyle(styleID: "locationStyle\(rndNumber)")
+//                createPois(layerID: "location\(rndNumber)", styleID: "locationStyle\(rndNumber)", poiID: "poiID\(rndNumber)", mapPoints: [MapPoint(longitude: movedLong, latitude: movedLat + 0.001)])
             }
         }
         

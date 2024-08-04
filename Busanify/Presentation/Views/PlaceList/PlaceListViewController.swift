@@ -9,26 +9,26 @@ import UIKit
 import Combine
 
 class PlaceListViewController: UIViewController {
-    private var viewModel: PlaceListViewModel
+    private var viewModel: PlaceListViewModel = PlaceListViewModel()
     private let authViewModel = AuthenticationViewModel.shared
     private var cancellables = Set<AnyCancellable>()
     private let tableView = UITableView()
     private let lang = "eng" // 임시
     
-    init(viewModel: PlaceListViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
+//    init(viewModel: PlaceListViewModel) {
+//        self.viewModel = viewModel
+//        super.init(nibName: nil, bundle: nil)
+//    }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
         bindViewModel()
-        fetchPlaces()
+//        fetchPlaces()
     }
     
     private func setupTableView() {
@@ -66,6 +66,10 @@ class PlaceListViewController: UIViewController {
     
     private func fetchPlaces() {
         viewModel.fetchPlaces(typeId: .touristAttraction, lang: lang, lat: 35.07885, lng: 129.04402, radius: 3000)
+    }
+    
+    func fetchPlaces(type: PlaceType, lat: CGFloat, lng: CGFloat) {
+        viewModel.fetchPlaces(typeId: type, lang: lang, lat: lat, lng: lng, radius: 3000)
     }
     
     private func showLoginAlert() {
