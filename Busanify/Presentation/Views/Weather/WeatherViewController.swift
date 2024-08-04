@@ -62,19 +62,10 @@ class WeatherViewController: UIViewController {
         self.title = "날씨"
         self.navigationController?.navigationBar.barTintColor = .white
         
-        let backButton = UIButton(type: .system)
-        backButton.setImage(UIImage(systemName: "chevron.left"), for: .normal)
-        backButton.setTitle("back", for: .normal)
-        backButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
-        backButton.sizeToFit()
-        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
-        
-        let backBarButtonItem = UIBarButtonItem(customView: backButton)
-        self.navigationItem.leftBarButtonItem = backBarButtonItem
-        
-        let menuButton = UIBarButtonItem(title: "select", style: .plain, target: self, action: #selector(menuButtonTapped))
+        let menuButton = UIBarButtonItem(title: "Select", style: .plain, target: self, action: #selector(menuButtonTapped))
         self.navigationItem.rightBarButtonItem = menuButton
     }
+
     
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
