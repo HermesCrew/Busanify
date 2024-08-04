@@ -33,14 +33,15 @@ struct PlaceCellViewModel {
 final class PlaceListViewModel {
     @Published var placeCellViewModels: [PlaceCellViewModel] = []
     private var cancellables = Set<AnyCancellable>()
-    private let useCase: PlaceListViewUseCase
+//    private let useCase: PlaceListViewUseCase
+    private let placeAPI = PlacesApi()
     
-    init(useCase: PlaceListViewUseCase) {
-        self.useCase = useCase
-    }
+//    init(useCase: PlaceListViewUseCase) {
+//        self.useCase = useCase
+//    }
     
     func fetchPlaces(typeId: PlaceType, lang: String, lat: Double, lng: Double, radius: Double) {        
-        useCase.getPlaces(by: typeId, lang: lang, lat: lat, lng: lng, radius: radius)
+        placeAPI.getPlaces(by: typeId, lang: lang, lat: lat, lng: lng, radius: radius)
             .map { places in places.map { PlaceCellViewModel(place: $0) } }
             .receive(on: DispatchQueue.main)
             .sink { completion in
@@ -60,13 +61,13 @@ final class PlaceListViewModel {
         
         let placeId = placeCellViewModels[index].id
         
-        useCase.toggleBookmark(placeId: placeId, token: token)
+        placeAPI.toggleBookmark(placeId: placeId, token: token)
     }
     
     func syncBookmarksWithServer(lang: String) {
         guard let token = AuthenticationViewModel.shared.getToken() else { return }
         
-        useCase.getBookmarkedPlaces(token: token, lang: lang)
+        placeAPI.getBookmarkedPlaces(token: token, lang: lang)
             .receive(on: DispatchQueue.main)
             .sink { completion in
                 if case .failure(let error) = completion {

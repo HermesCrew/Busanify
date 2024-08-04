@@ -13,3 +13,7 @@ protocol PlaceDetailViewUseCase {
     func toggleBookmark(placeId: String, token: String)
     func deleteReview(by id: Int, token: String) async throws
 }
+
+protocol MoveToMapLocation {
+    func moveTo(lat: CGFloat, lng: CGFloat)
+}
