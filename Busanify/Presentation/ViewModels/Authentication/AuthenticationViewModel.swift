@@ -187,14 +187,14 @@ final class AuthenticationViewModel {
             return
         }
         
-//        if let currentUser = self.currentUser, !currentUser.profileImage.isEmpty {
-//            let imageRef = Storage.storage().reference(forURL: currentUser.profileImage)
-//            imageRef.delete { error in
-//                if let error = error {
-//                    print("Error deleting previous profile image: \(error.localizedDescription)")
-//                }
-//            }
-//        }
+        if let profileImage = self.currentUser?.profileImage {
+            let imageRef = Storage.storage().reference(forURL: profileImage)
+            imageRef.delete { error in
+                if let error = error {
+                    completion(false)
+                }
+            }
+        }
         
         let storageReference = Storage.storage().reference().child("\(UUID().uuidString)")
         
@@ -224,18 +224,31 @@ final class AuthenticationViewModel {
                     .receive(on: DispatchQueue.main)
                     .assign(to: &self.$currentUser)
                 
-//                let imageRef = Storage.storage().reference(forURL: imageUrlToDelete)
-//                imageRef.delete { error in
-//                    if let error = error {
-//                        completion(.failure(error))
-//                        return
-//                    }
-//                    completion(.success(()))
-//                }
-                
                 completion(true)
             }
         }
+    }
+    
+    func deleteProfileImage(completion: @escaping (Bool) -> Void) {
+        guard let token = self.getToken() else {
+            completion(false)
+            return
+        }
+        
+        if let profileImage = self.currentUser?.profileImage {
+            let imageRef = Storage.storage().reference(forURL: profileImage)
+            imageRef.delete { error in
+                if let error = error {
+                    completion(false)
+                }
+            }
+        }
+        
+        self.signInApi.updateUserProfile(token: token, profileImage: nil, nickname: nil)
+            .receive(on: DispatchQueue.main)
+            .assign(to: &self.$currentUser)
+        
+        completion(true)
     }
     
     func updateProfileNickname(nickname: String, completion: @escaping (Bool) -> Void) {
