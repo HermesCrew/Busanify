@@ -114,7 +114,7 @@ class ReviewTableViewCell: UITableViewCell {
     
     func configure(with review: Review) {
         profileImage.image = UIImage(data: review.user.profileImage)
-        usernameLabel.text = review.user.name
+        usernameLabel.text = review.user.nickname
         contentLabel.text = review.content
         dateLabel.text = review.createdAt
         
