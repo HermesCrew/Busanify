@@ -24,9 +24,9 @@ final class SignInApi {
         self.baseURL = baseURL
     }
     
-    func saveGoogleUser(idToken: String) {
+    func saveGoogleUser(idToken: String) -> AnyPublisher<User?, Never> {
         guard let authData = try? JSONEncoder().encode(["idToken": idToken]) else {
-            return
+            fatalError("Json Encode Error")
         }
         
         let urlString = "\(baseURL)/auth/google/signin"
@@ -37,15 +37,17 @@ final class SignInApi {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = authData
         
-        let task = URLSession.shared.uploadTask(with: request, from: authData) { data, response, error in
-        }
-        
-        task.resume()
+        return URLSession.shared.dataTaskPublisher(for: request)
+                .map(\.data)
+                .decode(type: User?.self, decoder: JSONDecoder())
+                .replaceError(with: nil)
+                .eraseToAnyPublisher()
     }
     
-    func saveAppleUser(code: String, username: String, completion: @escaping (Result<String, NetworkError>) -> Void) {
-        guard let authData = try? JSONEncoder().encode(["authorizationCode": code, "username": username]) else {
+    func saveAppleUser(code: String, completion: @escaping (Result<String, NetworkError>) -> Void) {
+        guard let authData = try? JSONEncoder().encode(["authorizationCode": code]) else {
             return
         }
         
@@ -75,19 +77,19 @@ final class SignInApi {
         task.resume()
     }
     
-    func getAppleUserProfile(accessToken: String) -> AnyPublisher<User, Never> {
-        let urlString = "\(baseURL)/auth/apple/profile"
+    func getUserProfile(token: String) -> AnyPublisher<User?, Never> {
+        let urlString = "\(baseURL)/auth/profile"
         guard let url = URL(string: urlString) else {
             fatalError("Invalid URL")
         }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
         return URLSession.shared.dataTaskPublisher(for: request)
             .map(\.data)
-            .decode(type: User.self, decoder: JSONDecoder())
-            .replaceError(with: User(id: "", email: "", name: "", profileImage: Data()))
+            .decode(type: User?.self, decoder: JSONDecoder())
+            .replaceError(with: nil)
             .eraseToAnyPublisher()
     }
 }
