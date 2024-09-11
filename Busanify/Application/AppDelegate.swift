@@ -8,6 +8,7 @@
 import UIKit
 import KakaoMapsSDK
 import GoogleSignIn
+import FirebaseCore
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -22,6 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // 소셜로그인 유저 로그인 유지
         authenticationViewModel.restorePreviousGoogleSignIn()
         authenticationViewModel.restorePreviousAppleSignIn()
+        
+        FirebaseApp.configure()
         return true
     }
 
