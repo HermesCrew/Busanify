@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class ReviewTableViewCell: UITableViewCell {
     
@@ -15,7 +16,7 @@ class ReviewTableViewCell: UITableViewCell {
     
     weak var delegate: ReviewTableViewCellDelegate?
     
-    private lazy var profileImage: UIImageView = {
+    private lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person.crop.circle")
         imageView.contentMode = .scaleAspectFit
@@ -69,15 +70,15 @@ class ReviewTableViewCell: UITableViewCell {
     }
     
     private func configureUI() {
-        profileImage.layer.cornerRadius = 15
-        contentView.addSubview(profileImage)
+        profileImageView.layer.cornerRadius = 15
+        contentView.addSubview(profileImageView)
         contentView.addSubview(usernameLabel)
         contentView.addSubview(starStackView)
         contentView.addSubview(contentLabel)
         contentView.addSubview(dateLabel)
         contentView.addSubview(moreButton)
         
-        profileImage.translatesAutoresizingMaskIntoConstraints = false
+        profileImageView.translatesAutoresizingMaskIntoConstraints = false
         usernameLabel.translatesAutoresizingMaskIntoConstraints = false
         starStackView.translatesAutoresizingMaskIntoConstraints = false
         contentLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -86,20 +87,20 @@ class ReviewTableViewCell: UITableViewCell {
         
         NSLayoutConstraint.activate([
             
-            profileImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            profileImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            profileImage.widthAnchor.constraint(equalToConstant: 30),
-            profileImage.heightAnchor.constraint(equalToConstant: 30),
+            profileImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            profileImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            profileImageView.widthAnchor.constraint(equalToConstant: 30),
+            profileImageView.heightAnchor.constraint(equalToConstant: 30),
             
             usernameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            usernameLabel.leadingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: 8),
-            usernameLabel.centerYAnchor.constraint(equalTo: profileImage.centerYAnchor),
+            usernameLabel.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 8),
+            usernameLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
             
             moreButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             moreButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            moreButton.centerYAnchor.constraint(equalTo: profileImage.centerYAnchor),
+            moreButton.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
             
-            starStackView.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 8),
+            starStackView.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 8),
             starStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             starStackView.widthAnchor.constraint(equalToConstant: 50),
             
@@ -113,7 +114,10 @@ class ReviewTableViewCell: UITableViewCell {
     }
     
     func configure(with review: Review) {
-        profileImage.image = UIImage(data: review.user.profileImage)
+        if let profileImage = review.user.profileImage {
+            let url = URL(string: profileImage)
+            profileImageView.kf.setImage(with: url)
+        }
         usernameLabel.text = review.user.nickname
         contentLabel.text = review.content
         dateLabel.text = review.createdAt
