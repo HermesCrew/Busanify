@@ -92,4 +92,27 @@ final class SignInApi {
             .replaceError(with: nil)
             .eraseToAnyPublisher()
     }
+    
+    func updateUserProfile(token: String, profileImage: String?, nickname: String?) -> AnyPublisher<User?, Never> {
+        guard let jsonData = try? JSONEncoder().encode(["profileImage": profileImage, "nickname": nickname]) else {
+            fatalError("Json Encode Error")
+        }
+        
+        let urlString = "\(baseURL)/auth/updateProfile"
+        guard let url = URL(string: urlString) else {
+            fatalError("Invalid URL")
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.httpBody = jsonData
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+                .map(\.data)
+                .decode(type: User?.self, decoder: JSONDecoder())
+                .replaceError(with: nil)
+                .eraseToAnyPublisher()
+    }
 }
