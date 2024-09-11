@@ -8,8 +8,9 @@
 import UIKit
 import Combine
 import PhotosUI
+import Kingfisher
 
-class SettingViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class SettingViewController: UIViewController {
     private let viewModel = AuthenticationViewModel.shared
     private var cancellables = Set<AnyCancellable>()
     
@@ -29,14 +30,24 @@ class SettingViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     private lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "photo")
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.borderColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.3).cgColor
-        imageView.layer.masksToBounds = true
-        imageView.layer.borderWidth = 0.5
+        imageView.image = UIImage(systemName: "person.fill")
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = .black
+        imageView.backgroundColor = .lightGray
         imageView.layer.cornerRadius = 60
         imageView.clipsToBounds = true
         
+        return imageView
+    }()
+    
+    private lazy var cameraIconView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "camera.fill")
+        imageView.contentMode = .center
+        imageView.tintColor = .gray
+        imageView.backgroundColor = .white
+        imageView.layer.cornerRadius = 15
+        imageView.clipsToBounds = true
         return imageView
     }()
     
@@ -50,7 +61,11 @@ class SettingViewController: UIViewController, UITableViewDelegate, UITableViewD
     lazy var nicknameTextField: UITextField = {
         let textField = UITextField()
         textField.borderStyle = .roundedRect
+        textField.autocorrectionType = .no
+        textField.spellCheckingType = .no
+        textField.autocapitalizationType = .none
         textField.isHidden = true
+        textField.delegate = self
         
         return textField
     }()
@@ -84,7 +99,27 @@ class SettingViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         return tableView
     }()
-
+    
+    private let loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    
+    private let footerView = UIView()
+    
+    private lazy var footerButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Delete Account", for: .normal)
+        button.setTitleColor(.gray, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 12)
+        
+        button.addAction(UIAction { [weak self] _ in
+            self?.showDeleteAccountAlert()
+        }, for: .touchUpInside)
+        
+        return button
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -106,6 +141,7 @@ class SettingViewController: UIViewController, UITableViewDelegate, UITableViewD
         view.addSubview(editNicknameButton)
         view.addSubview(emailLabel)
         view.addSubview(settingTableView)
+        footerView.addSubview(footerButton)
         
         loginButton.translatesAutoresizingMaskIntoConstraints = false
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -114,6 +150,13 @@ class SettingViewController: UIViewController, UITableViewDelegate, UITableViewD
         editNicknameButton.translatesAutoresizingMaskIntoConstraints = false
         emailLabel.translatesAutoresizingMaskIntoConstraints = false
         settingTableView.translatesAutoresizingMaskIntoConstraints = false
+        footerButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(loadingIndicator)
+        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(cameraIconView)
+        cameraIconView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             loginButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
@@ -123,6 +166,11 @@ class SettingViewController: UIViewController, UITableViewDelegate, UITableViewD
             profileImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             profileImageView.widthAnchor.constraint(equalToConstant: 120),
             profileImageView.heightAnchor.constraint(equalToConstant: 120),
+            
+            cameraIconView.widthAnchor.constraint(equalToConstant: 30),   // 카메라 아이콘 크기 설정
+            cameraIconView.heightAnchor.constraint(equalToConstant: 30),
+            cameraIconView.trailingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: -5), // 오른쪽 하단에 위치
+            cameraIconView.bottomAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: -5),
             
             nicknameLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 10),
             nicknameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -139,7 +187,13 @@ class SettingViewController: UIViewController, UITableViewDelegate, UITableViewD
             settingTableView.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: 40),
             settingTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             settingTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            settingTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            settingTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            footerButton.trailingAnchor.constraint(equalTo: footerView.trailingAnchor, constant: -16),
+            footerButton.bottomAnchor.constraint(equalTo: footerView.bottomAnchor, constant: 8),
+            
+            loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
     
@@ -149,7 +203,14 @@ class SettingViewController: UIViewController, UITableViewDelegate, UITableViewD
             setProfileElementsHidden(false)
             
             if let currentUser = viewModel.currentUser {
-                profileImageView.image = UIImage(data: currentUser.profileImage)
+                if let profileImage = currentUser.profileImage {
+                    let url = URL(string: profileImage)
+                    profileImageView.kf.setImage(
+                        with: url,
+                        placeholder: profileImageView.image)
+                } else {
+                    profileImageView.image = UIImage(systemName: "person.fill")
+                }
                 nicknameLabel.text = currentUser.nickname
                 emailLabel.text = currentUser.email
             }
@@ -160,6 +221,7 @@ class SettingViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     private func setProfileElementsHidden(_ isHidden: Bool) {
         profileImageView.isHidden = isHidden
+        cameraIconView.isHidden = isHidden
         nicknameLabel.isHidden = isHidden
         editNicknameButton.isHidden = isHidden
         emailLabel.isHidden = isHidden
@@ -201,31 +263,6 @@ class SettingViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.state == .signedOut ? 5 : 6
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let settingInfos =  [("My Review", "doc.text.magnifyingglass"), ("My Community Post", "square.and.pencil"), ("Language", "globe"), ("Version", "info.circle"), ("Privacy Policy", "shield.lefthalf.fill"), ("Logout", "rectangle.portrait.and.arrow.right")]
-        
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingTableViewCell.identifier, for: indexPath) as? SettingTableViewCell else {
-            return UITableViewCell()
-        }
-        
-        let settingInfo = settingInfos[indexPath.row]
-        cell.configure(with: settingInfo)
-        cell.accessoryType = .disclosureIndicator
-        cell.selectionStyle = .none
-        
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 5 {
-            showLogoutAlert()
-        }
-    }
-    
     @objc private func goToLogin() {
         let signInVC = SignInViewController()
         present(signInVC, animated: true)
@@ -246,16 +283,88 @@ class SettingViewController: UIViewController, UITableViewDelegate, UITableViewD
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true)
     }
+    
+    private func showDeleteAccountAlert() {
+        let alert = UIAlertController(title: "Busanify", message: "Are you sure you want to delete your account? All data will be removed", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
+            // 회원탈퇴
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alert, animated: true)
+    }
+    
+    private func addGestureRecognizer() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+        
+        let profileImageTapGesture = UITapGestureRecognizer(target: self, action: #selector(addProfileImageButtonTapped))
+        profileImageView.isUserInteractionEnabled = true
+        profileImageView.addGestureRecognizer(profileImageTapGesture)
+    }
+    
+    @objc private func addProfileImageButtonTapped(_ sender: UIButton) {
+        let actionSheet = UIAlertController(title: "Add Profile Image", message: nil, preferredStyle: .actionSheet)
+        
+        actionSheet.addAction(UIAlertAction(title: "Select Image", style: .default, handler: { _ in
+            self.presentPHPPicker()
+        }))
+        
+        if let currentUser = viewModel.currentUser, currentUser.profileImage != nil {
+            actionSheet.addAction(UIAlertAction(title: "Delete exist Image", style: .destructive, handler: { _ in
+                self.loadingIndicator.startAnimating()
+                self.viewModel.deleteProfileImage { success in
+                    if success {
+                        self.loadingIndicator.stopAnimating()
+                    }
+                }
+            }))
+        }
+        
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        present(actionSheet, animated: true, completion: nil)
+    }
+}
+
+extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.state == .signedOut ? 5 : 6
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let settingInfos =  [("My Review", "doc.text.magnifyingglass"), ("My Community Post", "square.and.pencil"), ("Language", "globe"), ("Privacy Policy", "shield.lefthalf.fill"), ("Version", "info.circle"), ("Logout", "rectangle.portrait.and.arrow.right")]
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingTableViewCell.identifier, for: indexPath) as? SettingTableViewCell else {
+            return UITableViewCell()
+        }
+        
+        let settingInfo = settingInfos[indexPath.row]
+        cell.configure(with: settingInfo)
+        cell.selectionStyle = .none
+            
+        switch indexPath.row {
+        case 0, 1, 2, 3:
+            cell.accessoryType = .disclosureIndicator
+        default:
+            cell.accessoryType = .none
+        }
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == 5 {
+            showLogoutAlert()
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return footerView
+    }
 }
 
 extension SettingViewController: PHPickerViewControllerDelegate {
-    
-    private func addGestureRecognizer() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(presentPHPPicker))
-        profileImageView.isUserInteractionEnabled = true
-        profileImageView.addGestureRecognizer(tapGesture)
-    }
-    
     @objc private func presentPHPPicker() {
         var config = PHPickerConfiguration()
         config.filter = .images
@@ -277,9 +386,11 @@ extension SettingViewController: PHPickerViewControllerDelegate {
                 case .success(let data):
                     DispatchQueue.main.async {
                         self.data = data
+                        self.loadingIndicator.startAnimating()
                         self.viewModel.updateProfileImage(data: data) { success in
                             if success {
                                 // 프로필 수정 완료되었습니다 알림 표시
+                                self.loadingIndicator.stopAnimating()
                             }
                         }
                     }
@@ -287,15 +398,18 @@ extension SettingViewController: PHPickerViewControllerDelegate {
                     print("\(error.localizedDescription)")
                 }
             }
-            
-            itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
-                guard let image = image as? UIImage else { return }
-                
-                DispatchQueue.main.async {
-                    self?.profileImageView.contentMode = .scaleAspectFill
-                    self?.profileImageView.image = image
-                }
-            }
         }
+    }
+}
+
+extension SettingViewController: UITextFieldDelegate {
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
+    }
+
+    // Return 키를 눌렀을 때 키보드 내리기
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
