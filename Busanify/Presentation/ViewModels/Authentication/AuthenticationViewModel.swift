@@ -10,6 +10,7 @@ import Foundation
 import GoogleSignIn
 import AuthenticationServices
 import Combine
+import FirebaseStorage
 
 enum State: Equatable {
     case googleSignedIn(GIDGoogleUser)
@@ -22,7 +23,7 @@ final class AuthenticationViewModel {
     static let shared = AuthenticationViewModel(signInApi: SignInApi()) // 싱글톤 패턴
     
     @Published var state: State = .signedOut
-    @Published var appleUserProfile: User?
+    @Published var currentUser: User? = nil
     private let signInApi: SignInApi
     private let keyChain = Keychain()
     
@@ -32,33 +33,44 @@ final class AuthenticationViewModel {
         self.signInApi = signInApi
     }
     
-    func googleSignIn() {
+    func googleSignIn(completion: @escaping (Bool) -> Void) {
         let scenes = UIApplication.shared.connectedScenes
         let windowScene = scenes.first as? UIWindowScene
         let window = windowScene?.windows.first
         
         guard let rootViewController = window?.rootViewController else {
             print("There is no root view controller!")
+            completion(false)
             return
         }
         
         GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController) { signInResult, error in
-            guard error == nil else { return }
-            guard let signInResult = signInResult else { return }
+            guard error == nil, let signInResult = signInResult else {
+                completion(false)
+                return
+            }
             
             let user = signInResult.user
             
-            guard let idToken = user.idToken?.tokenString else { return }
+            guard let idToken = user.idToken?.tokenString else {
+                completion(false)
+                return
+            }
             
             print(idToken)
             self.state = .googleSignedIn(user)
-            self.signInApi.saveGoogleUser(idToken: idToken)
+            self.signInApi.saveGoogleUser(idToken: idToken) 
+                .receive(on: DispatchQueue.main)
+                .assign(to: &self.$currentUser)
+            
+            completion(true)
         }
     }
     
     func googleSignOut() {
         GIDSignIn.sharedInstance.signOut()
         self.state = .signedOut
+        self.currentUser = nil
     }
     
     // 로그인 상태 복원
@@ -68,6 +80,7 @@ final class AuthenticationViewModel {
             DispatchQueue.main.async {
                 if let user = user {
                     self?.state = .googleSignedIn(user)
+                    self?.getUserProfile()
                 } else {
                     self?.state = .signedOut
                     if let error = error {
@@ -78,21 +91,25 @@ final class AuthenticationViewModel {
         }
     }
     
-    func appleSignIn(code: String, username: String, userId: String) {
-        self.signInApi.saveAppleUser(code: code, username: username) { [weak self] result in
+    func appleSignIn(code: String, userId: String, completion: @escaping (Bool) -> Void) {
+        self.signInApi.saveAppleUser(code: code) { [weak self] result in
             switch result {
             case .success(let accessToken):
                 print(accessToken)
                 self?.keyChain.save(key: "appleAccessToken", value: accessToken)
                 self?.keyChain.save(key: "appleUserId", value: userId)
                 DispatchQueue.main.async {
-                    self?.getAppleUserProfile()
                     self?.state = .appleSignedIn
+                    self?.getUserProfile()
+                    
+                    completion(true)
                 }
             case .failure(let error):
                 print("Error saving Apple user: \(error)")
                 DispatchQueue.main.async {
                     self?.state = .signedOut
+                    
+                    completion(false)
                 }
             }
         }
@@ -118,8 +135,8 @@ final class AuthenticationViewModel {
                 case .authorized:
                     print("authorized")
                     DispatchQueue.main.async {
-                        self.getAppleUserProfile()
                         self.state = .appleSignedIn
+                        self.getUserProfile()
                     }
                 case .revoked:
                     print("revoked")
@@ -138,17 +155,12 @@ final class AuthenticationViewModel {
         }
     }
     
-    func getAppleUserProfile() {
-        guard let accessToken = self.keyChain.read(key: "appleAccessToken") else {
-            return
-        }
+    func getUserProfile() {
+        guard let token = self.getToken() else { return }
         
-        self.signInApi.getAppleUserProfile(accessToken: accessToken)
+        self.signInApi.getUserProfile(token: token)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] userProfile in
-                self?.appleUserProfile = userProfile
-            }
-            .store(in: &cancellables)
+            .assign(to: &$currentUser)
     }
     
     // 사용자 정보를 확인하여 서버에서 데이터를 요청할때 사용하는 토큰
@@ -167,5 +179,72 @@ final class AuthenticationViewModel {
         case .signedOut:
             return nil
         }
+    }
+    
+    func updateProfileImage(data: Data, completion: @escaping (Bool) -> Void) {
+        guard let token = self.getToken() else {
+            completion(false)
+            return
+        }
+        
+//        if let currentUser = self.currentUser, !currentUser.profileImage.isEmpty {
+//            let imageRef = Storage.storage().reference(forURL: currentUser.profileImage)
+//            imageRef.delete { error in
+//                if let error = error {
+//                    print("Error deleting previous profile image: \(error.localizedDescription)")
+//                }
+//            }
+//        }
+        
+        let storageReference = Storage.storage().reference().child("\(UUID().uuidString)")
+        
+        print("Uploading data to Firebase Storage")
+        
+        storageReference.putData(data, metadata: nil) { [weak self] metadata, error in
+            guard let self = self else { return }
+            
+            if let error = error {
+                print("Error uploading data: \(error.localizedDescription)")
+                completion(false)
+                return
+            }
+            
+            storageReference.downloadURL { url, error in
+                if error != nil {
+                    completion(false)
+                    return
+                }
+                
+                guard let downloadURL = url else {
+                    completion(false)
+                    return
+                }
+                
+                self.signInApi.updateUserProfile(token: token, profileImage: downloadURL.absoluteString, nickname: nil)
+                    .receive(on: DispatchQueue.main)
+                    .assign(to: &self.$currentUser)
+                
+//                let imageRef = Storage.storage().reference(forURL: imageUrlToDelete)
+//                imageRef.delete { error in
+//                    if let error = error {
+//                        completion(.failure(error))
+//                        return
+//                    }
+//                    completion(.success(()))
+//                }
+                
+                completion(true)
+            }
+        }
+    }
+    
+    func updateProfileNickname(nickname: String, completion: @escaping (Bool) -> Void) {
+        guard let token = self.getToken() else { return }
+        
+        self.signInApi.updateUserProfile(token: token, profileImage: nil, nickname: nickname)
+            .receive(on: DispatchQueue.main)
+            .assign(to: &self.$currentUser)
+        
+        completion(true)
     }
 }
