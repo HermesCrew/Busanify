@@ -119,6 +119,7 @@ final class AuthenticationViewModel {
         self.keyChain.delete(key: "appleAccessToken")
         self.keyChain.delete(key: "appleUserId")
         self.state = .signedOut
+        self.currentUser = nil
     }
     
     func restorePreviousAppleSignIn() {
@@ -259,5 +260,36 @@ final class AuthenticationViewModel {
             .assign(to: &self.$currentUser)
         
         completion(true)
+    }
+    
+    func deleteUser() {
+        guard let token = self.getToken() else { return }
+        
+        switch state {
+        case .googleSignedIn:
+            self.signInApi.deleteUser(token: token, providerToDelete: "googleDelete") { success in
+                if success {
+                    GIDSignIn.sharedInstance.disconnect { error in
+                        if let error = error {
+                            print("Error disconnecting Google account: \(error.localizedDescription)")
+                        } else {
+                            self.state = .signedOut
+                            self.currentUser = nil
+                        }
+                    }
+                }
+            }
+        case .appleSignedIn:
+            self.signInApi.deleteUser(token: token, providerToDelete: "appleDelete") { success in
+                if success {
+                    self.keyChain.delete(key: "appleAccessToken")
+                    self.keyChain.delete(key: "appleUserId")
+                    self.state = .signedOut
+                    self.currentUser = nil
+                }
+            }
+        default:
+            return
+        }
     }
 }

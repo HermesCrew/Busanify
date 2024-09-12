@@ -16,6 +16,7 @@ enum NetworkError: Error {
 
 final class SignInApi {
     private let baseURL: String
+    var cancellables = Set<AnyCancellable>()
     
     init() {
         guard let baseURL = Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String else {
@@ -104,7 +105,7 @@ final class SignInApi {
         }
         
         var request = URLRequest(url: url)
-        request.httpMethod = "POST"
+        request.httpMethod = "PATCH"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.httpBody = jsonData
@@ -114,5 +115,27 @@ final class SignInApi {
                 .decode(type: User?.self, decoder: JSONDecoder())
                 .replaceError(with: nil)
                 .eraseToAnyPublisher()
+    }
+    
+    func deleteUser(token: String, providerToDelete: String, completion: @escaping (Bool) -> Void) {
+        let urlString = "\(baseURL)/auth/\(providerToDelete)"
+        guard let url = URL(string: urlString) else {
+            fatalError("Invalid URL")
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error deleting user data: \(error.localizedDescription)")
+                completion(false)
+            } else {
+                completion(true)
+            }
+        }
+        
+        task.resume()
     }
 }

@@ -225,6 +225,7 @@ class SettingViewController: UIViewController {
         nicknameLabel.isHidden = isHidden
         editNicknameButton.isHidden = isHidden
         emailLabel.isHidden = isHidden
+        footerButton.isHidden = isHidden
         loginButton.isHidden = !isHidden
     }
     
@@ -287,7 +288,7 @@ class SettingViewController: UIViewController {
     private func showDeleteAccountAlert() {
         let alert = UIAlertController(title: "Busanify", message: "Are you sure you want to delete your account? All data will be removed", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
-            // 회원탈퇴
+            self?.viewModel.deleteUser()
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true)
