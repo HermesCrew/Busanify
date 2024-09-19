@@ -120,7 +120,10 @@ extension PlaceListViewController: UITableViewDataSource, UITableViewDelegate, D
             placeId: selectedId,
             useCase: PlacesApi()
         )
-        let placeDetailVC = PlaceDetailViewController(viewModel: placeDetailViewModel)
+        
+        let reviewViewModel = ReviewViewModel(useCase: ReviewApi())
+        
+        let placeDetailVC = PlaceDetailViewController(placeDetailViewModel: placeDetailViewModel, reviewViewModel: reviewViewModel)
         placeDetailVC.delegate = self
         show(placeDetailVC, sender: self)
     }

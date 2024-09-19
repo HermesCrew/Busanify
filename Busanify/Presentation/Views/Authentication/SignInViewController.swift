@@ -41,8 +41,11 @@ class SignInViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         
         button.addAction(UIAction { [weak self] _ in
-            self?.viewModel.googleSignIn()
-            self?.navigationController?.popViewController(animated: true) // 로그인 후에 처리되도록 해야할듯. 지금은 비동기처리됨
+            self?.viewModel.googleSignIn { success in
+                if success {
+                    self?.dismiss(animated: true, completion: nil)
+                }
+            }
         }, for: .touchUpInside)
         
         return button
@@ -68,7 +71,6 @@ class SignInViewController: UIViewController {
         
         button.addAction(UIAction { [weak self] _ in
             self?.appleSignIn()
-//            self?.navigationController?.popViewController(animated: true) // 이전 뷰로 돌아가는게 안됨..
         }, for: .touchUpInside)
         
         return button
@@ -130,11 +132,14 @@ extension SignInViewController: ASAuthorizationControllerDelegate, ASAuthorizati
         case let appleIDCredential as ASAuthorizationAppleIDCredential:
             // You can create an account in your system.
             let userIdentifier = appleIDCredential.user
-            let fullName = appleIDCredential.fullName ?? PersonNameComponents()
             
             if let authorizationCode = appleIDCredential.authorizationCode,
                 let authCodeString = String(data: authorizationCode, encoding: .utf8) {
-                self.viewModel.appleSignIn(code: authCodeString, username: PersonNameComponentsFormatter().string(from: fullName), userId: userIdentifier)
+                self.viewModel.appleSignIn(code: authCodeString, userId: userIdentifier) { success in
+                    if success {
+                        self.dismiss(animated: true, completion: nil)
+                    }
+                }
             }
         default:
             break
