@@ -13,6 +13,7 @@ class ReviewTableViewCell: UITableViewCell {
     static let identifier = "review"
     private let authViewModel = AuthenticationViewModel.shared
     private let keyChain = Keychain()
+    var photos: [String] = []
     
     weak var delegate: ReviewTableViewCellDelegate?
     
@@ -33,6 +34,21 @@ class ReviewTableViewCell: UITableViewCell {
     }()
     
     private let contentLabel = UILabel()
+    
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 10
+        layout.minimumInteritemSpacing = 10
+        layout.itemSize = CGSize(width: 100, height: 100)
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "ImageCell")
+                
+        return collectionView
+    }()
     
     private lazy var starStackView: UIStackView = {
         let stackView = UIStackView()
@@ -75,6 +91,7 @@ class ReviewTableViewCell: UITableViewCell {
         contentView.addSubview(usernameLabel)
         contentView.addSubview(starStackView)
         contentView.addSubview(contentLabel)
+        contentView.addSubview(collectionView)
         contentView.addSubview(dateLabel)
         contentView.addSubview(moreButton)
         
@@ -82,6 +99,7 @@ class ReviewTableViewCell: UITableViewCell {
         usernameLabel.translatesAutoresizingMaskIntoConstraints = false
         starStackView.translatesAutoresizingMaskIntoConstraints = false
         contentLabel.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
         moreButton.translatesAutoresizingMaskIntoConstraints = false
         
@@ -104,7 +122,12 @@ class ReviewTableViewCell: UITableViewCell {
             starStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             starStackView.widthAnchor.constraint(equalToConstant: 50),
             
-            contentLabel.topAnchor.constraint(equalTo: starStackView.bottomAnchor, constant: 8),
+            collectionView.topAnchor.constraint(equalTo: starStackView.bottomAnchor, constant: 8),
+            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            collectionView.heightAnchor.constraint(equalToConstant: 100),
+            
+            contentLabel.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 8),
             contentLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             
             dateLabel.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 8),
@@ -122,7 +145,13 @@ class ReviewTableViewCell: UITableViewCell {
         contentLabel.text = review.content
         dateLabel.text = review.createdAt
         
-        var menuItems: [UIAction] = [UIAction(title: "Report", image: UIImage(systemName: "exclamationmark.triangle"), handler: { _ in })]
+        self.photos = review.photos
+        collectionView.reloadData()
+        
+        var menuItems: [UIAction] = [UIAction(title: "Report", image: UIImage(systemName: "exclamationmark.triangle"), handler: { _ in
+            self.delegate?.reportReview(review)
+        })
+        ]
         
         switch authViewModel.state {
         case .googleSignedIn(let user):
@@ -195,6 +224,39 @@ class ReviewTableViewCell: UITableViewCell {
     }
 }
 
+extension ReviewTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return photos.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath)
+            
+        // 기존의 이미지 뷰 제거 (중복 추가 방지)
+        cell.contentView.subviews.forEach { $0.removeFromSuperview() }
+        
+        // 이미지 뷰 생성 및 추가
+        let imageView = UIImageView(frame: cell.contentView.bounds)
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        
+        // 이미지 설정
+        if let url = URL(string: photos[indexPath.item]) {
+            imageView.kf.setImage(with: url, placeholder: UIImage(systemName: "circle.dotted")) // Kingfisher로 이미지 로드
+        } else {
+            imageView.image = UIImage(systemName: "circle.dotted")
+        }
+        
+        // 이미지 뷰를 셀에 추가
+        cell.contentView.addSubview(imageView)
+        
+        return cell
+    }
+    
+    
+}
+
 protocol ReviewTableViewCellDelegate: NSObject {
     func didDeleteReview(_ review: Review)
+    func reportReview(_ review: Review)
 }

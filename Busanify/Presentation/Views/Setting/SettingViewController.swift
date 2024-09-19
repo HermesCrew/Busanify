@@ -19,7 +19,7 @@ class SettingViewController: UIViewController {
     
     private lazy var loginButton: UIButton = {
         var config = UIButton.Configuration.filled()
-        config.title = "로그인"
+        config.title = "Login"
         config.baseForegroundColor = .black
         config.baseBackgroundColor = .white
         let button = UIButton(configuration: config)
