@@ -156,7 +156,9 @@ extension BookmarkViewController: UITableViewDataSource, UITableViewDelegate, De
             placeId: selectedId,
             useCase: PlacesApi()
         )
-        let placeDetailVC = PlaceDetailViewController(viewModel: placeDetailViewModel)
+        
+        let reviewViewModel = ReviewViewModel(useCase: ReviewApi())
+        let placeDetailVC = PlaceDetailViewController(placeDetailViewModel: placeDetailViewModel, reviewViewModel: reviewViewModel)
         placeDetailVC.delegate = self
         show(placeDetailVC, sender: self)
     }
@@ -185,7 +187,9 @@ extension BookmarkViewController: UICollectionViewDataSource, UICollectionViewDe
             placeId: selectedId,
             useCase: PlacesApi()
         )
-        let placeDetailVC = PlaceDetailViewController(viewModel: placeDetailViewModel)
+        
+        let reviewViewModel = ReviewViewModel(useCase: ReviewApi())
+        let placeDetailVC = PlaceDetailViewController(placeDetailViewModel: placeDetailViewModel, reviewViewModel: reviewViewModel)
         placeDetailVC.delegate = self
         show(placeDetailVC, sender: self)
     }
