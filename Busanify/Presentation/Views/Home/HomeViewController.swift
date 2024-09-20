@@ -307,15 +307,6 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
                 
                 self.listViewController.fetchPlaces(type: btnInfo, lat: viewModel.currentLat, lng: viewModel.currentLong)
                 self.presentListView()
-//                listView.modalPresentationStyle = .pageSheet
-//                listView.sheetPresentationController?.detents = [minimumDetent, .large()]
-//                listView.sheetPresentationController?.largestUndimmedDetentIdentifier = minimumDetent.identifier
-//                listView.sheetPresentationController?.prefersGrabberVisible = true
-//                if self.presentedViewController == nil {
-//                    // MARK: present 할 때 tabbar를 숨김?
-//                    // 캐러셀로
-//                    present(listView, animated: false)
-//                }
             }, for: .touchUpInside)
             
             categoryContentView.addSubview(btn)
@@ -332,7 +323,6 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
             prevTrailingAnchor = btn.trailingAnchor
         }
     }
-    
     
     func presentListView() {
         if let presentedVC = presentedViewController as? PlaceListViewController {
@@ -428,6 +418,15 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
                    poiID: "mainPoi",
                    mapPoints: [MapPoint(longitude: viewModel.currentLong, latitude: viewModel.currentLat)])
         
+        let _ = view.addCameraWillMovedEventHandler(target: view) { map in
+            return { [weak self] _ in
+                guard let self = self else { return }
+                if self.presentedViewController != nil {
+                    self.listViewController.dismiss(animated: true)
+                }
+            }
+        }
+        
         // 카메라 이동 event
         let _ = view.addCameraStoppedEventHandler(target: view) { map in
             return { [weak self] _ in
@@ -439,11 +438,6 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
                 // MARK: 카메라 이동하고 위, 경도 조정이 잘 안되는거같음
                 viewModel.currentLong = movedLong
                 viewModel.currentLat = movedLat + 0.001
-                
-//                let rndNumber = Int.random(in: 1...200)
-//                createLabelLayer(layerID: "location\(rndNumber)")
-//                createPoiStyle(styleID: "locationStyle\(rndNumber)")
-//                createPois(layerID: "location\(rndNumber)", styleID: "locationStyle\(rndNumber)", poiID: "poiID\(rndNumber)", mapPoints: [MapPoint(longitude: movedLong, latitude: movedLat + 0.001)])
             }
         }
         
@@ -515,6 +509,34 @@ extension HomeViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
+        if let text = textField.text {
+            var btnInfo: PlaceType? = nil
+            
+            switch text {
+            case "음식", "음식점":
+                btnInfo = .restaurant
+            case "쇼핑":
+                btnInfo = .shopping
+            case "숙박", "숙소", "잠":
+                btnInfo = .accommodation
+            case "관광", "관광지", "볼거":
+                btnInfo = .touristAttraction
+            default:
+                // MARK: TODO - 입력한 텍스트로 검색기능 추가
+                break
+            }
+            if let btnInfo = btnInfo {
+                self.viewModel.getLocationBy(typeId: btnInfo,
+                                             lat: viewModel.currentLat,
+                                             lng: viewModel.currentLong,
+                                             radius: 1000)
+                
+                self.listViewController.fetchPlaces(type: btnInfo, lat: viewModel.currentLat, lng: viewModel.currentLong)
+            } else {
+                self.viewModel.getLocationsBy(keyword: text)
+            }
+            
+        }
         return true
     }
 }
