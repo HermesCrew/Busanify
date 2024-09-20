@@ -19,7 +19,12 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
     let weatherContainer = WeatherContainer()
     let searchTextField = SearchTextField()
 //    let listView = SelectedPlaceListViewController()
-    let listView = PlaceListViewController()
+//    let listView = PlaceListViewController()
+    private var listContainerView: UIView!
+    private var listViewController: PlaceListViewController!
+    private var listViewHeightConstraint: NSLayoutConstraint!
+    private let minimumListHeight: CGFloat = 140
+    private let maximumListHeight: CGFloat = UIScreen.main.bounds.height * 0.7
     let searchIcon: UIImageView = {
         let icon = UIImageView()
         icon.translatesAutoresizingMaskIntoConstraints = false
@@ -138,6 +143,7 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
         } else {
             navigationController?.pushViewController(weatherVC, animated: true)
         }
+        dismiss(animated: false)
     }
 
     // WeatherManagerDelegate 메서드 구현
@@ -161,9 +167,7 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
                 if places.count > 0 {
                     self.createLabelLayer(layerID: "LocationLayer")
                     self.createPoiStyle(styleID: "LocationStyle")
-                    let mapPoints = places.map {
-                        return MapPoint(longitude: $0.lng, latitude: $0.lat)
-                    }
+                    let mapPoints = places.map { MapPoint(longitude: $0.lng, latitude: $0.lat) }
                     self.createPois(layerID: "LocationLayer", styleID: "LocationStyle", poiID: "", mapPoints: mapPoints)
                 }
             }
@@ -171,9 +175,72 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
     }
     
     func configureUI() {
+        setupListView()
         setWeatherArea()
         setCategoryButtons()
         setMovieToCurrentLocationButton()
+    }
+    
+    private func setupListView() {
+        listContainerView = UIView()
+        listContainerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(listContainerView)
+        
+        listViewController = PlaceListViewController()
+        addChild(listViewController)
+        listContainerView.addSubview(listViewController.view)
+        listViewController.didMove(toParent: self)
+        
+        listViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            listContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            listContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            listContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            listViewController.view.topAnchor.constraint(equalTo: listContainerView.topAnchor),
+            listViewController.view.leadingAnchor.constraint(equalTo: listContainerView.leadingAnchor),
+            listViewController.view.trailingAnchor.constraint(equalTo: listContainerView.trailingAnchor),
+            listViewController.view.bottomAnchor.constraint(equalTo: listContainerView.bottomAnchor)
+        ])
+        
+        listViewHeightConstraint = listContainerView.heightAnchor.constraint(equalToConstant: minimumListHeight)
+        listViewHeightConstraint.isActive = true
+        
+        listContainerView.isHidden = true
+        
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
+        listContainerView.addGestureRecognizer(panGesture)
+    }
+    
+    func showListView() {
+        listContainerView.isHidden = false
+        UIView.animate(withDuration: 0.3) {
+            self.listViewHeightConstraint.constant = self.minimumListHeight
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translation(in: listContainerView)
+        let velocity = gesture.velocity(in: listContainerView)
+
+        switch gesture.state {
+        case .changed:
+            let newHeight = listViewHeightConstraint.constant - translation.y
+            listViewHeightConstraint.constant = min(max(newHeight, minimumListHeight), maximumListHeight)
+            gesture.setTranslation(.zero, in: listContainerView)
+        case .ended:
+            let shouldExpand = velocity.y < 0 || listViewHeightConstraint.constant > (minimumListHeight + maximumListHeight) / 2
+            let targetHeight = shouldExpand ? maximumListHeight : minimumListHeight
+            
+            UIView.animate(withDuration: 0.3) {
+                self.listViewHeightConstraint.constant = targetHeight
+                self.view.layoutIfNeeded()
+            }
+        default:
+            break
+        }
     }
     
     func setWeatherArea() {
@@ -238,18 +305,17 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
                                              lng: viewModel.currentLong,
                                              radius: 1000)
                 
-//                listView.locationDelegate = self
-                self.listView.fetchPlaces(type: btnInfo, lat: viewModel.currentLat, lng: viewModel.currentLong)
-                listView.modalPresentationStyle = .pageSheet
-//                listView.sheetPresentationController?.preferredCornerRadius = 25
-                listView.sheetPresentationController?.detents = [minimumDetent, .medium(), .large()]
-                listView.sheetPresentationController?.largestUndimmedDetentIdentifier = minimumDetent.identifier
-                listView.sheetPresentationController?.prefersGrabberVisible = true
-                if self.presentedViewController == nil {
-                    // MARK: present 할 때 tabbar를 숨김?
-                    // 캐러셀로
-                    present(listView, animated: false)
-                }
+                self.listViewController.fetchPlaces(type: btnInfo, lat: viewModel.currentLat, lng: viewModel.currentLong)
+                self.presentListView()
+//                listView.modalPresentationStyle = .pageSheet
+//                listView.sheetPresentationController?.detents = [minimumDetent, .large()]
+//                listView.sheetPresentationController?.largestUndimmedDetentIdentifier = minimumDetent.identifier
+//                listView.sheetPresentationController?.prefersGrabberVisible = true
+//                if self.presentedViewController == nil {
+//                    // MARK: present 할 때 tabbar를 숨김?
+//                    // 캐러셀로
+//                    present(listView, animated: false)
+//                }
             }, for: .touchUpInside)
             
             categoryContentView.addSubview(btn)
@@ -264,6 +330,30 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
             }
             
             prevTrailingAnchor = btn.trailingAnchor
+        }
+    }
+    
+    
+    func presentListView() {
+        if let presentedVC = presentedViewController as? PlaceListViewController {
+            // If already presented, just update the sheet presentation controller
+            presentedVC.sheetPresentationController?.animateChanges {
+                presentedVC.sheetPresentationController?.selectedDetentIdentifier = minimumDetent.identifier
+            }
+        } else {
+            // If not presented, create a new PlaceListViewController and present it
+            let listVC = PlaceListViewController()
+            listVC.modalPresentationStyle = .pageSheet
+            if let sheet = listVC.sheetPresentationController {
+                sheet.detents = [minimumDetent, .large()]
+                sheet.largestUndimmedDetentIdentifier = minimumDetent.identifier
+                sheet.prefersGrabberVisible = true
+                sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+                sheet.prefersEdgeAttachedInCompactHeight = true
+                sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
+            }
+            present(listVC, animated: true, completion: nil)
+            self.listViewController = listVC
         }
     }
     
@@ -433,14 +523,15 @@ extension HomeViewController: MoveToMapLocation {
     func moveTo(lat: CGFloat, lng: CGFloat) {
         let view = mapController?.getView("mapview") as? KakaoMap
         
-        self.listView.sheetPresentationController?.animateChanges {
-            self.listView.sheetPresentationController?.selectedDetentIdentifier = minimumDetent.identifier
+        UIView.animate(withDuration: 0.3) {
+            self.listViewHeightConstraint.constant = self.minimumListHeight
+            self.view.layoutIfNeeded()
         }
+
         view?.animateCamera(cameraUpdate: .make(cameraPosition: .init(target: MapPoint(longitude: lng, latitude: lat),
                                                                       zoomLevel: 17,
                                                                       rotation: view!.rotationAngle,
                                                                       tilt: view!.tiltAngle)),
                             options: CameraAnimationOptions.init(autoElevation: true, consecutive: true, durationInMillis: 200))
-        
     }
 }
