@@ -255,7 +255,7 @@ final class AuthenticationViewModel {
     func updateProfileNickname(nickname: String, completion: @escaping (Bool) -> Void) {
         guard let token = self.getToken() else { return }
         
-        self.signInApi.updateUserProfile(token: token, profileImage: nil, nickname: nickname)
+        self.signInApi.updateUserProfile(token: token, profileImage: self.currentUser?.profileImage, nickname: nickname)
             .receive(on: DispatchQueue.main)
             .assign(to: &self.$currentUser)
         

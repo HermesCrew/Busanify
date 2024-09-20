@@ -237,6 +237,14 @@ class SettingViewController: UIViewController {
                 self?.settingTableView.reloadData()
             }
             .store(in: &cancellables)
+        
+        viewModel.$state
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.configureProfile()
+                self?.settingTableView.reloadData()
+            }
+            .store(in: &cancellables)
     }
     
     @objc private func editNickname() {
