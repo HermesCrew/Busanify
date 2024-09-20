@@ -13,7 +13,7 @@ class ReviewTableViewCell: UITableViewCell {
     static let identifier = "review"
     private let authViewModel = AuthenticationViewModel.shared
     private let keyChain = Keychain()
-    var photos: [String] = []
+    var photoUrls: [String] = []
     
     weak var delegate: ReviewTableViewCellDelegate?
     
@@ -122,15 +122,15 @@ class ReviewTableViewCell: UITableViewCell {
             starStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             starStackView.widthAnchor.constraint(equalToConstant: 50),
             
-            collectionView.topAnchor.constraint(equalTo: starStackView.bottomAnchor, constant: 8),
+            contentLabel.topAnchor.constraint(equalTo: starStackView.bottomAnchor, constant: 8),
+            contentLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            
+            collectionView.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 8),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             collectionView.heightAnchor.constraint(equalToConstant: 100),
             
-            contentLabel.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 8),
-            contentLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            
-            dateLabel.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 8),
+            dateLabel.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 8),
             dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             dateLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
         ])
@@ -145,7 +145,7 @@ class ReviewTableViewCell: UITableViewCell {
         contentLabel.text = review.content
         dateLabel.text = review.createdAt
         
-        self.photos = review.photos
+        self.photoUrls = review.photoUrls
         collectionView.reloadData()
         
         var menuItems: [UIAction] = [UIAction(title: "Report", image: UIImage(systemName: "exclamationmark.triangle"), handler: { _ in
@@ -157,7 +157,7 @@ class ReviewTableViewCell: UITableViewCell {
         case .googleSignedIn(let user):
             if review.user.id == user.userID {
                 menuItems = [
-                    UIAction(title: "Modify", image: UIImage(systemName: "pencil"), handler: { _ in }),
+                    UIAction(title: "Edit", image: UIImage(systemName: "pencil"), handler: { _ in }),
                     UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
                         self?.delegate?.didDeleteReview(review)
                     })
@@ -171,7 +171,7 @@ class ReviewTableViewCell: UITableViewCell {
             
             if review.user.id == userId {
                 menuItems = [
-                    UIAction(title: "Modify", image: UIImage(systemName: "pencil"), handler: { _ in }),
+                    UIAction(title: "Edit", image: UIImage(systemName: "pencil"), handler: { _ in }),
                     UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
                         self?.delegate?.didDeleteReview(review)
                     })
@@ -226,7 +226,7 @@ class ReviewTableViewCell: UITableViewCell {
 
 extension ReviewTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return photos.count
+        return photoUrls.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -241,7 +241,7 @@ extension ReviewTableViewCell: UICollectionViewDataSource, UICollectionViewDeleg
         imageView.clipsToBounds = true
         
         // 이미지 설정
-        if let url = URL(string: photos[indexPath.item]) {
+        if let url = URL(string: photoUrls[indexPath.item]) {
             imageView.kf.setImage(with: url, placeholder: UIImage(systemName: "circle.dotted")) // Kingfisher로 이미지 로드
         } else {
             imageView.image = UIImage(systemName: "circle.dotted")

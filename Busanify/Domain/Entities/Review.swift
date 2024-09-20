@@ -12,12 +12,12 @@ struct Review: Identifiable, Hashable, Codable {
     let id: Int
     let rating: Double
     let content: String
-    let photos: [String]
+    let photoUrls: [String]
     let user: User
     let createdAt: String
     
     private enum CodingKeys: String, CodingKey {
-        case id, rating, content, photos, user, createdAt
+        case id, rating, content, photoUrls, user, createdAt
     }
     
     init(from decoder: Decoder) throws {
@@ -25,7 +25,7 @@ struct Review: Identifiable, Hashable, Codable {
         id = try container.decode(Int.self, forKey: .id)
         rating = try container.decode(Double.self, forKey: .rating)
         content = try container.decode(String.self, forKey: .content)
-        photos = try container.decode([String].self, forKey: .photos)
+        photoUrls = try container.decode([String].self, forKey: .photoUrls)
         user = try container.decode(User.self, forKey: .user)
         
         let createdAtString = try container.decode(String.self, forKey: .createdAt)
