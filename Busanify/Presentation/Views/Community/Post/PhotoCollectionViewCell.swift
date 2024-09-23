@@ -6,34 +6,34 @@
 //
 
 import UIKit
+import Kingfisher
 
 class PhotoCollectionViewCell: UICollectionViewCell {
     
     var currentIndex: Int? // 현재 인덱스
-    var images: [UIImage]? // 이미지 URL 배열
     
     let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 10
         imageView.clipsToBounds = true
         return imageView
     }()
     
     let deleteButton: UIButton = {
         let button = UIButton(type: .custom)
-        let deleteImage = UIImage(systemName: "minus.circle.fill")
+        let deleteImage = UIImage(systemName: "x.circle.fill")
         button.setImage(deleteImage, for: .normal)
-        button.tintColor = .red
-        button.isHidden = true
-        button.translatesAutoresizingMaskIntoConstraints = false
+        button.tintColor = .gray
         return button
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        contentView.layer.cornerRadius = 10
-        contentView.layer.masksToBounds = true
+//        contentView.layer.cornerRadius = 10
+        contentView.layer.masksToBounds = false // 클리핑 해제
+            contentView.clipsToBounds = false
         
         contentView.addSubview(imageView)
         contentView.addSubview(deleteButton)
@@ -48,8 +48,8 @@ class PhotoCollectionViewCell: UICollectionViewCell {
             imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             
-            deleteButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5), // 상단 여백 줄임
-            deleteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5), // 우측 여백 줄임
+            deleteButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: -10), // 상단 여백 줄임
+            deleteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 10), // 우측 여백 줄임
             deleteButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.22), // 크기 증가
             deleteButton.heightAnchor.constraint(equalTo: deleteButton.widthAnchor) // 정사각형 유지
         ])
@@ -67,9 +67,12 @@ class PhotoCollectionViewCell: UICollectionViewCell {
         contentView.layer.borderColor = nil
     }
     
-    func configure(with images: [UIImage], index: Int) {
-        imageView.image = images[index]
-        self.currentIndex = index
-        self.images = images // 이미지 URL 배열 설정
+    func configure(with image: UIImage) {
+        imageView.image = image
+    }
+    
+    func configure(with imageUrl: String) {
+        let url = URL(string: imageUrl)
+        imageView.kf.setImage(with: url, placeholder: UIImage(systemName: "circle.dotted"))
     }
 }

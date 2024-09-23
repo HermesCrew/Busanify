@@ -38,6 +38,22 @@ final class PostViewModel {
             .assign(to: &$posts)
     }
     
+    func updatePost(token: String?, id: Int, content: String, photos: [UIImage], existingImageUrls: [String]) async throws {
+        guard let token = token else { return }
+        var photoUrls: [String] = []
+        
+        for photo in photos {
+            if let data = photo.jpegData(compressionQuality: 1.0) {
+                let url = try await useCase.saveImage(data: data)
+                photoUrls.append(url)
+            }
+        }
+        
+        let allImageUrls = existingImageUrls + photoUrls
+        let updatePostDTO = UpdatePostDTO(id: id, content: content, photoUrls: allImageUrls)
+        try await useCase.updatePost(token: token, updatePostDTO: updatePostDTO)
+    }
+    
     func deletePost(token: String?, id: Int, photoUrls: [String]) async throws {
         guard let token = token else { return }
         

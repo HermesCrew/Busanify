@@ -28,6 +28,8 @@
 		C207F37B2C3AFC0C007DFA27 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207F37A2C3AFC0C007DFA27 /* SignInViewController.swift */; };
 		C207F3812C3AFC5F007DFA27 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207F3802C3AFC5F007DFA27 /* AuthenticationViewModel.swift */; };
 		C207F3832C3AFC74007DFA27 /* SignInApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207F3822C3AFC74007DFA27 /* SignInApi.swift */; };
+		C20D082C2CA1102D00459803 /* UpdatePostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20D082B2CA1102D00459803 /* UpdatePostViewController.swift */; };
+		C20D082E2CA11CDC00459803 /* UpdatePostDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20D082D2CA11CD600459803 /* UpdatePostDTO.swift */; };
 		C22C8D9A2C9C63D8006BB06B /* PostApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22C8D992C9C63D8006BB06B /* PostApi.swift */; };
 		C22C8D9C2C9C642F006BB06B /* PostViewUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22C8D9B2C9C642F006BB06B /* PostViewUseCase.swift */; };
 		C22C8D9E2C9C64AE006BB06B /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22C8D9D2C9C64AE006BB06B /* Post.swift */; };
@@ -117,6 +119,8 @@
 		C207F37A2C3AFC0C007DFA27 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		C207F3802C3AFC5F007DFA27 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
 		C207F3822C3AFC74007DFA27 /* SignInApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInApi.swift; sourceTree = "<group>"; };
+		C20D082B2CA1102D00459803 /* UpdatePostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePostViewController.swift; sourceTree = "<group>"; };
+		C20D082D2CA11CD600459803 /* UpdatePostDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePostDTO.swift; sourceTree = "<group>"; };
 		C22C8D992C9C63D8006BB06B /* PostApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostApi.swift; sourceTree = "<group>"; };
 		C22C8D9B2C9C642F006BB06B /* PostViewUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewUseCase.swift; sourceTree = "<group>"; };
 		C22C8D9D2C9C64AE006BB06B /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
@@ -297,6 +301,7 @@
 		C22C8D9F2C9C6677006BB06B /* DTOs */ = {
 			isa = PBXGroup;
 			children = (
+				C20D082D2CA11CD600459803 /* UpdatePostDTO.swift */,
 				C22C8DA02C9C66A2006BB06B /* PostDTO.swift */,
 				C2AD58BC2C96D5CC00FBE6AA /* ReportDTO.swift */,
 			);
@@ -326,6 +331,7 @@
 			children = (
 				C22C8DA62C9C6802006BB06B /* AddPostViewController.swift */,
 				C22C8DAB2C9C7B38006BB06B /* PhotoCollectionViewCell.swift */,
+				C20D082B2CA1102D00459803 /* UpdatePostViewController.swift */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -768,6 +774,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C20D082E2CA11CDC00459803 /* UpdatePostDTO.swift in Sources */,
 				C20637F92C51F0ED00089D74 /* User.swift in Sources */,
 				753520AA2C3286D400E439CF /* PlaceListViewController.swift in Sources */,
 				C207F37B2C3AFC0C007DFA27 /* SignInViewController.swift in Sources */,
@@ -803,6 +810,7 @@
 				753520A42C326B0E00E439CF /* PlaceListViewModel.swift in Sources */,
 				B8F89BD62C5387CC00332FE2 /* DailyForecastCell.swift in Sources */,
 				C296D7022C1F16B000691515 /* ViewController.swift in Sources */,
+				C20D082C2CA1102D00459803 /* UpdatePostViewController.swift in Sources */,
 				C2D279CB2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift in Sources */,
 				C259310D2C9D51A100901DC2 /* CommunityTableViewCell.swift in Sources */,
 				C2B27C8D2C91850700223874 /* SettingTableViewCell.swift in Sources */,
