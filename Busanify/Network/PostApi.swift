@@ -68,6 +68,26 @@ final class PostApi: PostViewUseCase {
             .eraseToAnyPublisher()
     }
     
+    func updatePost(token: String, updatePostDTO: UpdatePostDTO) async throws {
+        let urlString = "\(baseURL)/posts"
+        
+        guard let url = URL(string: urlString) else {
+            fatalError("Invalid URL")
+        }
+        
+        guard let jsonData = try? JSONEncoder().encode(updatePostDTO) else {
+            fatalError("Json Encode Error")
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "PATCH"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.httpBody = jsonData
+        
+        let (_, _) = try await URLSession.shared.data(for: request)
+    }
+    
     func deletePost(by id: Int, token: String) async throws {
         let urlString = "\(baseURL)/posts"
         
