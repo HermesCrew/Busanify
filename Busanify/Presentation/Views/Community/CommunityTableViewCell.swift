@@ -8,7 +8,6 @@
 import UIKit
 
 class CommunityTableViewCell: UITableViewCell {
-
     static let identifier = "community"
     private let authViewModel = AuthenticationViewModel.shared
     private let keyChain = Keychain()
@@ -19,7 +18,7 @@ class CommunityTableViewCell: UITableViewCell {
     private lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person.crop.circle")
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         
         return imageView
@@ -76,6 +75,18 @@ class CommunityTableViewCell: UITableViewCell {
         return button
     }()
     
+    private lazy var commentButton: UIButton = {
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(systemName: "bubble.right")
+        config.title = "Comment"
+        config.imagePadding = 8 // 이미지와 텍스트 사이의 간격
+        config.baseForegroundColor = .black
+        
+        let button = UIButton(configuration: config)
+        
+        return button
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureUI()
@@ -106,6 +117,7 @@ class CommunityTableViewCell: UITableViewCell {
         contentView.addSubview(collectionView)
         contentView.addSubview(dateLabel)
         contentView.addSubview(moreButton)
+        contentView.addSubview(commentButton)
         
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         usernameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -113,6 +125,7 @@ class CommunityTableViewCell: UITableViewCell {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
         moreButton.translatesAutoresizingMaskIntoConstraints = false
+        commentButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             profileImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
@@ -139,8 +152,11 @@ class CommunityTableViewCell: UITableViewCell {
             collectionView.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 8),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
             collectionViewHeightConstraint,
+            
+            commentButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 8),
+            commentButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+            commentButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
         ])
     }
     
@@ -152,6 +168,10 @@ class CommunityTableViewCell: UITableViewCell {
         usernameLabel.text = post.user.nickname
         contentLabel.text = post.content
         dateLabel.text = post.createdAt
+        commentButton.setTitle(String(post.commentsCount), for: .normal)
+        commentButton.addAction(UIAction { [weak self] _ in
+            self?.delegate?.commentButtonTapped(post)
+        }, for: .touchUpInside)
         
         self.photoUrls = post.photoUrls
         if post.photoUrls.isEmpty {
@@ -240,4 +260,5 @@ protocol CommunityTableViewCellDelegate: NSObject {
     func updatePost(_ post: Post)
     func reportPost(_ post: Post)
     func expandPost(cell: CommunityTableViewCell)
+    func commentButtonTapped(_ post: Post)
 }
