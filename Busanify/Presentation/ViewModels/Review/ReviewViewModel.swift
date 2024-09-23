@@ -14,10 +14,10 @@ final class ReviewViewModel {
         self.useCase = useCase
     }
     
-    func reportReview(token: String?, reportData: Report) {
+    func reportReview(token: String?, reportDTO: ReportDTO) {
         guard let token = token else { return }
         
-        useCase.reportReview(token: token, reportData: reportData)
+        useCase.reportReview(token: token, reportDTO: reportDTO)
     }
     
     func deleteReview(id: Int, token: String?) async throws {

@@ -9,6 +9,6 @@ import Foundation
 import Combine
 
 protocol ReviewUseCase {
-    func reportReview(token: String, reportData: Report)
+    func reportReview(token: String, reportDTO: ReportDTO)
     func deleteReview(by id: Int, token: String) async throws
 }
