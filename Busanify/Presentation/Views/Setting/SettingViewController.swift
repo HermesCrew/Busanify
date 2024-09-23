@@ -31,7 +31,7 @@ class SettingViewController: UIViewController {
     private lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person.fill")
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.tintColor = .black
         imageView.backgroundColor = .lightGray
         imageView.layer.cornerRadius = 60
@@ -179,7 +179,7 @@ class SettingViewController: UIViewController {
             nicknameTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             nicknameTextField.centerYAnchor.constraint(equalTo: nicknameLabel.centerYAnchor),
             
-            editNicknameButton.leadingAnchor.constraint(equalTo: nicknameLabel.trailingAnchor),
+            editNicknameButton.leadingAnchor.constraint(equalTo: nicknameLabel.trailingAnchor, constant: 14),
             editNicknameButton.centerYAnchor.constraint(equalTo: nicknameLabel.centerYAnchor),
             
             emailLabel.topAnchor.constraint(equalTo: nicknameLabel.bottomAnchor, constant: 8),
