@@ -19,14 +19,14 @@ final class ReviewApi: ReviewUseCase {
         self.baseURL = baseURL
     }
     
-    func reportReview(token: String, reportData: Report) {
+    func reportReview(token: String, reportDTO: ReportDTO) {
         let urlString = "\(baseURL)/reports"
         
         guard let url = URL(string: urlString) else {
             fatalError("Invalid URL")
         }
         
-        guard let jsonData = try? JSONEncoder().encode(reportData) else {
+        guard let jsonData = try? JSONEncoder().encode(reportDTO) else {
             fatalError("Json Encode Error")
         }
         

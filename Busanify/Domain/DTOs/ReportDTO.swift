@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Report: Codable {
+struct ReportDTO: Codable {
     let reportedContentId: Int
     let reportedUserId: String
     let content: String

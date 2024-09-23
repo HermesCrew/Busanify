@@ -326,8 +326,8 @@ extension PlaceDetailViewController: ReviewTableViewCellDelegate {
             alert.addAction(UIAlertAction(title: "Report", style: .destructive, handler: { _ in
                 let reportReason = alert.textFields?.first?.text ?? "report"
                 
-                let report = Report(reportedContentId: review.id, reportedUserId: review.user.id, content: reportReason, reportType: .review)
-                self.reviewViewModel.reportReview(token: self.authViewModel.getToken()!, reportData: report)
+                let reportDTO = ReportDTO(reportedContentId: review.id, reportedUserId: review.user.id, content: reportReason, reportType: .review)
+                self.reviewViewModel.reportReview(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
             }))
         case .signedOut:
             alert = UIAlertController(title: "로그인 필요", message: "북마크 기능을 사용하려면 로그인이 필요합니다.", preferredStyle: .alert)

@@ -1,21 +1,20 @@
 //
-//  ReviewTableViewCell.swift
+//  CommunityTableViewCell.swift
 //  Busanify
 //
-//  Created by 이인호 on 7/18/24.
+//  Created by 이인호 on 9/20/24.
 //
 
 import UIKit
-import Kingfisher
 
-class ReviewTableViewCell: UITableViewCell {
-    
-    static let identifier = "review"
+class CommunityTableViewCell: UITableViewCell {
+
+    static let identifier = "community"
     private let authViewModel = AuthenticationViewModel.shared
     private let keyChain = Keychain()
     var photoUrls: [String] = []
-    
-    weak var delegate: ReviewTableViewCellDelegate?
+    private var isExpanded = false
+    weak var delegate: CommunityTableViewCellDelegate?
     
     private lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
@@ -33,7 +32,14 @@ class ReviewTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let contentLabel = UILabel()
+    private let contentLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 5
+        label.lineBreakMode = .byTruncatingTail
+        label.isUserInteractionEnabled = true
+        
+        return label
+    }()
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -50,14 +56,8 @@ class ReviewTableViewCell: UITableViewCell {
         return collectionView
     }()
     
-    private lazy var starStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.spacing = 0
-        stackView.alignment = .fill
-        stackView.distribution = .fillEqually
-        
-        return stackView
+    private lazy var collectionViewHeightConstraint: NSLayoutConstraint = {
+        return collectionView.heightAnchor.constraint(equalToConstant: 100) // 기본 높이 100
     }()
     
     private lazy var dateLabel: UILabel = {
@@ -79,17 +79,29 @@ class ReviewTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureUI()
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapContentLabel))
+        contentLabel.addGestureRecognizer(tapGesture)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    @objc private func didTapContentLabel() {
+        if contentLabel.numberOfLines == 0 {
+            contentLabel.numberOfLines = 5
+        } else {
+            contentLabel.numberOfLines = 0
+        }
+        
+        self.delegate?.expandPost(cell: self)
+    }
+    
     private func configureUI() {
         profileImageView.layer.cornerRadius = 15
         contentView.addSubview(profileImageView)
         contentView.addSubview(usernameLabel)
-        contentView.addSubview(starStackView)
         contentView.addSubview(contentLabel)
         contentView.addSubview(collectionView)
         contentView.addSubview(dateLabel)
@@ -97,14 +109,12 @@ class ReviewTableViewCell: UITableViewCell {
         
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         usernameLabel.translatesAutoresizingMaskIntoConstraints = false
-        starStackView.translatesAutoresizingMaskIntoConstraints = false
         contentLabel.translatesAutoresizingMaskIntoConstraints = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
         moreButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            
             profileImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             profileImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             profileImageView.widthAnchor.constraint(equalToConstant: 30),
@@ -114,52 +124,58 @@ class ReviewTableViewCell: UITableViewCell {
             usernameLabel.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 8),
             usernameLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
             
+            dateLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            dateLabel.leadingAnchor.constraint(equalTo: usernameLabel.trailingAnchor, constant: 8),
+            dateLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
+            
             moreButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             moreButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             moreButton.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
             
-            starStackView.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 8),
-            starStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            starStackView.widthAnchor.constraint(equalToConstant: 50),
-            
-            contentLabel.topAnchor.constraint(equalTo: starStackView.bottomAnchor, constant: 8),
+            contentLabel.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 8),
             contentLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            contentLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
             collectionView.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 8),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            collectionView.heightAnchor.constraint(equalToConstant: 100),
-            
-            dateLabel.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 8),
-            dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            dateLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+            collectionViewHeightConstraint,
         ])
     }
     
-    func configure(with review: Review) {
-        if let profileImage = review.user.profileImage {
+    func configure(with post: Post) {
+        if let profileImage = post.user.profileImage {
             let url = URL(string: profileImage)
             profileImageView.kf.setImage(with: url)
         }
-        usernameLabel.text = review.user.nickname
-        contentLabel.text = review.content
-        dateLabel.text = review.createdAt
+        usernameLabel.text = post.user.nickname
+        contentLabel.text = post.content
+        dateLabel.text = post.createdAt
         
-        self.photoUrls = review.photoUrls
+        self.photoUrls = post.photoUrls
+        if post.photoUrls.isEmpty {
+            collectionViewHeightConstraint.constant = 0
+        } else {
+            collectionViewHeightConstraint.constant = 100
+        }
+        
         collectionView.reloadData()
         
         var menuItems: [UIAction] = [UIAction(title: "Report", image: UIImage(systemName: "exclamationmark.triangle"), handler: { _ in
-            self.delegate?.reportReview(review)
+            self.delegate?.reportPost(post)
         })
         ]
         
         switch authViewModel.state {
         case .googleSignedIn(let user):
-            if review.user.id == user.userID {
+            if post.user.id == user.userID {
                 menuItems = [
-                    UIAction(title: "Edit", image: UIImage(systemName: "pencil"), handler: { _ in }),
+                    UIAction(title: "Edit", image: UIImage(systemName: "pencil"), handler: { [weak self] _ in
+                        self?.delegate?.updatePost(post)
+                    }),
                     UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
-                        self?.delegate?.didDeleteReview(review)
+                        self?.delegate?.didDeletePost(post)
                     })
                 ]
             }
@@ -169,11 +185,13 @@ class ReviewTableViewCell: UITableViewCell {
                 return
             }
             
-            if review.user.id == userId {
+            if post.user.id == userId {
                 menuItems = [
-                    UIAction(title: "Edit", image: UIImage(systemName: "pencil"), handler: { _ in }),
+                    UIAction(title: "Edit", image: UIImage(systemName: "pencil"), handler: { [weak self] _ in
+                        self?.delegate?.updatePost(post)
+                    }),
                     UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
-                        self?.delegate?.didDeleteReview(review)
+                        self?.delegate?.didDeletePost(post)
                     })
                 ]
             }
@@ -183,48 +201,10 @@ class ReviewTableViewCell: UITableViewCell {
         
         let menu = UIMenu(title: "", image: nil, options: [], children: menuItems)
         moreButton.menu = menu
-        
-        setupStarRating(rating: review.rating)
-    }
-    
-    private func setupStarRating(rating: Double) {
-        starStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        
-        for i in 0..<5 {
-            let starImageView = UIImageView()
-            starImageView.contentMode = .scaleAspectFit
-            
-            let fillRatio = min(max(rating - Double(i), 0), 1)
-            
-            let filledStarImage = drawPartialStar(fillRatio: CGFloat(fillRatio))
-            starImageView.image = filledStarImage
-            
-            starStackView.addArrangedSubview(starImageView)
-        }
-    }
-    
-    private func drawPartialStar(fillRatio: CGFloat) -> UIImage? {
-        let size = CGSize(width: 24, height: 22)
-        let renderer = UIGraphicsImageRenderer(size: size)
-        
-        return renderer.image { context in
-            let rect = CGRect(origin: .zero, size: size)
-            
-            let emptyStarImage = UIImage(systemName: "star")?.withRenderingMode(.alwaysTemplate)
-            UIColor.systemYellow.setFill()
-            emptyStarImage?.draw(in: rect)
-            
-            let filledStarImage = UIImage(systemName: "star.fill")?.withRenderingMode(.alwaysTemplate)
-            context.cgContext.saveGState()
-            context.cgContext.clip(to: CGRect(x: 0, y: 0, width: size.width * fillRatio, height: size.height))
-            UIColor.systemYellow.setFill()
-            filledStarImage?.draw(in: rect)
-            context.cgContext.restoreGState()
-        }
     }
 }
 
-extension ReviewTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension CommunityTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return photoUrls.count
     }
@@ -238,6 +218,7 @@ extension ReviewTableViewCell: UICollectionViewDataSource, UICollectionViewDeleg
         // 이미지 뷰 생성 및 추가
         let imageView = UIImageView(frame: cell.contentView.bounds)
         imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 10
         imageView.clipsToBounds = true
         
         // 이미지 설정
@@ -252,11 +233,11 @@ extension ReviewTableViewCell: UICollectionViewDataSource, UICollectionViewDeleg
         
         return cell
     }
-    
-    
 }
 
-protocol ReviewTableViewCellDelegate: NSObject {
-    func didDeleteReview(_ review: Review)
-    func reportReview(_ review: Review)
+protocol CommunityTableViewCellDelegate: NSObject {
+    func didDeletePost(_ post: Post)
+    func updatePost(_ post: Post)
+    func reportPost(_ post: Post)
+    func expandPost(cell: CommunityTableViewCell)
 }
