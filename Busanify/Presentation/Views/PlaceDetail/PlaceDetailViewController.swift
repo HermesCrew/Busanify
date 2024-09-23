@@ -10,6 +10,7 @@ import Combine
 
 class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     private let placeDetailViewModel: PlaceDetailViewModel
+    private let reviewViewModel: ReviewViewModel
     private let authViewModel = AuthenticationViewModel.shared
     private var cancellables = Set<AnyCancellable>()
     private var placeInfos: [(label: String, icon: String)] = []
@@ -65,8 +66,9 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
         return button
     }()
     
-    init(viewModel: PlaceDetailViewModel) {
-        self.placeDetailViewModel = viewModel
+    init(placeDetailViewModel: PlaceDetailViewModel, reviewViewModel: ReviewViewModel) {
+        self.placeDetailViewModel = placeDetailViewModel
+        self.reviewViewModel = reviewViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -300,12 +302,42 @@ extension PlaceDetailViewController: ReviewTableViewCellDelegate {
     func didDeleteReview(_ review: Review) {
         Task {
             do {
-                try await placeDetailViewModel.deleteReview(id: review.id, token: self.authViewModel.getToken()!)
+                try await reviewViewModel.deleteReview(id: review.id, token: self.authViewModel.getToken()!)
+                placeDetailViewModel.fetchPlace(token: self.authViewModel.getToken()!)
                 self.delegate?.didUpdateData()
             } catch {
                 print("Failed to delete review: \(error)")
             }
         }
+    }
+    
+    func reportReview(_ review: Review) {
+        var alert = UIAlertController()
+        
+        switch authViewModel.state {
+        case .googleSignedIn, .appleSignedIn:
+            alert = UIAlertController(title: "Report review", message: nil, preferredStyle: .alert)
+            
+            alert.addTextField { textField in
+                textField.placeholder = "Please write the reason"
+            }
+            
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "Report", style: .destructive, handler: { _ in
+                let reportReason = alert.textFields?.first?.text ?? "report"
+                
+                let report = Report(reportedContentId: review.id, reportedUserId: review.user.id, content: reportReason, reportType: .review)
+                self.reviewViewModel.reportReview(token: self.authViewModel.getToken()!, reportData: report)
+            }))
+        case .signedOut:
+            alert = UIAlertController(title: "로그인 필요", message: "북마크 기능을 사용하려면 로그인이 필요합니다.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "로그인", style: .default, handler: { [weak self] _ in
+                self?.moveToSignInView()
+            }))
+            alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        }
+        
+        present(alert, animated: true, completion: nil)
     }
 }
 
