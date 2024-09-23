@@ -25,6 +25,15 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
     private var listViewHeightConstraint: NSLayoutConstraint!
     private let minimumListHeight: CGFloat = 140
     private let maximumListHeight: CGFloat = UIScreen.main.bounds.height * 0.7
+    var tempMovedLat: Double = 0
+    var tempMovedLng: Double = 0
+    var currentZoomLevel: Int = 15
+    var currentRadius: Double {
+        get {
+            return 1000.0 + (15.0 - Double(currentZoomLevel)) * 150.0
+        }
+    }
+    
     let searchIcon: UIImageView = {
         let icon = UIImageView()
         icon.translatesAutoresizingMaskIntoConstraints = false
@@ -101,7 +110,6 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
         
         setSubscriber()
         configureUI()
-//        setupTapGesture()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -178,7 +186,7 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
         setupListView()
         setWeatherArea()
         setCategoryButtons()
-        setMovieToCurrentLocationButton()
+        setCurrentLocationButton()
     }
     
     private func setupListView() {
@@ -298,15 +306,18 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
             let btn = CategoryButton(text: btnInfo.placeInfo.0,
                                      image: UIImage(systemName: btnInfo.placeInfo.1),
                                      color: btnInfo.placeInfo.2)
+            
             btn.addAction(UIAction{ [weak self] _ in
                 guard let self = self else { return }
+                // MARK: 지도에 핀을 찍기 위한거
                 self.viewModel.getLocationBy(typeId: btnInfo,
                                              lat: viewModel.currentLat,
                                              lng: viewModel.currentLong,
-                                             radius: 1000)
+                                             radius: currentRadius)
                 
-                self.listViewController.fetchPlaces(type: btnInfo, lat: viewModel.currentLat, lng: viewModel.currentLong)
-                self.presentListView()
+                // MARK: ListViewController의 cell을 채우기 위해서
+                self.listViewController.fetchPlaces(type: btnInfo, lat: viewModel.currentLat, lng: viewModel.currentLong, radius: currentRadius)
+                self.presentListView(btnInfo: btnInfo)
             }, for: .touchUpInside)
             
             categoryContentView.addSubview(btn)
@@ -324,15 +335,18 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
         }
     }
     
-    func presentListView() {
+    func presentListView(btnInfo: PlaceType?) {
         if let presentedVC = presentedViewController as? PlaceListViewController {
-            // If already presented, just update the sheet presentation controller
             presentedVC.sheetPresentationController?.animateChanges {
                 presentedVC.sheetPresentationController?.selectedDetentIdentifier = minimumDetent.identifier
             }
         } else {
-            // If not presented, create a new PlaceListViewController and present it
             let listVC = PlaceListViewController()
+            
+            listVC.selectedPlaceType = btnInfo
+            listVC.selectedLat = viewModel.currentLat
+            listVC.selectedLng = viewModel.currentLong
+            listVC.selectedRadius = currentRadius
             listVC.modalPresentationStyle = .pageSheet
             if let sheet = listVC.sheetPresentationController {
                 sheet.detents = [minimumDetent, .large()]
@@ -347,7 +361,7 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
         }
     }
     
-    func setMovieToCurrentLocationButton() {
+    func setCurrentLocationButton() {
         let currentButton = CustomLocationButton(type: .custom)
         view.addSubview(currentButton)
         
@@ -360,8 +374,9 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
             guard let self = self else { return }
             let view = mapController?.getView("mapview") as? KakaoMap
             let currentLocation = self.viewModel.getCurrentLocation()
+            currentZoomLevel = 15
             view?.animateCamera(cameraUpdate: .make(cameraPosition: .init(target: MapPoint(longitude: currentLocation.0, latitude: currentLocation.1),
-                                                                          zoomLevel: 17,
+                                                                          zoomLevel: 15,
                                                                           rotation: view!.rotationAngle,
                                                                           tilt: view!.tiltAngle)),
                                 options: CameraAnimationOptions.init(autoElevation: true, consecutive: true, durationInMillis: 200))
@@ -398,7 +413,7 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
                                                    viewInfoName: "map",
                                                    defaultPosition: defaultPosition,
                                                    defaultLevel: 15)
-        
+        currentZoomLevel = 15
         mapController?.addView(mapviewInfo)
     }
     
@@ -409,6 +424,13 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
     //addView 성공 이벤트 delegate. 추가적으로 수행할 작업을 진행한다.
     func addViewSucceeded(_ viewName: String, viewInfoName: String) {
         let view = mapController?.getView("mapview") as! KakaoMap
+        
+        let _ = view.addMapTappedEventHandler(target: view, handler: { map in
+            return { [weak self] _ in
+                guard let self = self else { return }
+                dismissKeyboard()
+            }
+        })
         
         // 현재 위치 pin
         createLabelLayer(layerID: "PoiLayer")
@@ -431,11 +453,15 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
         let _ = view.addCameraStoppedEventHandler(target: view) { map in
             return { [weak self] _ in
                 guard let self = self else { return }
-                let mapPosition = map.getPosition(CGPoint(x: self.view.frame.width / 2, y: self.view.frame.height / 2))
-                
+                let mapPosition = map.getPosition(CGPoint(x: self.view.safeAreaLayoutGuide.layoutFrame.width / 2, y: self.view.safeAreaLayoutGuide.layoutFrame.height / 2))
+
                 let movedLong = mapPosition.wgsCoord.longitude
                 let movedLat = mapPosition.wgsCoord.latitude
+                let view = mapController?.getView("mapview") as? KakaoMap
                 // MARK: 카메라 이동하고 위, 경도 조정이 잘 안되는거같음
+                currentZoomLevel = view?.zoomLevel ?? 15
+                tempMovedLat = movedLat + 0.001
+                tempMovedLng = movedLong
                 viewModel.currentLong = movedLong
                 viewModel.currentLat = movedLat + 0.001
             }
@@ -529,13 +555,20 @@ extension HomeViewController: UITextFieldDelegate {
                 self.viewModel.getLocationBy(typeId: btnInfo,
                                              lat: viewModel.currentLat,
                                              lng: viewModel.currentLong,
-                                             radius: 1000)
+                                             radius: currentRadius)
                 
-                self.listViewController.fetchPlaces(type: btnInfo, lat: viewModel.currentLat, lng: viewModel.currentLong)
+                self.listViewController.fetchPlaces(type: btnInfo, lat: viewModel.currentLat, lng: viewModel.currentLong, radius: currentRadius)
             } else {
                 self.viewModel.getLocationsBy(keyword: text)
             }
             
+            if let presentedVC = presentedViewController as? PlaceListViewController {
+                presentedVC.dismiss(animated: false) {
+                    self.presentListView(btnInfo: btnInfo)
+                }
+            } else {
+                self.presentListView(btnInfo: btnInfo)
+            }
         }
         return true
     }
@@ -550,8 +583,9 @@ extension HomeViewController: MoveToMapLocation {
             self.view.layoutIfNeeded()
         }
 
+        currentZoomLevel = 15
         view?.animateCamera(cameraUpdate: .make(cameraPosition: .init(target: MapPoint(longitude: lng, latitude: lat),
-                                                                      zoomLevel: 17,
+                                                                      zoomLevel: 15,
                                                                       rotation: view!.rotationAngle,
                                                                       tilt: view!.tiltAngle)),
                             options: CameraAnimationOptions.init(autoElevation: true, consecutive: true, durationInMillis: 200))
