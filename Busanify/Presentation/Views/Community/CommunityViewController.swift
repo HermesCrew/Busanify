@@ -12,7 +12,7 @@ class CommunityViewController: UIViewController  {
     private let postViewModel = PostViewModel(useCase: PostApi())
     private let authViewModel = AuthenticationViewModel.shared
     private var cancellables = Set<AnyCancellable>()
-
+    
     private lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.addAction(UIAction { [weak self] _ in
@@ -155,6 +155,12 @@ extension CommunityViewController: CommunityTableViewCellDelegate {
         }
         
         present(alert, animated: true, completion: nil)
+    }
+    
+    func expandPost(cell: CommunityTableViewCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        
+        tableView.reloadRows(at: [indexPath], with: .none)
     }
 }
 
