@@ -142,6 +142,7 @@ class SettingViewController: UIViewController {
         view.addSubview(emailLabel)
         view.addSubview(settingTableView)
         footerView.addSubview(footerButton)
+        settingTableView.tableFooterView = footerView
         
         loginButton.translatesAutoresizingMaskIntoConstraints = false
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -190,7 +191,6 @@ class SettingViewController: UIViewController {
             settingTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
             footerButton.trailingAnchor.constraint(equalTo: footerView.trailingAnchor, constant: -16),
-            footerButton.bottomAnchor.constraint(equalTo: footerView.bottomAnchor, constant: 8),
             
             loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
@@ -366,10 +366,6 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
         if indexPath.row == 5 {
             showLogoutAlert()
         }
-    }
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return footerView
     }
 }
 
