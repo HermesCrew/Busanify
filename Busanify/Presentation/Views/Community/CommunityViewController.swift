@@ -55,8 +55,8 @@ class CommunityViewController: UIViewController  {
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
     }
@@ -161,6 +161,17 @@ extension CommunityViewController: CommunityTableViewCellDelegate {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
         
         tableView.reloadRows(at: [indexPath], with: .none)
+    }
+    
+    func commentButtonTapped(_ post: Post) {
+        let commentViewModel = CommentViewModel(useCase: CommentApi())
+        let sheetViewController = CommentViewController(commentViewModel: commentViewModel, post: post)
+        // 시트 프레젠테이션 설정
+        if let sheet = sheetViewController.sheetPresentationController {
+            sheet.detents = [.medium()] // 시트 크기 설정
+            sheet.prefersGrabberVisible = true // 그랩바 표시
+        }
+        self.present(sheetViewController, animated: true, completion: nil)
     }
 }
 
