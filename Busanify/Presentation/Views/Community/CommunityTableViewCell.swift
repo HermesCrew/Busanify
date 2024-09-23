@@ -13,7 +13,7 @@ class CommunityTableViewCell: UITableViewCell {
     private let authViewModel = AuthenticationViewModel.shared
     private let keyChain = Keychain()
     var photoUrls: [String] = []
-    
+    private var isExpanded = false
     weak var delegate: CommunityTableViewCellDelegate?
     
     private lazy var profileImageView: UIImageView = {
@@ -79,10 +79,23 @@ class CommunityTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureUI()
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapContentLabel))
+        contentLabel.addGestureRecognizer(tapGesture)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc private func didTapContentLabel() {
+        if contentLabel.numberOfLines == 0 {
+            contentLabel.numberOfLines = 5
+        } else {
+            contentLabel.numberOfLines = 0
+        }
+        
+        self.delegate?.expandPost(cell: self)
     }
     
     private func configureUI() {
@@ -93,9 +106,6 @@ class CommunityTableViewCell: UITableViewCell {
         contentView.addSubview(collectionView)
         contentView.addSubview(dateLabel)
         contentView.addSubview(moreButton)
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(toggleLabel))
-        contentLabel.addGestureRecognizer(tapGesture)
         
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         usernameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -192,11 +202,6 @@ class CommunityTableViewCell: UITableViewCell {
         let menu = UIMenu(title: "", image: nil, options: [], children: menuItems)
         moreButton.menu = menu
     }
-    
-    @objc private func toggleLabel() {
-        // numberOfLines 변경
-        contentLabel.numberOfLines = 0
-    }
 }
 
 extension CommunityTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -234,4 +239,5 @@ protocol CommunityTableViewCellDelegate: NSObject {
     func didDeletePost(_ post: Post)
     func updatePost(_ post: Post)
     func reportPost(_ post: Post)
+    func expandPost(cell: CommunityTableViewCell)
 }
