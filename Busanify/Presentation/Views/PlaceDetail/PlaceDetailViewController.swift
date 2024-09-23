@@ -40,7 +40,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0 // stackview에서 이거 없으면 안보임
-        label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         
         return label
     }()
@@ -50,8 +50,9 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.distribution = .fill
-        stackView.spacing = 10
-        
+        stackView.spacing = 15
+        stackView.layoutMargins = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+        stackView.isLayoutMarginsRelativeArrangement = true
         return stackView
     }()
     
@@ -276,6 +277,30 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
         case 1: return "Review"
         default: return nil
         }
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView()
+        headerView.backgroundColor = .clear
+        
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        label.text = self.tableView(tableView, titleForHeaderInSection: section)
+        
+        headerView.addSubview(label)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 15),
+            label.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -15),
+            label.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 10),
+            label.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -10)
+        ])
+        
+        return headerView
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50
     }
     
     private func updatePlaceInfos(place: Place) {
