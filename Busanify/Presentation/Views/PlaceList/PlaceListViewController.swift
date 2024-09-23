@@ -14,6 +14,10 @@ class PlaceListViewController: UIViewController {
     private var cancellables = Set<AnyCancellable>()
     private let tableView = UITableView()
     private let lang = "eng" // 임시
+    var selectedPlaceType: PlaceType? = nil
+    var selectedLat: Double = 0
+    var selectedLng: Double = 0
+    var selectedRadius: Double = 3000
     
 //    init(viewModel: PlaceListViewModel) {
 //        self.viewModel = viewModel
@@ -65,11 +69,12 @@ class PlaceListViewController: UIViewController {
     }
     
     private func fetchPlaces() {
-        viewModel.fetchPlaces(typeId: .touristAttraction, lang: lang, lat: 35.07885, lng: 129.04402, radius: 3000)
+        guard let selectedPlaceType = selectedPlaceType else { return }
+        viewModel.fetchPlaces(typeId: selectedPlaceType, lang: lang, lat: selectedLat, lng: selectedLng, radius: selectedRadius)
     }
     
-    func fetchPlaces(type: PlaceType, lat: CGFloat, lng: CGFloat) {
-        viewModel.fetchPlaces(typeId: type, lang: lang, lat: lat, lng: lng, radius: 3000)
+    func fetchPlaces(type: PlaceType, lat: CGFloat, lng: CGFloat, radius: CGFloat) {
+        viewModel.fetchPlaces(typeId: type, lang: lang, lat: lat, lng: lng, radius: radius)
     }
     
     private func showLoginAlert() {
