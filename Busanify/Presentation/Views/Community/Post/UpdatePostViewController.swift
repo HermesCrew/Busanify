@@ -51,7 +51,9 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
         textView.layer.borderWidth = 1
         textView.layer.borderColor = UIColor.lightGray.cgColor
         textView.layer.cornerRadius = 10
-        textView.text = "Write content"
+        textView.autocapitalizationType = .none
+        textView.autocorrectionType = .no
+        textView.spellCheckingType = .no
         
         return textView
     }()
@@ -86,10 +88,14 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
         
         configureUI()
         configure()
+        setupTapGesture()
         
         contentTextView.delegate = self
         photoCollectionView.delegate = self
         photoCollectionView.dataSource = self
+        photoCollectionView.dragInteractionEnabled = true
+        photoCollectionView.reorderingCadence = .immediate
+        
         photoCollectionView.register(PhotoCollectionViewCell.self, forCellWithReuseIdentifier: "PhotoCollectionViewCell")
     }
     
@@ -170,14 +176,6 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
         return CGSize(width: width, height: height)
     }
     
-//    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: any UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-//        
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: any UICollectionViewDropCoordinator) {
-//
-//    }
-//    
     @objc private func deleteButtonTapped(_ sender: UIButton) {
         let index = sender.tag
         
@@ -209,6 +207,16 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
                 print("Failed to create post: \(error)")
             }
         }
+    }
+    
+    private func setupTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
+
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
 

@@ -36,6 +36,7 @@ class CommunityTableViewCell: UITableViewCell {
         let label = UILabel()
         label.numberOfLines = 5
         label.lineBreakMode = .byTruncatingTail
+        label.isUserInteractionEnabled = true
         
         return label
     }()
@@ -92,6 +93,9 @@ class CommunityTableViewCell: UITableViewCell {
         contentView.addSubview(collectionView)
         contentView.addSubview(dateLabel)
         contentView.addSubview(moreButton)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(toggleLabel))
+        contentLabel.addGestureRecognizer(tapGesture)
         
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         usernameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -187,6 +191,11 @@ class CommunityTableViewCell: UITableViewCell {
         
         let menu = UIMenu(title: "", image: nil, options: [], children: menuItems)
         moreButton.menu = menu
+    }
+    
+    @objc private func toggleLabel() {
+        // numberOfLines 변경
+        contentLabel.numberOfLines = 0
     }
 }
 

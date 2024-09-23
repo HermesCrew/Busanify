@@ -8,7 +8,7 @@
 import UIKit
 import PhotosUI
 
-class AddPostViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class AddPostViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDragDelegate, UICollectionViewDropDelegate {
     private let postViewModel: PostViewModel
     private let authViewModel = AuthenticationViewModel.shared
     
@@ -51,6 +51,9 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
         textView.layer.cornerRadius = 10
         textView.text = "Write content"
         textView.textColor = .systemGray3
+        textView.autocapitalizationType = .none
+        textView.autocorrectionType = .no
+        textView.spellCheckingType = .no
         
         return textView
     }()
@@ -82,10 +85,16 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
         super.viewDidLoad()
         
         configureUI()
+        setupTapGesture()
         
         contentTextView.delegate = self
         photoCollectionView.delegate = self
         photoCollectionView.dataSource = self
+        photoCollectionView.dragDelegate = self
+        photoCollectionView.dropDelegate = self
+        photoCollectionView.dragInteractionEnabled = true
+        photoCollectionView.reorderingCadence = .immediate
+        
         photoCollectionView.register(PhotoCollectionViewCell.self, forCellWithReuseIdentifier: "PhotoCollectionViewCell")
     }
     
@@ -95,6 +104,8 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
         view.addSubview(photoCollectionView)
         view.addSubview(contentTextView)
         view.addSubview(saveButton)
+        
+        updateSaveButtonState()
         
         addButton.translatesAutoresizingMaskIntoConstraints = false
         photoCollectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -125,17 +136,15 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return selectedImages.count
+        return self.selectedImages.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCollectionViewCell", for: indexPath) as! PhotoCollectionViewCell
         
-        cell.configure(with: selectedImages, index: indexPath.item)
+        cell.configure(with: self.selectedImages[indexPath.item])
         cell.deleteButton.tag = indexPath.item
-//        cell.deleteButton.addTarget(self, action: #selector(self.deleteButtonTapped(_:)), for: .touchUpInside)
-        cell.currentIndex = indexPath.item
-//        cell.imageUrls = snap.imageUrls
+        cell.deleteButton.addTarget(self, action: #selector(self.deleteButtonTapped(_:)), for: .touchUpInside)
         
         return cell
     }
@@ -155,13 +164,77 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
         return CGSize(width: width, height: height)
     }
     
-//    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: any UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-//        <#code#>
-//    }
-//    
-//    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: any UICollectionViewDropCoordinator) {
-//        <#code#>
-//    }
+    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: any UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        let item = selectedImages[indexPath.item]
+        let itemProvider = NSItemProvider(object: item)
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = item
+        
+        return [dragItem]
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+        guard let destinationIndexPath = coordinator.destinationIndexPath else { return }
+        
+        for item in coordinator.items {
+            if let sourceIndexPath = item.sourceIndexPath {
+                collectionView.performBatchUpdates({
+                    // 데이터 소스 업데이트
+                    let movedImage = selectedImages.remove(at: sourceIndexPath.item)
+                    selectedImages.insert(movedImage, at: destinationIndexPath.item)
+                    
+                    // 컬렉션 뷰에서 셀 이동
+                    collectionView.moveItem(at: sourceIndexPath, to: destinationIndexPath)
+                }, completion: { _ in
+                    self.updateCellTags()
+                })
+                coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
+            }
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
+        return session.localDragSession != nil
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, dragPreviewParametersForItemAt indexPath: IndexPath) -> UIDragPreviewParameters? {
+        let parameters = UIDragPreviewParameters()
+        
+        // 꾹 누르고 이미지 이동 시 둥글게 유지되도록
+        if let cell = collectionView.cellForItem(at: indexPath) as? PhotoCollectionViewCell {
+            parameters.visiblePath = UIBezierPath(roundedRect: cell.imageView.bounds, cornerRadius: 10)
+        }
+        
+        return parameters
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+        return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+    }
+    
+    @objc private func deleteButtonTapped(_ sender: UIButton) {
+        let index = sender.tag
+        self.selectedImages.remove(at: index)
+        
+        DispatchQueue.main.async {
+            self.photoCollectionView.performBatchUpdates({
+                self.photoCollectionView.deleteItems(at: [IndexPath(item: index, section: 0)]) // 컬렉션뷰에서 인덱스로 삭제
+            }) { _ in
+                // 삭제 후 나머지 셀들이 있다면 태그 업데이트
+                self.photoCollectionView.reloadData()
+            }
+        }
+    }
+    
+    private func updateCellTags() {
+        let totalItems = photoCollectionView.numberOfItems(inSection: 0)  // 섹션이 하나이므로 0번째 섹션 사용
+        for item in 0..<totalItems {
+            let indexPath = IndexPath(item: item, section: 0)
+            if let cell = photoCollectionView.cellForItem(at: indexPath) as? PhotoCollectionViewCell {
+                cell.deleteButton.tag = item
+            }
+        }
+    }
     
     private func addPost() {
         Task {
@@ -176,6 +249,16 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
                 print("Failed to create post: \(error)")
             }
         }
+    }
+    
+    private func setupTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
+
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
 
@@ -260,6 +343,19 @@ extension AddPostViewController: UITextViewDelegate {
             contentTextView.text = "Write content"
             contentTextView.textColor = .systemGray3
         }
+        updateSaveButtonState()
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        updateSaveButtonState()
+    }
+    
+    private func updateSaveButtonState() {
+        let isPlaceholder = contentTextView.textColor == .systemGray3
+        let textIsEmpty = contentTextView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        
+        saveButton.isEnabled = !(isPlaceholder || textIsEmpty)
+        saveButton.alpha = saveButton.isEnabled ? 1.0 : 0.5
     }
 }
 
