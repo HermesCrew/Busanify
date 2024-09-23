@@ -12,6 +12,18 @@ class CommunityViewController: UIViewController  {
     private let postViewModel = PostViewModel(useCase: PostApi())
     private let authViewModel = AuthenticationViewModel.shared
     private var cancellables = Set<AnyCancellable>()
+
+    private lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addAction(UIAction { [weak self] _ in
+            self?.postViewModel.fetchPosts()
+            DispatchQueue.main.async {
+                self?.refreshControl.endRefreshing()
+            }
+        }, for: .valueChanged)
+        
+        return refreshControl
+    }()
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -20,6 +32,7 @@ class CommunityViewController: UIViewController  {
         tableView.register(CommunityTableViewCell.self, forCellReuseIdentifier: CommunityTableViewCell.identifier)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 150
+        tableView.refreshControl = refreshControl
         
         return tableView
     }()
@@ -31,7 +44,6 @@ class CommunityViewController: UIViewController  {
         bind()
         
         postViewModel.fetchPosts()
-    
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "+", style: .done, target: self, action: #selector(addButtonTapped))
     }
     
@@ -110,7 +122,7 @@ extension CommunityViewController: CommunityTableViewCellDelegate {
     
     func updatePost(_ post: Post) {
         let postViewModel = PostViewModel(useCase: PostApi())
-        let addPostVC = AddPostViewController(postViewModel: postViewModel)
+        let addPostVC = UpdatePostViewController(postViewModel: postViewModel, post: post)
         addPostVC.delegate = self
         addPostVC.hidesBottomBarWhenPushed = true // 탭바 숨기기
         self.navigationController?.pushViewController(addPostVC, animated: true)

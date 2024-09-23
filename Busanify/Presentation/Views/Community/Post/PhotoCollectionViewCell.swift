@@ -48,10 +48,10 @@ class PhotoCollectionViewCell: UICollectionViewCell {
             imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             
-            deleteButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: -10), // 상단 여백 줄임
-            deleteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 10), // 우측 여백 줄임
-            deleteButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.22), // 크기 증가
-            deleteButton.heightAnchor.constraint(equalTo: deleteButton.widthAnchor) // 정사각형 유지
+            deleteButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: -10),
+            deleteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 10),
+            deleteButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.22),
+            deleteButton.heightAnchor.constraint(equalTo: deleteButton.widthAnchor)
         ])
     }
     
