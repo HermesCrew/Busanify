@@ -78,6 +78,7 @@
 		CD89D3522C29A55A00715404 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD89D3502C29A55A00715404 /* HomeViewController.swift */; };
 		CD89D3552C29A56B00715404 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD89D3532C29A56B00715404 /* HomeViewModel.swift */; };
 		CDA3BD122C56415B007A64E8 /* Extension+UIVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA3BD112C56415B007A64E8 /* Extension+UIVIew.swift */; };
+		CDE5CB3D2CA1D23000950993 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE5CB3C2CA1D23000950993 /* String+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -172,6 +173,7 @@
 		CD89D3502C29A55A00715404 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		CD89D3532C29A56B00715404 /* HomeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		CDA3BD112C56415B007A64E8 /* Extension+UIVIew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Extension+UIVIew.swift"; sourceTree = "<group>"; };
+		CDE5CB3C2CA1D23000950993 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		F8291F42EC69F9AA5802389C /* Pods-Busanify.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busanify.debug.xcconfig"; path = "Target Support Files/Pods-Busanify/Pods-Busanify.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -394,6 +396,7 @@
 			isa = PBXGroup;
 			children = (
 				B8AABE1A2CA176500000858E /* GoogleService-Info.plist */,
+				CDE5CB3B2CA1D22600950993 /* Extension */,
 				757882F72C43E52A0078EFAB /* Busanify.entitlements */,
 				C296D72F2C1F2B0200691515 /* Application */,
 				C296D72D2C1F2AA100691515 /* Data */,
@@ -571,6 +574,14 @@
 				CD32519B2C4C14E1006CB590 /* SelectedPlaceListViewModel.swift */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		CDE5CB3B2CA1D22600950993 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				CDE5CB3C2CA1D23000950993 /* String+Extension.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -810,6 +821,7 @@
 				C26E7CC82C480B60004996FE /* PlaceInfoTableViewCell.swift in Sources */,
 				C2AD58BD2C96D5CC00FBE6AA /* ReportDTO.swift in Sources */,
 				75304AF32C377A560058FDDE /* PlaceTableViewCell.swift in Sources */,
+				CDE5CB3D2CA1D23000950993 /* String+Extension.swift in Sources */,
 				753520A42C326B0E00E439CF /* PlaceListViewModel.swift in Sources */,
 				B8F89BD62C5387CC00332FE2 /* DailyForecastCell.swift in Sources */,
 				C296D7022C1F16B000691515 /* ViewController.swift in Sources */,

@@ -30,9 +30,10 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
     var currentZoomLevel: Int = 15
     var currentRadius: Double {
         get {
-            return 1000.0 + (15.0 - Double(currentZoomLevel)) * 150.0
+            return 1000.0 + (15.0 - Double(currentZoomLevel)) * 300.0
         }
     }
+    var tempPlaceType: PlaceType? = nil
     
     let searchIcon: UIImageView = {
         let icon = UIImageView()
@@ -95,6 +96,7 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
         
         self.view.backgroundColor = .systemBackground
         mapContainer = self.view as? KMViewContainer
+//        mapContainer?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissPresent)))
         
         //KMController 생성.
         mapController = KMController(viewContainer: mapContainer!)
@@ -174,9 +176,9 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
                 manager.removeLabelLayer(layerID: "LocationLayer")
                 if places.count > 0 {
                     self.createLabelLayer(layerID: "LocationLayer")
-                    self.createPoiStyle(styleID: "LocationStyle")
+                    self.createPoiStyle(styleID: "LocationStyle", placeType: tempPlaceType)
                     let mapPoints = places.map { MapPoint(longitude: $0.lng, latitude: $0.lat) }
-                    self.createPois(layerID: "LocationLayer", styleID: "LocationStyle", poiID: "", mapPoints: mapPoints)
+                    self.createPois(layerID: "LocationLayer", styleID: "LocationStyle", poiID: "", mapPoints: mapPoints, titles: places.map{ $0.title })
                 }
             }
             .store(in: &cancellable)
@@ -310,6 +312,7 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
             btn.addAction(UIAction{ [weak self] _ in
                 guard let self = self else { return }
                 // MARK: 지도에 핀을 찍기 위한거
+                self.tempPlaceType = btnInfo
                 self.viewModel.getLocationBy(typeId: btnInfo,
                                              lat: viewModel.currentLat,
                                              lng: viewModel.currentLong,
@@ -434,11 +437,12 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
         
         // 현재 위치 pin
         createLabelLayer(layerID: "PoiLayer")
-        createPoiStyle(styleID: "PerLevelStyle", currentLocation: true)
+        createPoiStyle(styleID: "My Location", currentLocation: true, placeType: nil)
         createPois(layerID: "PoiLayer",
                    styleID: "PerLevelStyle",
                    poiID: "mainPoi",
-                   mapPoints: [MapPoint(longitude: viewModel.currentLong, latitude: viewModel.currentLat)])
+                   mapPoints: [MapPoint(longitude: viewModel.currentLong, latitude: viewModel.currentLat)],
+                   titles: ["My Position"])
         
         let _ = view.addCameraWillMovedEventHandler(target: view) { map in
             return { [weak self] _ in
@@ -500,6 +504,12 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
 
     @objc func didBecomeActive(){
         mapController?.activateEngine() //뷰가 active 상태가 되면 렌더링 시작. 엔진은 미리 시작된 상태여야 함.
+    }
+    
+    @objc func dismissPresent() {
+        if let presentedVC = presentedViewController as? PlaceListViewController {
+            presentedVC.dismiss(animated: false)
+        }
     }
     
     var mapContainer: KMViewContainer?
