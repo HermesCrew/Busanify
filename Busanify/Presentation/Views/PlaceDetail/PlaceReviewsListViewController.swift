@@ -62,6 +62,7 @@ class PlaceReviewsListViewController: UIViewController, UITableViewDelegate, UIT
         
         let review = reviews[indexPath.row]
         cell.configure(with: review)
+        cell.selectionStyle = .none
         return cell
     }
 }
