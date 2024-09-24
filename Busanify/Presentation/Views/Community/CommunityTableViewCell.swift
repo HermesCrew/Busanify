@@ -81,8 +81,9 @@ class CommunityTableViewCell: UITableViewCell {
         var config = UIButton.Configuration.plain()
         config.image = UIImage(systemName: "bubble.right")
         config.title = "Comment"
-        config.imagePadding = 8 // 이미지와 텍스트 사이의 간격
+        config.imagePadding = 4 // 이미지와 텍스트 사이의 간격
         config.baseForegroundColor = .black
+        config.buttonSize = .small
         
         let button = UIButton(configuration: config)
         button.addAction(UIAction { [weak self] _ in

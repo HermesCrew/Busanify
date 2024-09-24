@@ -95,7 +95,7 @@ class CommentTableViewCell: UITableViewCell {
             moreButton.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
             
             contentLabel.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 8),
-            contentLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            contentLabel.leadingAnchor.constraint(equalTo: usernameLabel.leadingAnchor),
             contentLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             contentLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
         ])
