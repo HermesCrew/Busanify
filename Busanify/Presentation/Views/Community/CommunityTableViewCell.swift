@@ -12,7 +12,9 @@ class CommunityTableViewCell: UITableViewCell {
     private let authViewModel = AuthenticationViewModel.shared
     private let keyChain = Keychain()
     var photoUrls: [String] = []
+    private var post: Post?
     private var isExpanded = false
+    
     weak var delegate: CommunityTableViewCellDelegate?
     
     private lazy var profileImageView: UIImageView = {
@@ -83,6 +85,10 @@ class CommunityTableViewCell: UITableViewCell {
         config.baseForegroundColor = .black
         
         let button = UIButton(configuration: config)
+        button.addAction(UIAction { [weak self] _ in
+            guard let post = self?.post else { return }
+            self?.delegate?.commentButtonTapped(post)
+        }, for: .touchUpInside)
         
         return button
     }()
@@ -161,6 +167,8 @@ class CommunityTableViewCell: UITableViewCell {
     }
     
     func configure(with post: Post) {
+        self.post = post
+        
         if let profileImage = post.user.profileImage {
             let url = URL(string: profileImage)
             profileImageView.kf.setImage(with: url)
@@ -169,9 +177,6 @@ class CommunityTableViewCell: UITableViewCell {
         contentLabel.text = post.content
         dateLabel.text = post.createdAt
         commentButton.setTitle(String(post.commentsCount), for: .normal)
-        commentButton.addAction(UIAction { [weak self] _ in
-            self?.delegate?.commentButtonTapped(post)
-        }, for: .touchUpInside)
         
         self.photoUrls = post.photoUrls
         if post.photoUrls.isEmpty {

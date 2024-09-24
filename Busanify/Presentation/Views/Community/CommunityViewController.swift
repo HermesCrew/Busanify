@@ -171,6 +171,7 @@ extension CommunityViewController: CommunityTableViewCellDelegate {
             sheet.detents = [.medium()] // 시트 크기 설정
             sheet.prefersGrabberVisible = true // 그랩바 표시
         }
+        
         self.present(sheetViewController, animated: true, completion: nil)
     }
 }
