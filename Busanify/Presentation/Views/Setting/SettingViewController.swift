@@ -71,10 +71,9 @@ class SettingViewController: UIViewController {
     }()
     
     private lazy var editNicknameButton: UIButton = {
-        var config = UIButton.Configuration.filled()
+        var config = UIButton.Configuration.plain()
         config.image = UIImage(systemName: "pencil")
         config.baseForegroundColor = .black
-        config.baseBackgroundColor = .white
         let button = UIButton(configuration: config)
         button.addTarget(self, action: #selector(editNickname), for: .touchUpInside)
         
