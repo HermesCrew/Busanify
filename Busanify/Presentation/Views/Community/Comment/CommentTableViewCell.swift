@@ -110,9 +110,10 @@ class CommentTableViewCell: UITableViewCell {
         contentLabel.text = comment.content
         dateLabel.text = comment.createdAt
         
-        var menuItems: [UIAction] = [UIAction(title: "Report", image: UIImage(systemName: "exclamationmark.triangle"), handler: { _ in
-            self.delegate?.reportComment(comment)
-        })
+        var menuItems: [UIAction] = [
+            UIAction(title: "Report", image: UIImage(systemName: "exclamationmark.triangle"), handler: { _ in
+                self.delegate?.reportComment(comment)
+            })
         ]
         
         switch authViewModel.state {
@@ -141,8 +142,7 @@ class CommentTableViewCell: UITableViewCell {
             break
         }
         
-        let menu = UIMenu(title: "", image: nil, options: [], children: menuItems)
-        moreButton.menu = menu
+        moreButton.menu = UIMenu(children: menuItems)
     }
 }
 
