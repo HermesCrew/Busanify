@@ -131,7 +131,7 @@ class PlaceTableViewCell: UITableViewCell {
         bookmarkToggleHandler?(!bookmarkButton.isSelected)
     }
     
-    func configure(with viewModel: PlaceCellViewModel) {
+    func configure(with viewModel: PlaceCellModel) {
         titleLabel.text = viewModel.title
         addressLabel.text = viewModel.address
         ratingLabel.text = String(format: "%.1f", viewModel.avgRating)
