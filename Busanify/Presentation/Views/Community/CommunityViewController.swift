@@ -88,6 +88,13 @@ class CommunityViewController: UIViewController  {
                 self?.tableView.reloadData()
             }
             .store(in: &cancellables)
+        
+        authViewModel.$currentUser
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] currentUser in
+                self?.postViewModel.fetchPosts()
+            }
+            .store(in: &cancellables)
     }
 }
 
