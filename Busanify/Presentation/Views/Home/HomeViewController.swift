@@ -178,7 +178,7 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
                     self.createLabelLayer(layerID: "LocationLayer")
                     self.createPoiStyle(styleID: "LocationStyle", placeType: tempPlaceType)
                     let mapPoints = places.map { MapPoint(longitude: $0.lng, latitude: $0.lat) }
-                    self.createPois(layerID: "LocationLayer", styleID: "LocationStyle", poiID: "", mapPoints: mapPoints, titles: places.map{ $0.title })
+                    self.createPois(layerID: "LocationLayer", styleID: "LocationStyle", poiID: "", mapPoints: mapPoints, titles: places.map{ $0.title }, ids: places.map{ $0.id })
                 }
             }
             .store(in: &cancellable)
@@ -351,6 +351,7 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
             listVC.selectedLng = viewModel.currentLong
             listVC.selectedRadius = currentRadius
             listVC.modalPresentationStyle = .pageSheet
+            
             if let sheet = listVC.sheetPresentationController {
                 sheet.detents = [minimumDetent, .large()]
                 sheet.largestUndimmedDetentIdentifier = minimumDetent.identifier
@@ -359,6 +360,7 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
                 sheet.prefersEdgeAttachedInCompactHeight = true
                 sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
             }
+            
             present(listVC, animated: true, completion: nil)
             self.listViewController = listVC
         }
@@ -382,7 +384,7 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
                                                                           zoomLevel: 15,
                                                                           rotation: view!.rotationAngle,
                                                                           tilt: view!.tiltAngle)),
-                                options: CameraAnimationOptions.init(autoElevation: true, consecutive: true, durationInMillis: 200))
+                                options: CameraAnimationOptions.init(autoElevation: true, consecutive: true, durationInMillis: 50))
         }, for: .touchUpInside)
     }
     
@@ -439,19 +441,11 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
         createLabelLayer(layerID: "PoiLayer")
         createPoiStyle(styleID: "My Location", currentLocation: true, placeType: nil)
         createPois(layerID: "PoiLayer",
-                   styleID: "PerLevelStyle",
+                   styleID: "My Location",
                    poiID: "mainPoi",
                    mapPoints: [MapPoint(longitude: viewModel.currentLong, latitude: viewModel.currentLat)],
-                   titles: ["My Position"])
-        
-        let _ = view.addCameraWillMovedEventHandler(target: view) { map in
-            return { [weak self] _ in
-                guard let self = self else { return }
-                if self.presentedViewController != nil {
-                    self.listViewController.dismiss(animated: true)
-                }
-            }
-        }
+                   titles: ["My Position"],
+                   ids: ["My_Position"])
         
         // 카메라 이동 event
         let _ = view.addCameraStoppedEventHandler(target: view) { map in
@@ -462,7 +456,6 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
                 let movedLong = mapPosition.wgsCoord.longitude
                 let movedLat = mapPosition.wgsCoord.latitude
                 let view = mapController?.getView("mapview") as? KakaoMap
-                // MARK: 카메라 이동하고 위, 경도 조정이 잘 안되는거같음
                 currentZoomLevel = view?.zoomLevel ?? 15
                 tempMovedLat = movedLat + 0.001
                 tempMovedLng = movedLong
@@ -598,6 +591,6 @@ extension HomeViewController: MoveToMapLocation {
                                                                       zoomLevel: 15,
                                                                       rotation: view!.rotationAngle,
                                                                       tilt: view!.tiltAngle)),
-                            options: CameraAnimationOptions.init(autoElevation: true, consecutive: true, durationInMillis: 200))
+                            options: CameraAnimationOptions.init(autoElevation: true, consecutive: true, durationInMillis: 50))
     }
 }
