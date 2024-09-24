@@ -6,6 +6,7 @@
 //
 import Foundation
 import UIKit
+import Kingfisher
 
 class BookmarkListCell: UITableViewCell {
     let listImageView = UIImageView()
@@ -13,6 +14,8 @@ class BookmarkListCell: UITableViewCell {
     let ratingLabel = UILabel()
     let ratingStackView = UIStackView()
     let reviewCountLabel = UILabel()
+    let bookmarkButton = UIButton(type: .custom)
+    var bookmarkToggleHandler: (() -> Void)?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -45,7 +48,12 @@ class BookmarkListCell: UITableViewCell {
         reviewCountLabel.textColor = .darkGray
         contentView.addSubview(reviewCountLabel)
         
-        [listImageView, titleLabel, ratingLabel, ratingStackView, reviewCountLabel].forEach {
+        bookmarkButton.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
+        bookmarkButton.setImage(UIImage(systemName: "bookmark"), for: .selected)
+        bookmarkButton.addTarget(self, action: #selector(bookmarkTapped), for: .touchUpInside)
+        contentView.addSubview(bookmarkButton)
+        
+        [listImageView, titleLabel, ratingLabel, ratingStackView, reviewCountLabel, bookmarkButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
@@ -69,8 +77,18 @@ class BookmarkListCell: UITableViewCell {
             
             reviewCountLabel.leadingAnchor.constraint(equalTo: ratingStackView.trailingAnchor, constant: 4),
             reviewCountLabel.topAnchor.constraint(equalTo: ratingStackView.topAnchor),
-            reviewCountLabel.bottomAnchor.constraint(lessThanOrEqualTo: ratingStackView.bottomAnchor)
+            reviewCountLabel.bottomAnchor.constraint(lessThanOrEqualTo: ratingStackView.bottomAnchor),
+            
+            bookmarkButton.topAnchor.constraint(equalTo: listImageView.topAnchor, constant: 5),
+            bookmarkButton.leadingAnchor.constraint(equalTo: listImageView.leadingAnchor, constant: 5),
+            bookmarkButton.widthAnchor.constraint(equalToConstant: 30),
+            bookmarkButton.heightAnchor.constraint(equalToConstant: 30)
         ])
+    }
+    
+    @objc private func bookmarkTapped() {
+        bookmarkButton.isSelected.toggle()
+        bookmarkToggleHandler?()
     }
     
     func configure(with bookmark: Bookmark) {
@@ -78,33 +96,10 @@ class BookmarkListCell: UITableViewCell {
         ratingLabel.text = String(bookmark.avgRating)
         reviewCountLabel.text = "(\(bookmark.reviewCount))"
         
-        listImageView.image = nil
-        if let imageURL = URL(string: bookmark.image) {
-            loadImage(from: imageURL)
-        } else {
-            listImageView.image = UIImage(named: "placeholder")
-        }
+        let imageURL = URL(string: bookmark.image)
+        listImageView.kf.setImage(with: imageURL, placeholder: UIImage(named: "placeholder"))
         
         setupStarRating(rating: bookmark.avgRating)
-    }
-    
-    private func loadImage(from url: URL) {
-        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
-            guard let self = self else { return }
-            if let error = error {
-                print("Error loading image: \(error.localizedDescription)")
-                return
-            }
-            
-            guard let data = data, let image = UIImage(data: data) else {
-                print("Invalid image data")
-                return
-            }
-            
-            DispatchQueue.main.async {
-                self.listImageView.image = image
-            }
-        }.resume()
     }
     
     private func setupStarRating(rating: Double) {
