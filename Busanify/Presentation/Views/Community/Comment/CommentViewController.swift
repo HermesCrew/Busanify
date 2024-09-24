@@ -11,6 +11,7 @@ import Combine
 class CommentViewController: UIViewController {
     
     private let commentViewModel: CommentViewModel
+    private let postViewModel: PostViewModel
     private let authViewModel = AuthenticationViewModel.shared
     private var cancellables = Set<AnyCancellable>()
     private let post: Post
@@ -68,8 +69,9 @@ class CommentViewController: UIViewController {
        return contentTextField.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
     }()
     
-    init(commentViewModel: CommentViewModel, post: Post) {
+    init(commentViewModel: CommentViewModel, postViewModel: PostViewModel, post: Post) {
         self.commentViewModel = commentViewModel
+        self.postViewModel = postViewModel
         self.post = post
         super.init(nibName: nil, bundle: nil)
     }
@@ -150,6 +152,7 @@ class CommentViewController: UIViewController {
             do {
                 try await commentViewModel.createComment(token: authViewModel.getToken(), postId: post.id, content: contentTextField.text ?? "")
                 commentViewModel.fetchComments(postId: post.id)
+                postViewModel.fetchPosts()
                 contentTextField.text = ""
                 saveButton.isEnabled = false
             } catch {
@@ -197,6 +200,7 @@ extension CommentViewController: CommentTableViewCellDelegate {
                     tableView.endUpdates()
                 }
                 try await commentViewModel.deleteComment(token: self.authViewModel.getToken()!, id: comment.id)
+                postViewModel.fetchPosts()
             } catch {
                 print("Failed to delete review: \(error)")
             }
@@ -222,11 +226,11 @@ extension CommentViewController: CommentTableViewCellDelegate {
                 self.commentViewModel.reportComment(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
             }))
         case .signedOut:
-            alert = UIAlertController(title: "로그인 필요", message: "북마크 기능을 사용하려면 로그인이 필요합니다.", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "로그인", style: .default, handler: { [weak self] _ in
+            alert = UIAlertController(title: "Need Login", message: "You need to login for Report", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Login", style: .default, handler: { [weak self] _ in
                 self?.moveToSignInView()
             }))
-            alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         }
         
         present(alert, animated: true, completion: nil)
@@ -234,6 +238,21 @@ extension CommentViewController: CommentTableViewCellDelegate {
 }
 
 extension CommentViewController: UITextFieldDelegate, UIGestureRecognizerDelegate {
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        if authViewModel.state == .signedOut {
+            var alert = UIAlertController()
+            alert = UIAlertController(title: "Need Login", message: "You need to login for writing comment", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Login", style: .default, handler: { [weak self] _ in
+                self?.moveToSignInView()
+            }))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            
+            present(alert, animated: true, completion: nil)
+            return false
+        }
+        return true
+    }
+    
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let currentText = (textField.text as NSString?) ?? ""
         let updatedText = currentText.replacingCharacters(in: range, with: string)
