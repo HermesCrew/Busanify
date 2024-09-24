@@ -75,6 +75,7 @@
 		C2D279CF2C29459000AEAFD1 /* PlaceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D279CE2C29459000AEAFD1 /* PlaceType.swift */; };
 		C2DB0AFA2C8D814A00E485F9 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = C2DB0AF92C8D814A00E485F9 /* FirebaseStorage */; };
 		C2DB0AFC2C8D935A00E485F9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C2DB0AFB2C8D935A00E485F9 /* GoogleService-Info.plist */; };
+		C2ED4A2D2CA2A46400A93A90 /* UIResponder+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2ED4A2C2CA2A46400A93A90 /* UIResponder+Extensions.swift */; };
 		C2F5776D2C479C1E00B2365F /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F5776C2C479C1E00B2365F /* Review.swift */; };
 		C2FFD2B92C494AD90032C902 /* ReviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FFD2B82C494AD90032C902 /* ReviewTableViewCell.swift */; };
 		CD3251972C4C07E7006CB590 /* SelectedPlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3251962C4C07E7006CB590 /* SelectedPlaceListViewController.swift */; };
@@ -175,6 +176,7 @@
 		C2D279CC2C29458800AEAFD1 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
 		C2D279CE2C29459000AEAFD1 /* PlaceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceType.swift; sourceTree = "<group>"; };
 		C2DB0AFB2C8D935A00E485F9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C2ED4A2C2CA2A46400A93A90 /* UIResponder+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIResponder+Extensions.swift"; sourceTree = "<group>"; };
 		C2F5776C2C479C1E00B2365F /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
 		C2FFD2B82C494AD90032C902 /* ReviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewTableViewCell.swift; sourceTree = "<group>"; };
 		CD3251962C4C07E7006CB590 /* SelectedPlaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedPlaceListViewController.swift; sourceTree = "<group>"; };
@@ -434,6 +436,7 @@
 			children = (
 				757882F72C43E52A0078EFAB /* Busanify.entitlements */,
 				C296D72F2C1F2B0200691515 /* Application */,
+				C2ED4A2B2CA2A43C00A93A90 /* Common */,
 				C296D72D2C1F2AA100691515 /* Data */,
 				C296D72E2C1F2AB400691515 /* Network */,
 				C296D7342C1F2B8B00691515 /* Domain */,
@@ -584,6 +587,14 @@
 				C2B27C8C2C91850700223874 /* SettingTableViewCell.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		C2ED4A2B2CA2A43C00A93A90 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				C2ED4A2C2CA2A46400A93A90 /* UIResponder+Extensions.swift */,
+			);
+			path = Common;
 			sourceTree = "<group>";
 		};
 		CD3251982C4C080B006CB590 /* cell */ = {
@@ -880,6 +891,7 @@
 				C22C8D9A2C9C63D8006BB06B /* PostApi.swift in Sources */,
 				C296D6FE2C1F16B000691515 /* AppDelegate.swift in Sources */,
 				C20D08362CA1980D00459803 /* Comment.swift in Sources */,
+				C2ED4A2D2CA2A46400A93A90 /* UIResponder+Extensions.swift in Sources */,
 				C2D279CD2C29458800AEAFD1 /* Place.swift in Sources */,
 				C20D08392CA1A4F000459803 /* CommentViewController.swift in Sources */,
 				CD3251972C4C07E7006CB590 /* SelectedPlaceListViewController.swift in Sources */,

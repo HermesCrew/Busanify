@@ -44,7 +44,7 @@ class CommentViewController: UIViewController {
         textField.spellCheckingType = .no
         textField.autocapitalizationType = .none
         textField.placeholder = "Add Comments"
-//        textField.delegate = self
+        textField.delegate = self
         
         return textField
     }()
@@ -55,12 +55,17 @@ class CommentViewController: UIViewController {
         button.tintColor = .white
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 10
+        button.isEnabled = false
         
         button.addAction(UIAction { [weak self] _ in
             self?.addComment()
         }, for: .touchUpInside)
         
         return button
+    }()
+    
+    private lazy var contentTextFieldBottomConstraint: NSLayoutConstraint = {
+       return contentTextField.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
     }()
     
     init(commentViewModel: CommentViewModel, post: Post) {
@@ -79,6 +84,8 @@ class CommentViewController: UIViewController {
         configureUI()
         configure()
         bind()
+        setupTapGesture()
+        setupKeyboardEvent()
         
         commentViewModel.fetchComments(postId: post.id)
     }
@@ -108,7 +115,7 @@ class CommentViewController: UIViewController {
             
             contentTextField.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 8),
             contentTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            contentTextField.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            contentTextFieldBottomConstraint,
             
             saveButton.trailingAnchor.constraint(equalTo: contentTextField.trailingAnchor, constant: -8),
             saveButton.centerYAnchor.constraint(equalTo: contentTextField.centerYAnchor),
@@ -143,6 +150,8 @@ class CommentViewController: UIViewController {
             do {
                 try await commentViewModel.createComment(token: authViewModel.getToken(), postId: post.id, content: contentTextField.text ?? "")
                 commentViewModel.fetchComments(postId: post.id)
+                contentTextField.text = ""
+                saveButton.isEnabled = false
             } catch {
                 print("Failed to create post: \(error)")
             }
@@ -152,6 +161,11 @@ class CommentViewController: UIViewController {
     private func moveToSignInView() {
         let signInVC = SignInViewController()
         present(signInVC, animated: true, completion: nil)
+    }
+    
+    func setupKeyboardEvent() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 }
 
@@ -217,5 +231,56 @@ extension CommentViewController: CommentTableViewCellDelegate {
         
         present(alert, animated: true, completion: nil)
     }
+}
+
+extension CommentViewController: UITextFieldDelegate, UIGestureRecognizerDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let currentText = (textField.text as NSString?) ?? ""
+        let updatedText = currentText.replacingCharacters(in: range, with: string)
+        
+        saveButton.isEnabled = !updatedText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        
+        return true
+    }
     
+    // MARK: - Keyboard Handling
+    private func setupTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        tapGesture.delegate = self
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        // 터치된 뷰가 버튼일 경우 tapGesture를 무시하도록 설정
+        if touch.view is UIButton {
+            return false // 버튼을 터치한 경우 제스처가 실행되지 않도록 함
+        }
+        return true
+    }
+
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
+    }
+
+    // Return 키를 눌렀을 때 키보드 내리기
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    // 키보드 올라왔을때
+    @objc func keyboardWillShow(_ sender: Notification) {
+        guard let keyboardFrame = sender.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+        let keyboardHeight = keyboardFrame.cgRectValue.height
+        
+        contentTextFieldBottomConstraint.constant = -(keyboardHeight - view.safeAreaInsets.bottom + 16)
+        view.layoutIfNeeded()
+    }
+    
+    // 키보드 내려갔을때
+    @objc func keyboardWillHide(_ sender: Notification) {
+        contentTextFieldBottomConstraint.constant = 0
+        view.layoutIfNeeded()
+    }
 }
