@@ -248,11 +248,25 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
             content.textProperties.alignment = .center
         
             cell.contentConfiguration = content
-            cell.selectionStyle = .none
+            cell.selectionStyle = .default
             
             return cell
         default:
             return UITableViewCell()
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch indexPath.section {
+        case 3:
+            if indexPath.row == 0 {
+                // "View all reviews" 셀을 눌렀을 때
+                guard let reviews = placeDetailViewModel.place.reviews else { return }
+                let reviewsListVC = PlaceReviewsListViewController(reviews: reviews)
+                present(reviewsListVC, animated: true, completion: nil)
+            }
+        default:
+            break
         }
     }
     

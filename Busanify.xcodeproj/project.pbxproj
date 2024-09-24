@@ -15,6 +15,8 @@
 		75D78A3C2C4F84FC00E3259B /* BookmarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D78A3B2C4F84FC00E3259B /* BookmarkViewController.swift */; };
 		75D78A3E2C4F851900E3259B /* BookmarkGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D78A3D2C4F851900E3259B /* BookmarkGridCell.swift */; };
 		75D78A402C4F852900E3259B /* BookmarkListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D78A3F2C4F852900E3259B /* BookmarkListCell.swift */; };
+		B88542112CA1842E00696BD5 /* PlaceReviewsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88542102CA1842E00696BD5 /* PlaceReviewsListViewController.swift */; };
+		B8AABE1B2CA176500000858E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B8AABE1A2CA176500000858E /* GoogleService-Info.plist */; };
 		B8AB3C392C539B7B00E41BF7 /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AB3C382C539B7B00E41BF7 /* WeatherViewModel.swift */; };
 		B8F89BCC2C5386A800332FE2 /* WeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F89BCB2C5386A800332FE2 /* WeatherManager.swift */; };
 		B8F89BCE2C5386C100332FE2 /* Region.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F89BCD2C5386C100332FE2 /* Region.swift */; };
@@ -115,6 +117,8 @@
 		75D78A3F2C4F852900E3259B /* BookmarkListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkListCell.swift; sourceTree = "<group>"; };
 		90A686BAD126AABE23FE1EC1 /* Pods-Busanify.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busanify.release.xcconfig"; path = "Target Support Files/Pods-Busanify/Pods-Busanify.release.xcconfig"; sourceTree = "<group>"; };
 		AEFB0607F885ABD0E382C23B /* Pods_Busanify.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Busanify.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B88542102CA1842E00696BD5 /* PlaceReviewsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceReviewsListViewController.swift; sourceTree = "<group>"; };
+		B8AABE1A2CA176500000858E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B8AB3C382C539B7B00E41BF7 /* WeatherViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherViewModel.swift; sourceTree = "<group>"; };
 		B8F89BCB2C5386A800332FE2 /* WeatherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherManager.swift; sourceTree = "<group>"; };
 		B8F89BCD2C5386C100332FE2 /* Region.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Region.swift; sourceTree = "<group>"; };
@@ -396,6 +400,7 @@
 				C26E7CC92C482CDF004996FE /* RatingTableViewCell.swift */,
 				C2FFD2B82C494AD90032C902 /* ReviewTableViewCell.swift */,
 				C2B869B62C4F425000E4FEBD /* StarImageView.swift */,
+				B88542102CA1842E00696BD5 /* PlaceReviewsListViewController.swift */,
 			);
 			path = PlaceDetail;
 			sourceTree = "<group>";
@@ -434,6 +439,7 @@
 		C296D6FC2C1F16B000691515 /* Busanify */ = {
 			isa = PBXGroup;
 			children = (
+				B8AABE1A2CA176500000858E /* GoogleService-Info.plist */,
 				757882F72C43E52A0078EFAB /* Busanify.entitlements */,
 				C296D72F2C1F2B0200691515 /* Application */,
 				C2ED4A2B2CA2A43C00A93A90 /* Common */,
@@ -446,7 +452,6 @@
 				C296D7062C1F16B200691515 /* Assets.xcassets */,
 				C296D7082C1F16B200691515 /* LaunchScreen.storyboard */,
 				C296D70B2C1F16B200691515 /* Info.plist */,
-				C2DB0AFB2C8D935A00E485F9 /* GoogleService-Info.plist */,
 			);
 			path = Busanify;
 			sourceTree = "<group>";
@@ -744,7 +749,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C296D7072C1F16B200691515 /* Assets.xcassets in Resources */,
-				C2DB0AFC2C8D935A00E485F9 /* GoogleService-Info.plist in Resources */,
+				B8AABE1B2CA176500000858E /* GoogleService-Info.plist in Resources */,
 				C296D70A2C1F16B200691515 /* Base in Resources */,
 				C296D7052C1F16B000691515 /* Base in Resources */,
 			);
@@ -878,6 +883,7 @@
 				CD32519C2C4C14E1006CB590 /* SelectedPlaceListViewModel.swift in Sources */,
 				C2695D322C4788AC00375BA6 /* PlaceDetailViewController.swift in Sources */,
 				C207B98B2C45FEFB0088E2D5 /* Keychain.swift in Sources */,
+				B88542112CA1842E00696BD5 /* PlaceReviewsListViewController.swift in Sources */,
 				B8F89BDC2C53883000332FE2 /* WeatherIcon.swift in Sources */,
 				B8F89BD82C5387EC00332FE2 /* WeatherViewController.swift in Sources */,
 				CD89D3522C29A55A00715404 /* HomeViewController.swift in Sources */,
