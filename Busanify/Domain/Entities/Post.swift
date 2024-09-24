@@ -12,10 +12,11 @@ struct Post: Identifiable, Hashable, Codable {
     let content: String
     let photoUrls: [String]
     let user: User
+    let commentsCount: Int
     let createdAt: String
     
     private enum CodingKeys: String, CodingKey {
-        case id, content, photoUrls, user, createdAt
+        case id, content, photoUrls, user, commentsCount, createdAt
     }
     
     init(from decoder: Decoder) throws {
@@ -24,6 +25,7 @@ struct Post: Identifiable, Hashable, Codable {
         content = try container.decode(String.self, forKey: .content)
         photoUrls = try container.decode([String].self, forKey: .photoUrls)
         user = try container.decode(User.self, forKey: .user)
+        commentsCount = try container.decode(Int.self, forKey: .commentsCount)
         
         let createdAtString = try container.decode(String.self, forKey: .createdAt)
         
