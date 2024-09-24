@@ -19,20 +19,20 @@ class PlaceListViewController: UIViewController {
     var selectedLng: Double = 0
     var selectedRadius: Double = 3000
     
-//    init(viewModel: PlaceListViewModel) {
-//        self.viewModel = viewModel
-//        super.init(nibName: nil, bundle: nil)
-//    }
-
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
+    //    init(viewModel: PlaceListViewModel) {
+    //        self.viewModel = viewModel
+    //        super.init(nibName: nil, bundle: nil)
+    //    }
+    
+    //    required init?(coder: NSCoder) {
+    //        fatalError("init(coder:) has not been implemented")
+    //    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
         bindViewModel()
-//        fetchPlaces()
+        //        fetchPlaces()
     }
     
     private func setupTableView() {
@@ -53,7 +53,7 @@ class PlaceListViewController: UIViewController {
     }
     
     private func bindViewModel() {
-        viewModel.$placeCellViewModels
+        viewModel.$placeCellModels
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.tableView.reloadData()
@@ -88,13 +88,14 @@ class PlaceListViewController: UIViewController {
     
     private func moveToSignInView() {
         let signInVC = SignInViewController()
-        navigationController?.pushViewController(signInVC, animated: true)
+        signInVC.modalPresentationStyle = .pageSheet
+        present(signInVC, animated: true, completion: nil)
     }
 }
 
 extension PlaceListViewController: UITableViewDataSource, UITableViewDelegate, DetailViewControllerDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.placeCellViewModels.count
+        return viewModel.placeCellModels.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -102,7 +103,7 @@ extension PlaceListViewController: UITableViewDataSource, UITableViewDelegate, D
             return UITableViewCell()
         }
         
-        let cellViewModel = viewModel.placeCellViewModels[indexPath.row]
+        let cellViewModel = viewModel.placeCellModels[indexPath.row]
         cell.configure(with: cellViewModel)
         cell.selectionStyle = .none
         
@@ -120,7 +121,7 @@ extension PlaceListViewController: UITableViewDataSource, UITableViewDelegate, D
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedId = viewModel.placeCellViewModels[indexPath.row].id
+        let selectedId = viewModel.placeCellModels[indexPath.row].id
         let placeDetailViewModel = PlaceDetailViewModel(
             placeId: selectedId,
             useCase: PlacesApi()

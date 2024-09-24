@@ -11,22 +11,49 @@ import Combine
 class BookmarkViewController: UIViewController {
     let titleLabel = UILabel()
     let switchLayoutButton = UIButton(type: .system)
+    let emptyMessageLabel = UILabel()
     var tableView: UITableView?
     var collectionView: UICollectionView?
     var isGridView = false
-    var bookmarks: [Bookmark] = []
+    private let viewModel = BookmarkViewModel()
     private var cancellables = Set<AnyCancellable>()
-    private let placesApi = PlacesApi()
-    private let lang = "eng"  // user language
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupTableView()
         setupCollectionView()
-        loadBookmarks()
+        bindViewModel()
+        viewModel.loadBookmarks()
     }
-
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.loadBookmarks()
+    }
+    
+    func bindViewModel() {
+        viewModel.$bookmarks
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] bookmarks in
+                self?.tableView?.reloadData()
+                self?.collectionView?.reloadData()
+                self?.emptyMessageLabel.isHidden = !bookmarks.isEmpty
+                self?.showCells()
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func showCells() {
+        if self.isGridView {
+            self.collectionView?.isHidden = viewModel.bookmarks.isEmpty
+            self.tableView?.isHidden = true
+        } else {
+            self.tableView?.isHidden = viewModel.bookmarks.isEmpty
+            self.collectionView?.isHidden = true
+        }
+    }
+    
     func setupUI() {
         titleLabel.text = "Bookmarks"
         titleLabel.font = UIFont.boldSystemFont(ofSize: 24)
@@ -39,15 +66,25 @@ class BookmarkViewController: UIViewController {
         switchLayoutButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(switchLayoutButton)
         
+        emptyMessageLabel.text = "No place bookmarked"
+        emptyMessageLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        emptyMessageLabel.textColor = .gray
+        emptyMessageLabel.textAlignment = .center
+        emptyMessageLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(emptyMessageLabel)
+        
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             
             switchLayoutButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             switchLayoutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            
+            emptyMessageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyMessageLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
-
+    
     func setupTableView() {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -67,15 +104,19 @@ class BookmarkViewController: UIViewController {
         
         self.tableView = tableView
     }
-
+    
     func setupCollectionView() {
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 120, height: 170)
+        let screenWidth = UIScreen.main.bounds.width
+        let itemWidth = (screenWidth - 40) / 2
+        layout.itemSize = CGSize(width: itemWidth, height: itemWidth)
         layout.sectionInset = UIEdgeInsets(top: 10, left: 5, bottom: 10, right: 5)
-        layout.minimumInteritemSpacing = 10
+        layout.minimumInteritemSpacing = 5
         layout.minimumLineSpacing = 16
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.showsVerticalScrollIndicator = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.isHidden = true
         view.addSubview(collectionView)
@@ -85,32 +126,21 @@ class BookmarkViewController: UIViewController {
         collectionView.delegate = self
         
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 15),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 5),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         
         self.collectionView = collectionView
     }
-
+    
     func loadBookmarks() {
-        guard let token = AuthenticationViewModel.shared.getToken() else { return }
-        
-        placesApi.getBookmarkedPlaces(token: token, lang: lang)
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { completion in
-                if case .failure(let error) = completion {
-                    print("Error loading bookmarks: \(error)")
-                }
-            }, receiveValue: { [weak self] bookmarks in
-                self?.bookmarks = bookmarks
-                self?.tableView?.reloadData()
-                self?.collectionView?.reloadData()
-            })
-            .store(in: &cancellables)
+        viewModel.loadBookmarks()
+        tableView?.reloadData()
+        collectionView?.reloadData()
     }
-
+    
     func popupMenu() -> UIMenu {
         let listViewAction = UIAction(title: "리스트로 보기", image: UIImage(systemName: "list.bullet")) { _ in
             self.switchToTableView()
@@ -126,6 +156,7 @@ class BookmarkViewController: UIViewController {
         isGridView = false
         collectionView?.isHidden = true
         tableView?.isHidden = false
+        viewModel.loadBookmarks()
         tableView?.reloadData()
     }
     
@@ -133,25 +164,32 @@ class BookmarkViewController: UIViewController {
         isGridView = true
         tableView?.isHidden = true
         collectionView?.isHidden = false
+        viewModel.loadBookmarks()
         collectionView?.reloadData()
     }
 }
 
 extension BookmarkViewController: UITableViewDataSource, UITableViewDelegate, DetailViewControllerDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return bookmarks.count
+        return viewModel.bookmarks.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BookmarkListCell", for: indexPath) as! BookmarkListCell
-        let bookmark = bookmarks[indexPath.row]
+        let bookmark = viewModel.bookmarks[indexPath.row]
         cell.configure(with: bookmark)
+        cell.selectionStyle = .none
+        cell.bookmarkButton.isSelected = false
+        cell.bookmarkToggleHandler = {
+            self.viewModel.toggleBookmark(at: indexPath.row)
+        }
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let selectedId = bookmarks[indexPath.row].id
+        let selectedId = viewModel.bookmarks[indexPath.row].id
         let placeDetailViewModel = PlaceDetailViewModel(
             placeId: selectedId,
             useCase: PlacesApi()
@@ -171,18 +209,22 @@ extension BookmarkViewController: UITableViewDataSource, UITableViewDelegate, De
 
 extension BookmarkViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return bookmarks.count
+        return viewModel.bookmarks.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BookmarkGridCell", for: indexPath) as! BookmarkGridCell
-        let bookmark = bookmarks[indexPath.item]
+        let bookmark = viewModel.bookmarks[indexPath.item]
         cell.configure(with: bookmark)
+        cell.bookmarkButton.isSelected = false
+        cell.bookmarkToggleHandler = {
+            self.viewModel.toggleBookmark(at: indexPath.row)
+        }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let selectedId = bookmarks[indexPath.row].id
+        let selectedId = viewModel.bookmarks[indexPath.row].id
         let placeDetailViewModel = PlaceDetailViewModel(
             placeId: selectedId,
             useCase: PlacesApi()
