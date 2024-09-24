@@ -55,8 +55,8 @@ class CommunityViewController: UIViewController  {
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
     }
@@ -112,8 +112,14 @@ extension CommunityViewController: CommunityTableViewCellDelegate {
     func didDeletePost(_ post: Post) {
         Task {
             do {
+                if let index = self.postViewModel.posts.firstIndex(where: { $0.id == post.id }) {
+                    tableView.beginUpdates()
+                    self.tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .none)
+                    postViewModel.posts.remove(at: index)
+                    tableView.endUpdates()
+                }
+                
                 try await postViewModel.deletePost(token: self.authViewModel.getToken()!, id: post.id, photoUrls: post.photoUrls)
-                postViewModel.fetchPosts()
             } catch {
                 print("Failed to delete review: \(error)")
             }
@@ -147,11 +153,11 @@ extension CommunityViewController: CommunityTableViewCellDelegate {
                 self.postViewModel.reportPost(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
             }))
         case .signedOut:
-            alert = UIAlertController(title: "로그인 필요", message: "북마크 기능을 사용하려면 로그인이 필요합니다.", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "로그인", style: .default, handler: { [weak self] _ in
+            alert = UIAlertController(title: "Need Login", message: "You need to login for Report", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Login", style: .default, handler: { [weak self] _ in
                 self?.moveToSignInView()
             }))
-            alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         }
         
         present(alert, animated: true, completion: nil)
@@ -161,6 +167,18 @@ extension CommunityViewController: CommunityTableViewCellDelegate {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
         
         tableView.reloadRows(at: [indexPath], with: .none)
+    }
+    
+    func commentButtonTapped(_ post: Post) {
+        let commentViewModel = CommentViewModel(useCase: CommentApi())
+        let sheetViewController = CommentViewController(commentViewModel: commentViewModel, postViewModel: postViewModel, post: post)
+        // 시트 프레젠테이션 설정
+        if let sheet = sheetViewController.sheetPresentationController {
+            sheet.detents = [.medium()] // 시트 크기 설정
+            sheet.prefersGrabberVisible = true // 그랩바 표시
+        }
+        
+        self.present(sheetViewController, animated: true, completion: nil)
     }
 }
 

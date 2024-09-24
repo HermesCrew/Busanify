@@ -46,6 +46,7 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
     
     private let contentTextView: UITextView = {
         let textView = UITextView()
+        textView.font = UIFont.systemFont(ofSize: 16)
         textView.layer.borderWidth = 1
         textView.layer.borderColor = UIColor.lightGray.cgColor
         textView.layer.cornerRadius = 10
