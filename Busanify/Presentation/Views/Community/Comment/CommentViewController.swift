@@ -176,8 +176,13 @@ extension CommentViewController: CommentTableViewCellDelegate {
     func didDeleteComment(_ comment: Comment) {
         Task {
             do {
+                if let index = self.commentViewModel.comments.firstIndex(where: { $0.id == comment.id }) {
+                    tableView.beginUpdates()
+                    self.tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .none)
+                    commentViewModel.comments.remove(at: index)
+                    tableView.endUpdates()
+                }
                 try await commentViewModel.deleteComment(token: self.authViewModel.getToken()!, id: comment.id)
-                commentViewModel.fetchComments(postId: post.id)
             } catch {
                 print("Failed to delete review: \(error)")
             }

@@ -112,8 +112,14 @@ extension CommunityViewController: CommunityTableViewCellDelegate {
     func didDeletePost(_ post: Post) {
         Task {
             do {
+                if let index = self.postViewModel.posts.firstIndex(where: { $0.id == post.id }) {
+                    tableView.beginUpdates()
+                    self.tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .none)
+                    postViewModel.posts.remove(at: index)
+                    tableView.endUpdates()
+                }
+                
                 try await postViewModel.deletePost(token: self.authViewModel.getToken()!, id: post.id, photoUrls: post.photoUrls)
-                postViewModel.fetchPosts()
             } catch {
                 print("Failed to delete review: \(error)")
             }
