@@ -182,7 +182,7 @@ extension CommentViewController: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CommentTableViewCell.identifier, for: indexPath) as? CommentTableViewCell else {
             return UITableViewCell()
         }
-        cell.configure(with: commentViewModel.comments[indexPath.item])
+        cell.configure(comment: commentViewModel.comments[indexPath.item], post: post)
         cell.delegate = self
         cell.selectionStyle = .none
         
