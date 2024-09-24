@@ -60,6 +60,7 @@ class CommentViewController: UIViewController {
         
         button.addAction(UIAction { [weak self] _ in
             self?.addComment()
+            self?.dismissKeyboard()
         }, for: .touchUpInside)
         
         return button
