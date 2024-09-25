@@ -177,9 +177,9 @@ extension BookmarkViewController: UITableViewDataSource, UITableViewDelegate, De
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BookmarkListCell", for: indexPath) as! BookmarkListCell
         let bookmark = viewModel.bookmarks[indexPath.row]
-        cell.configure(with: bookmark)
+        let isBookmarked = viewModel.isBookmarked(bookmark.id)
+        cell.configure(with: bookmark, isBookmarked: isBookmarked)
         cell.selectionStyle = .none
-        cell.bookmarkButton.isSelected = false
         cell.bookmarkToggleHandler = {
             self.viewModel.toggleBookmark(at: indexPath.row)
         }
@@ -215,8 +215,8 @@ extension BookmarkViewController: UICollectionViewDataSource, UICollectionViewDe
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BookmarkGridCell", for: indexPath) as! BookmarkGridCell
         let bookmark = viewModel.bookmarks[indexPath.item]
-        cell.configure(with: bookmark)
-        cell.bookmarkButton.isSelected = false
+        let isBookmarked = viewModel.isBookmarked(bookmark.id)
+        cell.configure(with: bookmark, isBookmarked: isBookmarked)
         cell.bookmarkToggleHandler = {
             self.viewModel.toggleBookmark(at: indexPath.row)
         }
