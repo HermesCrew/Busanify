@@ -51,7 +51,7 @@ class WeatherContainer: UIView {
         
         viewModel.$selectedRegion
             .sink { [weak self] region in
-                let resolvedRegion = region ?? "부산광역시 부산진구 서면"
+                let resolvedRegion = region ?? "부산광역시 서면"
                 self?.updateLocation(resolvedRegion)
             }
             .store(in: &cancellables)
