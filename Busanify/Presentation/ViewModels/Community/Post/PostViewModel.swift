@@ -7,11 +7,15 @@
 
 import Foundation
 import UIKit
+import Combine
 
 final class PostViewModel {
     private let useCase: PostViewUseCase
     
     @Published var posts: [Post] = []
+    @Published var isLoading: Bool = false
+    
+    private var cancellables = Set<AnyCancellable>()
     
     init(useCase: PostViewUseCase) {
         self.useCase = useCase
@@ -33,9 +37,24 @@ final class PostViewModel {
     }
     
     func fetchPosts() {
+        isLoading = true
+        
         useCase.getPosts()
             .receive(on: DispatchQueue.main)
-            .assign(to: &$posts)
+            .handleEvents(receiveCompletion: { [weak self] _ in
+                self?.isLoading = false
+            })
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .failure(let error):
+                    print("Error fetching posts: \(error)")
+                case .finished:
+                    break
+                }
+            }, receiveValue: { [weak self] posts in
+                self?.posts = posts
+            })
+            .store(in: &cancellables)
     }
     
     func updatePost(token: String?, id: Int, content: String, photos: [ImageData]) async throws {
