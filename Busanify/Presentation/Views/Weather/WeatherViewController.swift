@@ -25,7 +25,7 @@ class WeatherViewController: UIViewController {
     private let weatherImageView = UIImageView()
     private let hourlyForecastCollectionView: UICollectionView
     private let dailyForecastTableView = UITableView()
-    private let locationSymbolButton = UIButton()
+    private let locationSymbolButton = CustomLocationButton()
     private let precipitationIconImageView = UIImageView()
     private let precipitationProbabilityLabel = UILabel()
     
@@ -80,26 +80,6 @@ class WeatherViewController: UIViewController {
         districtLabel.numberOfLines = 0 // 여러 줄 표시 허용
         contentView.addSubview(districtLabel)
         
-        locationSymbolButton.translatesAutoresizingMaskIntoConstraints = false
-        locationSymbolButton.setImage(UIImage(systemName: "dot.scope"), for: .normal)
-        locationSymbolButton.tintColor = .systemBlue
-        locationSymbolButton.addTarget(self, action: #selector(locationSymbolTapped), for: .touchUpInside)
-        contentView.addSubview(locationSymbolButton)
-        
-        
-        locationSymbolButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        let configuration = UIImage.SymbolConfiguration(pointSize: 18, weight: .regular)
-        let baseImage = UIImage(systemName: "circle", withConfiguration: configuration)?.withTintColor(.systemBlue, renderingMode: .alwaysOriginal)
-        let overlayImage = UIImage(systemName: "dot.scope", withConfiguration: configuration)?.withTintColor(.systemBlue, renderingMode: .alwaysOriginal)
-        
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 30, height: 30))
-        let customImage = renderer.image { context in
-            baseImage?.draw(in: context.format.bounds)
-            overlayImage?.draw(in: context.format.bounds)
-        }
-        
-        locationSymbolButton.setImage(customImage, for: .normal)
         locationSymbolButton.addTarget(self, action: #selector(locationSymbolTapped), for: .touchUpInside)
         contentView.addSubview(locationSymbolButton)
         
@@ -168,8 +148,6 @@ class WeatherViewController: UIViewController {
             
             locationSymbolButton.centerYAnchor.constraint(equalTo: districtLabel.centerYAnchor),
             locationSymbolButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            locationSymbolButton.widthAnchor.constraint(equalToConstant: 30),
-            locationSymbolButton.heightAnchor.constraint(equalToConstant: 30),
             
             currentWeatherStackView.topAnchor.constraint(equalTo: districtLabel.bottomAnchor, constant: 25),
             currentWeatherStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
