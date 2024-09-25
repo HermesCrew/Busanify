@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-struct PlaceCellViewModel {
+struct PlaceCellModel {
     let id: String
     let title: String
     let address: String
@@ -31,35 +31,35 @@ struct PlaceCellViewModel {
 }
 
 final class PlaceListViewModel {
-    @Published var placeCellViewModels: [PlaceCellViewModel] = []
+    @Published var placeCellModels: [PlaceCellModel] = []
     private var cancellables = Set<AnyCancellable>()
-//    private let useCase: PlaceListViewUseCase
+    //    private let useCase: PlaceListViewUseCase
     private let placeAPI = PlacesApi()
     
-//    init(useCase: PlaceListViewUseCase) {
-//        self.useCase = useCase
-//    }
+    //    init(useCase: PlaceListViewUseCase) {
+    //        self.useCase = useCase
+    //    }
     
-    func fetchPlaces(typeId: PlaceType, lang: String, lat: Double, lng: Double, radius: Double) {        
+    func fetchPlaces(typeId: PlaceType, lang: String, lat: Double, lng: Double, radius: Double) {
         placeAPI.getPlaces(by: typeId, lang: lang, lat: lat, lng: lng, radius: radius)
-            .map { places in places.map { PlaceCellViewModel(place: $0) } }
+            .map { places in places.map { PlaceCellModel(place: $0) } }
             .receive(on: DispatchQueue.main)
             .sink { completion in
                 if case .failure(let error) = completion {
                     print("Error fetching places: \(error)")
                 }
             } receiveValue: { [weak self] cellViewModels in
-                self?.placeCellViewModels = cellViewModels
+                self?.placeCellModels = cellViewModels
                 self?.syncBookmarksWithServer(lang: lang)
             }
             .store(in: &cancellables)
     }
     
     func toggleBookmark(at index: Int) {
-        guard index < placeCellViewModels.count,
+        guard index < placeCellModels.count,
               let token = AuthenticationViewModel.shared.getToken() else { return }
         
-        let placeId = placeCellViewModels[index].id
+        let placeId = placeCellModels[index].id
         
         placeAPI.toggleBookmark(placeId: placeId, token: token)
     }
@@ -81,7 +81,7 @@ final class PlaceListViewModel {
     
     private func updateBookmarkStatus(with bookmarkedPlaces: [Bookmark]) {
         let bookmarkedIds = Set(bookmarkedPlaces.map { $0.id })
-        placeCellViewModels = placeCellViewModels.map { viewModel in
+        placeCellModels = placeCellModels.map { viewModel in
             var updatedViewModel = viewModel
             updatedViewModel.isBookmarked = bookmarkedIds.contains(viewModel.id)
             return updatedViewModel
