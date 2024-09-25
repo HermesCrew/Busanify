@@ -15,10 +15,8 @@ class WeatherViewController: UIViewController {
     
     private var viewModel = WeatherViewModel()
     private var cancellables = Set<AnyCancellable>()
-    
     private let scrollView = UIScrollView()
     private let contentView = UIView()
-    private let cityLabel = UILabel()
     private let districtLabel = UILabel()
     private let currentWeatherStackView = UIStackView()
     private let temperatureLabel = UILabel()
@@ -31,7 +29,6 @@ class WeatherViewController: UIViewController {
     private let precipitationIconImageView = UIImageView()
     private let precipitationProbabilityLabel = UILabel()
     
-    private var regions: [Region] = Regions.all
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         let layout = UICollectionViewFlowLayout()
@@ -61,40 +58,10 @@ class WeatherViewController: UIViewController {
     private func setupNavigationBar() {
         self.title = "날씨"
         self.navigationController?.navigationBar.barTintColor = .white
-        
-        let menuButton = UIBarButtonItem(title: "Select", style: .plain, target: self, action: #selector(menuButtonTapped))
-        self.navigationItem.rightBarButtonItem = menuButton
     }
 
-    
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
-    }
-    
-    @objc private func menuButtonTapped() {
-        let alertController = UIAlertController(title: "지역 선택", message: nil, preferredStyle: .actionSheet)
-        
-        for region in regions {
-            let action = UIAlertAction(title: region.name, style: .default) { _ in
-                self.selectRegion(region)
-            }
-            alertController.addAction(action)
-        }
-        
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        alertController.addAction(cancelAction)
-        
-        if let popoverController = alertController.popoverPresentationController {
-            popoverController.barButtonItem = self.navigationItem.rightBarButtonItem
-        }
-        
-        present(alertController, animated: true, completion: nil)
-    }
-
-    private func selectRegion(_ region: Region) {
-        let location = CLLocation(latitude: region.latitude, longitude: region.longitude)
-        viewModel.fetchWeather(for: location, isCurrentLocation: false)
-        viewModel.selectedRegion = region.name
     }
 
     private func setupUI() {
@@ -105,23 +72,34 @@ class WeatherViewController: UIViewController {
         
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        
-        cityLabel.translatesAutoresizingMaskIntoConstraints = false
-        cityLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
-        cityLabel.textAlignment = .center
-        cityLabel.text = "부산광역시"
-        contentView.addSubview(cityLabel)
 
         districtLabel.translatesAutoresizingMaskIntoConstraints = false
-        districtLabel.font = UIFont.systemFont(ofSize: 18, weight: .regular)
-        districtLabel.textAlignment = .center
+        districtLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        districtLabel.textAlignment = .left
         districtLabel.text = "Loading..."
+        districtLabel.numberOfLines = 0 // 여러 줄 표시 허용
         contentView.addSubview(districtLabel)
         
         locationSymbolButton.translatesAutoresizingMaskIntoConstraints = false
-        locationSymbolButton.setImage(UIImage(systemName: "location.fill"), for: .normal)
-        locationSymbolButton.tintColor = .gray
-        locationSymbolButton.isHidden = true
+        locationSymbolButton.setImage(UIImage(systemName: "dot.scope"), for: .normal)
+        locationSymbolButton.tintColor = .systemBlue
+        locationSymbolButton.addTarget(self, action: #selector(locationSymbolTapped), for: .touchUpInside)
+        contentView.addSubview(locationSymbolButton)
+        
+        
+        locationSymbolButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        let configuration = UIImage.SymbolConfiguration(pointSize: 18, weight: .regular)
+        let baseImage = UIImage(systemName: "circle", withConfiguration: configuration)?.withTintColor(.systemBlue, renderingMode: .alwaysOriginal)
+        let overlayImage = UIImage(systemName: "dot.scope", withConfiguration: configuration)?.withTintColor(.systemBlue, renderingMode: .alwaysOriginal)
+        
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 30, height: 30))
+        let customImage = renderer.image { context in
+            baseImage?.draw(in: context.format.bounds)
+            overlayImage?.draw(in: context.format.bounds)
+        }
+        
+        locationSymbolButton.setImage(customImage, for: .normal)
         locationSymbolButton.addTarget(self, action: #selector(locationSymbolTapped), for: .touchUpInside)
         contentView.addSubview(locationSymbolButton)
         
@@ -153,11 +131,11 @@ class WeatherViewController: UIViewController {
         precipitationStackView.spacing = 5
 
         precipitationIconImageView.contentMode = .scaleAspectFit
-        precipitationIconImageView.tintColor = UIColor.systemPurple.withAlphaComponent(0.8) // 밝은 보라색
+        precipitationIconImageView.tintColor = UIColor.systemPurple.withAlphaComponent(0.8)
         precipitationStackView.addArrangedSubview(precipitationIconImageView)
 
         precipitationProbabilityLabel.font = UIFont.systemFont(ofSize: 16)
-        precipitationProbabilityLabel.textColor = UIColor.systemPurple.withAlphaComponent(0.8) // 밝은 보라색
+        precipitationProbabilityLabel.textColor = UIColor.systemPurple.withAlphaComponent(0.8)
         precipitationStackView.addArrangedSubview(precipitationProbabilityLabel)
         tempStackView.addArrangedSubview(precipitationStackView)
 
@@ -184,17 +162,14 @@ class WeatherViewController: UIViewController {
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-            
-            cityLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            cityLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
 
-            districtLabel.topAnchor.constraint(equalTo: cityLabel.bottomAnchor, constant: 5),
-            districtLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            districtLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            districtLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             
             locationSymbolButton.centerYAnchor.constraint(equalTo: districtLabel.centerYAnchor),
-            locationSymbolButton.trailingAnchor.constraint(equalTo: districtLabel.leadingAnchor, constant: -5),
-            locationSymbolButton.widthAnchor.constraint(equalToConstant: 20),
-            locationSymbolButton.heightAnchor.constraint(equalToConstant: 20),
+            locationSymbolButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            locationSymbolButton.widthAnchor.constraint(equalToConstant: 30),
+            locationSymbolButton.heightAnchor.constraint(equalToConstant: 30),
             
             currentWeatherStackView.topAnchor.constraint(equalTo: districtLabel.bottomAnchor, constant: 25),
             currentWeatherStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
@@ -245,7 +220,7 @@ class WeatherViewController: UIViewController {
         viewModel.$isCurrentLocation
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isCurrentLocation in
-                self?.locationSymbolButton.isHidden = !isCurrentLocation
+                self?.locationSymbolButton.tintColor = isCurrentLocation ? .systemBlue : .systemGray
             }
             .store(in: &cancellables)
     }
