@@ -10,6 +10,7 @@ import Combine
 
 class BookmarkViewModel {
     @Published var bookmarks: [Bookmark] = []
+    @Published var isLoading: Bool = false
     private var bookmarkedIds: Set<String> = []
     private let placeApi = PlacesApi()
     private let lang = "eng"  // 임시
@@ -21,8 +22,13 @@ class BookmarkViewModel {
             return
         }
         
+        isLoading = true
+        
         placeApi.getBookmarkedPlaces(token: token, lang: lang)
             .receive(on: DispatchQueue.main)
+            .handleEvents(receiveCompletion: { [weak self] _ in
+                self?.isLoading = false
+            })
             .sink(receiveCompletion: { completion in
                 if case .failure(let error) = completion {
                     print("Error loading bookmarks: \(error)")
@@ -34,13 +40,13 @@ class BookmarkViewModel {
             .store(in: &cancellables)
     }
     
-    func toggleBookmark(at index: Int) {
+    func toggleBookmark(at index: Int) async throws {
         guard index < bookmarks.count,
               let token = AuthenticationViewModel.shared.getToken() else { return }
         
         let placeId = bookmarks[index].id
-
-        placeApi.toggleBookmark(placeId: placeId, token: token)
+        
+        try await placeApi.toggleBookmark(placeId: placeId, token: token)
         
         if bookmarkedIds.contains(placeId) {
             bookmarkedIds.remove(placeId)

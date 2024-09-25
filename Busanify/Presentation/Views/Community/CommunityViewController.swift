@@ -37,6 +37,35 @@ class CommunityViewController: UIViewController  {
         return tableView
     }()
     
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Community"
+        label.font = UIFont.boldSystemFont(ofSize: 24)
+        
+        return label
+    }()
+    
+    private lazy var addPostButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "plus"), for: .normal)
+        
+        button.addAction(UIAction { [weak self] _ in
+            self?.addButtonTapped()
+        }, for: .touchUpInside)
+        return button
+    }()
+    
+    private let emptyMessageLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Be the first to write a post!"
+        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.textColor = .gray
+        label.textAlignment = .center
+        label.isHidden = true
+        
+        return label
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -44,29 +73,53 @@ class CommunityViewController: UIViewController  {
         bind()
         
         postViewModel.fetchPosts()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "+", style: .done, target: self, action: #selector(addButtonTapped))
     }
     
     private func configureUI() {
         view.backgroundColor = .systemBackground
+        view.addSubview(titleLabel)
+        view.addSubview(addPostButton)
+        view.addSubview(emptyMessageLabel)
         view.addSubview(tableView)
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        addPostButton.translatesAutoresizingMaskIntoConstraints = false
+        emptyMessageLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            
+            addPostButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            addPostButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            
+            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            emptyMessageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyMessageLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
     
     @objc private func addButtonTapped() {
-        let postViewModel = PostViewModel(useCase: PostApi())
-        let addPostVC = AddPostViewController(postViewModel: postViewModel)
-        addPostVC.delegate = self
-        addPostVC.hidesBottomBarWhenPushed = true // 탭바 숨기기
-        self.navigationController?.pushViewController(addPostVC, animated: true)
+        switch authViewModel.state {
+        case .googleSignedIn, .appleSignedIn:
+            let postViewModel = PostViewModel(useCase: PostApi())
+            let addPostVC = AddPostViewController(postViewModel: postViewModel)
+            addPostVC.delegate = self
+            addPostVC.hidesBottomBarWhenPushed = true // 탭바 숨기기
+            self.navigationController?.pushViewController(addPostVC, animated: true)
+        case .signedOut:
+            let alert = UIAlertController(title: "Need Login", message: "You need to login to write Post", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Login", style: .default, handler: { [weak self] _ in
+                self?.moveToSignInView()
+            }))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            present(alert, animated: true, completion: nil)
+        }
     }
     
     private func moveToSignInView() {
@@ -76,9 +129,16 @@ class CommunityViewController: UIViewController  {
     
     private func bind() {
         postViewModel.$posts
+            .combineLatest(postViewModel.$isLoading)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
+            .sink { [weak self] (posts, isLoading) in
                 self?.tableView.reloadData()
+                if isLoading {
+                    self?.emptyMessageLabel.isHidden = true
+                } else {
+                    // 로딩 완료 후, posts 상태에 따라 emptyMessageLabel을 숨기거나 표시
+                    self?.emptyMessageLabel.isHidden = !posts.isEmpty
+                }
             }
             .store(in: &cancellables)
         
@@ -86,6 +146,13 @@ class CommunityViewController: UIViewController  {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.tableView.reloadData()
+            }
+            .store(in: &cancellables)
+        
+        authViewModel.$currentUser
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] currentUser in
+                self?.postViewModel.fetchPosts()
             }
             .store(in: &cancellables)
     }
