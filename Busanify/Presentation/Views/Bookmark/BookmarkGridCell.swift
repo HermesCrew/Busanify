@@ -96,10 +96,11 @@ class BookmarkGridCell: UICollectionViewCell {
         bookmarkToggleHandler?()
     }
     
-    func configure(with bookmark: Bookmark) {
+    func configure(with bookmark: Bookmark, isBookmarked: Bool) {
         titleLabel.text = bookmark.title
         ratingLabel.text = "\(bookmark.avgRating)"
         reviewCountLabel.text = "(\(bookmark.reviewCount))"
+        bookmarkButton.isSelected = !isBookmarked
         
         let imageURL = URL(string: bookmark.image)
         gridImageView.kf.setImage(with: imageURL, placeholder: UIImage(named: "placeholder"))

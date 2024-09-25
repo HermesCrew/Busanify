@@ -11,6 +11,9 @@ import Combine
 
 class HomeViewModel {
     @Published var searchedPlaces: [Place] = []
+    @Published var textSearchedPlaces: [Place] = []
+    
+    @Published var searchText: String = ""
     
     var currentLong: CGFloat = 0
     var currentLat: CGFloat = 0
@@ -21,6 +24,18 @@ class HomeViewModel {
     private let longRange = 128.7384361...129.3728194
     
     init() {
+        resetCoordinates()
+        
+        self.$searchText
+            .removeDuplicates()
+            .sink { [weak self] text in
+                guard let self = self else { return }
+                self.getLocationsBy(keyword: text)
+            }
+            .store(in: &cancellable)
+    }
+    
+    func resetCoordinates() {
         if locationManager.authorizationStatus == .authorizedAlways ||
             locationManager.authorizationStatus == .authorizedWhenInUse {
             if let location = locationManager.location,
@@ -57,6 +72,6 @@ class HomeViewModel {
     func getLocationsBy(keyword: String) {
         placeService.getPlaces(by: keyword, lang: "eng")
             .receive(on: DispatchQueue.global())
-            .assign(to: &$searchedPlaces)
+            .assign(to: &$textSearchedPlaces)
     }
 }
