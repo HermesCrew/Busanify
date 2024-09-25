@@ -15,7 +15,7 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
     private var selections = [String : PHPickerResult]()
     private var selectedAssetIdentifiers = [String]()
     private var selectedImages: [UIImage] = []
-
+    
     weak var delegate: AddPostViewControllerDelegate?
     
     private lazy var addButton: UIButton = {
@@ -80,13 +80,13 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
         view.isHidden = true
         return view
     }()
-
+    
     private let activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
         indicator.color = .white
         return indicator
     }()
-
+    
     private let loadingLabel: UILabel = {
         let label = UILabel()
         label.text = "Uploading"
@@ -284,12 +284,13 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
         Task {
             do {
                 try await postViewModel.createPost(token: authViewModel.getToken(), content: contentTextView.text, photos: selectedImages)
-            
+                
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     self.hideLoading()
                     self.delegate?.didCreatePost()
                     self.navigationController?.popViewController(animated: true)
+                    self.delegate?.showToastMessage("Post uploaded successfully")
                 }
             } catch {
                 print("Failed to create post: \(error)")
@@ -312,7 +313,7 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
     }
-
+    
     @objc private func dismissKeyboard() {
         view.endEditing(true)
     }
@@ -336,14 +337,14 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
         }
     }
     
-    // 로딩 뷰
+    // 로딩 뷰 띄우기
     private func showLoading() {
         navigationItem.leftBarButtonItem?.isEnabled = false
         loadingView.isHidden = false
         activityIndicator.startAnimating()
         view.isUserInteractionEnabled = false
     }
-
+    
     private func hideLoading() {
         loadingView.isHidden = true
         activityIndicator.stopAnimating()
@@ -450,4 +451,5 @@ extension AddPostViewController: UITextViewDelegate {
 
 protocol AddPostViewControllerDelegate: NSObject {
     func didCreatePost()
+    func showToastMessage(_ message: String)
 }
