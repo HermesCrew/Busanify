@@ -38,12 +38,12 @@ class BookmarkViewModel {
             .store(in: &cancellables)
     }
     
-    func toggleBookmark(at index: Int) {
+    func toggleBookmark(at index: Int) async throws {
         guard index < bookmarks.count,
               let token = AuthenticationViewModel.shared.getToken() else { return }
         
         let placeId = bookmarks[index].id
         
-        placeApi.toggleBookmark(placeId: placeId, token: token)
+        try await placeApi.toggleBookmark(placeId: placeId, token: token)
     }
 }
