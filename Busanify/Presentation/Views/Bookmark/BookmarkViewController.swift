@@ -34,12 +34,18 @@ class BookmarkViewController: UIViewController {
     
     func bindViewModel() {
         viewModel.$bookmarks
+            .combineLatest(viewModel.$isLoading)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] bookmarks in
+            .sink { [weak self] (bookmarks, isLoading) in
                 self?.tableView?.reloadData()
                 self?.collectionView?.reloadData()
-                self?.emptyMessageLabel.isHidden = !bookmarks.isEmpty
                 self?.showCells()
+                
+                if isLoading {
+                    self?.emptyMessageLabel.isHidden = true
+                } else {
+                    self?.emptyMessageLabel.isHidden = !bookmarks.isEmpty
+                }
             }
             .store(in: &cancellables)
     }
@@ -70,6 +76,7 @@ class BookmarkViewController: UIViewController {
         emptyMessageLabel.font = UIFont.boldSystemFont(ofSize: 20)
         emptyMessageLabel.textColor = .gray
         emptyMessageLabel.textAlignment = .center
+        emptyMessageLabel.isHidden = true
         emptyMessageLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(emptyMessageLabel)
         
@@ -176,12 +183,19 @@ extension BookmarkViewController: UITableViewDataSource, UITableViewDelegate, De
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BookmarkListCell", for: indexPath) as! BookmarkListCell
+    
         let bookmark = viewModel.bookmarks[indexPath.row]
         let isBookmarked = viewModel.isBookmarked(bookmark.id)
         cell.configure(with: bookmark, isBookmarked: isBookmarked)
         cell.selectionStyle = .none
         cell.bookmarkToggleHandler = {
-            self.viewModel.toggleBookmark(at: indexPath.row)
+            Task {
+                do {
+                    try await self.viewModel.toggleBookmark(at: indexPath.row)
+                } catch {
+                    print("Failed to create post: \(error)")
+                }
+            }
         }
         
         return cell
@@ -198,6 +212,7 @@ extension BookmarkViewController: UITableViewDataSource, UITableViewDelegate, De
         let reviewViewModel = ReviewViewModel(useCase: ReviewApi())
         let placeDetailVC = PlaceDetailViewController(placeDetailViewModel: placeDetailViewModel, reviewViewModel: reviewViewModel)
         placeDetailVC.delegate = self
+        placeDetailVC.hidesBottomBarWhenPushed = true
         show(placeDetailVC, sender: self)
     }
     
@@ -218,7 +233,13 @@ extension BookmarkViewController: UICollectionViewDataSource, UICollectionViewDe
         let isBookmarked = viewModel.isBookmarked(bookmark.id)
         cell.configure(with: bookmark, isBookmarked: isBookmarked)
         cell.bookmarkToggleHandler = {
-            self.viewModel.toggleBookmark(at: indexPath.row)
+            Task {
+                do {
+                    try await self.viewModel.toggleBookmark(at: indexPath.row)
+                } catch {
+                    print("Failed to create post: \(error)")
+                }
+            }
         }
         return cell
     }
