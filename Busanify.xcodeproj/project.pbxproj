@@ -80,6 +80,8 @@
 		C2ED4A2D2CA2A46400A93A90 /* UIResponder+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2ED4A2C2CA2A46400A93A90 /* UIResponder+Extensions.swift */; };
 		C2F5776D2C479C1E00B2365F /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F5776C2C479C1E00B2365F /* Review.swift */; };
 		C2FFD2B92C494AD90032C902 /* ReviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FFD2B82C494AD90032C902 /* ReviewTableViewCell.swift */; };
+		CD0F67FB2CA440CC005E0628 /* ReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0F67FA2CA440CC005E0628 /* ReviewViewController.swift */; };
+		CD0F67FE2CA4458A005E0628 /* ReviewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0F67FD2CA4458A005E0628 /* ReviewProtocol.swift */; };
 		CD3251972C4C07E7006CB590 /* SelectedPlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3251962C4C07E7006CB590 /* SelectedPlaceListViewController.swift */; };
 		CD32519A2C4C0816006CB590 /* SelectedPlaceListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3251992C4C0816006CB590 /* SelectedPlaceListTableViewCell.swift */; };
 		CD32519C2C4C14E1006CB590 /* SelectedPlaceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD32519B2C4C14E1006CB590 /* SelectedPlaceListViewModel.swift */; };
@@ -88,6 +90,8 @@
 		CD89D3552C29A56B00715404 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD89D3532C29A56B00715404 /* HomeViewModel.swift */; };
 		CDA3BD122C56415B007A64E8 /* Extension+UIVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA3BD112C56415B007A64E8 /* Extension+UIVIew.swift */; };
 		CDE5CB3D2CA1D23000950993 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE5CB3C2CA1D23000950993 /* String+Extension.swift */; };
+		CDF123832CA46C1C001A0C63 /* ReviewDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF123822CA46C1C001A0C63 /* ReviewDTO.swift */; };
+		CDF123852CA47348001A0C63 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF123842CA47348001A0C63 /* UIViewController+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -184,6 +188,8 @@
 		C2ED4A2C2CA2A46400A93A90 /* UIResponder+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIResponder+Extensions.swift"; sourceTree = "<group>"; };
 		C2F5776C2C479C1E00B2365F /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
 		C2FFD2B82C494AD90032C902 /* ReviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewTableViewCell.swift; sourceTree = "<group>"; };
+		CD0F67FA2CA440CC005E0628 /* ReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewViewController.swift; sourceTree = "<group>"; };
+		CD0F67FD2CA4458A005E0628 /* ReviewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewProtocol.swift; sourceTree = "<group>"; };
 		CD3251962C4C07E7006CB590 /* SelectedPlaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedPlaceListViewController.swift; sourceTree = "<group>"; };
 		CD3251992C4C0816006CB590 /* SelectedPlaceListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedPlaceListTableViewCell.swift; sourceTree = "<group>"; };
 		CD32519B2C4C14E1006CB590 /* SelectedPlaceListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedPlaceListViewModel.swift; sourceTree = "<group>"; };
@@ -192,6 +198,8 @@
 		CD89D3532C29A56B00715404 /* HomeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		CDA3BD112C56415B007A64E8 /* Extension+UIVIew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Extension+UIVIew.swift"; sourceTree = "<group>"; };
 		CDE5CB3C2CA1D23000950993 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		CDF123822CA46C1C001A0C63 /* ReviewDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewDTO.swift; sourceTree = "<group>"; };
+		CDF123842CA47348001A0C63 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		F8291F42EC69F9AA5802389C /* Pods-Busanify.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busanify.debug.xcconfig"; path = "Target Support Files/Pods-Busanify/Pods-Busanify.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -358,6 +366,7 @@
 			children = (
 				C20D082D2CA11CD600459803 /* UpdatePostDTO.swift */,
 				C22C8DA02C9C66A2006BB06B /* PostDTO.swift */,
+				CDF123822CA46C1C001A0C63 /* ReviewDTO.swift */,
 				C2AD58BC2C96D5CC00FBE6AA /* ReportDTO.swift */,
 				C20D08402CA1AD4D00459803 /* CommentDTO.swift */,
 			);
@@ -525,6 +534,7 @@
 		C296D7312C1F2B5000691515 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				CD0F67F92CA440C3005E0628 /* Review */,
 				C22C8DA52C9C67F1006BB06B /* Community */,
 				C2695D302C47889F00375BA6 /* PlaceDetail */,
 				B8F89BD22C53873F00332FE2 /* Weather */,
@@ -614,6 +624,23 @@
 			path = Common;
 			sourceTree = "<group>";
 		};
+		CD0F67F92CA440C3005E0628 /* Review */ = {
+			isa = PBXGroup;
+			children = (
+				CD0F67FC2CA44580005E0628 /* protocol */,
+				CD0F67FA2CA440CC005E0628 /* ReviewViewController.swift */,
+			);
+			path = Review;
+			sourceTree = "<group>";
+		};
+		CD0F67FC2CA44580005E0628 /* protocol */ = {
+			isa = PBXGroup;
+			children = (
+				CD0F67FD2CA4458A005E0628 /* ReviewProtocol.swift */,
+			);
+			path = protocol;
+			sourceTree = "<group>";
+		};
 		CD3251982C4C080B006CB590 /* cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -647,6 +674,7 @@
 			isa = PBXGroup;
 			children = (
 				CDE5CB3C2CA1D23000950993 /* String+Extension.swift */,
+				CDF123842CA47348001A0C63 /* UIViewController+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -877,11 +905,13 @@
 				C26E7CCA2C482CDF004996FE /* RatingTableViewCell.swift in Sources */,
 				B8F89BCE2C5386C100332FE2 /* Region.swift in Sources */,
 				C2AD58B62C96D0AA00FBE6AA /* ReviewUseCase.swift in Sources */,
+				CDF123852CA47348001A0C63 /* UIViewController+Extension.swift in Sources */,
 				C22C8DA72C9C6802006BB06B /* AddPostViewController.swift in Sources */,
 				75D78A3C2C4F84FC00E3259B /* BookmarkViewController.swift in Sources */,
 				758FB83B2C57DF430029EBAA /* Bookmark.swift in Sources */,
 				C2D279CF2C29459000AEAFD1 /* PlaceType.swift in Sources */,
 				B8F89BDA2C53881D00332FE2 /* HourlyForecastCell.swift in Sources */,
+				CDF123832CA46C1C001A0C63 /* ReviewDTO.swift in Sources */,
 				C22C8D9E2C9C64AE006BB06B /* Post.swift in Sources */,
 				C2D279C72C29456200AEAFD1 /* PlacesApi.swift in Sources */,
 				C22C8DAC2C9C7B38006BB06B /* PhotoCollectionViewCell.swift in Sources */,
@@ -898,6 +928,8 @@
 				C296D7022C1F16B000691515 /* ViewController.swift in Sources */,
 				754871112CA2AD810088E74A /* BookmarkViewModel.swift in Sources */,
 				C20D082C2CA1102D00459803 /* UpdatePostViewController.swift in Sources */,
+				CD0F67FE2CA4458A005E0628 /* ReviewProtocol.swift in Sources */,
+				CD0F67FB2CA440CC005E0628 /* ReviewViewController.swift in Sources */,
 				C2D279CB2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift in Sources */,
 				C259310D2C9D51A100901DC2 /* CommunityTableViewCell.swift in Sources */,
 				C2B27C8D2C91850700223874 /* SettingTableViewCell.swift in Sources */,

@@ -244,6 +244,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
                 return UITableViewCell()
             }
             let rating = placeDetailViewModel.place.avgRating
+            cell.reviewDelegate = self
             cell.configure(with: rating)
             cell.selectionStyle = .none
             return cell
@@ -396,6 +397,27 @@ extension PlaceDetailViewController: ReviewTableViewCellDelegate {
     }
 }
 
+extension PlaceDetailViewController: MoveToReviewView {
+    func moveToReviewView() {
+        let reviewViewModel = ReviewViewModel(useCase: ReviewApi())
+        let reviewController = ReviewViewController(reviewViewModel: reviewViewModel, selectedPlace: self.placeDetailViewModel.place)
+        reviewController.delegate = self
+        let reviewView = UINavigationController(rootViewController: reviewController)
+        present(reviewView, animated: true)
+    }
+}
+
 protocol DetailViewControllerDelegate: NSObject {
     func didUpdateData()
+}
+
+
+extension PlaceDetailViewController: AddReviewViewControllerDelegate {
+    func showToastMessage(_ message: String) {
+        self.showToast(view, message: message)
+    }
+    
+    func didCreateReview() {
+        placeDetailViewModel.fetchPlace(token: authViewModel.getToken())
+    }
 }
