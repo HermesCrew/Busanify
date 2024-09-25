@@ -48,12 +48,16 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
     private lazy var stackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [placeImageView, titleLabel])
         stackView.axis = .vertical
-        stackView.alignment = .leading
+        stackView.alignment = .fill
         stackView.distribution = .fill
         stackView.spacing = 15
-        stackView.layoutMargins = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
-        stackView.isLayoutMarginsRelativeArrangement = true
         return stackView
+    }()
+    
+    private lazy var titleContainerView: UIView = {
+        let view = UIView()
+        view.addSubview(titleLabel)
+        return view
     }()
     
     private lazy var bookmarkButton: UIButton = {
@@ -92,7 +96,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
         
         placeImageView.addSubview(bookmarkButton)
         stackView.addArrangedSubview(placeImageView)
-        stackView.addArrangedSubview(titleLabel)
+        stackView.addArrangedSubview(titleContainerView)
         
         tableView.tableHeaderView = stackView
         tableView.separatorInset = UIEdgeInsets.zero // 라인
@@ -101,6 +105,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
         bookmarkButton.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        titleContainerView.translatesAutoresizingMaskIntoConstraints = false
         
         let safeArea = view.safeAreaLayoutGuide
         
@@ -114,7 +119,18 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
             bookmarkButton.trailingAnchor.constraint(equalTo: placeImageView.trailingAnchor, constant: -10),
 
             stackView.widthAnchor.constraint(equalTo: tableView.widthAnchor),
-            stackView.heightAnchor.constraint(equalToConstant: 300)
+            stackView.heightAnchor.constraint(equalToConstant: 300),
+
+            placeImageView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+            placeImageView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
+
+            titleContainerView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+            titleContainerView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
+
+            titleLabel.topAnchor.constraint(equalTo: titleContainerView.topAnchor),
+            titleLabel.bottomAnchor.constraint(equalTo: titleContainerView.bottomAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: titleContainerView.leadingAnchor, constant: 15),
+            titleLabel.trailingAnchor.constraint(equalTo: titleContainerView.trailingAnchor, constant: -15)
         ])
     }
     
