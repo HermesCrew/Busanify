@@ -16,7 +16,7 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
     private var weatherContainerWidthConstraint: NSLayoutConstraint!
     private var searchTextFieldLeadingConstraint: NSLayoutConstraint!
     private var searchTextFieldLeadingConstraintExpanded: NSLayoutConstraint!
-    let weatherContainer = WeatherContainer()
+    let weatherContainer = WeatherContainer(viewModel: WeatherViewModel())
     let searchTextField = SearchTextField()
 //    let listView = SelectedPlaceListViewController()
 //    let listView = PlaceListViewController()
@@ -158,7 +158,7 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
     func didUpdateWeather(_ weather: Weather) {
         let temperature = weather.currentWeather.temperature.value
         let icon = WeatherIcon.getWeatherIcon(for: weather.currentWeather)
-        weatherContainer.updateWeather(temperature: temperature, weatherImage: icon)
+        weatherContainer.updateWeather(temperature: temperature, weatherImage: icon!)
     }
     
     func didFailWithError(_ error: Error) {
