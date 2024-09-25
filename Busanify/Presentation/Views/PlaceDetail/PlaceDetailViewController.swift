@@ -40,7 +40,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0 // stackview에서 이거 없으면 안보임
-        label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         
         return label
     }()
@@ -48,11 +48,16 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
     private lazy var stackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [placeImageView, titleLabel])
         stackView.axis = .vertical
-        stackView.alignment = .leading
+        stackView.alignment = .fill
         stackView.distribution = .fill
-        stackView.spacing = 10
-        
+        stackView.spacing = 15
         return stackView
+    }()
+    
+    private lazy var titleContainerView: UIView = {
+        let view = UIView()
+        view.addSubview(titleLabel)
+        return view
     }()
     
     private lazy var bookmarkButton: UIButton = {
@@ -91,7 +96,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
         
         placeImageView.addSubview(bookmarkButton)
         stackView.addArrangedSubview(placeImageView)
-        stackView.addArrangedSubview(titleLabel)
+        stackView.addArrangedSubview(titleContainerView)
         
         tableView.tableHeaderView = stackView
         tableView.separatorInset = UIEdgeInsets.zero // 라인
@@ -100,6 +105,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
         bookmarkButton.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        titleContainerView.translatesAutoresizingMaskIntoConstraints = false
         
         let safeArea = view.safeAreaLayoutGuide
         
@@ -113,7 +119,18 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
             bookmarkButton.trailingAnchor.constraint(equalTo: placeImageView.trailingAnchor, constant: -10),
 
             stackView.widthAnchor.constraint(equalTo: tableView.widthAnchor),
-            stackView.heightAnchor.constraint(equalToConstant: 300)
+            stackView.heightAnchor.constraint(equalToConstant: 300),
+
+            placeImageView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+            placeImageView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
+
+            titleContainerView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+            titleContainerView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
+
+            titleLabel.topAnchor.constraint(equalTo: titleContainerView.topAnchor),
+            titleLabel.bottomAnchor.constraint(equalTo: titleContainerView.bottomAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: titleContainerView.leadingAnchor, constant: 15),
+            titleLabel.trailingAnchor.constraint(equalTo: titleContainerView.trailingAnchor, constant: -15)
         ])
     }
     
@@ -276,6 +293,30 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
         case 1: return "Review"
         default: return nil
         }
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView()
+        headerView.backgroundColor = .clear
+        
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        label.text = self.tableView(tableView, titleForHeaderInSection: section)
+        
+        headerView.addSubview(label)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 15),
+            label.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -15),
+            label.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 10),
+            label.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -10)
+        ])
+        
+        return headerView
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50
     }
     
     private func updatePlaceInfos(place: Place) {
