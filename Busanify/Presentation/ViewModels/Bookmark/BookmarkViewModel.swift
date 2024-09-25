@@ -10,6 +10,7 @@ import Combine
 
 class BookmarkViewModel {
     @Published var bookmarks: [Bookmark] = []
+    private var bookmarkedIds: Set<String> = []
     private let placeApi = PlacesApi()
     private let lang = "eng"  // 임시
     private var cancellables = Set<AnyCancellable>()
@@ -28,6 +29,7 @@ class BookmarkViewModel {
                 }
             }, receiveValue: { [weak self] bookmarks in
                 self?.bookmarks = bookmarks
+                self?.bookmarkedIds = Set(bookmarks.map { $0.id })
             })
             .store(in: &cancellables)
     }
@@ -37,7 +39,17 @@ class BookmarkViewModel {
               let token = AuthenticationViewModel.shared.getToken() else { return }
         
         let placeId = bookmarks[index].id
-        
+
         placeApi.toggleBookmark(placeId: placeId, token: token)
+        
+        if bookmarkedIds.contains(placeId) {
+            bookmarkedIds.remove(placeId)
+        } else {
+            bookmarkedIds.insert(placeId)
+        }
+    }
+    
+    func isBookmarked(_ id: String) -> Bool {
+        return bookmarkedIds.contains(id)
     }
 }
