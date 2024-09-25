@@ -37,6 +37,17 @@ class CommunityViewController: UIViewController  {
         return tableView
     }()
     
+    private let emptyMessageLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Be the first to write a post!"
+        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.textColor = .gray
+        label.textAlignment = .center
+        label.isHidden = true
+        
+        return label
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -50,14 +61,19 @@ class CommunityViewController: UIViewController  {
     private func configureUI() {
         view.backgroundColor = .systemBackground
         view.addSubview(tableView)
+        view.addSubview(emptyMessageLabel)
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        emptyMessageLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            emptyMessageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyMessageLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
     
@@ -76,9 +92,16 @@ class CommunityViewController: UIViewController  {
     
     private func bind() {
         postViewModel.$posts
+            .combineLatest(postViewModel.$isLoading)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
+            .sink { [weak self] (posts, isLoading) in
                 self?.tableView.reloadData()
+                if isLoading {
+                    self?.emptyMessageLabel.isHidden = true
+                } else {
+                    // 로딩 완료 후, posts 상태에 따라 emptyMessageLabel을 숨기거나 표시
+                    self?.emptyMessageLabel.isHidden = !posts.isEmpty
+                }
             }
             .store(in: &cancellables)
         
