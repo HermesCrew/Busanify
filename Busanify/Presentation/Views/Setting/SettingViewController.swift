@@ -70,6 +70,14 @@ class SettingViewController: UIViewController {
         return textField
     }()
     
+    private lazy var buttonToLabelConstraint: NSLayoutConstraint = {
+       return editNicknameButton.leadingAnchor.constraint(equalTo: nicknameLabel.trailingAnchor)
+    }()
+    
+    private lazy var buttonToTextFieldConstraint: NSLayoutConstraint = {
+       return editNicknameButton.leadingAnchor.constraint(equalTo: nicknameTextField.trailingAnchor)
+    }()
+    
     private lazy var editNicknameButton: UIButton = {
         var config = UIButton.Configuration.plain()
         config.image = UIImage(systemName: "pencil")
@@ -143,6 +151,9 @@ class SettingViewController: UIViewController {
         footerView.addSubview(footerButton)
         settingTableView.tableFooterView = footerView
         
+        buttonToLabelConstraint.isActive = true
+        buttonToTextFieldConstraint.isActive = false
+        
         loginButton.translatesAutoresizingMaskIntoConstraints = false
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         nicknameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -177,8 +188,8 @@ class SettingViewController: UIViewController {
             
             nicknameTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             nicknameTextField.centerYAnchor.constraint(equalTo: nicknameLabel.centerYAnchor),
-            
-            editNicknameButton.leadingAnchor.constraint(equalTo: nicknameLabel.trailingAnchor, constant: 14),
+        
+            buttonToLabelConstraint,
             editNicknameButton.centerYAnchor.constraint(equalTo: nicknameLabel.centerYAnchor),
             
             emailLabel.topAnchor.constraint(equalTo: nicknameLabel.bottomAnchor, constant: 8),
@@ -254,9 +265,13 @@ class SettingViewController: UIViewController {
             nicknameTextField.text = nicknameLabel.text
             nicknameTextField.becomeFirstResponder()
             editNicknameButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
+            buttonToLabelConstraint.isActive = false
+            buttonToTextFieldConstraint.isActive = true
         } else {
             nicknameLabel.isHidden = false
             nicknameTextField.isHidden = true
+            buttonToLabelConstraint.isActive = true
+            buttonToTextFieldConstraint.isActive = false
             
             if let newName = nicknameTextField.text, !newName.isEmpty, nicknameTextField.text != nicknameLabel.text {
                 self.viewModel.updateProfileNickname(nickname: newName) { [weak self] success in
@@ -415,5 +430,17 @@ extension SettingViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        // 현재 텍스트 필드의 텍스트
+        let currentText = textField.text ?? ""
+        
+        // 새로 입력될 텍스트
+        guard let stringRange = Range(range, in: currentText) else { return false }
+        let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+        
+        // 글자 수 제한 (예: 20자)
+        return updatedText.count <= 20
     }
 }
