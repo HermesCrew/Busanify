@@ -174,6 +174,7 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
                 guard let self = self, let mapController = self.mapController, let view = mapController.getView("mapview") as? KakaoMap else { return }
                 let manager = view.getLabelManager()
                 manager.removeLabelLayer(layerID: "LocationLayer")
+                manager.removeLabelLayer(layerID: "SearchedLocationLayer")
                 if places.count > 0 {
                     self.createLabelLayer(layerID: "LocationLayer")
                     self.createPoiStyle(styleID: "LocationStyle", placeType: tempPlaceType)
@@ -188,6 +189,7 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
             .sink { [weak self] places in
                 guard let self = self, let mapController = self.mapController, let view = mapController.getView("mapview") as? KakaoMap else { return }
                 let manager = view.getLabelManager()
+                manager.removeLabelLayer(layerID: "LocationLayer")
                 manager.removeLabelLayer(layerID: "SearchedLocationLayer")
                 if places.count > 0 {
                     self.createLabelLayer(layerID: "SearchedLocationLayer")
@@ -195,7 +197,7 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
                         let targetType = PlaceType.allCases.filter{ "\($0.rawValue)" == place.typeId }.first!
                         self.createPoiStyle(styleID: "SearchedLocationStyle\(idx)", placeType: targetType)
                         let mapPoints = MapPoint(longitude: place.lng, latitude: place.lat)
-                        self.createPois(layerID: "SearchedLocationLayer", styleID: "SearchedLocationStyle\(idx)", poiID: "", mapPoints: [mapPoints], titles: [place.title], ids: [place.id])
+                        self.createPoisForSearchText(layerID: "SearchedLocationLayer", styleID: "SearchedLocationStyle\(idx)", poiID: "", mapPoints: [mapPoints], titles: [place.title], ids: [place.id])
                     }
                 }
             }
