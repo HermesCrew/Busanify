@@ -16,6 +16,7 @@
 		75D78A3C2C4F84FC00E3259B /* BookmarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D78A3B2C4F84FC00E3259B /* BookmarkViewController.swift */; };
 		75D78A3E2C4F851900E3259B /* BookmarkGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D78A3D2C4F851900E3259B /* BookmarkGridCell.swift */; };
 		75D78A402C4F852900E3259B /* BookmarkListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D78A3F2C4F852900E3259B /* BookmarkListCell.swift */; };
+		B80BF50A2CA46ADB004869D4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B80BF5092CA46ADB004869D4 /* GoogleService-Info.plist */; };
 		B88542112CA1842E00696BD5 /* PlaceReviewsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88542102CA1842E00696BD5 /* PlaceReviewsListViewController.swift */; };
 		B8AB3C392C539B7B00E41BF7 /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AB3C382C539B7B00E41BF7 /* WeatherViewModel.swift */; };
 		B8F32CE32CA44ACA00DF172A /* PostDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F32CE22CA44ACA00DF172A /* PostDetailViewController.swift */; };
@@ -122,6 +123,7 @@
 		75D78A3F2C4F852900E3259B /* BookmarkListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkListCell.swift; sourceTree = "<group>"; };
 		90A686BAD126AABE23FE1EC1 /* Pods-Busanify.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busanify.release.xcconfig"; path = "Target Support Files/Pods-Busanify/Pods-Busanify.release.xcconfig"; sourceTree = "<group>"; };
 		AEFB0607F885ABD0E382C23B /* Pods_Busanify.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Busanify.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B80BF5092CA46ADB004869D4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		B88542102CA1842E00696BD5 /* PlaceReviewsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceReviewsListViewController.swift; sourceTree = "<group>"; };
 		B8AB3C382C539B7B00E41BF7 /* WeatherViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherViewModel.swift; sourceTree = "<group>"; };
 		B8F32CE22CA44ACA00DF172A /* PostDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailViewController.swift; sourceTree = "<group>"; };
@@ -405,7 +407,7 @@
 		C236ED6F2CA3D0B300CDA182 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
-				7548710D2CA1691D0088E74A /* Config.xcconfig */,
+				C2293DE32CA2DBD400E92E5B /* GoogleService-Info.plist */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -466,9 +468,9 @@
 		C296D6FC2C1F16B000691515 /* Busanify */ = {
 			isa = PBXGroup;
 			children = (
-				B8AABE1A2CA176500000858E /* GoogleService-Info.plist */,
 				CDE5CB3B2CA1D22600950993 /* Extension */,
 				757882F72C43E52A0078EFAB /* Busanify.entitlements */,
+				B80BF5092CA46ADB004869D4 /* GoogleService-Info.plist */,
 				C296D72F2C1F2B0200691515 /* Application */,
 				C2ED4A2B2CA2A43C00A93A90 /* Common */,
 				C296D72D2C1F2AA100691515 /* Data */,
@@ -788,6 +790,7 @@
 			files = (
 				C2293DE42CA2DC0100E92E5B /* GoogleService-Info.plist in Resources */,
 				C296D7072C1F16B200691515 /* Assets.xcassets in Resources */,
+				B80BF50A2CA46ADB004869D4 /* GoogleService-Info.plist in Resources */,
 				C296D70A2C1F16B200691515 /* Base in Resources */,
 				C296D7052C1F16B000691515 /* Base in Resources */,
 			);

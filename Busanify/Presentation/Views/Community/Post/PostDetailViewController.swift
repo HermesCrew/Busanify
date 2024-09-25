@@ -244,7 +244,7 @@ extension PostDetailViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
         let comment = commentViewModel.comments[indexPath.row]
-        cell.configure(with: comment)
+        cell.configure(comment: comment, post: post)
         cell.delegate = self
         return cell
     }
