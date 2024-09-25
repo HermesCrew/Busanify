@@ -13,7 +13,7 @@ import UIKit
 
 class WeatherViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var currentWeather: Weather?
-    @Published var selectedRegion: String = "전체"
+    @Published var selectedRegion: String?
     @Published var error: String?
     @Published var sortedHourlyForecast: [HourWeather] = []
     @Published var isCurrentLocation: Bool = true
@@ -85,7 +85,7 @@ class WeatherViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
                                 self.selectedRegion = locality
                             }
                         } else {
-                            self.selectedRegion = "부산광역시 서면"
+                            self.selectedRegion = "부산광역시 부산진구 서면"
                         }
                     }
                 }
