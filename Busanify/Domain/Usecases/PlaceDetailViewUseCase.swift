@@ -10,7 +10,7 @@ import Combine
 
 protocol PlaceDetailViewUseCase {
     func getPlace(by id: String, lang: String, token: String?) -> AnyPublisher<Place, Never>
-    func toggleBookmark(placeId: String, token: String)
+    func toggleBookmark(placeId: String, token: String) async throws
 }
 
 protocol MoveToMapLocation {
