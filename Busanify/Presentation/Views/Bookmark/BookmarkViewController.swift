@@ -183,12 +183,19 @@ extension BookmarkViewController: UITableViewDataSource, UITableViewDelegate, De
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BookmarkListCell", for: indexPath) as! BookmarkListCell
+    
         let bookmark = viewModel.bookmarks[indexPath.row]
         cell.configure(with: bookmark)
         cell.selectionStyle = .none
         cell.bookmarkButton.isSelected = false
         cell.bookmarkToggleHandler = {
-            self.viewModel.toggleBookmark(at: indexPath.row)
+            Task {
+                do {
+                    try await self.viewModel.toggleBookmark(at: indexPath.row)
+                } catch {
+                    print("Failed to create post: \(error)")
+                }
+            }
         }
         
         return cell
@@ -205,6 +212,7 @@ extension BookmarkViewController: UITableViewDataSource, UITableViewDelegate, De
         let reviewViewModel = ReviewViewModel(useCase: ReviewApi())
         let placeDetailVC = PlaceDetailViewController(placeDetailViewModel: placeDetailViewModel, reviewViewModel: reviewViewModel)
         placeDetailVC.delegate = self
+        placeDetailVC.hidesBottomBarWhenPushed = true
         show(placeDetailVC, sender: self)
     }
     
@@ -225,7 +233,13 @@ extension BookmarkViewController: UICollectionViewDataSource, UICollectionViewDe
         cell.configure(with: bookmark)
         cell.bookmarkButton.isSelected = false
         cell.bookmarkToggleHandler = {
-            self.viewModel.toggleBookmark(at: indexPath.row)
+            Task {
+                do {
+                    try await self.viewModel.toggleBookmark(at: indexPath.row)
+                } catch {
+                    print("Failed to create post: \(error)")
+                }
+            }
         }
         return cell
     }

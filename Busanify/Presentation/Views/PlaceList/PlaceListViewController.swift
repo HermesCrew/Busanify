@@ -75,6 +75,10 @@ class PlaceListViewController: UIViewController {
     
     func fetchPlaces(type: PlaceType, lat: CGFloat, lng: CGFloat, radius: CGFloat) {
         viewModel.fetchPlaces(typeId: type, lang: lang, lat: lat, lng: lng, radius: radius)
+        selectedPlaceType = type
+        selectedLat = lat
+        selectedLng = lng
+        selectedRadius = radius
     }
     
     private func showLoginAlert() {
@@ -111,8 +115,14 @@ extension PlaceListViewController: UITableViewDataSource, UITableViewDelegate, D
             guard let self = self else { return }
             switch self.authViewModel.state {
             case .googleSignedIn, .appleSignedIn:
-                self.viewModel.toggleBookmark(at: indexPath.row)
-                cell.bookmarkButton.isSelected.toggle()
+                Task {
+                    do {
+                        try await self.viewModel.toggleBookmark(at: indexPath.row)
+                        cell.bookmarkButton.isSelected.toggle() // isBookmarked를 값을 매번 가져오지않고 화면 내에서 바뀌도록
+                    } catch {
+                        print("Failed to create post: \(error)")
+                    }
+                }
             case .signedOut:
                 self.showLoginAlert()
             }

@@ -55,13 +55,13 @@ final class PlaceListViewModel {
             .store(in: &cancellables)
     }
     
-    func toggleBookmark(at index: Int) {
+    func toggleBookmark(at index: Int) async throws {
         guard index < placeCellModels.count,
               let token = AuthenticationViewModel.shared.getToken() else { return }
         
         let placeId = placeCellModels[index].id
         
-        placeAPI.toggleBookmark(placeId: placeId, token: token)
+        try await placeAPI.toggleBookmark(placeId: placeId, token: token)
     }
     
     func syncBookmarksWithServer(lang: String) {
