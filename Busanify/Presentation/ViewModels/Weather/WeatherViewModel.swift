@@ -85,7 +85,7 @@ class WeatherViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
                                 self.selectedRegion = locality
                             }
                         } else {
-                            self.selectedRegion = "부산광역시 부산진구 서면"
+                            self.selectedRegion = "부산광역시 서면"
                         }
                     }
                 }

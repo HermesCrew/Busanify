@@ -23,10 +23,11 @@ final class PlaceInfoTableViewCell: UITableViewCell {
     }
     
     private func configureUI() {
-        infoLabel.numberOfLines = 1
+        infoLabel.numberOfLines = 0
         infoLabel.lineBreakMode = .byTruncatingTail
         infoLabel.showsExpansionTextWhenTruncated = true
-        
+        infoLabel.font = UIFont.systemFont(ofSize: 15)
+
         contentView.addSubview(iconImageView)
         contentView.addSubview(infoLabel)
         
