@@ -101,7 +101,7 @@ class CommentTableViewCell: UITableViewCell {
         ])
     }
     
-    func configure(with comment: Comment) {
+    func configure(comment: Comment, post: Post) {
         if let profileImage = comment.user.profileImage {
             let url = URL(string: profileImage)
             profileImageView.kf.setImage(with: url)
@@ -118,12 +118,20 @@ class CommentTableViewCell: UITableViewCell {
         
         switch authViewModel.state {
         case .googleSignedIn(let user):
-            if comment.user.id == user.userID {
-                menuItems = [
-                    UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
-                        self?.delegate?.didDeleteComment(comment)
-                    })
-                ]
+            if post.user.id == user.userID {
+                if comment.user.id == user.userID {
+                    menuItems = [
+                        UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
+                            self?.delegate?.didDeleteComment(comment)
+                        })
+                    ]
+                } else {
+                    menuItems.append(
+                        UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
+                            self?.delegate?.didDeleteComment(comment)
+                        })
+                    )
+                }
             }
         case .appleSignedIn:
             guard let userId = self.keyChain.read(key: "appleUserId") else {
@@ -131,12 +139,20 @@ class CommentTableViewCell: UITableViewCell {
                 return
             }
             
-            if comment.user.id == userId {
-                menuItems = [
-                    UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
-                        self?.delegate?.didDeleteComment(comment)
-                    })
-                ]
+            if post.user.id == userId {
+                if comment.user.id == userId {
+                    menuItems = [
+                        UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
+                            self?.delegate?.didDeleteComment(comment)
+                        })
+                    ]
+                } else {
+                    menuItems.append(
+                        UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
+                            self?.delegate?.didDeleteComment(comment)
+                        })
+                    )
+                }
             }
         default:
             break

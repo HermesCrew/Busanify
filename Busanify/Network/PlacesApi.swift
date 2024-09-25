@@ -95,7 +95,7 @@ final class PlacesApi: HomeViewUseCase, PlaceDetailViewUseCase, PlaceListViewUse
             .eraseToAnyPublisher()
     }
     
-    func toggleBookmark(placeId: String, token: String) {
+    func toggleBookmark(placeId: String, token: String) async throws {
         let urlString = "\(baseURL)/bookmarks/toggle"
         guard let url = URL(string: urlString) else {
             fatalError("Invalid URL")
@@ -110,12 +110,6 @@ final class PlacesApi: HomeViewUseCase, PlaceDetailViewUseCase, PlaceListViewUse
         request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.httpBody = jsonData
         
-        URLSession.shared.dataTaskPublisher(for: request)
-            .sink(receiveCompletion: { _ in
-                print("completion")
-            }, receiveValue: {
-                print($0)
-            })
-            .store(in: &cancellables)
+        let (_, _) = try await URLSession.shared.data(for: request)
     }
 }
