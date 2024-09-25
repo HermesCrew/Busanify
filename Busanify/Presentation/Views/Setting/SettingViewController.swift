@@ -34,7 +34,7 @@ class SettingViewController: UIViewController {
         imageView.contentMode = .scaleAspectFill
         imageView.tintColor = .black
         imageView.backgroundColor = .lightGray
-        imageView.layer.cornerRadius = 60
+        imageView.layer.cornerRadius = 75
         imageView.clipsToBounds = true
         
         return imageView
@@ -48,12 +48,19 @@ class SettingViewController: UIViewController {
         imageView.backgroundColor = .white
         imageView.layer.cornerRadius = 15
         imageView.clipsToBounds = true
+        
+        imageView.layer.shadowColor = UIColor.black.cgColor
+        imageView.layer.shadowOpacity = 0.1 // 그림자 불투명도 (0.0 ~ 1.0)
+        imageView.layer.shadowOffset = CGSize(width: 1, height: 1) // 그림자 위치 (x, y)
+        imageView.layer.shadowRadius = 1 // 그림자 퍼짐 정도
+        imageView.layer.masksToBounds = false
+        
+        
         return imageView
     }()
     
     private lazy var nicknameLabel: UILabel = {
         let nameLabel = UILabel()
-//        nameLabel.font = UIFont.systemFont(ofSize: 36, weight: .bold)
         
         return nameLabel
     }()
@@ -178,13 +185,13 @@ class SettingViewController: UIViewController {
             
             profileImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             profileImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            profileImageView.widthAnchor.constraint(equalToConstant: 120),
-            profileImageView.heightAnchor.constraint(equalToConstant: 120),
+            profileImageView.widthAnchor.constraint(equalToConstant: 150),
+            profileImageView.heightAnchor.constraint(equalToConstant: 150),
             
-            cameraIconView.widthAnchor.constraint(equalToConstant: 30),   // 카메라 아이콘 크기 설정
+            cameraIconView.widthAnchor.constraint(equalToConstant: 30),
             cameraIconView.heightAnchor.constraint(equalToConstant: 30),
-            cameraIconView.trailingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: -5), // 오른쪽 하단에 위치
-            cameraIconView.bottomAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: -5),
+            cameraIconView.trailingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: -15), // 오른쪽 하단에 위치
+            cameraIconView.bottomAnchor.constraint(equalTo: profileImageView.bottomAnchor),
             
             nicknameLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 10),
             nicknameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
