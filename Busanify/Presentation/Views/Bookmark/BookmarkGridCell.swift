@@ -4,38 +4,41 @@
 //
 //  Created by seokyung on 7/20/24.
 //
-// 아이템 크기랑 위치 고민
+
 import Foundation
 import UIKit
+import Kingfisher
 
 class BookmarkGridCell: UICollectionViewCell {
     let gridImageView = UIImageView()
     let titleLabel = UILabel()
     let ratingLabel = UILabel()
     let ratingStackView = UIStackView()
-    //let reviewCountLabel = UILabel()
-
+    let bookmarkButton = UIButton(type: .custom)
+    var bookmarkToggleHandler: (() -> Void)?
+    let reviewCountLabel = UILabel()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
     }
-
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupUI()
     }
-
+    
     private func setupUI() {
         gridImageView.contentMode = .scaleAspectFill
         gridImageView.clipsToBounds = true
         gridImageView.layer.cornerRadius = 8
         contentView.addSubview(gridImageView)
-
+        
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 2
         titleLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         contentView.addSubview(titleLabel)
-
+        
         ratingLabel.textAlignment = .left
         ratingLabel.font = UIFont.systemFont(ofSize: 13)
         contentView.addSubview(ratingLabel)
@@ -45,25 +48,30 @@ class BookmarkGridCell: UICollectionViewCell {
         ratingStackView.spacing = 2
         contentView.addSubview(ratingStackView)
         
-//        reviewCountLabel.font = UIFont.systemFont(ofSize: 14)
-//        reviewCountLabel.textColor = .darkGray
-//        contentView.addSubview(reviewCountLabel)
+        bookmarkButton.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
+        bookmarkButton.setImage(UIImage(systemName: "bookmark"), for: .selected)
+        bookmarkButton.addTarget(self, action: #selector(bookmarkTapped), for: .touchUpInside)
+        contentView.addSubview(bookmarkButton)
         
-        [gridImageView, titleLabel, ratingLabel, ratingStackView].forEach {
+        reviewCountLabel.font = UIFont.systemFont(ofSize: 12)
+        reviewCountLabel.textColor = .darkGray
+        contentView.addSubview(reviewCountLabel)
+        
+        [gridImageView, titleLabel, ratingLabel, ratingStackView, bookmarkButton, reviewCountLabel].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
-
+        
         NSLayoutConstraint.activate([
             gridImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             gridImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
             gridImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
             gridImageView.heightAnchor.constraint(equalToConstant: 110),
             gridImageView.widthAnchor.constraint(equalToConstant: 110),
-
+            
             titleLabel.topAnchor.constraint(equalTo: gridImageView.bottomAnchor, constant: 4),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
-
+            
             ratingLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 2),
             ratingLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
             ratingLabel.bottomAnchor.constraint(equalTo: ratingStackView.bottomAnchor),
@@ -72,44 +80,31 @@ class BookmarkGridCell: UICollectionViewCell {
             ratingStackView.topAnchor.constraint(equalTo: ratingLabel.topAnchor),
             ratingStackView.heightAnchor.constraint(equalToConstant: 14),
             
-//            reviewCountLabel.leadingAnchor.constraint(equalTo: ratingStackView.trailingAnchor, constant: 4),
-//            reviewCountLabel.topAnchor.constraint(equalTo: ratingStackView.topAnchor),
-//            reviewCountLabel.bottomAnchor.constraint(lessThanOrEqualTo: ratingStackView.bottomAnchor)
+            bookmarkButton.topAnchor.constraint(equalTo: gridImageView.topAnchor, constant: 5),
+            bookmarkButton.leadingAnchor.constraint(equalTo: gridImageView.leadingAnchor, constant: 5),
+            bookmarkButton.widthAnchor.constraint(equalToConstant: 30),
+            bookmarkButton.heightAnchor.constraint(equalToConstant: 30),
+            
+            reviewCountLabel.leadingAnchor.constraint(equalTo: ratingStackView.trailingAnchor, constant: 4),
+            reviewCountLabel.topAnchor.constraint(equalTo: ratingStackView.topAnchor),
+            reviewCountLabel.bottomAnchor.constraint(lessThanOrEqualTo: ratingStackView.bottomAnchor)
         ])
     }
-
+    
+    @objc private func bookmarkTapped() {
+        bookmarkButton.isSelected.toggle()
+        bookmarkToggleHandler?()
+    }
+    
     func configure(with bookmark: Bookmark) {
         titleLabel.text = bookmark.title
         ratingLabel.text = "\(bookmark.avgRating)"
-        //reviewCountLabel.text = "(\(bookmark.reviewCount))"
+        reviewCountLabel.text = "(\(bookmark.reviewCount))"
         
-        gridImageView.image = nil
-        if let imageURL = URL(string: bookmark.image) {
-            loadImage(from: imageURL)
-        } else {
-            gridImageView.image = UIImage(named: "placeholder")
-        }
+        let imageURL = URL(string: bookmark.image)
+        gridImageView.kf.setImage(with: imageURL, placeholder: UIImage(named: "placeholder"))
         
         setupStarRating(rating: bookmark.avgRating)
-    }
-
-    private func loadImage(from url: URL) {
-        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
-            guard let self = self else { return }
-            if let error = error {
-                print("Error loading image: \(error.localizedDescription)")
-                return
-            }
-            
-            guard let data = data, let image = UIImage(data: data) else {
-                print("Invalid image data")
-                return
-            }
-            
-            DispatchQueue.main.async {
-                self.gridImageView.image = image
-            }
-        }.resume()
     }
     
     private func setupStarRating(rating: Double) {
