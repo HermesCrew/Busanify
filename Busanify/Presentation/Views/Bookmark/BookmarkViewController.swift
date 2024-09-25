@@ -34,12 +34,18 @@ class BookmarkViewController: UIViewController {
     
     func bindViewModel() {
         viewModel.$bookmarks
+            .combineLatest(viewModel.$isLoading)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] bookmarks in
+            .sink { [weak self] (bookmarks, isLoading) in
                 self?.tableView?.reloadData()
                 self?.collectionView?.reloadData()
-                self?.emptyMessageLabel.isHidden = !bookmarks.isEmpty
                 self?.showCells()
+                
+                if isLoading {
+                    self?.emptyMessageLabel.isHidden = true
+                } else {
+                    self?.emptyMessageLabel.isHidden = !bookmarks.isEmpty
+                }
             }
             .store(in: &cancellables)
     }
@@ -70,6 +76,7 @@ class BookmarkViewController: UIViewController {
         emptyMessageLabel.font = UIFont.boldSystemFont(ofSize: 20)
         emptyMessageLabel.textColor = .gray
         emptyMessageLabel.textAlignment = .center
+        emptyMessageLabel.isHidden = true
         emptyMessageLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(emptyMessageLabel)
         
