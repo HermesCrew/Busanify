@@ -113,7 +113,12 @@ class SettingViewController: UIViewController {
         return indicator
     }()
     
-    private let footerView = UIView()
+    private lazy var footerView: UIView = {
+        let view = UIView()
+        view.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
+        
+        return view
+    }()
     
     private lazy var footerButton: UIButton = {
         let button = UIButton()
@@ -143,11 +148,13 @@ class SettingViewController: UIViewController {
         
         view.addSubview(loginButton)
         view.addSubview(profileImageView)
+        view.addSubview(cameraIconView)
         view.addSubview(nicknameLabel)
         view.addSubview(nicknameTextField)
         view.addSubview(editNicknameButton)
         view.addSubview(emailLabel)
         view.addSubview(settingTableView)
+        view.addSubview(loadingIndicator)
         footerView.addSubview(footerButton)
         settingTableView.tableFooterView = footerView
         
@@ -162,11 +169,7 @@ class SettingViewController: UIViewController {
         emailLabel.translatesAutoresizingMaskIntoConstraints = false
         settingTableView.translatesAutoresizingMaskIntoConstraints = false
         footerButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(loadingIndicator)
         loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(cameraIconView)
         cameraIconView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
