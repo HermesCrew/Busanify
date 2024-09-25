@@ -283,3 +283,16 @@ protocol CommunityTableViewCellDelegate: NSObject {
     func commentButtonTapped(_ post: Post)
     func showPostDetail(post: Post)
 }
+
+
+extension CommunityTableViewCell: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // 선택한 이미지 URL 오 ImagePreviewViewController에 전달
+        let previewVC = ImagePreviewViewController(imageUrls: photoUrls)
+        previewVC.modalPresentationStyle = .overFullScreen
+        
+        if let viewController = self.delegate as? UIViewController {
+            viewController.present(previewVC, animated: true, completion: nil)
+        }
+    }
+}
