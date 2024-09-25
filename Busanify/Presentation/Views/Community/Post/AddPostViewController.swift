@@ -73,6 +73,28 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
         return button
     }()
     
+    // 로딩 뷰
+    private let loadingView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        view.isHidden = true
+        return view
+    }()
+
+    private let activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .white
+        return indicator
+    }()
+
+    private let loadingLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Uploading"
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        return label
+    }()
+    
     init(postViewModel: PostViewModel) {
         self.postViewModel = postViewModel
         super.init(nibName: nil, bundle: nil)
@@ -100,11 +122,17 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
     }
     
     private func configureUI() {
+        // 내비게이션 leftitem 추가
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(cancelButtonTapped))
+        
         view.backgroundColor = .systemBackground
         view.addSubview(addButton)
         view.addSubview(photoCollectionView)
         view.addSubview(contentTextView)
         view.addSubview(saveButton)
+        view.addSubview(loadingView)
+        loadingView.addSubview(activityIndicator)
+        loadingView.addSubview(loadingLabel)
         
         updateSaveButtonState()
         
@@ -112,6 +140,9 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
         photoCollectionView.translatesAutoresizingMaskIntoConstraints = false
         contentTextView.translatesAutoresizingMaskIntoConstraints = false
         saveButton.translatesAutoresizingMaskIntoConstraints = false
+        loadingView.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        loadingLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             addButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -132,7 +163,18 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
             saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             saveButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            saveButton.heightAnchor.constraint(equalToConstant: 50)
+            saveButton.heightAnchor.constraint(equalToConstant: 50),
+            
+            loadingView.topAnchor.constraint(equalTo: view.topAnchor),
+            loadingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            loadingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            loadingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: loadingView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: loadingView.centerYAnchor, constant: -20),
+            
+            loadingLabel.topAnchor.constraint(equalTo: activityIndicator.bottomAnchor, constant: 10),
+            loadingLabel.centerXAnchor.constraint(equalTo: loadingView.centerXAnchor)
         ])
     }
     
@@ -238,18 +280,31 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
     }
     
     private func addPost() {
+        showLoading()
         Task {
             do {
                 try await postViewModel.createPost(token: authViewModel.getToken(), content: contentTextView.text, photos: selectedImages)
             
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.hideLoading()
                     self.delegate?.didCreatePost()
                     self.navigationController?.popViewController(animated: true)
                 }
             } catch {
                 print("Failed to create post: \(error)")
+                DispatchQueue.main.async { [weak self] in
+                    self?.hideLoading()
+                    self?.showErrorAlert(message: "Failed to create post. Please try again.")
+                }
             }
         }
+    }
+    
+    private func showErrorAlert(message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
     
     private func setupTapGesture() {
@@ -260,6 +315,39 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
 
     @objc private func dismissKeyboard() {
         view.endEditing(true)
+    }
+    
+    // 입력된 내용이 있으면 Alert 띄우기
+    @objc private func cancelButtonTapped() {
+        if !selectedImages.isEmpty || !contentTextView.text.isEmpty && contentTextView.textColor != .systemGray3 {
+            let alert = UIAlertController(title: "Unsaved Changes", message: "You have unsaved changes.", preferredStyle: .alert)
+            
+            let discardAction = UIAlertAction(title: "Discard", style: .destructive) { _ in
+                self.navigationController?.popViewController(animated: true)
+            }
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            
+            alert.addAction(discardAction)
+            alert.addAction(cancelAction)
+            
+            present(alert, animated: true, completion: nil)
+        } else {
+            self.navigationController?.popViewController(animated: true)
+        }
+    }
+    
+    // 로딩 뷰
+    private func showLoading() {
+        navigationItem.leftBarButtonItem?.isEnabled = false
+        loadingView.isHidden = false
+        activityIndicator.startAnimating()
+        view.isUserInteractionEnabled = false
+    }
+
+    private func hideLoading() {
+        loadingView.isHidden = true
+        activityIndicator.stopAnimating()
+        view.isUserInteractionEnabled = true
     }
 }
 
