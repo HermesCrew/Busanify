@@ -198,6 +198,15 @@ extension CommunityViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension CommunityViewController: CommunityTableViewCellDelegate {
+    
+    func showPostDetail(post: Post) {
+        let commentViewModel = CommentViewModel(useCase: CommentApi())
+        let postViewModel = PostViewModel(useCase: PostApi())
+        
+        let postDetailVC = PostDetailViewController(post: post, commentViewModel: commentViewModel, postViewModel: postViewModel)
+        navigationController?.pushViewController(postDetailVC, animated: true)
+    }
+    
     func didDeletePost(_ post: Post) {
         Task {
             do {
