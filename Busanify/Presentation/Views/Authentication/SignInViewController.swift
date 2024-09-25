@@ -13,13 +13,12 @@ class SignInViewController: UIViewController {
     
     private let viewModel = AuthenticationViewModel.shared
     
-    private lazy var titleLabel: UILabel = {
-        let titleLabel = UILabel()
-        titleLabel.text = "BUSANIFY"
-        titleLabel.font = UIFont.systemFont(ofSize: 36, weight: .bold)
-        titleLabel.textAlignment = .center
-        
-        return titleLabel
+    private lazy var logoImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "LOGO")
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
     }()
     
     private lazy var googleSignInButton: UIButton = {
@@ -92,11 +91,11 @@ class SignInViewController: UIViewController {
         stackView.distribution = .fillEqually
         
         view.addSubview(stackView)
-        view.addSubview(titleLabel)
-        
+        view.addSubview(logoImageView)
+
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
+        logoImageView.translatesAutoresizingMaskIntoConstraints = false
+
         NSLayoutConstraint.activate([
             
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -104,8 +103,10 @@ class SignInViewController: UIViewController {
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40),
             
-            titleLabel.bottomAnchor.constraint(equalTo: stackView.topAnchor, constant: -60),
-            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            logoImageView.bottomAnchor.constraint(equalTo: stackView.topAnchor, constant: -60),
+            logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            logoImageView.widthAnchor.constraint(equalToConstant: 200),
+            logoImageView.heightAnchor.constraint(equalToConstant: 200)
         ])
     }
 }
