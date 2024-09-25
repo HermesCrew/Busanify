@@ -116,6 +116,24 @@ class CommunityTableViewCell: UITableViewCell {
         self.delegate?.expandPost(cell: self)
     }
     
+    // 게시글 삭제 Alert
+    private func showDeleteConfirmationAlert(for post: Post) {
+        guard let viewController = self.delegate as? UIViewController else { return }
+        
+        let alert = UIAlertController(title: "Delete Post", message: "작성한 글이 삭제됩니다.", preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+            guard let self = self else { return }
+            self.delegate?.didDeletePost(post)
+        }
+        
+        alert.addAction(cancelAction)
+        alert.addAction(deleteAction)
+        
+        viewController.present(alert, animated: true, completion: nil)
+    }
+    
     private func configureUI() {
         profileImageView.layer.cornerRadius = 15
         contentView.addSubview(profileImageView)
@@ -201,7 +219,7 @@ class CommunityTableViewCell: UITableViewCell {
                         self?.delegate?.updatePost(post)
                     }),
                     UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
-                        self?.delegate?.didDeletePost(post)
+                        self?.showDeleteConfirmationAlert(for: post)
                     })
                 ]
             }
@@ -217,7 +235,7 @@ class CommunityTableViewCell: UITableViewCell {
                         self?.delegate?.updatePost(post)
                     }),
                     UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
-                        self?.delegate?.didDeletePost(post)
+                        self?.showDeleteConfirmationAlert(for: post)
                     })
                 ]
             }
