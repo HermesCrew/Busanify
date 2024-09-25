@@ -36,7 +36,6 @@ extension HomeViewController: KakaoMapEventDelegate {
             
         }
         // PoiBadge는 스타일에도 추가될 수 있다. 이렇게 추가된 Badge는 해당 스타일이 적용될 때 함께 그려진다.
-        // MARK: TODO - image 밑에 가게 이름 입력할것
         let iconStyle1 = PoiIconStyle(symbol: iconImage,
                                       anchorPoint: CGPoint(x: 0, y: 0),
                                       transition: PoiTransition(entrance: .alpha, exit: .alpha)
@@ -66,7 +65,9 @@ extension HomeViewController: KakaoMapEventDelegate {
             poiOption1.clickable = true
             poiOption1.addText(PoiText(text: titles[idx].truncate(to: 17), styleIndex: 0))
             let poi = layer?.addPoi(option: poiOption1, at: mapPoint)
-            let _ = poi!.addPoiTappedEventHandler(target: self, handler: HomeViewController.poiTappedHandler)
+            if let poi = poi {
+                let _ = poi.addPoiTappedEventHandler(target: self, handler: HomeViewController.poiTappedHandler)
+            }
         }
         layer?.showAllPois()
     }
@@ -81,7 +82,9 @@ extension HomeViewController: KakaoMapEventDelegate {
         let reviewViewModel = ReviewViewModel(useCase: ReviewApi())
         let placeDetailVC = PlaceDetailViewController(placeDetailViewModel: placeDetailViewModel, reviewViewModel: reviewViewModel)
         
-        if let presentedView = presentedViewController {
+        if presentedViewController == nil {
+            self.present(placeDetailVC, animated: true)
+        } else {
             dismiss(animated: true) {
                 self.present(placeDetailVC, animated: true)
             }

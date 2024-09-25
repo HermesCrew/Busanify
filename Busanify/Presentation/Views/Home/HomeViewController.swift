@@ -182,6 +182,24 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
                 }
             }
             .store(in: &cancellable)
+        
+        viewModel.$textSearchedPlaces
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] places in
+                guard let self = self, let mapController = self.mapController, let view = mapController.getView("mapview") as? KakaoMap else { return }
+                let manager = view.getLabelManager()
+                manager.removeLabelLayer(layerID: "SearchedLocationLayer")
+                if places.count > 0 {
+                    self.createLabelLayer(layerID: "SearchedLocationLayer")
+                    for (idx, place) in places.enumerated() {
+                        let targetType = PlaceType.allCases.filter{ "\($0.rawValue)" == place.typeId }.first!
+                        self.createPoiStyle(styleID: "SearchedLocationStyle\(idx)", placeType: targetType)
+                        let mapPoints = MapPoint(longitude: place.lng, latitude: place.lat)
+                        self.createPois(layerID: "SearchedLocationLayer", styleID: "SearchedLocationStyle\(idx)", poiID: "", mapPoints: [mapPoints], titles: [place.title], ids: [place.id])
+                    }
+                }
+            }
+            .store(in: &cancellable)
     }
     
     func configureUI() {
@@ -409,6 +427,7 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
     override func viewDidDisappear(_ animated: Bool) {
         removeObservers()
         mapController?.resetEngine()     //엔진 정지. 추가되었던 ViewBase들이 삭제된다.
+        viewModel.resetCoordinates()
     }
     
     func addViews() {
@@ -429,7 +448,6 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
     //addView 성공 이벤트 delegate. 추가적으로 수행할 작업을 진행한다.
     func addViewSucceeded(_ viewName: String, viewInfoName: String) {
         let view = mapController?.getView("mapview") as! KakaoMap
-        
         let _ = view.addMapTappedEventHandler(target: view, handler: { map in
             return { [weak self] _ in
                 guard let self = self else { return }
@@ -446,6 +464,15 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
                    mapPoints: [MapPoint(longitude: viewModel.currentLong, latitude: viewModel.currentLat)],
                    titles: ["My Position"],
                    ids: ["My_Position"])
+        
+        let _ = view.addCameraWillMovedEventHandler(target: view, handler: { map in
+            return { [weak self] _ in
+                guard let self = self else { return }
+                if let presentedVC = self.presentedViewController as? PlaceListViewController {
+                    presentedVC.dismiss(animated: false)
+                }
+            }
+        })
         
         // 카메라 이동 event
         let _ = view.addCameraStoppedEventHandler(target: view) { map in
@@ -542,18 +569,23 @@ extension HomeViewController: UITextFieldDelegate {
             var btnInfo: PlaceType? = nil
             
             switch text {
-            case "음식", "음식점":
+            case "음식", "음식점", "restaurant", "food":
                 btnInfo = .restaurant
-            case "쇼핑":
+                tempPlaceType = .restaurant
+            case "쇼핑", "shopping", "shop":
                 btnInfo = .shopping
-            case "숙박", "숙소", "잠":
+                tempPlaceType = .shopping
+            case "숙박", "숙소", "잠", "accommodation", "house", "rest", "sleep":
                 btnInfo = .accommodation
+                tempPlaceType = .accommodation
             case "관광", "관광지", "볼거":
                 btnInfo = .touristAttraction
+                tempPlaceType = .touristAttraction
             default:
-                // MARK: TODO - 입력한 텍스트로 검색기능 추가
+                // MARK: TODO - 입력한 텍스트의 카테고리로 pin이 나오게 해야됨
                 break
             }
+            
             if let btnInfo = btnInfo {
                 self.viewModel.getLocationBy(typeId: btnInfo,
                                              lat: viewModel.currentLat,
@@ -561,16 +593,16 @@ extension HomeViewController: UITextFieldDelegate {
                                              radius: currentRadius)
                 
                 self.listViewController.fetchPlaces(type: btnInfo, lat: viewModel.currentLat, lng: viewModel.currentLong, radius: currentRadius)
-            } else {
-                self.viewModel.getLocationsBy(keyword: text)
-            }
-            
-            if let presentedVC = presentedViewController as? PlaceListViewController {
-                presentedVC.dismiss(animated: false) {
+                
+                if let presentedVC = presentedViewController as? PlaceListViewController {
+                    presentedVC.dismiss(animated: false) {
+                        self.presentListView(btnInfo: btnInfo)
+                    }
+                } else {
                     self.presentListView(btnInfo: btnInfo)
                 }
             } else {
-                self.presentListView(btnInfo: btnInfo)
+                viewModel.searchText = text
             }
         }
         return true
