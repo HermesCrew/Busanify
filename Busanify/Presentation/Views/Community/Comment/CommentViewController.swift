@@ -51,11 +51,12 @@ class CommentViewController: UIViewController {
     }()
     
     private lazy var saveButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "arrow.up"), for: .normal)
-        button.tintColor = .white
-        button.backgroundColor = .systemBlue
-        button.layer.cornerRadius = 10
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(systemName: "paperplane.fill")
+        config.baseForegroundColor = .systemBlue
+        config.buttonSize = .small
+        
+        let button = UIButton(configuration: config)
         button.isEnabled = false
         
         button.addAction(UIAction { [weak self] _ in
@@ -120,7 +121,7 @@ class CommentViewController: UIViewController {
             contentTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             contentTextFieldBottomConstraint,
             
-            saveButton.trailingAnchor.constraint(equalTo: contentTextField.trailingAnchor, constant: -8),
+            saveButton.trailingAnchor.constraint(equalTo: contentTextField.trailingAnchor),
             saveButton.centerYAnchor.constraint(equalTo: contentTextField.centerYAnchor),
         ])
     }
