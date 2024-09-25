@@ -10,6 +10,7 @@ import Combine
 
 class BookmarkViewModel {
     @Published var bookmarks: [Bookmark] = []
+    @Published var isLoading: Bool = false
     private let placeApi = PlacesApi()
     private let lang = "eng"  // 임시
     private var cancellables = Set<AnyCancellable>()
@@ -20,8 +21,13 @@ class BookmarkViewModel {
             return
         }
         
+        isLoading = true
+        
         placeApi.getBookmarkedPlaces(token: token, lang: lang)
             .receive(on: DispatchQueue.main)
+            .handleEvents(receiveCompletion: { [weak self] _ in
+                self?.isLoading = false
+            })
             .sink(receiveCompletion: { completion in
                 if case .failure(let error) = completion {
                     print("Error loading bookmarks: \(error)")
