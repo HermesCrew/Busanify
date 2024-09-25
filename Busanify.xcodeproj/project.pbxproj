@@ -11,6 +11,9 @@
 		75304AF32C377A560058FDDE /* PlaceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75304AF22C377A560058FDDE /* PlaceTableViewCell.swift */; };
 		753520A42C326B0E00E439CF /* PlaceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753520A32C326B0E00E439CF /* PlaceListViewModel.swift */; };
 		753520AA2C3286D400E439CF /* PlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753520A92C3286D400E439CF /* PlaceListViewController.swift */; };
+		7548710C2CA1681B0088E74A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7548710B2CA1681B0088E74A /* GoogleService-Info.plist */; };
+		7548710E2CA1691D0088E74A /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 7548710D2CA1691D0088E74A /* Config.xcconfig */; };
+		754871112CA2AD810088E74A /* BookmarkViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754871102CA2AD810088E74A /* BookmarkViewModel.swift */; };
 		758FB83B2C57DF430029EBAA /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758FB83A2C57DF430029EBAA /* Bookmark.swift */; };
 		75D78A3C2C4F84FC00E3259B /* BookmarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D78A3B2C4F84FC00E3259B /* BookmarkViewController.swift */; };
 		75D78A3E2C4F851900E3259B /* BookmarkGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D78A3D2C4F851900E3259B /* BookmarkGridCell.swift */; };
@@ -110,6 +113,9 @@
 		75304AF22C377A560058FDDE /* PlaceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceTableViewCell.swift; sourceTree = "<group>"; };
 		753520A32C326B0E00E439CF /* PlaceListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewModel.swift; sourceTree = "<group>"; };
 		753520A92C3286D400E439CF /* PlaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewController.swift; sourceTree = "<group>"; };
+		7548710B2CA1681B0088E74A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7548710D2CA1691D0088E74A /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		754871102CA2AD810088E74A /* BookmarkViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkViewModel.swift; sourceTree = "<group>"; };
 		757882F72C43E52A0078EFAB /* Busanify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Busanify.entitlements; sourceTree = "<group>"; };
 		758FB83A2C57DF430029EBAA /* Bookmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
 		75D78A3B2C4F84FC00E3259B /* BookmarkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkViewController.swift; sourceTree = "<group>"; };
@@ -245,6 +251,14 @@
 				753520A32C326B0E00E439CF /* PlaceListViewModel.swift */,
 			);
 			path = PlaceList;
+			sourceTree = "<group>";
+		};
+		7548710F2CA2AD620088E74A /* Bookmark */ = {
+			isa = PBXGroup;
+			children = (
+				754871102CA2AD810088E74A /* BookmarkViewModel.swift */,
+			);
+			path = Bookmark;
 			sourceTree = "<group>";
 		};
 		75D78A3A2C4F84E800E3259B /* Bookmark */ = {
@@ -536,6 +550,7 @@
 				C207F3792C3AFB62007DFA27 /* Authentication */,
 				CD89D3542C29A56B00715404 /* Home */,
 				75304AF42C377A6B0058FDDE /* PlaceList */,
+				7548710F2CA2AD620088E74A /* Bookmark */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -876,6 +891,7 @@
 				B8F89BD62C5387CC00332FE2 /* DailyForecastCell.swift in Sources */,
 				C20D08412CA1AD4D00459803 /* CommentDTO.swift in Sources */,
 				C296D7022C1F16B000691515 /* ViewController.swift in Sources */,
+				754871112CA2AD810088E74A /* BookmarkViewModel.swift in Sources */,
 				C20D082C2CA1102D00459803 /* UpdatePostViewController.swift in Sources */,
 				C2D279CB2C29458000AEAFD1 /* PlaceDetailViewUseCase.swift in Sources */,
 				C259310D2C9D51A100901DC2 /* CommunityTableViewCell.swift in Sources */,
@@ -962,6 +978,7 @@
 /* Begin XCBuildConfiguration section */
 		C296D7222C1F16B200691515 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7548710D2CA1691D0088E74A /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -1025,6 +1042,7 @@
 		};
 		C296D7232C1F16B200691515 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7548710D2CA1691D0088E74A /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
