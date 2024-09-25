@@ -23,7 +23,7 @@ class WeatherViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     private let locationManager = CLLocationManager()
     
     // (내 위치가 부산이 아닐 시) 홈 뷰와 같이 부산 서면으로 위치 고정
-    private let pinLocation = CLLocation(latitude: 35.1795543, longitude: 129.0756416)
+    private let pinLocation = CLLocation(latitude: 35.1577, longitude: 129.0595)
     
     override init() {
         super.init()
