@@ -72,6 +72,26 @@ extension HomeViewController: KakaoMapEventDelegate {
         layer?.showAllPois()
     }
     
+    func createPoisForSearchText(layerID: String, styleID: String, poiID: String, mapPoints: [MapPoint], titles: [String], ids: [String]) {
+        let view = mapController?.getView("mapview") as! KakaoMap
+        let manager = view.getLabelManager()
+        let layer = manager.getLabelLayer(layerID: layerID)
+        layer?.visible = true
+        
+        for (idx, mapPoint) in mapPoints.enumerated() {
+            let poiOption1 = PoiOptions(styleID: styleID, poiID: ids[idx])
+            
+            poiOption1.rank = 0
+            poiOption1.clickable = true
+            poiOption1.addText(PoiText(text: titles[idx].truncate(to: 17), styleIndex: 0))
+            let poi = layer?.addPoi(option: poiOption1, at: mapPoint)
+            if let poi = poi {
+                let _ = poi.addPoiTappedEventHandler(target: self, handler: HomeViewController.poiTappedHandler)
+            }
+        }
+        layer?.showAllPois()
+    }
+    
     // POI 탭 이벤트가 발생하고, 표시하고 있던 Poi를 숨긴다.
     func poiTappedHandler(_ param: PoiInteractionEventParam) {
         let placeDetailViewModel = PlaceDetailViewModel(
