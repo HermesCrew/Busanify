@@ -13,12 +13,26 @@ class PostDetailViewController: UIViewController {
     private let post: Post
     private let commentViewModel: CommentViewModel
     private let postViewModel: PostViewModel
-    private let tableView = UITableView(frame: .zero, style: .grouped)
     private var cancellables = Set<AnyCancellable>()
     
     private let authViewModel = AuthenticationViewModel.shared
     private let keyChain = Keychain()
 
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.contentInset = .zero
+        tableView.backgroundColor = .systemGray5
+        tableView.showsVerticalScrollIndicator = false
+        return tableView
+    }()
+    
+    private lazy var dividerLine: UIView = {
+        let dividerLine = UIView()
+        dividerLine.backgroundColor = .systemGray5
+        dividerLine.translatesAutoresizingMaskIntoConstraints = false
+        return dividerLine
+    }()
+    
     private lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -94,6 +108,7 @@ class PostDetailViewController: UIViewController {
         view.addSubview(contentLabel)
         view.addSubview(collectionView)
         view.addSubview(tableView)
+        view.addSubview(dividerLine)
         
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         usernameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -126,11 +141,16 @@ class PostDetailViewController: UIViewController {
             contentLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
             collectionView.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 16),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             collectionView.heightAnchor.constraint(equalToConstant: 200),
             
-            tableView.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 16),
+            dividerLine.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 16),
+            dividerLine.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            dividerLine.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            dividerLine.heightAnchor.constraint(equalToConstant: 1),
+            
+            tableView.topAnchor.constraint(equalTo: dividerLine.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
