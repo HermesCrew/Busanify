@@ -10,6 +10,7 @@ import UIKit
 class RatingTableViewCell: UITableViewCell {
     
     static let identifier = "rating"
+    var reviewDelegate: MoveToReviewView?
     
     private let ratingLabel = UILabel()
     
@@ -28,7 +29,8 @@ class RatingTableViewCell: UITableViewCell {
         button.setImage(UIImage(systemName: "plus.circle"), for: .normal)
         button.addAction(UIAction { [weak self] _ in
             // 버튼 클릭시 리뷰 작성 뷰로 이동
-            
+            guard let self = self else { return }
+            self.reviewDelegate?.moveToReviewView()
         }, for: .touchUpInside)
         
         return button

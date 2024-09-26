@@ -7,9 +7,12 @@
 
 import Foundation
 import Combine
+import FirebaseStorage
 
 final class ReviewApi: ReviewUseCase {
+    
     private let baseURL: String
+    private let storage = Storage.storage().reference()
     var cancellables = Set<AnyCancellable>()
     
     init() {
@@ -17,6 +20,37 @@ final class ReviewApi: ReviewUseCase {
             fatalError("BASE_URL not set in plist")
         }
         self.baseURL = baseURL
+    }
+    
+    func createReview(token: String, reviewDTO: ReviewDTO) async throws {
+        let urlString = "\(baseURL)/reviews"
+        
+        guard let url = URL(string: urlString) else {
+            fatalError("Invalid URL")
+        }
+        
+        guard let jsonData = try? JSONEncoder().encode(reviewDTO) else {
+            fatalError("Json Encode Error")
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.httpBody = jsonData
+        
+        let (_, _) = try await URLSession.shared.data(for: request)
+    }
+    
+    func saveImage(data: Data) async throws -> String {
+        let path = UUID().uuidString
+        let fileReference = storage.child(path)
+        
+        _ = try await fileReference.putDataAsync(data)
+        
+        let downloadUrl = try await fileReference.downloadURL()
+        
+        return downloadUrl.absoluteString
     }
     
     func reportReview(token: String, reportDTO: ReportDTO) {
