@@ -49,6 +49,7 @@ class PostDetailViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.showsHorizontalScrollIndicator = false
+        collectionView.backgroundColor = .clear
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "ImageCell")
         return collectionView
     }()
@@ -87,50 +88,11 @@ class PostDetailViewController: UIViewController {
     }
 
     private func setupUI() {
-        view.addSubview(profileImageView)
-        view.addSubview(usernameLabel)
-        view.addSubview(dateLabel)
-        view.addSubview(moreButton)
-        view.addSubview(contentLabel)
-        view.addSubview(collectionView)
         view.addSubview(tableView)
-        
-        profileImageView.translatesAutoresizingMaskIntoConstraints = false
-        usernameLabel.translatesAutoresizingMaskIntoConstraints = false
-        dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        moreButton.translatesAutoresizingMaskIntoConstraints = false
-        contentLabel.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        
+
         NSLayoutConstraint.activate([
-            profileImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            profileImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            profileImageView.widthAnchor.constraint(equalToConstant: 30),
-            profileImageView.heightAnchor.constraint(equalToConstant: 30),
-            
-            usernameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            usernameLabel.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 8),
-            usernameLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
-            
-            dateLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            dateLabel.leadingAnchor.constraint(equalTo: usernameLabel.trailingAnchor, constant: 8),
-            dateLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
-            
-            moreButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            moreButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            moreButton.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
-            
-            contentLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 16),
-            contentLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            contentLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            
-            collectionView.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 16),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.heightAnchor.constraint(equalToConstant: 200),
-            
-            tableView.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 16),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -139,6 +101,56 @@ class PostDetailViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(CommentTableViewCell.self, forCellReuseIdentifier: CommentTableViewCell.identifier)
+        tableView.tableHeaderView = createTableHeaderView()
+    }
+
+    private func createTableHeaderView() -> UIView {
+        let headerView = UIView()
+        headerView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 350)
+
+        headerView.addSubview(profileImageView)
+        headerView.addSubview(usernameLabel)
+        headerView.addSubview(dateLabel)
+        headerView.addSubview(moreButton)
+        headerView.addSubview(contentLabel)
+        headerView.addSubview(collectionView)
+        
+        profileImageView.translatesAutoresizingMaskIntoConstraints = false
+        usernameLabel.translatesAutoresizingMaskIntoConstraints = false
+        dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        moreButton.translatesAutoresizingMaskIntoConstraints = false
+        contentLabel.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            profileImageView.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 16),
+            profileImageView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
+            profileImageView.widthAnchor.constraint(equalToConstant: 30),
+            profileImageView.heightAnchor.constraint(equalToConstant: 30),
+            
+            usernameLabel.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 16),
+            usernameLabel.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 8),
+            usernameLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
+            
+            dateLabel.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 16),
+            dateLabel.leadingAnchor.constraint(equalTo: usernameLabel.trailingAnchor, constant: 8),
+            dateLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
+            
+            moreButton.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 16),
+            moreButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
+            moreButton.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
+            
+            contentLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 16),
+            contentLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
+            contentLabel.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
+            
+            collectionView.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 16),
+            collectionView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
+            collectionView.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
+            collectionView.heightAnchor.constraint(equalToConstant: 200),
+        ])
+
+        return headerView
     }
 
     private func configureUI() {
@@ -205,32 +217,6 @@ class PostDetailViewController: UIViewController {
                 self?.tableView.reloadData()
             }.store(in: &cancellables)
     }
-    
-    private func showDeleteConfirmationAlert() {
-        let alert = UIAlertController(title: NSLocalizedString("deletePost", comment: ""), message: NSLocalizedString("postWillBeDeleted", comment: ""), preferredStyle: .alert)
-        
-        let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil)
-        let deleteAction = UIAlertAction(title: NSLocalizedString("delete", comment: ""), style: .destructive) { [weak self] _ in
-            self?.deletePost()
-        }
-        
-        alert.addAction(cancelAction)
-        alert.addAction(deleteAction)
-        
-        present(alert, animated: true, completion: nil)
-    }
-    
-    private func deletePost() {
-        // Implement delete post logic
-    }
-    
-    private func updatePost() {
-        // Implement update post logic
-    }
-    
-    private func reportPost() {
-        // Implement report post logic
-    }
 }
 
 extension PostDetailViewController: UITableViewDataSource, UITableViewDelegate {
@@ -246,6 +232,7 @@ extension PostDetailViewController: UITableViewDataSource, UITableViewDelegate {
         let comment = commentViewModel.comments[indexPath.row]
         cell.configure(comment: comment, post: post)
         cell.delegate = self
+        cell.selectionStyle = .none
         return cell
     }
 }
@@ -257,7 +244,8 @@ extension PostDetailViewController: UICollectionViewDataSource, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath)
-        
+        cell.backgroundColor = .clear
+
         // 기존의 이미지 뷰 제거 (중복 추가 방지)
         cell.contentView.subviews.forEach { $0.removeFromSuperview() }
         
@@ -281,13 +269,101 @@ extension PostDetailViewController: UICollectionViewDataSource, UICollectionView
     }
 }
 
-// -TODO: 수정 삭제 로직 구현
+// Post 관련 로직을 처리하는 확장
+extension PostDetailViewController{
+    
+    // 게시글 수정
+    func updatePost() {
+        let updatePostVC = UpdatePostViewController(postViewModel: postViewModel, post: post)
+        updatePostVC.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(updatePostVC, animated: true)
+    }
+
+    // 게시글 삭제
+    func showDeleteConfirmationAlert() {
+        let alert = UIAlertController(title: "Delete Post", message: "작성한 글이 삭제됩니다.", preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+            self?.deletePost()
+        }
+        
+        alert.addAction(cancelAction)
+        alert.addAction(deleteAction)
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    private func deletePost() {
+        Task {
+            do {
+                try await postViewModel.deletePost(token: authViewModel.getToken()!, id: post.id, photoUrls: post.photoUrls)
+                navigationController?.popViewController(animated: true)
+            } catch {
+                print("게시글 삭제 실패: \(error)")
+            }
+        }
+    }
+
+    // 게시글 신고
+    func reportPost() {
+        let alert = UIAlertController(title: "신고하기", message: "신고 사유를 입력해주세요.", preferredStyle: .alert)
+        
+        alert.addTextField { textField in
+            textField.placeholder = "신고 사유"
+        }
+        
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        let reportAction = UIAlertAction(title: "신고", style: .destructive) { _ in
+            guard let reason = alert.textFields?.first?.text, !reason.isEmpty else { return }
+            
+            let reportDTO = ReportDTO(reportedContentId: self.post.id, reportedUserId: self.post.user.id, content: reason, reportType: .post)
+            self.postViewModel.reportPost(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
+        }
+        
+        alert.addAction(cancelAction)
+        alert.addAction(reportAction)
+        
+        present(alert, animated: true, completion: nil)
+    }
+}
+
+// 댓글 신고 및 삭제 로직
 extension PostDetailViewController: CommentTableViewCellDelegate {
     func didDeleteComment(_ comment: Comment) {
-//        commentViewModel.deleteComment(comment)
+        Task {
+            do {
+                if let index = commentViewModel.comments.firstIndex(where: { $0.id == comment.id }) {
+                    tableView.beginUpdates()
+                    tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+                    commentViewModel.comments.remove(at: index)
+                    tableView.endUpdates()
+                }
+                try await commentViewModel.deleteComment(token: authViewModel.getToken()!, id: comment.id)
+            } catch {
+                print("댓글 삭제 실패: \(error)")
+            }
+        }
     }
     
     func reportComment(_ comment: Comment) {
-//        commentViewModel.reportComment(comment)
+        let alert = UIAlertController(title: "댓글 신고하기", message: "신고 사유를 입력해주세요.", preferredStyle: .alert)
+        
+        alert.addTextField { textField in
+            textField.placeholder = "신고 사유"
+        }
+        
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        let reportAction = UIAlertAction(title: "신고", style: .destructive) { _ in
+            guard let reason = alert.textFields?.first?.text, !reason.isEmpty else { return }
+            
+            let reportDTO = ReportDTO(reportedContentId: comment.id, reportedUserId: comment.user.id, content: reason, reportType: .comment)
+            self.commentViewModel.reportComment(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
+        }
+        
+        alert.addAction(cancelAction)
+        alert.addAction(reportAction)
+        
+        present(alert, animated: true, completion: nil)
     }
 }
