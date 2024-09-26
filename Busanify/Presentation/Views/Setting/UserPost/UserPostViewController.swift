@@ -76,6 +76,14 @@ extension UserPostViewController: UITableViewDataSource, UITableViewDelegate {
 }
 
 extension UserPostViewController: CommunityTableViewCellDelegate {
+    func showPostDetail(post: Post) {
+        let commentViewModel = CommentViewModel(useCase: CommentApi())
+        let postViewModel = PostViewModel(useCase: PostApi())
+        
+        let postDetailVC = PostDetailViewController(post: post, commentViewModel: commentViewModel, postViewModel: postViewModel)
+        navigationController?.pushViewController(postDetailVC, animated: true)
+    }
+    
     func didDeletePost(_ post: Post) {
         Task {
             do {
@@ -139,6 +147,7 @@ extension UserPostViewController: CommunityTableViewCellDelegate {
         if let sheet = sheetViewController.sheetPresentationController {
             sheet.detents = [.medium()] // 시트 크기 설정
             sheet.prefersGrabberVisible = true // 그랩바 표시
+            sheet.delegate = self
         }
         
         self.present(sheetViewController, animated: true, completion: nil)
@@ -152,5 +161,11 @@ extension UserPostViewController: AddPostViewControllerDelegate {
     
     func didCreatePost() {
         postViewModel.fetchPosts()
+    }
+}
+
+extension UserPostViewController: UISheetPresentationControllerDelegate {
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        viewModel.loadPosts()
     }
 }
