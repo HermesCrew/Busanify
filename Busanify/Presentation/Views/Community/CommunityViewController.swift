@@ -182,6 +182,7 @@ extension CommunityViewController: CommunityTableViewCellDelegate {
         let postViewModel = PostViewModel(useCase: PostApi())
         
         let postDetailVC = PostDetailViewController(post: post, commentViewModel: commentViewModel, postViewModel: postViewModel)
+        postDetailVC.delegate = self
         navigationController?.pushViewController(postDetailVC, animated: true)
     }
     
