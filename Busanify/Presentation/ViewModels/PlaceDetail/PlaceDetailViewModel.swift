@@ -21,7 +21,7 @@ final class PlaceDetailViewModel {
     }
     
     func fetchPlace(token: String?) {
-        useCase.getPlace(by: placeId, lang: "eng", token: token)
+        useCase.getPlace(by: placeId, lang: NSLocalizedString("lang", comment: ""), token: token)
             .receive(on: DispatchQueue.main)
             .assign(to: &$place)
     }

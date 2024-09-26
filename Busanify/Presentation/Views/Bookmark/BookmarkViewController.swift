@@ -61,7 +61,7 @@ class BookmarkViewController: UIViewController {
     }
     
     func setupUI() {
-        titleLabel.text = "Bookmarks"
+        titleLabel.text = NSLocalizedString("bookmark", comment: "")
         titleLabel.font = UIFont.boldSystemFont(ofSize: 24)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
@@ -72,7 +72,7 @@ class BookmarkViewController: UIViewController {
         switchLayoutButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(switchLayoutButton)
         
-        emptyMessageLabel.text = "No place bookmarked"
+        emptyMessageLabel.text = NSLocalizedString("bookmarkEmpty", comment: "")
         emptyMessageLabel.font = UIFont.boldSystemFont(ofSize: 20)
         emptyMessageLabel.textColor = .gray
         emptyMessageLabel.textAlignment = .center
@@ -149,10 +149,10 @@ class BookmarkViewController: UIViewController {
     }
     
     func popupMenu() -> UIMenu {
-        let listViewAction = UIAction(title: "리스트로 보기", image: UIImage(systemName: "list.bullet")) { _ in
+        let listViewAction = UIAction(title: NSLocalizedString("viewAsList", comment: ""), image: UIImage(systemName: "list.bullet")) { _ in
             self.switchToTableView()
         }
-        let gridViewAction = UIAction(title: "그리드로 보기", image: UIImage(systemName: "square.grid.2x2")) { _ in
+        let gridViewAction = UIAction(title: NSLocalizedString("viewAsGrid", comment: ""), image: UIImage(systemName: "square.grid.2x2")) { _ in
             self.switchToGridView()
         }
         

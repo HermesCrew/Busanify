@@ -39,7 +39,7 @@ class CommunityViewController: UIViewController  {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Community"
+        label.text = NSLocalizedString("community", comment: "")
         label.font = UIFont.boldSystemFont(ofSize: 24)
         
         return label
@@ -57,7 +57,7 @@ class CommunityViewController: UIViewController  {
     
     private let emptyMessageLabel: UILabel = {
         let label = UILabel()
-        label.text = "Be the first to write a post!"
+        label.text = NSLocalizedString("postEmpty", comment: "")
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.textColor = .gray
         label.textAlignment = .center
@@ -113,11 +113,11 @@ class CommunityViewController: UIViewController  {
             addPostVC.hidesBottomBarWhenPushed = true // 탭바 숨기기
             self.navigationController?.pushViewController(addPostVC, animated: true)
         case .signedOut:
-            let alert = UIAlertController(title: "Need Login", message: "You need to login to write Post", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Login", style: .default, handler: { [weak self] _ in
+            let alert = UIAlertController(title: NSLocalizedString("needLogin", comment: ""), message: NSLocalizedString("needLoginMessageForWritePost", comment: ""), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("login", comment: ""), style: .default, handler: { [weak self] _ in
                 self?.moveToSignInView()
             }))
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
             present(alert, animated: true, completion: nil)
         }
     }
@@ -215,25 +215,25 @@ extension CommunityViewController: CommunityTableViewCellDelegate {
         
         switch authViewModel.state {
         case .googleSignedIn, .appleSignedIn:
-            alert = UIAlertController(title: "Report post", message: nil, preferredStyle: .alert)
+            alert = UIAlertController(title: NSLocalizedString("reportPost", comment: ""), message: nil, preferredStyle: .alert)
             
             alert.addTextField { textField in
-                textField.placeholder = "Please write the reason"
+                textField.placeholder = NSLocalizedString("writeTheReason", comment: "")
             }
             
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-            alert.addAction(UIAlertAction(title: "Report", style: .destructive, handler: { _ in
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("report", comment: ""), style: .destructive, handler: { _ in
                 let reportReason = alert.textFields?.first?.text ?? "report"
                 
                 let reportDTO = ReportDTO(reportedContentId: post.id, reportedUserId: post.user.id, content: reportReason, reportType: .post)
                 self.postViewModel.reportPost(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
             }))
         case .signedOut:
-            alert = UIAlertController(title: "Need Login", message: "You need to login for Report", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Login", style: .default, handler: { [weak self] _ in
+            alert = UIAlertController(title: NSLocalizedString("needLogin", comment: ""), message: NSLocalizedString("needLoginMessageForReport", comment: ""), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("login", comment: ""), style: .default, handler: { [weak self] _ in
                 self?.moveToSignInView()
             }))
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
         }
         
         present(alert, animated: true, completion: nil)
