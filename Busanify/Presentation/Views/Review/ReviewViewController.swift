@@ -7,6 +7,7 @@
 
 import UIKit
 import PhotosUI
+import Kingfisher
 
 class ReviewViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDragDelegate, UICollectionViewDropDelegate {
     private let reviewViewModel: ReviewViewModel
@@ -20,10 +21,12 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
     private var selections = [String : PHPickerResult]()
     private var selectedAssetIdentifiers = [String]()
     private var selectedImages: [UIImage] = []
+    private var imageItems: [ImageData] = []
     
     weak var delegate: AddReviewViewControllerDelegate?
     
     var selectedPlace: Place
+    var selectedReview: Review?
     
     private lazy var rateStackView: RatingStackView = {
         let stackView = RatingStackView()
@@ -57,14 +60,14 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
         return collectionView
     }()
     
-    private let contentTextView: UITextView = {
+    private lazy var contentTextView: UITextView = {
         let textView = UITextView()
         textView.font = UIFont.systemFont(ofSize: 16)
         textView.layer.borderWidth = 1
         textView.layer.borderColor = UIColor.lightGray.cgColor
         textView.layer.cornerRadius = 10
-        textView.text = "Write content"
-        textView.textColor = .systemGray3
+        textView.text = self.selectedReview == nil ? "Write content" : self.selectedReview?.content
+        textView.textColor = self.selectedReview == nil ? .systemGray3 : .label
         textView.autocapitalizationType = .none
         textView.autocorrectionType = .no
         textView.spellCheckingType = .no
@@ -74,13 +77,17 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     private lazy var saveButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Add Review", for: .normal)
+        button.setTitle(self.selectedReview == nil ? "Add Review" : "Edit Review", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 10
         
         button.addAction(UIAction { [weak self] _ in
-            self?.addReview()
+            if self?.selectedReview == nil {
+                self?.addReview()
+            } else {
+                self?.editReview()
+            }
         }, for: .touchUpInside)
         
         return button
@@ -133,6 +140,14 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
         photoCollectionView.reorderingCadence = .immediate
         
         photoCollectionView.register(PhotoCollectionViewCell.self, forCellWithReuseIdentifier: "PhotoCollectionViewCell")
+        
+        if let editReview = selectedReview {
+            self.rateStackView.setStarCount(editReview.rating)
+            self.contentTextView.text = editReview.content
+            self.imageItems = editReview.photoUrls.map { ImageData.url($0) }
+            self.photoCollectionView.reloadData()
+            updateSaveButtonState()
+        }
     }
     
     private func configureUI() {
@@ -198,13 +213,27 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.selectedImages.count
+        if selectedReview == nil {
+            return self.selectedImages.count
+        } else {
+            return self.imageItems.count
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCollectionViewCell", for: indexPath) as! PhotoCollectionViewCell
         
-        cell.configure(with: self.selectedImages[indexPath.item])
+        if selectedReview == nil {
+            cell.configure(with: self.selectedImages[indexPath.item])
+        } else {
+            let imageData = imageItems[indexPath.item]
+            switch imageData {
+            case .url(let imageUrl):
+                cell.configure(with: imageUrl)
+            case .image(let image):
+                cell.configure(with: image)
+            }
+        }
         cell.deleteButton.tag = indexPath.item
         cell.deleteButton.addTarget(self, action: #selector(self.deleteButtonTapped(_:)), for: .touchUpInside)
         
@@ -227,12 +256,30 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: any UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-        let item = selectedImages[indexPath.item]
-        let itemProvider = NSItemProvider(object: item)
-        let dragItem = UIDragItem(itemProvider: itemProvider)
-        dragItem.localObject = item
-        
-        return [dragItem]
+        if selectedReview == nil {
+            let item = selectedImages[indexPath.item]
+            let itemProvider = NSItemProvider(object: item)
+            let dragItem = UIDragItem(itemProvider: itemProvider)
+            dragItem.localObject = item
+            return [dragItem]
+        } else {
+            let item = imageItems[indexPath.item]
+            let itemProvider: NSItemProvider
+            
+            switch item {
+            case .url(let urlString):
+                // URL String을 NSItemProvider에 제공
+                itemProvider = NSItemProvider(object: urlString as NSString)
+            case .image(let image):
+                // UIImage를 NSItemProvider에 제공
+                itemProvider = NSItemProvider(object: image)
+            }
+            
+            let dragItem = UIDragItem(itemProvider: itemProvider)
+            dragItem.localObject = item // 드래그하는 객체 자체를 보관
+            
+            return [dragItem]
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
@@ -242,8 +289,13 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
             if let sourceIndexPath = item.sourceIndexPath {
                 collectionView.performBatchUpdates({
                     // 데이터 소스 업데이트
-                    let movedImage = selectedImages.remove(at: sourceIndexPath.item)
-                    selectedImages.insert(movedImage, at: destinationIndexPath.item)
+                    if selectedReview == nil {
+                        let movedImage = selectedImages.remove(at: sourceIndexPath.item)
+                        selectedImages.insert(movedImage, at: destinationIndexPath.item)
+                    } else {
+                        let movedImage = imageItems.remove(at: sourceIndexPath.item)
+                        imageItems.insert(movedImage, at: destinationIndexPath.item)
+                    }
                     
                     // 컬렉션 뷰에서 셀 이동
                     collectionView.moveItem(at: sourceIndexPath, to: destinationIndexPath)
@@ -276,7 +328,11 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     @objc private func deleteButtonTapped(_ sender: UIButton) {
         let index = sender.tag
-        self.selectedImages.remove(at: index)
+        if selectedReview == nil {
+            self.selectedImages.remove(at: index)
+        } else {
+            self.imageItems.remove(at: index)
+        }
         
         DispatchQueue.main.async {
             self.photoCollectionView.performBatchUpdates({
@@ -302,7 +358,29 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
         showLoading()
         Task {
             do {
-                try await reviewViewModel.createReview(token: authViewModel.getToken(), content: contentTextView.text, rating: currentRating, photos: selectedImages)
+                try await reviewViewModel.createReview(token: authViewModel.getToken(), content: contentTextView.text, placeId: self.selectedPlace.id, rating: currentRating, photos: selectedImages)
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.hideLoading()
+                    self.delegate?.didCreateReview()
+                    self.dismiss(animated: true)
+                    self.delegate?.showToastMessage("Post uploaded successfully")
+                }
+            } catch {
+                print("Failed to create post: \(error)")
+                DispatchQueue.main.async { [weak self] in
+                    self?.hideLoading()
+                    self?.showErrorAlert(message: "Failed to create post. Please try again.")
+                }
+            }
+        }
+    }
+    
+    private func editReview() {
+        showLoading()
+        Task {
+            do {
+                try await reviewViewModel.editReview(token: authViewModel.getToken(), content: contentTextView.text, reviewId: self.selectedReview!.id, rating: currentRating, photos: imageItems)
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     self.hideLoading()
@@ -368,26 +446,6 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
         activityIndicator.stopAnimating()
         view.isUserInteractionEnabled = true
     }
-    
-    @objc private func starTapped(_ gesture: UITapGestureRecognizer) {
-        guard let tappedImageView = gesture.view as? UIImageView else { return }
-        let tappedRating = tappedImageView.tag + 1
-        updateRating(tappedRating)
-    }
-    
-    private func updateRating(_ rating: Int) {
-        for i in 0..<5 {
-            if let starImageView = rateStackView.arrangedSubviews[i] as? UIImageView {
-                if i < rating {
-                    starImageView.image = .init(systemName: "star.fill")
-                } else if i == rating - 1 && rating.isMultiple(of: 1) == false {
-                    starImageView.image = .init(systemName: "star.leadinghalf.filled")
-                } else {
-                    starImageView.image = .init(systemName: "star")
-                }
-            }
-        }
-    }
 }
 
 extension ReviewViewController: PHPickerViewControllerDelegate {
@@ -436,7 +494,11 @@ extension ReviewViewController: PHPickerViewControllerDelegate {
             // 선택한 이미지의 순서대로 정렬하여 스택뷰에 올리기
             for identifier in self.selectedAssetIdentifiers {
                 guard let image = imagesDict[identifier] else { return }
-                self.selectedImages.append(image)
+                if selectedReview == nil {
+                    self.selectedImages.append(image)
+                } else {
+                    self.imageItems.append(ImageData.image(image))
+                }
             }
             
             self.photoCollectionView.reloadData()
@@ -463,7 +525,7 @@ extension ReviewViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         guard contentTextView.textColor == .systemGray3 else { return }
         contentTextView.text = nil
-        contentTextView.textColor = .black
+        contentTextView.textColor = .label
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
