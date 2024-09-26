@@ -148,7 +148,7 @@ class ReviewTableViewCell: UITableViewCell {
         self.photoUrls = review.photoUrls
         collectionView.reloadData()
         
-        var menuItems: [UIAction] = [UIAction(title: "Report", image: UIImage(systemName: "exclamationmark.triangle"), handler: { _ in
+        var menuItems: [UIAction] = [UIAction(title: NSLocalizedString("report", comment: ""), image: UIImage(systemName: "exclamationmark.triangle"), handler: { _ in
             self.delegate?.reportReview(review)
         })
         ]
@@ -157,8 +157,8 @@ class ReviewTableViewCell: UITableViewCell {
         case .googleSignedIn(let user):
             if review.user.id == user.userID {
                 menuItems = [
-                    UIAction(title: "Edit", image: UIImage(systemName: "pencil"), handler: { _ in }),
-                    UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
+                    UIAction(title: NSLocalizedString("edit", comment: ""), image: UIImage(systemName: "pencil"), handler: { _ in }),
+                    UIAction(title: NSLocalizedString("delete", comment: ""), image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
                         self?.delegate?.didDeleteReview(review)
                     })
                 ]
@@ -171,8 +171,8 @@ class ReviewTableViewCell: UITableViewCell {
             
             if review.user.id == userId {
                 menuItems = [
-                    UIAction(title: "Edit", image: UIImage(systemName: "pencil"), handler: { _ in }),
-                    UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
+                    UIAction(title: NSLocalizedString("edit", comment: ""), image: UIImage(systemName: "pencil"), handler: { _ in }),
+                    UIAction(title: NSLocalizedString("delete", comment: ""), image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
                         self?.delegate?.didDeleteReview(review)
                     })
                 ]

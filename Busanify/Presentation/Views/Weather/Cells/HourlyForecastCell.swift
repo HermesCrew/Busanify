@@ -52,11 +52,18 @@ class HourlyForecastCell: UICollectionViewCell {
     
     func configure(with forecast: HourWeather, isNow: Bool) {
         if isNow {
-            timeLabel.text = "지금"
+            timeLabel.text = NSLocalizedString("now", comment: "")
         } else {
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "a h시"
-            dateFormatter.locale = Locale(identifier: "ko_KR")
+            let languageCode = Locale.current.language.languageCode?.identifier
+            
+            if languageCode == "en" {
+                dateFormatter.dateFormat = "ha"
+            } else if languageCode == "ja" || languageCode == "zh" {
+                dateFormatter.dateFormat = "ah時"
+            }
+            
+            dateFormatter.locale = Locale.current
             timeLabel.text = dateFormatter.string(from: forecast.date)
         }
         

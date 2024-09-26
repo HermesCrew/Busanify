@@ -13,7 +13,7 @@ class BookmarkViewModel {
     @Published var isLoading: Bool = false
     private var bookmarkedIds: Set<String> = []
     private let placeApi = PlacesApi()
-    private let lang = "eng"  // 임시
+    private let lang = NSLocalizedString("lang", comment: "")  // 임시
     private var cancellables = Set<AnyCancellable>()
     
     func loadBookmarks() {

@@ -129,7 +129,7 @@ class SettingViewController: UIViewController {
     
     private lazy var footerButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Delete Account", for: .normal)
+        button.setTitle(NSLocalizedString("deleteAccount", comment: ""), for: .normal)
         button.setTitleColor(.gray, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 12)
         
@@ -302,8 +302,8 @@ class SettingViewController: UIViewController {
     }
     
     private func showLogoutAlert() {
-        let alert = UIAlertController(title: "Busanify", message: "Logout?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Logout", style: .default, handler: { [weak self] _ in
+        let alert = UIAlertController(title: NSLocalizedString("wouldYouLikeToLogout", comment: ""), message: "", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("logout", comment: ""), style: .default, handler: { [weak self] _ in
             switch self?.viewModel.state {
             case .googleSignedIn:
                 self?.viewModel.googleSignOut()
@@ -313,16 +313,16 @@ class SettingViewController: UIViewController {
                 break
             }
         }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
         present(alert, animated: true)
     }
     
     private func showDeleteAccountAlert() {
-        let alert = UIAlertController(title: "Busanify", message: "Are you sure you want to delete your account? All data will be removed", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
+        let alert = UIAlertController(title: NSLocalizedString("deleteAccountAsk", comment: ""), message: NSLocalizedString("deleteAccountMessage", comment: ""), preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("delete", comment: ""), style: .destructive, handler: { [weak self] _ in
             self?.viewModel.deleteUser()
         }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
         present(alert, animated: true)
     }
     
@@ -337,14 +337,14 @@ class SettingViewController: UIViewController {
     }
     
     @objc private func addProfileImageButtonTapped(_ sender: UIButton) {
-        let actionSheet = UIAlertController(title: "Add Profile Image", message: nil, preferredStyle: .actionSheet)
+        let actionSheet = UIAlertController(title: NSLocalizedString("addProfileImage", comment: ""), message: nil, preferredStyle: .actionSheet)
         
-        actionSheet.addAction(UIAlertAction(title: "Select Image", style: .default, handler: { _ in
+        actionSheet.addAction(UIAlertAction(title: NSLocalizedString("selectImage", comment: ""), style: .default, handler: { _ in
             self.presentPHPPicker()
         }))
         
         if let currentUser = viewModel.currentUser, currentUser.profileImage != nil {
-            actionSheet.addAction(UIAlertAction(title: "Delete exist Image", style: .destructive, handler: { _ in
+            actionSheet.addAction(UIAlertAction(title: NSLocalizedString("deleteExistImage", comment: ""), style: .destructive, handler: { _ in
                 self.loadingIndicator.startAnimating()
                 self.viewModel.deleteProfileImage { success in
                     if success {
@@ -354,7 +354,7 @@ class SettingViewController: UIViewController {
             }))
         }
         
-        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        actionSheet.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
         
         present(actionSheet, animated: true, completion: nil)
     }
@@ -366,7 +366,7 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let settingInfos =  [("My Review", "doc.text.magnifyingglass"), ("My Community Post", "square.and.pencil"), ("Language", "globe"), ("Privacy Policy", "shield.lefthalf.fill"), ("Version", "info.circle"), ("Logout", "rectangle.portrait.and.arrow.right")]
+        let settingInfos =  [(NSLocalizedString("myReview", comment: ""), "doc.text.magnifyingglass"), (NSLocalizedString("myCommunityPost", comment: ""), "square.and.pencil"), (NSLocalizedString("language", comment: ""), "globe"), (NSLocalizedString("privacyPolicy", comment: ""), "shield.lefthalf.fill"), (NSLocalizedString("version", comment: ""), "info.circle"), (NSLocalizedString("logout", comment: ""), "rectangle.portrait.and.arrow.right")]
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingTableViewCell.identifier, for: indexPath) as? SettingTableViewCell else {
             return UITableViewCell()
