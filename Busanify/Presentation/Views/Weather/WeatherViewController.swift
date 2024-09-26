@@ -215,7 +215,7 @@ class WeatherViewController: UIViewController {
         
         let highTemp = Int(weather.dailyForecast.first?.highTemperature.value ?? 0)
         let lowTemp = Int(weather.dailyForecast.first?.lowTemperature.value ?? 0)
-        maxMinTempLabel.text = "최고 \(highTemp)° / 최저 \(lowTemp)°"
+        maxMinTempLabel.text = "\(NSLocalizedString("Highest", comment: "")) \(highTemp)° / \(NSLocalizedString("Lowest", comment: "")) \(lowTemp)°"
         
         // 강수 확률 설정
         if let precipitationChance = weather.hourlyForecast.first?.precipitationChance {

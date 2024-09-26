@@ -13,7 +13,7 @@ class PlaceListViewController: UIViewController {
     private let authViewModel = AuthenticationViewModel.shared
     private var cancellables = Set<AnyCancellable>()
     private let tableView = UITableView()
-    private let lang = "eng" // 임시
+    private let lang = NSLocalizedString("lang", comment: "")
     var selectedPlaceType: PlaceType? = nil
     var selectedLat: Double = 0
     var selectedLng: Double = 0

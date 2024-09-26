@@ -64,13 +64,13 @@ class HomeViewModel {
     }
     
     func getLocationBy(typeId: PlaceType, lat: CGFloat, lng: CGFloat, radius: Double) {
-        placeService.getPlaces(by: typeId, lang: "eng", lat: lat, lng: lng, radius: radius)
+        placeService.getPlaces(by: typeId, lang: NSLocalizedString("lang", comment: ""), lat: lat, lng: lng, radius: radius)
             .receive(on: DispatchQueue.global())
             .assign(to: &$searchedPlaces)
     }
     
     func getLocationsBy(keyword: String) {
-        placeService.getPlaces(by: keyword, lang: "eng")
+        placeService.getPlaces(by: keyword, lang: NSLocalizedString("lang", comment: ""))
             .receive(on: DispatchQueue.global())
             .assign(to: &$textSearchedPlaces)
     }
