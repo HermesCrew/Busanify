@@ -63,7 +63,6 @@ class PostDetailViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = .clear
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "ImageCell")
         return collectionView
     }()
@@ -102,6 +101,12 @@ class PostDetailViewController: UIViewController {
     }
 
     private func setupUI() {
+        view.addSubview(profileImageView)
+        view.addSubview(usernameLabel)
+        view.addSubview(dateLabel)
+        view.addSubview(moreButton)
+        view.addSubview(contentLabel)
+        view.addSubview(collectionView)
         view.addSubview(tableView)
         view.addSubview(dividerLine)
         
@@ -111,32 +116,31 @@ class PostDetailViewController: UIViewController {
         moreButton.translatesAutoresizingMaskIntoConstraints = false
         contentLabel.translatesAutoresizingMaskIntoConstraints = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
-            profileImageView.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 16),
-            profileImageView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
+            profileImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            profileImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             profileImageView.widthAnchor.constraint(equalToConstant: 30),
             profileImageView.heightAnchor.constraint(equalToConstant: 30),
             
-            usernameLabel.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 16),
+            usernameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             usernameLabel.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 8),
             usernameLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
             
-            dateLabel.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 16),
+            dateLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             dateLabel.leadingAnchor.constraint(equalTo: usernameLabel.trailingAnchor, constant: 8),
             dateLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
             
-            moreButton.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 16),
-            moreButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
+            moreButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            moreButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             moreButton.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
             
             contentLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 16),
-            contentLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
-            contentLabel.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
+            contentLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            contentLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
             collectionView.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 16),
-            collectionView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
-            collectionView.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             collectionView.heightAnchor.constraint(equalToConstant: 200),
@@ -152,7 +156,9 @@ class PostDetailViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
 
-        return headerView
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(CommentTableViewCell.self, forCellReuseIdentifier: CommentTableViewCell.identifier)
     }
 
     private func configureUI() {
@@ -234,7 +240,6 @@ extension PostDetailViewController: UITableViewDataSource, UITableViewDelegate {
         let comment = commentViewModel.comments[indexPath.row]
         cell.configure(comment: comment, post: post)
         cell.delegate = self
-        cell.selectionStyle = .none
         return cell
     }
 }
@@ -246,8 +251,7 @@ extension PostDetailViewController: UICollectionViewDataSource, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath)
-        cell.backgroundColor = .clear
-
+        
         // 기존의 이미지 뷰 제거 (중복 추가 방지)
         cell.contentView.subviews.forEach { $0.removeFromSuperview() }
         
