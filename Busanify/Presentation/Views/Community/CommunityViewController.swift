@@ -113,8 +113,8 @@ class CommunityViewController: UIViewController  {
             addPostVC.hidesBottomBarWhenPushed = true // 탭바 숨기기
             self.navigationController?.pushViewController(addPostVC, animated: true)
         case .signedOut:
-            let alert = UIAlertController(title: "Need Login", message: "You need to login to write Post", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Login", style: .default, handler: { [weak self] _ in
+            let alert = UIAlertController(title: NSLocalizedString("needLogin", comment: ""), message: NSLocalizedString("needLoginMessageForWritePost", comment: ""), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("login", comment: ""), style: .default, handler: { [weak self] _ in
                 self?.moveToSignInView()
             }))
             alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
@@ -229,8 +229,8 @@ extension CommunityViewController: CommunityTableViewCellDelegate {
                 self.postViewModel.reportPost(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
             }))
         case .signedOut:
-            alert = UIAlertController(title: "Need Login", message: "You need to login for Report", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Login", style: .default, handler: { [weak self] _ in
+            alert = UIAlertController(title: NSLocalizedString("needLogin", comment: ""), message: NSLocalizedString("needLoginMessageForReport", comment: ""), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("login", comment: ""), style: .default, handler: { [weak self] _ in
                 self?.moveToSignInView()
             }))
             alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))

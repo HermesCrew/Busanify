@@ -157,7 +157,7 @@ class PostDetailViewController: UIViewController {
     
     private func setupMoreButton() {
         var menuItems: [UIAction] = [
-            UIAction(title: "Report", image: UIImage(systemName: "exclamationmark.triangle"), handler: { [weak self] _ in
+            UIAction(title: NSLocalizedString("report", comment: ""), image: UIImage(systemName: "exclamationmark.triangle"), handler: { [weak self] _ in
                 self?.reportPost()
             })
         ]
@@ -166,10 +166,10 @@ class PostDetailViewController: UIViewController {
         case .googleSignedIn(let user):
             if post.user.id == user.userID {
                 menuItems = [
-                    UIAction(title: "Edit", image: UIImage(systemName: "pencil"), handler: { [weak self] _ in
+                    UIAction(title: NSLocalizedString("edit", comment: ""), image: UIImage(systemName: "pencil"), handler: { [weak self] _ in
                         self?.updatePost()
                     }),
-                    UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
+                    UIAction(title: NSLocalizedString("delete", comment: ""), image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
                         self?.showDeleteConfirmationAlert()
                     })
                 ]
@@ -182,10 +182,10 @@ class PostDetailViewController: UIViewController {
             
             if post.user.id == userId {
                 menuItems = [
-                    UIAction(title: "Edit", image: UIImage(systemName: "pencil"), handler: { [weak self] _ in
+                    UIAction(title: NSLocalizedString("edit", comment: ""), image: UIImage(systemName: "pencil"), handler: { [weak self] _ in
                         self?.updatePost()
                     }),
-                    UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
+                    UIAction(title: NSLocalizedString("delete", comment: ""), image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
                         self?.showDeleteConfirmationAlert()
                     })
                 ]
@@ -207,10 +207,10 @@ class PostDetailViewController: UIViewController {
     }
     
     private func showDeleteConfirmationAlert() {
-        let alert = UIAlertController(title: "Delete Post", message: "작성한 글이 삭제됩니다.", preferredStyle: .alert)
+        let alert = UIAlertController(title: NSLocalizedString("deletePost", comment: ""), message: NSLocalizedString("postWillBeDeleted", comment: ""), preferredStyle: .alert)
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+        let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil)
+        let deleteAction = UIAlertAction(title: NSLocalizedString("delete", comment: ""), style: .destructive) { [weak self] _ in
             self?.deletePost()
         }
         

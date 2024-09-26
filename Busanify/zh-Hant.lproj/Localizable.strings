@@ -63,3 +63,12 @@
 "today" = "今天";
 "viewAsList" = "列表顯示";
 "viewAsGrid" = "網格顯示";
+"error" = "錯誤";
+"ok" = "確定";
+"needLogin" = "需要登入";
+"login" = "登入";
+"needLoginMessageForReport" = "舉報需要登入";
+"needLoginMessageForWritePost" = "發帖需要登入";
+"needLoginMessageForWriteComment" = "寫評論需要登入";
+"needLoginMessageForWriteReview" = "寫評價需要登入";
+"needLoginMessageForBookmark" = "收藏需要登入";
