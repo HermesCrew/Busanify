@@ -224,8 +224,8 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
             return min(reviews.count, 3)
         case 3:
             guard let reviews = placeDetailViewModel.place.reviews else { return 0 }
-            return reviews.isEmpty ? 0 : 1
-        default: 
+            return reviews.count <= 3 ? 0 : 1 // 3개 이하일땐 더보기 필요없음
+        default:
             return 0
         }
     }
@@ -262,12 +262,12 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
         case 3:
             let cell = tableView.dequeueReusableCell(withIdentifier: "reviewList", for: indexPath)
             var content = cell.defaultContentConfiguration()
-            content.text = "View all reviews"
+            content.text = NSLocalizedString("viewAllReviews", comment: "")
             content.textProperties.color = .systemBlue
             content.textProperties.alignment = .center
         
             cell.contentConfiguration = content
-            cell.selectionStyle = .default
+            cell.selectionStyle = .none
             
             return cell
         default:
@@ -291,8 +291,8 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
-        case 0: return "Info"
-        case 1: return "Review"
+        case 0: return NSLocalizedString("info", comment: "")
+        case 1: return NSLocalizedString("review", comment: "")
         default: return nil
         }
     }
@@ -318,7 +318,10 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 50
+        switch section {
+        case 0, 1: return 50
+        default: return 0
+        }
     }
     
     private func updatePlaceInfos(place: Place) {

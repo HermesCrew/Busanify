@@ -368,7 +368,7 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
                     self.hideLoading()
                     self.delegate?.didCreateReview()
                     self.dismiss(animated: true)
-                    self.delegate?.showToastMessage("Post uploaded successfully")
+                    self.delegate?.showToastMessage(NSLocalizedString("reviewSaved", comment: ""))
                 }
             } catch {
                 print("Failed to create post: \(error)")
@@ -390,7 +390,7 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
                     self.hideLoading()
                     self.delegate?.didCreateReview()
                     self.dismiss(animated: true)
-                    self.delegate?.showToastMessage("Post uploaded successfully")
+                    self.delegate?.showToastMessage(NSLocalizedString("changesSaved", comment: ""))
                 }
             } catch {
                 print("Failed to create post: \(error)")

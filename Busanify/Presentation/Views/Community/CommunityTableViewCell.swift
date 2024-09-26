@@ -107,6 +107,12 @@ class CommunityTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        profileImageView.image = UIImage(systemName: "person.crop.circle")
+    }
+    
     @objc private func didTapContentLabel() {
         guard let post = self.post else { return }
         self.delegate?.showPostDetail(post:post)

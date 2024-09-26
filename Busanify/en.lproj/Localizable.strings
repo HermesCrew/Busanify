@@ -14,7 +14,7 @@
 "weather" = "Weather";
 "myReview" = "My Review";
 "myCommunityPost" = "My Community Post";
-"language" = "English";
+"language" = "Language";
 "privacyPolicy" = "Privacy Policy";
 "version" = "Version";
 "logout" = "Logout";
@@ -34,7 +34,9 @@
 "editPost" = "Edit Post";
 "save" = "Save";
 "writeContent" = "Write Content";
-"postUploadedSuccessfully" = "Post Uploaded Successfully";
+"postSaved" = "Post Saved Successfully";
+"reviewSaved" = "Review Saved Successfully";
+"changesSaved" = "Changes Saved Successfully";
 "yearAgo" = " years ago";
 "monthAgo" = " months ago";
 "dayAgo" = " days ago";
@@ -46,7 +48,7 @@
 "delete" = "Delete";
 "deletePost" = "Delete Post?";
 "postWillBeDeleted" = "This can't be undone";
-"wouldYouLikeToLogout" = "Would you like to logout?";
+"wouldYouLikeToLogout" = "Logout?";
 "discardUnsavedChanges" = "Discard unsaved changes?";
 "discardUnsavedChangesMessageForAdd" = "This will discard your draft";
 "discardUnsavedChangesMessageForEdit" = "This will delete all edits";
@@ -75,3 +77,7 @@
 "needLoginMessageForWriteComment" = "You need to login to write a comment";
 "needLoginMessageForWriteReview" = "You need to login to write a review";
 "needLoginMessageForBookmark" = "You need to login to bookmark";
+"viewAllReviews" = "View All Reviews";
+"info" = "Info";
+"review" = "Review";
+"langInLocalText" = "English";

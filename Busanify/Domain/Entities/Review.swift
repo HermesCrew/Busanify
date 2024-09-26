@@ -34,11 +34,50 @@ struct Review: Identifiable, Hashable, Codable {
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         
         if let date = formatter.date(from: createdAtString) {
-            let convertFormatter = DateFormatter()
-            convertFormatter.dateFormat = "yyyy.MM.dd HH:mm"
-            createdAt = convertFormatter.string(from: date)
+            let relativeTime = Self.relativeTimeString(from: date)
+            createdAt = relativeTime
         } else {
             createdAt = createdAtString
         }
+    }
+    
+    static func relativeTimeString(from date: Date) -> String {
+        let calendar = Calendar.current
+        let now = Date()
+        
+        // 현재 시간과 입력 시간 사이의 경과 시간 계산
+        let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date, to: now)
+
+        // 1년 이상
+        if let years = components.year, years > 0 {
+            return "\(years)\(NSLocalizedString("yearAgo", comment: ""))"
+        }
+        
+        // 1달 이상
+        if let months = components.month, months > 0 {
+            return "\(months)\(NSLocalizedString("monthAgo", comment: ""))"
+        }
+        
+        // 1일 이상
+        if let days = components.day, days > 0 {
+            return "\(days)\(NSLocalizedString("dayAgo", comment: ""))"
+        }
+        
+        // 1시간 이상
+        if let hours = components.hour, hours > 0 {
+            return "\(hours)\(NSLocalizedString("hourAgo", comment: ""))"
+        }
+        
+        // 1분 이상
+        if let minutes = components.minute, minutes > 0 {
+            return "\(minutes)\(NSLocalizedString("minuteAgo", comment: ""))"
+        }
+        
+        // 1분 이내
+        if let seconds = components.second, seconds > 0 {
+            return "\(seconds)\(NSLocalizedString("secondAgo", comment: ""))"
+        }
+        
+        return NSLocalizedString("now", comment: "")
     }
 }

@@ -15,8 +15,6 @@
 		754871152CA445E80088E74A /* UserPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754871142CA445E80088E74A /* UserPostViewController.swift */; };
 		7548711A2CA44A3C0088E74A /* UserPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754871192CA44A3C0088E74A /* UserPostViewModel.swift */; };
 		754871202CA5945F0088E74A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7548711F2CA5945E0088E74A /* GoogleService-Info.plist */; };
-		754871222CA594BD0088E74A /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 754871212CA594BD0088E74A /* Config.xcconfig */; };
-		754871252CA59DB00088E74A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 754871242CA59DB00088E74A /* GoogleService-Info.plist */; };
 		758FB83B2C57DF430029EBAA /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758FB83A2C57DF430029EBAA /* Bookmark.swift */; };
 		75D78A3C2C4F84FC00E3259B /* BookmarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D78A3B2C4F84FC00E3259B /* BookmarkViewController.swift */; };
 		75D78A3E2C4F851900E3259B /* BookmarkGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D78A3D2C4F851900E3259B /* BookmarkGridCell.swift */; };
@@ -46,6 +44,7 @@
 		C20D08412CA1AD4D00459803 /* CommentDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20D08402CA1AD4D00459803 /* CommentDTO.swift */; };
 		C20D08452CA1ADD300459803 /* CommentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20D08442CA1ADD300459803 /* CommentViewModel.swift */; };
 		C20D08472CA1AE8400459803 /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20D08462CA1AE8400459803 /* CommentTableViewCell.swift */; };
+		C2159D5C2CA5C48900CD1DD7 /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2159D5B2CA5C48900CD1DD7 /* PrivacyPolicyViewController.swift */; };
 		C2293DE62CA2FD1B00E92E5B /* ImageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2293DE52CA2FD1B00E92E5B /* ImageData.swift */; };
 		C22C8D9A2C9C63D8006BB06B /* PostApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22C8D992C9C63D8006BB06B /* PostApi.swift */; };
 		C22C8D9C2C9C642F006BB06B /* PostViewUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22C8D9B2C9C642F006BB06B /* PostViewUseCase.swift */; };
@@ -129,8 +128,6 @@
 		754871142CA445E80088E74A /* UserPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostViewController.swift; sourceTree = "<group>"; };
 		754871192CA44A3C0088E74A /* UserPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostViewModel.swift; sourceTree = "<group>"; };
 		7548711F2CA5945E0088E74A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		754871212CA594BD0088E74A /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
-		754871242CA59DB00088E74A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		757882F72C43E52A0078EFAB /* Busanify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Busanify.entitlements; sourceTree = "<group>"; };
 		758FB83A2C57DF430029EBAA /* Bookmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
 		75D78A3B2C4F84FC00E3259B /* BookmarkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkViewController.swift; sourceTree = "<group>"; };
@@ -162,6 +159,8 @@
 		C20D08402CA1AD4D00459803 /* CommentDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentDTO.swift; sourceTree = "<group>"; };
 		C20D08442CA1ADD300459803 /* CommentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewModel.swift; sourceTree = "<group>"; };
 		C20D08462CA1AE8400459803 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
+		C2159D5A2CA5B08B00CD1DD7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C2159D5B2CA5C48900CD1DD7 /* PrivacyPolicyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PrivacyPolicyViewController.swift; path = Busanify/Presentation/Views/Setting/PrivacyPolicyViewController.swift; sourceTree = SOURCE_ROOT; };
 		C2293DE52CA2FD1B00E92E5B /* ImageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageData.swift; sourceTree = "<group>"; };
 		C22C8D992C9C63D8006BB06B /* PostApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostApi.swift; sourceTree = "<group>"; };
 		C22C8D9B2C9C642F006BB06B /* PostViewUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewUseCase.swift; sourceTree = "<group>"; };
@@ -416,6 +415,14 @@
 			path = Comment;
 			sourceTree = "<group>";
 		};
+		C2159D582CA59F0D00CD1DD7 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				7548711F2CA5945E0088E74A /* GoogleService-Info.plist */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		C22C8D9F2C9C6677006BB06B /* DTOs */ = {
 			isa = PBXGroup;
 			children = (
@@ -503,15 +510,14 @@
 		C296D6F12C1F16B000691515 = {
 			isa = PBXGroup;
 			children = (
-				754871212CA594BD0088E74A /* Config.xcconfig */,
-				754871242CA59DB00088E74A /* GoogleService-Info.plist */,
+				C2159D5A2CA5B08B00CD1DD7 /* GoogleService-Info.plist */,
 				C296D6FC2C1F16B000691515 /* Busanify */,
 				C296D7132C1F16B200691515 /* BusanifyTests */,
 				C296D71D2C1F16B200691515 /* BusanifyUITests */,
 				C296D6FB2C1F16B000691515 /* Products */,
 				BEFDFFBA458BE9B300E7C88A /* Pods */,
 				393F9CAAFA31CE009CC48C16 /* Frameworks */,
-				754871232CA59BDD0088E74A /* Recovered References */,
+				C2159D582CA59F0D00CD1DD7 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -685,6 +691,7 @@
 			isa = PBXGroup;
 			children = (
 				C2B27C8C2C91850700223874 /* SettingTableViewCell.swift */,
+				C2159D5B2CA5C48900CD1DD7 /* PrivacyPolicyViewController.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -875,11 +882,9 @@
 				C23FFED82CA44CC90022B3CD /* Localizable.strings in Resources */,
 				C296D7072C1F16B200691515 /* Assets.xcassets in Resources */,
 				C242DFDE2CA5206F00AEC1D1 /* arial-unicode-ms.ttf in Resources */,
-				754871222CA594BD0088E74A /* Config.xcconfig in Resources */,
 				C296D70A2C1F16B200691515 /* Base in Resources */,
 				C296D7052C1F16B000691515 /* Base in Resources */,
 				754871202CA5945F0088E74A /* GoogleService-Info.plist in Resources */,
-				754871252CA59DB00088E74A /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1032,6 +1037,7 @@
 				B8AB3C392C539B7B00E41BF7 /* WeatherViewModel.swift in Sources */,
 				C20D08472CA1AE8400459803 /* CommentTableViewCell.swift in Sources */,
 				B8F89BCC2C5386A800332FE2 /* WeatherManager.swift in Sources */,
+				C2159D5C2CA5C48900CD1DD7 /* PrivacyPolicyViewController.swift in Sources */,
 				C22C8D9C2C9C642F006BB06B /* PostViewUseCase.swift in Sources */,
 				C22C8D9A2C9C63D8006BB06B /* PostApi.swift in Sources */,
 				C296D6FE2C1F16B000691515 /* AppDelegate.swift in Sources */,
@@ -1248,7 +1254,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Busanify/Info.plist;
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "필요하다 너의 위치 정보";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "필요하다 너의 위치 정보";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "필요하다 너의 위치 정보 ";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -1285,7 +1291,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Busanify/Info.plist;
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "필요하다 너의 위치 정보";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "필요하다 너의 위치 정보";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "필요하다 너의 위치 정보 ";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

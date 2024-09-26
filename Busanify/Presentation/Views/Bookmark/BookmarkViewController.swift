@@ -156,7 +156,7 @@ class BookmarkViewController: UIViewController {
             self.switchToGridView()
         }
         
-        return UIMenu(title: "", children: [listViewAction, gridViewAction])
+        return UIMenu(title: "", children: [gridViewAction, listViewAction])
     }
     
     func switchToTableView() {

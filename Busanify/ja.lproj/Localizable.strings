@@ -34,7 +34,9 @@
 "editPost" = "投稿を編集";
 "save" = "保存";
 "writeContent" = "内容を書く";
-"postUploadedSuccessfully" = "投稿が正常にアップロードされました";
+"postSaved" = "投稿が正常に保存されました";
+"reviewSaved" = "レビューが正常に保存されました";
+"changesSaved" = "変更が正常に保存されました";
 "yearAgo" = "年前";
 "monthAgo" = "か月前";
 "dayAgo" = "日前";
@@ -75,4 +77,7 @@
 "needLoginMessageForWriteComment" = "コメントを書くにはログインが必要です";
 "needLoginMessageForWriteReview" = "レビューを書くにはログインが必要です";
 "needLoginMessageForBookmark" = "ブックマークするにはログインが必要です";
-
+"viewAllReviews" = "すべてのレビューを見る";
+"info" = "情報";
+"review" = "レビュー";
+"langInLocalText" = "日本語";
