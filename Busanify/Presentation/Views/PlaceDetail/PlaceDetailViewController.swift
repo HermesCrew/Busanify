@@ -154,11 +154,6 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
         present(alert, animated: true)
     }
     
-    private func moveToSignInView() {
-        let signInVC = SignInViewController()
-        show(signInVC, sender: self)
-    }
-    
     private func bind() {
         placeDetailViewModel.$place
             .receive(on: DispatchQueue.main)
@@ -399,11 +394,26 @@ extension PlaceDetailViewController: ReviewTableViewCellDelegate {
 
 extension PlaceDetailViewController: MoveToReviewView {
     func moveToReviewView() {
-        let reviewViewModel = ReviewViewModel(useCase: ReviewApi())
-        let reviewController = ReviewViewController(reviewViewModel: reviewViewModel, selectedPlace: self.placeDetailViewModel.place)
-        reviewController.delegate = self
-        let reviewView = UINavigationController(rootViewController: reviewController)
-        present(reviewView, animated: true)
+        if authViewModel.state == .signedOut {
+            var alert = UIAlertController()
+            alert = UIAlertController(title: "Need Login", message: "You need to login for writing comment", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Login", style: .default, handler: { [weak self] _ in
+                self?.moveToSignInView()
+            }))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            present(alert, animated: true, completion: nil)
+        } else {
+            let reviewViewModel = ReviewViewModel(useCase: ReviewApi())
+            let reviewController = ReviewViewController(reviewViewModel: reviewViewModel, selectedPlace: self.placeDetailViewModel.place)
+            reviewController.delegate = self
+            let reviewView = UINavigationController(rootViewController: reviewController)
+            present(reviewView, animated: true)
+        }
+    }
+    
+    func moveToSignInView() {
+        let signInVC = SignInViewController()
+        show(signInVC, sender: self)
     }
 }
 
