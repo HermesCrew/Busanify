@@ -63,4 +63,13 @@
 "today" = "今日";
 "viewAsList" = "リストで表示";
 "viewAsGrid" = "グリッドで表示";
+"error" = "エラー";
+"ok" = "OK";
+"needLogin" = "ログインが必要です";
+"login" = "ログイン";
+"needLoginMessageForReport" = "報告するにはログインが必要です";
+"needLoginMessageForWritePost" = "投稿するにはログインが必要です";
+"needLoginMessageForWriteComment" = "コメントを書くにはログインが必要です";
+"needLoginMessageForWriteReview" = "レビューを書くにはログインが必要です";
+"needLoginMessageForBookmark" = "ブックマークするにはログインが必要です";
 

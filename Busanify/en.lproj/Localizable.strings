@@ -63,3 +63,12 @@
 "today" = "Today";
 "viewAsList" = "View as List";
 "viewAsGrid" = "View as Grid";
+"error" = "Error";
+"ok" = "OK";
+"needLogin" = "Need Login";
+"login" = "Login";
+"needLoginMessageForReport" = "You need to login to report";
+"needLoginMessageForWritePost" = "You need to login to write a post";
+"needLoginMessageForWriteComment" = "You need to login to write a comment";
+"needLoginMessageForWriteReview" = "You need to login to write a review";
+"needLoginMessageForBookmark" = "You need to login to bookmark";

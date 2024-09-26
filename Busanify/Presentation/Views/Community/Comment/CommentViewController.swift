@@ -228,8 +228,8 @@ extension CommentViewController: CommentTableViewCellDelegate {
                 self.commentViewModel.reportComment(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
             }))
         case .signedOut:
-            alert = UIAlertController(title: "Need Login", message: "You need to login for Report", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Login", style: .default, handler: { [weak self] _ in
+            alert = UIAlertController(title: NSLocalizedString("needLogin", comment: ""), message: NSLocalizedString("needLoginMessageForReport", comment: ""), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("login", comment: ""), style: .default, handler: { [weak self] _ in
                 self?.moveToSignInView()
             }))
             alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
@@ -243,8 +243,8 @@ extension CommentViewController: UITextFieldDelegate, UIGestureRecognizerDelegat
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         if authViewModel.state == .signedOut {
             var alert = UIAlertController()
-            alert = UIAlertController(title: "Need Login", message: "You need to login for writing comment", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Login", style: .default, handler: { [weak self] _ in
+            alert = UIAlertController(title: NSLocalizedString("needLogin", comment: ""), message: NSLocalizedString("needLoginMessageForWriteComment", comment: ""), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("login", comment: ""), style: .default, handler: { [weak self] _ in
                 self?.moveToSignInView()
             }))
             alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
