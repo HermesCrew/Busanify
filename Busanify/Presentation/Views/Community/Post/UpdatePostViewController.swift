@@ -11,7 +11,7 @@ import PhotosUI
 class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDragDelegate, UICollectionViewDropDelegate {
     private let postViewModel: PostViewModel
     private let authViewModel = AuthenticationViewModel.shared
-    private let post: Post
+    private var post: Post
     
     private var selections = [String : PHPickerResult]()
     private var selectedAssetIdentifiers = [String]()
@@ -20,6 +20,7 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
     private var initialImageItems: [ImageData] = []
     
     weak var delegate: AddPostViewControllerDelegate?
+    weak var updateDelegate: UpdatePostViewControllerDelegate?
     
     private lazy var addButton: UIButton = {
         let button = UIButton(type: .custom)
@@ -351,14 +352,20 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
         showLoading()
         Task {
             do {
-                try await postViewModel.updatePost(token: authViewModel.getToken(), id: post.id, content: contentTextView.text, photos: imageItems)
+                let imgStrs = try await postViewModel.updatePost(token: authViewModel.getToken(), id: post.id, content: contentTextView.text, photos: imageItems)
+                
+                print("imgStrs count >> \(imgStrs.count)")
+                self.post.content = contentTextView.text
+                self.post.photoUrls = imgStrs
                 
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     self.hideLoading()
                     self.delegate?.didCreatePost()
+                    self.updateDelegate?.didUpdatePost(post: post)
                     self.navigationController?.popViewController(animated: true)
                     self.delegate?.showToastMessage("Post edited successfully")
+                    self.updateDelegate?.showToastMessage(messaage: "Post Updated")
                 }
             } catch {
                 print("Failed to create post: \(error)")
@@ -466,7 +473,8 @@ extension UpdatePostViewController: UITextViewDelegate {
 }
 
 protocol UpdatePostViewControllerDelegate: NSObject {
-    func didCreatePost()
+    func didUpdatePost(post: Post)
+    func showToastMessage(messaage: String)
 }
 
 extension ImageData: Equatable {

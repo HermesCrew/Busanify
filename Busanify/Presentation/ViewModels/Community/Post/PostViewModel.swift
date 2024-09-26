@@ -57,8 +57,8 @@ final class PostViewModel {
             .store(in: &cancellables)
     }
     
-    func updatePost(token: String?, id: Int, content: String, photos: [ImageData]) async throws {
-        guard let token = token else { return }
+    func updatePost(token: String?, id: Int, content: String, photos: [ImageData]) async throws -> [String] {
+        guard let token = token else { return [] }
         var photoUrls: [String] = []
         
         for photo in photos {
@@ -76,6 +76,7 @@ final class PostViewModel {
 
         let updatePostDTO = UpdatePostDTO(id: id, content: content, photoUrls: photoUrls)
         try await useCase.updatePost(token: token, updatePostDTO: updatePostDTO)
+        return photoUrls
     }
     
     func deletePost(token: String?, id: Int, photoUrls: [String]) async throws {
