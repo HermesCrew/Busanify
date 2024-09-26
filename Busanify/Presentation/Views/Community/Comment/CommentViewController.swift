@@ -214,10 +214,10 @@ extension CommentViewController: CommentTableViewCellDelegate {
         
         switch authViewModel.state {
         case .googleSignedIn, .appleSignedIn:
-            alert = UIAlertController(title: NSLocalizedString("reportPost", comment: ""), message: nil, preferredStyle: .alert)
+            alert = UIAlertController(title: NSLocalizedString("reportComment", comment: ""), message: nil, preferredStyle: .alert)
             
             alert.addTextField { textField in
-                textField.placeholder = "Please write the reason"
+                textField.placeholder = NSLocalizedString("writeTheReason", comment: "")
             }
             
             alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))

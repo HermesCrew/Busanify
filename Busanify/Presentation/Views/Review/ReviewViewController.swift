@@ -77,7 +77,7 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     private lazy var saveButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(self.selectedReview == nil ? "Add Review" : "Edit Review", for: .normal)
+        button.setTitle(NSLocalizedString("save", comment: ""), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 10

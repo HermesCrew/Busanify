@@ -23,13 +23,16 @@
 "selectImage" = "选择图片";
 "deleteExistImage" = "删除现有图片";
 "report" = "举报";
-"reportReview" = "举报评论";
+"reportReview" = "举报评价";
 "reportPost" = "举报帖子";
+"reportComment" = "举报评论";
 "writeTheReason" = "请写下原因";
 "edit" = "编辑";
 "delete" = "删除";
 "addComment" = "添加评论";
 "addPost" = "添加帖子";
+"editPost" = "编辑帖子";
+"save" = "保存";
 "writeContent" = "写内容";
 "postUploadedSuccessfully" = "帖子上传成功";
 "yearAgo" = "年前";

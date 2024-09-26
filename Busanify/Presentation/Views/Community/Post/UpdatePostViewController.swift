@@ -62,7 +62,7 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
     
     private lazy var updateButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Update Post", for: .normal)
+        button.setTitle(NSLocalizedString("save", comment: ""), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 10
@@ -129,7 +129,7 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
     
     private func configureUI() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(cancelButtonTapped))
-        title = "Edit Post"
+        title = NSLocalizedString("editPost", comment: "")
         view.backgroundColor = .systemBackground
         view.addSubview(addButton)
         view.addSubview(photoCollectionView)

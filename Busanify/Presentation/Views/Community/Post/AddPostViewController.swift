@@ -61,7 +61,7 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
     
     private lazy var saveButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(NSLocalizedString("addPost", comment: ""), for: .normal)
+        button.setTitle(NSLocalizedString("save", comment: ""), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 10
@@ -125,7 +125,7 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
     private func configureUI() {
         // 내비게이션 leftitem 추가
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(cancelButtonTapped))
-        title = "Add Post"
+        title = NSLocalizedString("addPost", comment: "")
         view.backgroundColor = .systemBackground
         view.addSubview(addButton)
         view.addSubview(photoCollectionView)

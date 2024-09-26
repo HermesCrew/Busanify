@@ -25,11 +25,14 @@
 "report" = "報告";
 "reportReview" = "レビューを報告";
 "reportPost" = "投稿を報告";
+"reportComment" = "コメントを報告";
 "writeTheReason" = "理由を記入してください";
 "edit" = "編集";
 "delete" = "削除";
 "addComment" = "コメントを追加";
 "addPost" = "投稿を追加";
+"editPost" = "投稿を編集";
+"save" = "保存";
 "writeContent" = "内容を書く";
 "postUploadedSuccessfully" = "投稿が正常にアップロードされました";
 "yearAgo" = "年前";
