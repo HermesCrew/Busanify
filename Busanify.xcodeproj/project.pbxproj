@@ -311,6 +311,14 @@
 			path = UserPost;
 			sourceTree = "<group>";
 		};
+		754871232CA59BDD0088E74A /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				7548711F2CA5945E0088E74A /* GoogleService-Info.plist */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		75D78A3A2C4F84E800E3259B /* Bookmark */ = {
 			isa = PBXGroup;
 			children = (
