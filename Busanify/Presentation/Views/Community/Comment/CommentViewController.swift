@@ -44,7 +44,7 @@ class CommentViewController: UIViewController {
         textField.autocorrectionType = .no
         textField.spellCheckingType = .no
         textField.autocapitalizationType = .none
-        textField.placeholder = "Add Comments"
+        textField.placeholder = NSLocalizedString("addComment", comment: "")
         textField.delegate = self
         
         return textField
@@ -214,25 +214,25 @@ extension CommentViewController: CommentTableViewCellDelegate {
         
         switch authViewModel.state {
         case .googleSignedIn, .appleSignedIn:
-            alert = UIAlertController(title: "Report post", message: nil, preferredStyle: .alert)
+            alert = UIAlertController(title: NSLocalizedString("reportComment", comment: ""), message: nil, preferredStyle: .alert)
             
             alert.addTextField { textField in
-                textField.placeholder = "Please write the reason"
+                textField.placeholder = NSLocalizedString("writeTheReason", comment: "")
             }
             
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-            alert.addAction(UIAlertAction(title: "Report", style: .destructive, handler: { _ in
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("report", comment: ""), style: .destructive, handler: { _ in
                 let reportReason = alert.textFields?.first?.text ?? "report"
                 
                 let reportDTO = ReportDTO(reportedContentId: comment.id, reportedUserId: comment.user.id, content: reportReason, reportType: .comment)
                 self.commentViewModel.reportComment(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
             }))
         case .signedOut:
-            alert = UIAlertController(title: "Need Login", message: "You need to login for Report", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Login", style: .default, handler: { [weak self] _ in
+            alert = UIAlertController(title: NSLocalizedString("needLogin", comment: ""), message: NSLocalizedString("needLoginMessageForReport", comment: ""), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("login", comment: ""), style: .default, handler: { [weak self] _ in
                 self?.moveToSignInView()
             }))
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
         }
         
         present(alert, animated: true, completion: nil)
@@ -243,11 +243,11 @@ extension CommentViewController: UITextFieldDelegate, UIGestureRecognizerDelegat
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         if authViewModel.state == .signedOut {
             var alert = UIAlertController()
-            alert = UIAlertController(title: "Need Login", message: "You need to login for writing comment", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Login", style: .default, handler: { [weak self] _ in
+            alert = UIAlertController(title: NSLocalizedString("needLogin", comment: ""), message: NSLocalizedString("needLoginMessageForWriteComment", comment: ""), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("login", comment: ""), style: .default, handler: { [weak self] _ in
                 self?.moveToSignInView()
             }))
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
             
             present(alert, animated: true, completion: nil)
             return false
