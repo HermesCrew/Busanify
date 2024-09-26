@@ -14,7 +14,7 @@ class BookmarkViewController: UIViewController {
     let emptyMessageLabel = UILabel()
     var tableView: UITableView?
     var collectionView: UICollectionView?
-    var isGridView = false
+    var isGridView = true
     private let viewModel = BookmarkViewModel()
     private var cancellables = Set<AnyCancellable>()
     
