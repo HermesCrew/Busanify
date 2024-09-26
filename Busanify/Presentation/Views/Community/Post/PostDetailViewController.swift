@@ -216,32 +216,6 @@ class PostDetailViewController: UIViewController {
                 self?.tableView.reloadData()
             }.store(in: &cancellables)
     }
-    
-    private func showDeleteConfirmationAlert() {
-        let alert = UIAlertController(title: "Delete Post", message: "작성한 글이 삭제됩니다.", preferredStyle: .alert)
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
-            self?.deletePost()
-        }
-        
-        alert.addAction(cancelAction)
-        alert.addAction(deleteAction)
-        
-        present(alert, animated: true, completion: nil)
-    }
-    
-    private func deletePost() {
-        // Implement delete post logic
-    }
-    
-    private func updatePost() {
-        // Implement update post logic
-    }
-    
-    private func reportPost() {
-        // Implement report post logic
-    }
 }
 
 extension PostDetailViewController: UITableViewDataSource, UITableViewDelegate {
@@ -293,13 +267,101 @@ extension PostDetailViewController: UICollectionViewDataSource, UICollectionView
     }
 }
 
-// -TODO: 수정 삭제 로직 구현
+// Post 관련 로직을 처리하는 확장
+extension PostDetailViewController{
+    
+    // 게시글 수정
+    func updatePost() {
+        let updatePostVC = UpdatePostViewController(postViewModel: postViewModel, post: post)
+        updatePostVC.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(updatePostVC, animated: true)
+    }
+
+    // 게시글 삭제
+    func showDeleteConfirmationAlert() {
+        let alert = UIAlertController(title: "Delete Post", message: "작성한 글이 삭제됩니다.", preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+            self?.deletePost()
+        }
+        
+        alert.addAction(cancelAction)
+        alert.addAction(deleteAction)
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    private func deletePost() {
+        Task {
+            do {
+                try await postViewModel.deletePost(token: authViewModel.getToken()!, id: post.id, photoUrls: post.photoUrls)
+                navigationController?.popViewController(animated: true)
+            } catch {
+                print("게시글 삭제 실패: \(error)")
+            }
+        }
+    }
+
+    // 게시글 신고
+    func reportPost() {
+        let alert = UIAlertController(title: "신고하기", message: "신고 사유를 입력해주세요.", preferredStyle: .alert)
+        
+        alert.addTextField { textField in
+            textField.placeholder = "신고 사유"
+        }
+        
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        let reportAction = UIAlertAction(title: "신고", style: .destructive) { _ in
+            guard let reason = alert.textFields?.first?.text, !reason.isEmpty else { return }
+            
+            let reportDTO = ReportDTO(reportedContentId: self.post.id, reportedUserId: self.post.user.id, content: reason, reportType: .post)
+            self.postViewModel.reportPost(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
+        }
+        
+        alert.addAction(cancelAction)
+        alert.addAction(reportAction)
+        
+        present(alert, animated: true, completion: nil)
+    }
+}
+
+// 댓글 신고 및 삭제 로직
 extension PostDetailViewController: CommentTableViewCellDelegate {
     func didDeleteComment(_ comment: Comment) {
-//        commentViewModel.deleteComment(comment)
+        Task {
+            do {
+                if let index = commentViewModel.comments.firstIndex(where: { $0.id == comment.id }) {
+                    tableView.beginUpdates()
+                    tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+                    commentViewModel.comments.remove(at: index)
+                    tableView.endUpdates()
+                }
+                try await commentViewModel.deleteComment(token: authViewModel.getToken()!, id: comment.id)
+            } catch {
+                print("댓글 삭제 실패: \(error)")
+            }
+        }
     }
     
     func reportComment(_ comment: Comment) {
-//        commentViewModel.reportComment(comment)
+        let alert = UIAlertController(title: "댓글 신고하기", message: "신고 사유를 입력해주세요.", preferredStyle: .alert)
+        
+        alert.addTextField { textField in
+            textField.placeholder = "신고 사유"
+        }
+        
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        let reportAction = UIAlertAction(title: "신고", style: .destructive) { _ in
+            guard let reason = alert.textFields?.first?.text, !reason.isEmpty else { return }
+            
+            let reportDTO = ReportDTO(reportedContentId: comment.id, reportedUserId: comment.user.id, content: reason, reportType: .comment)
+            self.commentViewModel.reportComment(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
+        }
+        
+        alert.addAction(cancelAction)
+        alert.addAction(reportAction)
+        
+        present(alert, animated: true, completion: nil)
     }
 }
