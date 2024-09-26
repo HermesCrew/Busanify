@@ -87,50 +87,11 @@ class PostDetailViewController: UIViewController {
     }
 
     private func setupUI() {
-        view.addSubview(profileImageView)
-        view.addSubview(usernameLabel)
-        view.addSubview(dateLabel)
-        view.addSubview(moreButton)
-        view.addSubview(contentLabel)
-        view.addSubview(collectionView)
         view.addSubview(tableView)
-        
-        profileImageView.translatesAutoresizingMaskIntoConstraints = false
-        usernameLabel.translatesAutoresizingMaskIntoConstraints = false
-        dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        moreButton.translatesAutoresizingMaskIntoConstraints = false
-        contentLabel.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        
+
         NSLayoutConstraint.activate([
-            profileImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            profileImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            profileImageView.widthAnchor.constraint(equalToConstant: 30),
-            profileImageView.heightAnchor.constraint(equalToConstant: 30),
-            
-            usernameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            usernameLabel.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 8),
-            usernameLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
-            
-            dateLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            dateLabel.leadingAnchor.constraint(equalTo: usernameLabel.trailingAnchor, constant: 8),
-            dateLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
-            
-            moreButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            moreButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            moreButton.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
-            
-            contentLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 16),
-            contentLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            contentLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            
-            collectionView.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 16),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.heightAnchor.constraint(equalToConstant: 200),
-            
-            tableView.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 16),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -139,6 +100,56 @@ class PostDetailViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(CommentTableViewCell.self, forCellReuseIdentifier: CommentTableViewCell.identifier)
+        tableView.tableHeaderView = createTableHeaderView()
+    }
+
+    private func createTableHeaderView() -> UIView {
+        let headerView = UIView()
+        headerView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 350)
+
+        headerView.addSubview(profileImageView)
+        headerView.addSubview(usernameLabel)
+        headerView.addSubview(dateLabel)
+        headerView.addSubview(moreButton)
+        headerView.addSubview(contentLabel)
+        headerView.addSubview(collectionView)
+        
+        profileImageView.translatesAutoresizingMaskIntoConstraints = false
+        usernameLabel.translatesAutoresizingMaskIntoConstraints = false
+        dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        moreButton.translatesAutoresizingMaskIntoConstraints = false
+        contentLabel.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            profileImageView.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 16),
+            profileImageView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
+            profileImageView.widthAnchor.constraint(equalToConstant: 30),
+            profileImageView.heightAnchor.constraint(equalToConstant: 30),
+            
+            usernameLabel.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 16),
+            usernameLabel.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 8),
+            usernameLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
+            
+            dateLabel.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 16),
+            dateLabel.leadingAnchor.constraint(equalTo: usernameLabel.trailingAnchor, constant: 8),
+            dateLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
+            
+            moreButton.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 16),
+            moreButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
+            moreButton.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
+            
+            contentLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 16),
+            contentLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
+            contentLabel.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
+            
+            collectionView.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 16),
+            collectionView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: headerView.trailingAnchor),
+            collectionView.heightAnchor.constraint(equalToConstant: 200),
+        ])
+
+        return headerView
     }
 
     private func configureUI() {
@@ -246,6 +257,7 @@ extension PostDetailViewController: UITableViewDataSource, UITableViewDelegate {
         let comment = commentViewModel.comments[indexPath.row]
         cell.configure(comment: comment, post: post)
         cell.delegate = self
+        cell.selectionStyle = .none
         return cell
     }
 }
