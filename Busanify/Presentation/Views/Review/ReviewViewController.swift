@@ -66,7 +66,7 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
         textView.layer.borderWidth = 1
         textView.layer.borderColor = UIColor.lightGray.cgColor
         textView.layer.cornerRadius = 10
-        textView.text = self.selectedReview == nil ? "Write content" : self.selectedReview?.content
+        textView.text = self.selectedReview == nil ? NSLocalizedString("writeContent", comment: "") : self.selectedReview?.content
         textView.textColor = self.selectedReview == nil ? .systemGray3 : .label
         textView.autocapitalizationType = .none
         textView.autocorrectionType = .no
