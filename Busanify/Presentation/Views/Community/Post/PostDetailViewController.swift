@@ -49,6 +49,7 @@ class PostDetailViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.showsHorizontalScrollIndicator = false
+        collectionView.backgroundColor = .clear
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "ImageCell")
         return collectionView
     }()
@@ -144,8 +145,8 @@ class PostDetailViewController: UIViewController {
             contentLabel.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
             
             collectionView.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 16),
-            collectionView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: headerView.trailingAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
+            collectionView.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
             collectionView.heightAnchor.constraint(equalToConstant: 200),
         ])
 
@@ -243,7 +244,8 @@ extension PostDetailViewController: UICollectionViewDataSource, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath)
-        
+        cell.backgroundColor = .clear
+
         // 기존의 이미지 뷰 제거 (중복 추가 방지)
         cell.contentView.subviews.forEach { $0.removeFromSuperview() }
         
