@@ -1,0 +1,65 @@
+/* 
+  Localizable.strings
+  Busanify
+
+  Created by 이인호 on 9/25/24.
+  
+*/
+
+"lang" = "eng";
+"home" = "Home";
+"bookmark" = "Bookmark";
+"community" = "Community";
+"setting" = "Setting";
+"weather" = "Weather";
+"myReview" = "My Review";
+"myCommunityPost" = "My Community Post";
+"language" = "English";
+"privacyPolicy" = "Privacy Policy";
+"version" = "Version";
+"logout" = "Logout";
+"deleteAccount" = "Delete Account";
+"addProfileImage" = "Add Profile Image";
+"selectImage" = "Select Image";
+"deleteExistImage" = "Delete Exist Image";
+"report" = "Report";
+"reportReview" = "Report Review";
+"reportPost" = "Report Post";
+"writeTheReason" = "Please write the reason";
+"edit" = "Edit";
+"delete" = "Delete";
+"addComment" = "Add Comment";
+"addPost" = "Add Post";
+"writeContent" = "Write Content";
+"postUploadedSuccessfully" = "Post Uploaded Successfully";
+"yearAgo" = " years ago";
+"monthAgo" = " months ago";
+"dayAgo" = " days ago";
+"hourAgo" = " hours ago";
+"minuteAgo" = " minutes ago";
+"secondAgo" = " seconds ago";
+"now" = "now";
+"cancel" = "Cancel";
+"delete" = "Delete";
+"deletePost" = "Delete Post?";
+"postWillBeDeleted" = "This can't be undone";
+"wouldYouLikeToLogout" = "Would you like to logout?";
+"discardUnsavedChanges" = "Discard unsaved changes?";
+"discardUnsavedChangesMessageForAdd" = "This will discard your draft";
+"discardUnsavedChangesMessageForEdit" = "This will delete all edits";
+"discard" = "Discard";
+"deleteAccount" = "Delete Account";
+"deleteAccountAsk" = "Delete Account?";
+"deleteAccountMessage" = "All data will be removed";
+"bookmarkEmpty" = "No places bookmarked";
+"postEmpty" = "Be the first to write a post!";
+"touristAttraction" = "Attraction";
+"shopping" = "Shopping";
+"accommodation" = "Accommodation";
+"restaurant" = "Restaurant";
+"search" = "Search";
+"Highest" = "H";
+"Lowest" = "L";
+"today" = "Today";
+"viewAsList" = "View as List";
+"viewAsGrid" = "View as Grid";

@@ -1,0 +1,65 @@
+/* 
+  Localizable.strings
+  Busanify
+
+  Created by 이인호 on 9/25/24.
+  
+*/
+
+"lang" = "chs";
+"home" = "首页";
+"bookmark" = "书签";
+"community" = "社区";
+"setting" = "设置";
+"weather" = "天气";
+"myReview" = "我的评论";
+"myCommunityPost" = "我的社区帖子";
+"language" = "语言";
+"privacyPolicy" = "隐私政策";
+"version" = "版本";
+"logout" = "登出";
+"deleteAccount" = "删除账户";
+"addProfileImage" = "添加个人图片";
+"selectImage" = "选择图片";
+"deleteExistImage" = "删除现有图片";
+"report" = "举报";
+"reportReview" = "举报评论";
+"reportPost" = "举报帖子";
+"writeTheReason" = "请写下原因";
+"edit" = "编辑";
+"delete" = "删除";
+"addComment" = "添加评论";
+"addPost" = "添加帖子";
+"writeContent" = "写内容";
+"postUploadedSuccessfully" = "帖子上传成功";
+"yearAgo" = "年前";
+"monthAgo" = "个月前";
+"dayAgo" = "天前";
+"hourAgo" = "小时前";
+"minuteAgo" = "分钟前";
+"secondAgo" = "秒前";
+"now" = "现在";
+"cancel" = "取消";
+"delete" = "删除";
+"deletePost" = "删除帖子？";
+"postWillBeDeleted" = "此操作无法撤销";
+"wouldYouLikeToLogout" = "您确定要登出吗？";
+"discardUnsavedChanges" = "放弃未保存的更改？";
+"discardUnsavedChangesMessageForAdd" = "这将丢弃您的草稿";
+"discardUnsavedChangesMessageForEdit" = "这将删除所有编辑";
+"discard" = "放弃";
+"deleteAccount" = "删除账户";
+"deleteAccountAsk" = "删除账户？";
+"deleteAccountMessage" = "所有数据将被移除";
+"bookmarkEmpty" = "没有书签地点";
+"postEmpty" = "成为第一个写帖子的人！";
+"touristAttraction" = "景点";
+"shopping" = "购物";
+"accommodation" = "住宿";
+"restaurant" = "餐厅";
+"search" = "搜索";
+"Highest" = "最高";
+"Lowest" = "最低";
+"today" = "今天";
+"viewAsList" = "列表显示";
+"viewAsGrid" = "网格显示";
