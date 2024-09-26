@@ -13,7 +13,6 @@ class PostDetailViewController: UIViewController {
     private var post: Post
     private let commentViewModel: CommentViewModel
     private let postViewModel: PostViewModel
-    private let tableView = UITableView(frame: .zero, style: .grouped)
     private var cancellables = Set<AnyCancellable>()
     
     private let authViewModel = AuthenticationViewModel.shared
@@ -21,6 +20,21 @@ class PostDetailViewController: UIViewController {
     
     weak var delegate: AddPostViewControllerDelegate?
 
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.contentInset = .zero
+        tableView.backgroundColor = .systemGray5
+        tableView.showsVerticalScrollIndicator = false
+        return tableView
+    }()
+    
+    private lazy var dividerLine: UIView = {
+        let dividerLine = UIView()
+        dividerLine.backgroundColor = .systemGray5
+        dividerLine.translatesAutoresizingMaskIntoConstraints = false
+        return dividerLine
+    }()
+    
     private lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -51,7 +65,6 @@ class PostDetailViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = .clear
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "ImageCell")
         return collectionView
     }()
@@ -90,11 +103,56 @@ class PostDetailViewController: UIViewController {
     }
 
     private func setupUI() {
+        view.addSubview(profileImageView)
+        view.addSubview(usernameLabel)
+        view.addSubview(dateLabel)
+        view.addSubview(moreButton)
+        view.addSubview(contentLabel)
+        view.addSubview(collectionView)
         view.addSubview(tableView)
+        view.addSubview(dividerLine)
+        
+        profileImageView.translatesAutoresizingMaskIntoConstraints = false
+        usernameLabel.translatesAutoresizingMaskIntoConstraints = false
+        dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        moreButton.translatesAutoresizingMaskIntoConstraints = false
+        contentLabel.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
-
+        
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            profileImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            profileImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            profileImageView.widthAnchor.constraint(equalToConstant: 30),
+            profileImageView.heightAnchor.constraint(equalToConstant: 30),
+            
+            usernameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            usernameLabel.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 8),
+            usernameLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
+            
+            dateLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            dateLabel.leadingAnchor.constraint(equalTo: usernameLabel.trailingAnchor, constant: 8),
+            dateLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
+            
+            moreButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            moreButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            moreButton.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
+            
+            contentLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 16),
+            contentLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            contentLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            
+            collectionView.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 16),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            collectionView.heightAnchor.constraint(equalToConstant: 200),
+            
+            dividerLine.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 16),
+            dividerLine.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            dividerLine.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            dividerLine.heightAnchor.constraint(equalToConstant: 1),
+            
+            tableView.topAnchor.constraint(equalTo: dividerLine.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -103,56 +161,6 @@ class PostDetailViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(CommentTableViewCell.self, forCellReuseIdentifier: CommentTableViewCell.identifier)
-        tableView.tableHeaderView = createTableHeaderView()
-    }
-
-    private func createTableHeaderView() -> UIView {
-        let headerView = UIView()
-        headerView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 350)
-
-        headerView.addSubview(profileImageView)
-        headerView.addSubview(usernameLabel)
-        headerView.addSubview(dateLabel)
-        headerView.addSubview(moreButton)
-        headerView.addSubview(contentLabel)
-        headerView.addSubview(collectionView)
-        
-        profileImageView.translatesAutoresizingMaskIntoConstraints = false
-        usernameLabel.translatesAutoresizingMaskIntoConstraints = false
-        dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        moreButton.translatesAutoresizingMaskIntoConstraints = false
-        contentLabel.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-
-        NSLayoutConstraint.activate([
-            profileImageView.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 16),
-            profileImageView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
-            profileImageView.widthAnchor.constraint(equalToConstant: 30),
-            profileImageView.heightAnchor.constraint(equalToConstant: 30),
-            
-            usernameLabel.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 16),
-            usernameLabel.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 8),
-            usernameLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
-            
-            dateLabel.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 16),
-            dateLabel.leadingAnchor.constraint(equalTo: usernameLabel.trailingAnchor, constant: 8),
-            dateLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
-            
-            moreButton.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 16),
-            moreButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
-            moreButton.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
-            
-            contentLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 16),
-            contentLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
-            contentLabel.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
-            
-            collectionView.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 16),
-            collectionView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
-            collectionView.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
-            collectionView.heightAnchor.constraint(equalToConstant: 200),
-        ])
-
-        return headerView
     }
 
     private func configureUI() {
@@ -171,7 +179,7 @@ class PostDetailViewController: UIViewController {
     
     private func setupMoreButton() {
         var menuItems: [UIAction] = [
-            UIAction(title: "Report", image: UIImage(systemName: "exclamationmark.triangle"), handler: { [weak self] _ in
+            UIAction(title: NSLocalizedString("report", comment: ""), image: UIImage(systemName: "exclamationmark.triangle"), handler: { [weak self] _ in
                 self?.reportPost()
             })
         ]
@@ -180,10 +188,10 @@ class PostDetailViewController: UIViewController {
         case .googleSignedIn(let user):
             if post.user.id == user.userID {
                 menuItems = [
-                    UIAction(title: "Edit", image: UIImage(systemName: "pencil"), handler: { [weak self] _ in
+                    UIAction(title: NSLocalizedString("edit", comment: ""), image: UIImage(systemName: "pencil"), handler: { [weak self] _ in
                         self?.updatePost()
                     }),
-                    UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
+                    UIAction(title: NSLocalizedString("delete", comment: ""), image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
                         self?.showDeleteConfirmationAlert()
                     })
                 ]
@@ -196,10 +204,10 @@ class PostDetailViewController: UIViewController {
             
             if post.user.id == userId {
                 menuItems = [
-                    UIAction(title: "Edit", image: UIImage(systemName: "pencil"), handler: { [weak self] _ in
+                    UIAction(title: NSLocalizedString("edit", comment: ""), image: UIImage(systemName: "pencil"), handler: { [weak self] _ in
                         self?.updatePost()
                     }),
-                    UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
+                    UIAction(title: NSLocalizedString("delete", comment: ""), image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
                         self?.showDeleteConfirmationAlert()
                     })
                 ]
@@ -234,7 +242,6 @@ extension PostDetailViewController: UITableViewDataSource, UITableViewDelegate {
         let comment = commentViewModel.comments[indexPath.row]
         cell.configure(comment: comment, post: post)
         cell.delegate = self
-        cell.selectionStyle = .none
         return cell
     }
 }
@@ -246,8 +253,7 @@ extension PostDetailViewController: UICollectionViewDataSource, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath)
-        cell.backgroundColor = .clear
-
+        
         // 기존의 이미지 뷰 제거 (중복 추가 방지)
         cell.contentView.subviews.forEach { $0.removeFromSuperview() }
         
@@ -291,15 +297,16 @@ extension PostDetailViewController: UpdatePostViewControllerDelegate {
         let updatePostVC = UpdatePostViewController(postViewModel: postViewModel, post: post)
         updatePostVC.updateDelegate = self
         updatePostVC.hidesBottomBarWhenPushed = true
+        updatePostVC.delegate = self
         navigationController?.pushViewController(updatePostVC, animated: true)
     }
 
     // 게시글 삭제
     func showDeleteConfirmationAlert() {
-        let alert = UIAlertController(title: "Delete Post", message: "작성한 글이 삭제됩니다.", preferredStyle: .alert)
+        let alert = UIAlertController(title: NSLocalizedString("deletePost", comment: ""), message: NSLocalizedString("postWillBeDeleted", comment: ""), preferredStyle: .alert)
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+        let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil)
+        let deleteAction = UIAlertAction(title: NSLocalizedString("delete", comment: ""), style: .destructive) { [weak self] _ in
             self?.deletePost()
         }
         
@@ -324,24 +331,40 @@ extension PostDetailViewController: UpdatePostViewControllerDelegate {
 
     // 게시글 신고
     func reportPost() {
-        let alert = UIAlertController(title: "신고하기", message: "신고 사유를 입력해주세요.", preferredStyle: .alert)
+        var alert = UIAlertController()
         
-        alert.addTextField { textField in
-            textField.placeholder = "신고 사유"
-        }
-        
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        let reportAction = UIAlertAction(title: "신고", style: .destructive) { _ in
-            guard let reason = alert.textFields?.first?.text, !reason.isEmpty else { return }
+        switch authViewModel.state {
+        case .googleSignedIn, .appleSignedIn:
+            alert = UIAlertController(title: NSLocalizedString("reportPost", comment: ""), message: nil, preferredStyle: .alert)
             
-            let reportDTO = ReportDTO(reportedContentId: self.post.id, reportedUserId: self.post.user.id, content: reason, reportType: .post)
-            self.postViewModel.reportPost(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
+            alert.addTextField { textField in
+                textField.placeholder = NSLocalizedString("writeTheReason", comment: "")
+            }
+            
+            let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil)
+            let reportAction = UIAlertAction(title: NSLocalizedString("report", comment: ""), style: .destructive) { _ in
+                guard let reason = alert.textFields?.first?.text, !reason.isEmpty else { return }
+                
+                let reportDTO = ReportDTO(reportedContentId: self.post.id, reportedUserId: self.post.user.id, content: reason, reportType: .post)
+                self.postViewModel.reportPost(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
+            }
+            
+            alert.addAction(cancelAction)
+            alert.addAction(reportAction)
+        case .signedOut:
+            alert = UIAlertController(title: NSLocalizedString("needLogin", comment: ""), message: NSLocalizedString("needLoginMessageForReport", comment: ""), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("login", comment: ""), style: .default, handler: { [weak self] _ in
+                self?.moveToSignInView()
+            }))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
         }
-        
-        alert.addAction(cancelAction)
-        alert.addAction(reportAction)
         
         present(alert, animated: true, completion: nil)
+    }
+    
+    private func moveToSignInView() {
+        let signInVC = SignInViewController()
+        present(signInVC, animated: true, completion: nil)
     }
 }
 
@@ -365,23 +388,44 @@ extension PostDetailViewController: CommentTableViewCellDelegate {
     }
     
     func reportComment(_ comment: Comment) {
-        let alert = UIAlertController(title: "댓글 신고하기", message: "신고 사유를 입력해주세요.", preferredStyle: .alert)
+        var alert = UIAlertController()
         
-        alert.addTextField { textField in
-            textField.placeholder = "신고 사유"
-        }
-        
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        let reportAction = UIAlertAction(title: "신고", style: .destructive) { _ in
-            guard let reason = alert.textFields?.first?.text, !reason.isEmpty else { return }
+        switch authViewModel.state {
+        case .googleSignedIn, .appleSignedIn:
+            alert = UIAlertController(title: NSLocalizedString("reportComment", comment: ""), message: nil, preferredStyle: .alert)
             
-            let reportDTO = ReportDTO(reportedContentId: comment.id, reportedUserId: comment.user.id, content: reason, reportType: .comment)
-            self.commentViewModel.reportComment(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
+            alert.addTextField { textField in
+                textField.placeholder = NSLocalizedString("writeTheReason", comment: "")
+            }
+            
+            let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil)
+            let reportAction = UIAlertAction(title: NSLocalizedString("report", comment: ""), style: .destructive) { _ in
+                guard let reason = alert.textFields?.first?.text, !reason.isEmpty else { return }
+                
+                let reportDTO = ReportDTO(reportedContentId: comment.id, reportedUserId: comment.user.id, content: reason, reportType: .comment)
+                self.commentViewModel.reportComment(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
+            }
+            
+            alert.addAction(cancelAction)
+            alert.addAction(reportAction)
+        case .signedOut:
+            alert = UIAlertController(title: NSLocalizedString("needLogin", comment: ""), message: NSLocalizedString("needLoginMessageForReport", comment: ""), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("login", comment: ""), style: .default, handler: { [weak self] _ in
+                self?.moveToSignInView()
+            }))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
         }
-        
-        alert.addAction(cancelAction)
-        alert.addAction(reportAction)
         
         present(alert, animated: true, completion: nil)
+    }
+}
+
+extension PostDetailViewController: AddPostViewControllerDelegate {
+    func didCreatePost() {
+        //
+    }
+    
+    func showToastMessage(_ message: String) {
+        showToast(view, message: message)
     }
 }

@@ -54,11 +54,11 @@ class DailyForecastCell: UITableViewCell {
         let calendar = Calendar.current
         
         if calendar.isDate(now, inSameDayAs: forecast.date) {
-            dayLabel.text = "오늘"
+            dayLabel.text = NSLocalizedString("today", comment: "")
         } else {
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "M/d(E)"
-            dateFormatter.locale = Locale(identifier: "ko_KR")
+            dateFormatter.dateFormat = "M/d (E)"
+            dateFormatter.locale = Locale.current
             dayLabel.text = dateFormatter.string(from: forecast.date)
         }
         

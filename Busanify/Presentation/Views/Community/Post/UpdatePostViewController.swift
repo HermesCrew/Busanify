@@ -63,7 +63,7 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
     
     private lazy var updateButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Update Post", for: .normal)
+        button.setTitle(NSLocalizedString("save", comment: ""), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 10
@@ -130,7 +130,7 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
     
     private func configureUI() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(cancelButtonTapped))
-        title = "Edit Post"
+        title = NSLocalizedString("editPost", comment: "")
         view.backgroundColor = .systemBackground
         view.addSubview(addButton)
         view.addSubview(photoCollectionView)
@@ -187,12 +187,12 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
         let imagesChanged = imageItems != initialImageItems
         
         if contentChanged || imagesChanged {
-            let alert = UIAlertController(title: "Unsaved Changes", message: "You have unsaved changes.", preferredStyle: .alert)
+            let alert = UIAlertController(title: NSLocalizedString("discardUnsavedChanges", comment: ""), message: NSLocalizedString("discardUnsavedChangesMessageForEdit", comment: ""), preferredStyle: .alert)
             
-            let discardAction = UIAlertAction(title: "Discard", style: .destructive) { _ in
+            let discardAction = UIAlertAction(title: NSLocalizedString("discard", comment: ""), style: .destructive) { _ in
                 self.navigationController?.popViewController(animated: true)
             }
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil)
             
             alert.addAction(discardAction)
             alert.addAction(cancelAction)
@@ -378,8 +378,8 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     private func showErrorAlert(message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
     }
     

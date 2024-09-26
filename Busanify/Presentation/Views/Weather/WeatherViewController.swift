@@ -215,7 +215,7 @@ class WeatherViewController: UIViewController {
         
         let highTemp = Int(weather.dailyForecast.first?.highTemperature.value ?? 0)
         let lowTemp = Int(weather.dailyForecast.first?.lowTemperature.value ?? 0)
-        maxMinTempLabel.text = "최고 \(highTemp)° / 최저 \(lowTemp)°"
+        maxMinTempLabel.text = "\(NSLocalizedString("Highest", comment: "")) \(highTemp)° / \(NSLocalizedString("Lowest", comment: "")) \(lowTemp)°"
         
         // 강수 확률 설정
         if let precipitationChance = weather.hourlyForecast.first?.precipitationChance {
@@ -238,8 +238,8 @@ class WeatherViewController: UIViewController {
     }
     
     private func showError(_ error: String) {
-        let alert = UIAlertController(title: "Error", message: error, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: error, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default))
         present(alert, animated: true)
     }
 }

@@ -13,7 +13,7 @@ class PlaceListViewController: UIViewController {
     private let authViewModel = AuthenticationViewModel.shared
     private var cancellables = Set<AnyCancellable>()
     private let tableView = UITableView()
-    private let lang = "eng" // 임시
+    private let lang = NSLocalizedString("lang", comment: "")
     var selectedPlaceType: PlaceType? = nil
     var selectedLat: Double = 0
     var selectedLng: Double = 0
@@ -82,11 +82,11 @@ class PlaceListViewController: UIViewController {
     }
     
     private func showLoginAlert() {
-        let alert = UIAlertController(title: "로그인 필요", message: "북마크 기능을 사용하려면 로그인이 필요합니다.", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "로그인", style: .default, handler: { [weak self] _ in
+        let alert = UIAlertController(title: NSLocalizedString("needLogin", comment: ""), message: NSLocalizedString("needLoginMessageForBookmark", comment: ""), preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("login", comment: ""), style: .default, handler: { [weak self] _ in
             self?.moveToSignInView()
         }))
-        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
         present(alert, animated: true)
     }
     

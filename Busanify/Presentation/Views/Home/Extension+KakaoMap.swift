@@ -19,6 +19,12 @@ extension HomeViewController: KakaoMapEventDelegate {
     
     func createPoiStyle(styleID: String, currentLocation: Bool = false, placeType: PlaceType?) {
         let view = mapController?.getView("mapview") as! KakaoMap
+        
+        if let fontPath = Bundle.main.path(forResource: "arial-unicode-ms", ofType: "ttf"),
+           let fontData = try? Data(contentsOf: URL(fileURLWithPath: fontPath)) {
+            mapController?.addFont(fontName: "arial", fontData: fontData)
+        }
+        
         let manager = view.getLabelManager()
         var iconImage = UIImage(named: "map_ico_marker")
         manager.removePoiStyle(styleID)
@@ -41,7 +47,7 @@ extension HomeViewController: KakaoMapEventDelegate {
                                       transition: PoiTransition(entrance: .alpha, exit: .alpha)
                                       /*badges: [noti1]*/)
         
-        let textColor = TextStyle(fontSize: 20, fontColor: UIColor.black, strokeThickness: 2, strokeColor: UIColor.white)
+        let textColor = TextStyle(fontSize: 20, fontColor: UIColor.black, strokeThickness: 2, strokeColor: UIColor.white, font: "arial")
         let textStyle1 = PoiTextStyle(textLineStyles: [
             PoiTextLineStyle(textStyle: textColor)
         ])
@@ -63,7 +69,7 @@ extension HomeViewController: KakaoMapEventDelegate {
             
             poiOption1.rank = 0
             poiOption1.clickable = true
-            poiOption1.addText(PoiText(text: titles[idx].truncate(to: 17), styleIndex: 0))
+            poiOption1.addText(PoiText(text: titles[idx], styleIndex: 0))
             let poi = layer?.addPoi(option: poiOption1, at: mapPoint)
             if let poi = poi {
                 let _ = poi.addPoiTappedEventHandler(target: self, handler: HomeViewController.poiTappedHandler)
