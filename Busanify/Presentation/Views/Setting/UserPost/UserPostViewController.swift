@@ -117,14 +117,14 @@ extension UserPostViewController: CommunityTableViewCellDelegate {
     func reportPost(_ post: Post) {
         var alert = UIAlertController()
         
-        alert = UIAlertController(title: "Report post", message: nil, preferredStyle: .alert)
+        alert = UIAlertController(title: NSLocalizedString("reportPost", comment: ""), message: nil, preferredStyle: .alert)
         
         alert.addTextField { textField in
-            textField.placeholder = "Please write the reason"
+            textField.placeholder = NSLocalizedString("writeTheReason", comment: "")
         }
         
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "Report", style: .destructive, handler: { _ in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("report", comment: ""), style: .destructive, handler: { _ in
             let reportReason = alert.textFields?.first?.text ?? "report"
             
             let reportDTO = ReportDTO(reportedContentId: post.id, reportedUserId: post.user.id, content: reportReason, reportType: .post)

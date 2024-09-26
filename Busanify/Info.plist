@@ -43,5 +43,9 @@
 			</array>
 		</dict>
 	</dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>arial-unicode-ms.ttf</string>
+	</array>
 </dict>
 </plist>

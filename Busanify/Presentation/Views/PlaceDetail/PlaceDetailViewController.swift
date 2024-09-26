@@ -152,11 +152,11 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     private func showLoginAlert() {
-        let alert = UIAlertController(title: "로그인 필요", message: "북마크 기능을 사용하려면 로그인이 필요합니다.", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "로그인", style: .default, handler: { [weak self] _ in
+        let alert = UIAlertController(title: NSLocalizedString("needLogin", comment: ""), message: NSLocalizedString("needLoginMessageForBookmark", comment: ""), preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("login", comment: ""), style: .default, handler: { [weak self] _ in
             self?.moveToSignInView()
         }))
-        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
         present(alert, animated: true)
     }
     
@@ -382,25 +382,25 @@ extension PlaceDetailViewController: ReviewTableViewCellDelegate {
         
         switch authViewModel.state {
         case .googleSignedIn, .appleSignedIn:
-            alert = UIAlertController(title: "Report review", message: nil, preferredStyle: .alert)
+            alert = UIAlertController(title: NSLocalizedString("reportReview", comment: ""), message: nil, preferredStyle: .alert)
             
             alert.addTextField { textField in
-                textField.placeholder = "Please write the reason"
+                textField.placeholder = NSLocalizedString("writeTheReason", comment: "")
             }
             
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-            alert.addAction(UIAlertAction(title: "Report", style: .destructive, handler: { _ in
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("report", comment: ""), style: .destructive, handler: { _ in
                 let reportReason = alert.textFields?.first?.text ?? "report"
                 
                 let reportDTO = ReportDTO(reportedContentId: review.id, reportedUserId: review.user.id, content: reportReason, reportType: .review)
                 self.reviewViewModel.reportReview(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
             }))
         case .signedOut:
-            alert = UIAlertController(title: "로그인 필요", message: "북마크 기능을 사용하려면 로그인이 필요합니다.", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "로그인", style: .default, handler: { [weak self] _ in
+            alert = UIAlertController(title: NSLocalizedString("needLogin", comment: ""), message: NSLocalizedString("needLoginMessageForBookmark", comment: ""), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("login", comment: ""), style: .default, handler: { [weak self] _ in
                 self?.moveToSignInView()
             }))
-            alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
         }
         
         present(alert, animated: true, completion: nil)
@@ -411,11 +411,11 @@ extension PlaceDetailViewController: MoveToReviewView {
     func moveToReviewView() {
         if authViewModel.state == .signedOut {
             var alert = UIAlertController()
-            alert = UIAlertController(title: "Need Login", message: "You need to login for writing comment", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Login", style: .default, handler: { [weak self] _ in
+            alert = UIAlertController(title: NSLocalizedString("needLogin", comment: ""), message: NSLocalizedString("needLoginMessageForWriteReview", comment: ""), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("login", comment: ""), style: .default, handler: { [weak self] _ in
                 self?.moveToSignInView()
             }))
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
             present(alert, animated: true, completion: nil)
         } else {
             let reviewViewModel = ReviewViewModel(useCase: ReviewApi())
