@@ -148,6 +148,10 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
             self.photoCollectionView.reloadData()
             updateSaveButtonState()
         }
+        
+        rateStackView.onRatingChanged = { [weak self] _ in
+            self?.updateSaveButtonState()
+        }
     }
     
     private func configureUI() {
@@ -544,7 +548,7 @@ extension ReviewViewController: UITextViewDelegate {
         let isPlaceholder = contentTextView.textColor == .systemGray3
         let textIsEmpty = contentTextView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         
-        saveButton.isEnabled = !(isPlaceholder || textIsEmpty)
+        saveButton.isEnabled = !(isPlaceholder || textIsEmpty || currentRating == 0)
         saveButton.alpha = saveButton.isEnabled ? 1.0 : 0.5
     }
 }
