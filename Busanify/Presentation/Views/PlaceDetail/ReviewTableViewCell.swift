@@ -46,7 +46,7 @@ class ReviewTableViewCell: UITableViewCell {
         collectionView.delegate = self
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "ImageCell")
-                
+        
         return collectionView
     }()
     
@@ -64,7 +64,7 @@ class ReviewTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 10, weight: .light)
         label.textColor = .gray
-    
+        
         return label
     }()
     
@@ -157,7 +157,9 @@ class ReviewTableViewCell: UITableViewCell {
         case .googleSignedIn(let user):
             if review.user.id == user.userID {
                 menuItems = [
-                    UIAction(title: "Edit", image: UIImage(systemName: "pencil"), handler: { _ in }),
+                    UIAction(title: "Edit", image: UIImage(systemName: "pencil"), handler: { [weak self] _ in
+                        self?.delegate?.didEditReview(review)
+                    }),
                     UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
                         self?.delegate?.didDeleteReview(review)
                     })
@@ -171,7 +173,9 @@ class ReviewTableViewCell: UITableViewCell {
             
             if review.user.id == userId {
                 menuItems = [
-                    UIAction(title: "Edit", image: UIImage(systemName: "pencil"), handler: { _ in }),
+                    UIAction(title: "Edit", image: UIImage(systemName: "pencil"), handler: { [weak self] _ in
+                        self?.delegate?.didEditReview(review)
+                    }),
                     UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
                         self?.delegate?.didDeleteReview(review)
                     })
@@ -231,7 +235,7 @@ extension ReviewTableViewCell: UICollectionViewDataSource, UICollectionViewDeleg
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath)
-            
+        
         // 기존의 이미지 뷰 제거 (중복 추가 방지)
         cell.contentView.subviews.forEach { $0.removeFromSuperview() }
         
@@ -258,5 +262,6 @@ extension ReviewTableViewCell: UICollectionViewDataSource, UICollectionViewDeleg
 
 protocol ReviewTableViewCellDelegate: NSObject {
     func didDeleteReview(_ review: Review)
+    func didEditReview(_ review: Review)
     func reportReview(_ review: Review)
 }

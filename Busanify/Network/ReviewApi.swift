@@ -42,6 +42,26 @@ final class ReviewApi: ReviewUseCase {
         let (_, _) = try await URLSession.shared.data(for: request)
     }
     
+    func updateReview(token: String, updateReviewDTO: UpdateReviewDTO) async throws {
+        let urlString = "\(baseURL)/reviews"
+        
+        guard let url = URL(string: urlString) else {
+            fatalError("Invalid URL")
+        }
+        
+        guard let jsonData = try? JSONEncoder().encode(updateReviewDTO) else {
+            fatalError("Json Encode Error")
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "PATCH"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.httpBody = jsonData
+        
+        let (_, _) = try await URLSession.shared.data(for: request)
+    }
+    
     func saveImage(data: Data) async throws -> String {
         let path = UUID().uuidString
         let fileReference = storage.child(path)

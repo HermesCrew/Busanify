@@ -1,14 +1,14 @@
 //
-//  PostDTO.swift
+//  UpdateReviewDTO.swift
 //  Busanify
 //
-//  Created by 이인호 on 9/19/24.
+//  Created by MadCow on 2024/9/26.
 //
 
 import Foundation
 
-struct ReviewDTO: Codable {
-    let placeId: String
+struct UpdateReviewDTO: Codable {
+    let id: String
     let rating: Double
     let content: String
     let photoUrls: [String]
