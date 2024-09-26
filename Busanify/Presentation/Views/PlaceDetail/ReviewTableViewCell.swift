@@ -20,7 +20,7 @@ class ReviewTableViewCell: UITableViewCell {
     private lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person.crop.circle")
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         
         return imageView
@@ -33,7 +33,11 @@ class ReviewTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let contentLabel = UILabel()
+    private let contentLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        return label
+    }()
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -48,6 +52,10 @@ class ReviewTableViewCell: UITableViewCell {
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "ImageCell")
         
         return collectionView
+    }()
+    
+    private lazy var collectionViewHeightConstraint: NSLayoutConstraint = {
+        return collectionView.heightAnchor.constraint(equalToConstant: 100) // 기본 높이 100
     }()
     
     private lazy var starStackView: UIStackView = {
@@ -124,15 +132,17 @@ class ReviewTableViewCell: UITableViewCell {
             
             contentLabel.topAnchor.constraint(equalTo: starStackView.bottomAnchor, constant: 8),
             contentLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            contentLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
             collectionView.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 8),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            collectionView.heightAnchor.constraint(equalToConstant: 100),
+            collectionViewHeightConstraint,
+            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
             
-            dateLabel.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 8),
-            dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            dateLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+            dateLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            dateLabel.leadingAnchor.constraint(equalTo: usernameLabel.trailingAnchor, constant: 8),
+            dateLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
         ])
     }
     
@@ -146,6 +156,12 @@ class ReviewTableViewCell: UITableViewCell {
         dateLabel.text = review.createdAt
         
         self.photoUrls = review.photoUrls
+        if review.photoUrls.isEmpty {
+            collectionViewHeightConstraint.constant = 0
+        } else {
+            collectionViewHeightConstraint.constant = 100
+        }
+        
         collectionView.reloadData()
         
         var menuItems: [UIAction] = [UIAction(title: NSLocalizedString("report", comment: ""), image: UIImage(systemName: "exclamationmark.triangle"), handler: { _ in
@@ -242,6 +258,7 @@ extension ReviewTableViewCell: UICollectionViewDataSource, UICollectionViewDeleg
         // 이미지 뷰 생성 및 추가
         let imageView = UIImageView(frame: cell.contentView.bounds)
         imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 10
         imageView.clipsToBounds = true
         
         // 이미지 설정

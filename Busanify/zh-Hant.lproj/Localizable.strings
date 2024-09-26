@@ -34,7 +34,9 @@
 "editPost" = "編輯貼文";
 "save" = "保存";
 "writeContent" = "撰寫內容";
-"postUploadedSuccessfully" = "貼文上傳成功";
+"postSaved" = "貼文已成功保存";
+"reviewSaved" = "評論已成功保存";
+"changesSaved" = "更改已成功保存";
 "yearAgo" = " 年前";
 "monthAgo" = " 個月前";
 "dayAgo" = " 天前";
@@ -75,3 +77,7 @@
 "needLoginMessageForWriteComment" = "寫評論需要登入";
 "needLoginMessageForWriteReview" = "寫評價需要登入";
 "needLoginMessageForBookmark" = "收藏需要登入";
+"viewAllReviews" = "查看所有評論";
+"info" = "資訊";
+"review" = "評論";
+"langInLocalText" = "繁體中文";

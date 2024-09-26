@@ -36,7 +36,7 @@ class UserPostViewController: UIViewController {
     
     private func setupUI() {
         view.backgroundColor = .white
-        title = "My Community Post"
+        title = NSLocalizedString("myCommunityPost", comment: "")
         
         tableView.register(CommunityTableViewCell.self, forCellReuseIdentifier: CommunityTableViewCell.identifier)
         tableView.delegate = self

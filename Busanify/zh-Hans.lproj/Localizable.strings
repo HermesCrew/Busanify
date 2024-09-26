@@ -34,7 +34,9 @@
 "editPost" = "编辑帖子";
 "save" = "保存";
 "writeContent" = "写内容";
-"postUploadedSuccessfully" = "帖子上传成功";
+"postSaved" = "帖子已成功保存";
+"reviewSaved" = "评论已成功保存";
+"changesSaved" = "更改已成功保存";
 "yearAgo" = "年前";
 "monthAgo" = "个月前";
 "dayAgo" = "天前";
@@ -75,3 +77,7 @@
 "needLoginMessageForWriteComment" = "写评论需要登录";
 "needLoginMessageForWriteReview" = "写评价需要登录";
 "needLoginMessageForBookmark" = "收藏需要登录";
+"viewAllReviews" = "查看所有评论";
+"info" = "信息";
+"review" = "评论";
+"langInLocalText" = "简体中文";

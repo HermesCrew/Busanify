@@ -19,6 +19,13 @@ class SettingTableViewCell: UITableViewCell {
     
     private let cellLabel = UILabel()
     
+    private let label: UILabel = {
+        let label = UILabel()
+        label.textColor = .gray
+        
+        return label
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureUI()
@@ -31,10 +38,12 @@ class SettingTableViewCell: UITableViewCell {
     private func configureUI() {
         contentView.addSubview(iconImageView)
         contentView.addSubview(cellLabel)
+        contentView.addSubview(label)
         selectionStyle = .none
         
         iconImageView.translatesAutoresizingMaskIntoConstraints = false
         cellLabel.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             iconImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
@@ -42,13 +51,17 @@ class SettingTableViewCell: UITableViewCell {
             iconImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24),
             
             cellLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: 16),
-            cellLabel.centerYAnchor.constraint(equalTo: iconImageView.centerYAnchor)
+            cellLabel.centerYAnchor.constraint(equalTo: iconImageView.centerYAnchor),
+            
+            label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            label.centerYAnchor.constraint(equalTo: iconImageView.centerYAnchor),
         ])
     }
     
-    func configure(with settingInfo: (String, String)) {
+    func configure(with settingInfo: (String, String), labelText: String) {
         cellLabel.text = settingInfo.0
         iconImageView.image = UIImage(systemName: settingInfo.1)
+        label.text = labelText
     }
 }
 
