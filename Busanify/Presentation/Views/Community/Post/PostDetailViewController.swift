@@ -276,12 +276,13 @@ extension PostDetailViewController: UICollectionViewDataSource, UICollectionView
 }
 
 // Post 관련 로직을 처리하는 확장
-extension PostDetailViewController{
+extension PostDetailViewController {
     
     // 게시글 수정
     func updatePost() {
         let updatePostVC = UpdatePostViewController(postViewModel: postViewModel, post: post)
         updatePostVC.hidesBottomBarWhenPushed = true
+        updatePostVC.delegate = self
         navigationController?.pushViewController(updatePostVC, animated: true)
     }
 
@@ -398,5 +399,15 @@ extension PostDetailViewController: CommentTableViewCellDelegate {
         }
         
         present(alert, animated: true, completion: nil)
+    }
+}
+
+extension PostDetailViewController: AddPostViewControllerDelegate {
+    func didCreatePost() {
+        //
+    }
+    
+    func showToastMessage(_ message: String) {
+        showToast(view, message: message)
     }
 }
