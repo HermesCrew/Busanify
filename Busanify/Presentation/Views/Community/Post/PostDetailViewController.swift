@@ -10,7 +10,7 @@ import Kingfisher
 import Combine
 
 class PostDetailViewController: UIViewController {
-    private let post: Post
+    private var post: Post
     private let commentViewModel: CommentViewModel
     private let postViewModel: PostViewModel
     private let tableView = UITableView(frame: .zero, style: .grouped)
@@ -18,6 +18,8 @@ class PostDetailViewController: UIViewController {
     
     private let authViewModel = AuthenticationViewModel.shared
     private let keyChain = Keychain()
+    
+    weak var delegate: AddPostViewControllerDelegate?
 
     private lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
@@ -270,11 +272,24 @@ extension PostDetailViewController: UICollectionViewDataSource, UICollectionView
 }
 
 // Post 관련 로직을 처리하는 확장
-extension PostDetailViewController{
+extension PostDetailViewController: UpdatePostViewControllerDelegate {
+    func showToastMessage(messaage: String) {
+        self.showToast(view, message: messaage)
+    }
+    
+    func didUpdatePost(post: Post) {
+        delegate?.didCreatePost()
+        DispatchQueue.main.async {
+            self.post = post
+            self.contentLabel.text = post.content
+            self.collectionView.reloadData()
+        }
+    }
     
     // 게시글 수정
     func updatePost() {
         let updatePostVC = UpdatePostViewController(postViewModel: postViewModel, post: post)
+        updatePostVC.updateDelegate = self
         updatePostVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(updatePostVC, animated: true)
     }
@@ -298,6 +313,8 @@ extension PostDetailViewController{
         Task {
             do {
                 try await postViewModel.deletePost(token: authViewModel.getToken()!, id: post.id, photoUrls: post.photoUrls)
+                self.delegate?.didCreatePost()
+                self.delegate?.showToastMessage("게시글이 삭제되었습니다.")
                 navigationController?.popViewController(animated: true)
             } catch {
                 print("게시글 삭제 실패: \(error)")
@@ -340,6 +357,7 @@ extension PostDetailViewController: CommentTableViewCellDelegate {
                     tableView.endUpdates()
                 }
                 try await commentViewModel.deleteComment(token: authViewModel.getToken()!, id: comment.id)
+                self.delegate?.didCreatePost()
             } catch {
                 print("댓글 삭제 실패: \(error)")
             }

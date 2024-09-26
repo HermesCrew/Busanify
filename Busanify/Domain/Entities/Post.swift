@@ -9,8 +9,8 @@ import Foundation
 
 struct Post: Identifiable, Hashable, Codable {
     let id: Int
-    let content: String
-    let photoUrls: [String]
+    var content: String
+    var photoUrls: [String]
     let user: User
     let commentsCount: Int
     let createdAt: String
