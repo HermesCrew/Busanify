@@ -16,6 +16,8 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
     private var selections = [String : PHPickerResult]()
     private var selectedAssetIdentifiers = [String]()
     private var imageItems: [ImageData] = []
+    private var initialContent: String = ""
+    private var initialImageItems: [ImageData] = []
     
     weak var delegate: AddPostViewControllerDelegate?
     
@@ -73,6 +75,27 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
         return button
     }()
     
+    private let loadingView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        view.isHidden = true
+        return view
+    }()
+    
+    private let activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .white
+        return indicator
+    }()
+    
+    private let loadingLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Uploading"
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        return label
+    }()
+    
     init(postViewModel: PostViewModel, post: Post) {
         self.postViewModel = postViewModel
         self.post = post
@@ -99,32 +122,43 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
         photoCollectionView.reorderingCadence = .immediate
         
         photoCollectionView.register(PhotoCollectionViewCell.self, forCellWithReuseIdentifier: "PhotoCollectionViewCell")
+        
+        initialContent = post.content
+        initialImageItems = post.photoUrls.map { ImageData.url($0) }
     }
     
     private func configureUI() {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(cancelButtonTapped))
+        title = "Edit Post"
         view.backgroundColor = .systemBackground
         view.addSubview(addButton)
         view.addSubview(photoCollectionView)
         view.addSubview(contentTextView)
         view.addSubview(updateButton)
+        view.addSubview(loadingView)
+        loadingView.addSubview(activityIndicator)
+        loadingView.addSubview(loadingLabel)
         
         addButton.translatesAutoresizingMaskIntoConstraints = false
         photoCollectionView.translatesAutoresizingMaskIntoConstraints = false
         contentTextView.translatesAutoresizingMaskIntoConstraints = false
         updateButton.translatesAutoresizingMaskIntoConstraints = false
+        loadingView.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        loadingLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             addButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            addButton.widthAnchor.constraint(equalToConstant: 50),
-            addButton.heightAnchor.constraint(equalToConstant: 50),
+            addButton.widthAnchor.constraint(equalToConstant: 80),
+            addButton.heightAnchor.constraint(equalToConstant: 80),
             addButton.centerYAnchor.constraint(equalTo: photoCollectionView.centerYAnchor),
             
-            photoCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            photoCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             photoCollectionView.leadingAnchor.constraint(equalTo: addButton.trailingAnchor, constant: 16),
             photoCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            photoCollectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.20),
+            photoCollectionView.heightAnchor.constraint(equalToConstant: 120),
             
-            contentTextView.topAnchor.constraint(equalTo: photoCollectionView.bottomAnchor, constant: 16),
+            contentTextView.topAnchor.constraint(equalTo: photoCollectionView.bottomAnchor, constant: 10),
             contentTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             contentTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             contentTextView.bottomAnchor.constraint(equalTo: updateButton.topAnchor, constant: -16),
@@ -132,12 +166,57 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
             updateButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             updateButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             updateButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            updateButton.heightAnchor.constraint(equalToConstant: 50)
+            updateButton.heightAnchor.constraint(equalToConstant: 50),
+            
+            loadingView.topAnchor.constraint(equalTo: view.topAnchor),
+            loadingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            loadingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            loadingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: loadingView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: loadingView.centerYAnchor, constant: -20),
+            
+            loadingLabel.topAnchor.constraint(equalTo: activityIndicator.bottomAnchor, constant: 10),
+            loadingLabel.centerXAnchor.constraint(equalTo: loadingView.centerXAnchor)
         ])
     }
     
+    @objc private func cancelButtonTapped() {
+        let contentChanged = contentTextView.text != initialContent
+        let imagesChanged = imageItems != initialImageItems
+        
+        if contentChanged || imagesChanged {
+            let alert = UIAlertController(title: "Unsaved Changes", message: "You have unsaved changes.", preferredStyle: .alert)
+            
+            let discardAction = UIAlertAction(title: "Discard", style: .destructive) { _ in
+                self.navigationController?.popViewController(animated: true)
+            }
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            
+            alert.addAction(discardAction)
+            alert.addAction(cancelAction)
+            
+            present(alert, animated: true, completion: nil)
+        } else {
+            self.navigationController?.popViewController(animated: true)
+        }
+    }
+    
+    private func showLoading() {
+        navigationItem.leftBarButtonItem?.isEnabled = false
+        loadingView.isHidden = false
+        activityIndicator.startAnimating()
+        view.isUserInteractionEnabled = false
+    }
+    
+    private func hideLoading() {
+        loadingView.isHidden = true
+        activityIndicator.stopAnimating()
+        view.isUserInteractionEnabled = true
+    }
+    
     func configure() {
-//        self.existingImageUrls = post.photoUrls
+        //        self.existingImageUrls = post.photoUrls
         self.contentTextView.text = post.content
         self.imageItems = post.photoUrls.map { ImageData.url($0) }
         self.photoCollectionView.reloadData()
@@ -158,13 +237,13 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
         case .image(let image):
             cell.configure(with: image)
         }
-//        if indexPath.item < existingImageUrls.count {
-//            let imageUrl = existingImageUrls[indexPath.item]
-//            cell.configure(with: imageUrl)
-//        } else {
-//            let image = selectedImages[indexPath.item - existingImageUrls.count]
-//            cell.configure(with: image)
-//        }
+        //        if indexPath.item < existingImageUrls.count {
+        //            let imageUrl = existingImageUrls[indexPath.item]
+        //            cell.configure(with: imageUrl)
+        //        } else {
+        //            let image = selectedImages[indexPath.item - existingImageUrls.count]
+        //            cell.configure(with: image)
+        //        }
         cell.deleteButton.tag = indexPath.item
         cell.deleteButton.addTarget(self, action: #selector(self.deleteButtonTapped(_:)), for: .touchUpInside)
         
@@ -222,21 +301,21 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
     
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: any UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         let item = imageItems[indexPath.item]
-            let itemProvider: NSItemProvider
-            
-            switch item {
-            case .url(let urlString):
-                // URL String을 NSItemProvider에 제공
-                itemProvider = NSItemProvider(object: urlString as NSString)
-            case .image(let image):
-                // UIImage를 NSItemProvider에 제공
-                itemProvider = NSItemProvider(object: image)
-            }
-            
-            let dragItem = UIDragItem(itemProvider: itemProvider)
-            dragItem.localObject = item // 드래그하는 객체 자체를 보관
-            
-            return [dragItem]
+        let itemProvider: NSItemProvider
+        
+        switch item {
+        case .url(let urlString):
+            // URL String을 NSItemProvider에 제공
+            itemProvider = NSItemProvider(object: urlString as NSString)
+        case .image(let image):
+            // UIImage를 NSItemProvider에 제공
+            itemProvider = NSItemProvider(object: image)
+        }
+        
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = item // 드래그하는 객체 자체를 보관
+        
+        return [dragItem]
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -269,18 +348,32 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     private func updatePost() {
+        showLoading()
         Task {
             do {
                 try await postViewModel.updatePost(token: authViewModel.getToken(), id: post.id, content: contentTextView.text, photos: imageItems)
-            
-                DispatchQueue.main.async {
+                
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.hideLoading()
                     self.delegate?.didCreatePost()
                     self.navigationController?.popViewController(animated: true)
+                    self.delegate?.showToastMessage("Post edited successfully")
                 }
             } catch {
                 print("Failed to create post: \(error)")
+                DispatchQueue.main.async { [weak self] in
+                    self?.hideLoading()
+                    self?.showErrorAlert(message: "Failed to create post. Please try again.")
+                }
             }
         }
+    }
+    
+    private func showErrorAlert(message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
     
     private func setupTapGesture() {
@@ -288,7 +381,7 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
     }
-
+    
     @objc private func dismissKeyboard() {
         view.endEditing(true)
     }
@@ -376,3 +469,15 @@ protocol UpdatePostViewControllerDelegate: NSObject {
     func didCreatePost()
 }
 
+extension ImageData: Equatable {
+    static func == (lhs: ImageData, rhs: ImageData) -> Bool {
+        switch (lhs, rhs) {
+        case (.url(let lhsUrl), .url(let rhsUrl)):
+            return lhsUrl == rhsUrl
+        case (.image(let lhsImage), .image(let rhsImage)):
+            return lhsImage.pngData() == rhsImage.pngData()
+        default:
+            return false
+        }
+    }
+}
