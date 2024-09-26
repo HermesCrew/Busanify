@@ -85,11 +85,6 @@ final class PlacesApi: HomeViewUseCase, PlaceDetailViewUseCase, PlaceListViewUse
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
         return URLSession.shared.dataTaskPublisher(for: request)
-            .handleEvents(receiveOutput: { output in
-                if let jsonString = String(data: output.data, encoding: .utf8) {
-                    print("Received JSON: \(jsonString)")
-                }
-            })
             .map(\.data)
             .decode(type: [Bookmark].self, decoder: JSONDecoder())
             .eraseToAnyPublisher()
