@@ -13,13 +13,12 @@ class SignInViewController: UIViewController {
     
     private let viewModel = AuthenticationViewModel.shared
     
-    private lazy var titleLabel: UILabel = {
-        let titleLabel = UILabel()
-        titleLabel.text = "BUSANIFY"
-        titleLabel.font = UIFont.systemFont(ofSize: 36, weight: .bold)
-        titleLabel.textAlignment = .center
-        
-        return titleLabel
+    private lazy var logoImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "LOGO")
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
     }()
     
     private lazy var googleSignInButton: UIButton = {
@@ -41,8 +40,11 @@ class SignInViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         
         button.addAction(UIAction { [weak self] _ in
-            self?.viewModel.googleSignIn()
-            self?.navigationController?.popViewController(animated: true)
+            self?.viewModel.googleSignIn { success in
+                if success {
+                    self?.dismiss(animated: true, completion: nil)
+                }
+            }
         }, for: .touchUpInside)
         
         return button
@@ -68,7 +70,6 @@ class SignInViewController: UIViewController {
         
         button.addAction(UIAction { [weak self] _ in
             self?.appleSignIn()
-//            self?.navigationController?.popViewController(animated: true) // 이전 뷰로 돌아가는게 안됨..
         }, for: .touchUpInside)
         
         return button
@@ -90,11 +91,11 @@ class SignInViewController: UIViewController {
         stackView.distribution = .fillEqually
         
         view.addSubview(stackView)
-        view.addSubview(titleLabel)
-        
+        view.addSubview(logoImageView)
+
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
+        logoImageView.translatesAutoresizingMaskIntoConstraints = false
+
         NSLayoutConstraint.activate([
             
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -102,8 +103,10 @@ class SignInViewController: UIViewController {
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40),
             
-            titleLabel.bottomAnchor.constraint(equalTo: stackView.topAnchor, constant: -60),
-            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            logoImageView.bottomAnchor.constraint(equalTo: stackView.topAnchor, constant: -60),
+            logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            logoImageView.widthAnchor.constraint(equalToConstant: 200),
+            logoImageView.heightAnchor.constraint(equalToConstant: 200)
         ])
     }
 }
@@ -130,11 +133,14 @@ extension SignInViewController: ASAuthorizationControllerDelegate, ASAuthorizati
         case let appleIDCredential as ASAuthorizationAppleIDCredential:
             // You can create an account in your system.
             let userIdentifier = appleIDCredential.user
-            let fullName = appleIDCredential.fullName ?? PersonNameComponents()
             
             if let authorizationCode = appleIDCredential.authorizationCode,
                 let authCodeString = String(data: authorizationCode, encoding: .utf8) {
-                self.viewModel.appleSignIn(code: authCodeString, username: PersonNameComponentsFormatter().string(from: fullName), userId: userIdentifier)
+                self.viewModel.appleSignIn(code: authCodeString, userId: userIdentifier) { success in
+                    if success {
+                        self.dismiss(animated: true, completion: nil)
+                    }
+                }
             }
         default:
             break

@@ -9,5 +9,10 @@ import Foundation
 import Combine
 
 protocol PlaceDetailViewUseCase {
-    func getPlace(by id: Int, lang: String) -> AnyPublisher<Place, Never>
+    func getPlace(by id: String, lang: String, token: String?) -> AnyPublisher<Place, Never>
+    func toggleBookmark(placeId: String, token: String) async throws
+}
+
+protocol MoveToMapLocation {
+    func moveTo(lat: CGFloat, lng: CGFloat)
 }

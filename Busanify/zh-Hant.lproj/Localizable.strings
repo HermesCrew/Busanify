@@ -1,0 +1,77 @@
+/* 
+  Localizable.strings
+  Busanify
+
+  Created by 이인호 on 9/25/24.
+  
+*/
+
+"lang" = "cht";
+"home" = "主頁";
+"bookmark" = "書籤";
+"community" = "社區";
+"setting" = "設定";
+"weather" = "天氣";
+"myReview" = "我的評論";
+"myCommunityPost" = "我的社區貼文";
+"language" = "語言";
+"privacyPolicy" = "隱私政策";
+"version" = "版本";
+"logout" = "登出";
+"deleteAccount" = "刪除帳戶";
+"addProfileImage" = "新增個人圖片";
+"selectImage" = "選擇圖片";
+"deleteExistImage" = "刪除現有圖片";
+"report" = "舉報";
+"reportReview" = "舉報評價";
+"reportPost" = "舉報貼文";
+"reportComment" = "舉報評論";
+"writeTheReason" = "請寫下原因";
+"edit" = "編輯";
+"delete" = "刪除";
+"addComment" = "新增評論";
+"addPost" = "新增貼文";
+"editPost" = "編輯貼文";
+"save" = "保存";
+"writeContent" = "撰寫內容";
+"postUploadedSuccessfully" = "貼文上傳成功";
+"yearAgo" = " 年前";
+"monthAgo" = " 個月前";
+"dayAgo" = " 天前";
+"hourAgo" = " 小時前";
+"minuteAgo" = " 分鐘前";
+"secondAgo" = " 秒前";
+"now" = "現在";
+"cancel" = "取消";
+"delete" = "刪除";
+"deletePost" = "刪除貼文？";
+"postWillBeDeleted" = "此操作無法撤銷";
+"wouldYouLikeToLogout" = "您確定要登出嗎？";
+"discardUnsavedChanges" = "放棄未保存的更改？";
+"discardUnsavedChangesMessageForAdd" = "這將丟棄您的草稿";
+"discardUnsavedChangesMessageForEdit" = "這將刪除所有編輯";
+"discard" = "放棄";
+"deleteAccount" = "刪除帳戶";
+"deleteAccountAsk" = "刪除帳戶？";
+"deleteAccountMessage" = "所有數據將被移除";
+"bookmarkEmpty" = "沒有書籤地點";
+"postEmpty" = "成為第一個撰寫貼文的人！";
+"touristAttraction" = "景點";
+"shopping" = "購物";
+"accommodation" = "住宿";
+"restaurant" = "餐廳";
+"search" = "搜索";
+"Highest" = "最高";
+"Lowest" = "最低";
+"today" = "今天";
+"viewAsList" = "列表顯示";
+"viewAsGrid" = "網格顯示";
+"error" = "錯誤";
+"ok" = "確定";
+"needLogin" = "需要登入";
+"login" = "登入";
+"needLoginMessageForReport" = "舉報需要登入";
+"needLoginMessageForWritePost" = "發帖需要登入";
+"needLoginMessageForWriteComment" = "寫評論需要登入";
+"needLoginMessageForWriteReview" = "寫評價需要登入";
+"needLoginMessageForBookmark" = "收藏需要登入";

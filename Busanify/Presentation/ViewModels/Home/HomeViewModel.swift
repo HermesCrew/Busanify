@@ -11,37 +11,67 @@ import Combine
 
 class HomeViewModel {
     @Published var searchedPlaces: [Place] = []
+    @Published var textSearchedPlaces: [Place] = []
     
+    @Published var searchText: String = ""
+    
+    var currentLong: CGFloat = 0
+    var currentLat: CGFloat = 0
     private let placeService = PlacesApi()
     private let locationManager = CLLocationManager()
     private var cancellable = Set<AnyCancellable>()
-    var currentLong: CGFloat? = nil
-    var currentLat: CGFloat? = nil
+    private let latRange = 34.8799083...35.3959361
+    private let longRange = 128.7384361...129.3728194
     
-    init() {        
+    init() {
+        resetCoordinates()
+        
+        self.$searchText
+            .removeDuplicates()
+            .sink { [weak self] text in
+                guard let self = self else { return }
+                self.getLocationsBy(keyword: text)
+            }
+            .store(in: &cancellable)
+    }
+    
+    func resetCoordinates() {
         if locationManager.authorizationStatus == .authorizedAlways ||
             locationManager.authorizationStatus == .authorizedWhenInUse {
-            if let location = locationManager.location {
-                currentLong = location.coordinate.longitude
-                currentLat = location.coordinate.latitude
+            if let location = locationManager.location,
+               longRange.contains(location.coordinate.longitude),
+               latRange.contains(location.coordinate.latitude) {
+                    currentLong = location.coordinate.longitude
+                    currentLat = location.coordinate.latitude
+            } else {
+                // default(임시로 서면역으로 설정) 위, 경도
+                currentLong = 129.0595
+                currentLat = 35.1577
             }
         } else {
             locationManager.requestWhenInUseAuthorization()
         }
     }
     
-    func getLocationBy(lat: CGFloat, lng: CGFloat, radius: Double) {
-        placeService.getPlaces(by: .shopping, lang: "eng", lat: lat, lng: lng, radius: radius)
+    func getCurrentLocation() -> (CGFloat, CGFloat) {
+        guard let location = locationManager.location else { return (0, 0) }
+        if longRange.contains(location.coordinate.longitude),
+           latRange.contains(location.coordinate.latitude) {
+            return (location.coordinate.longitude, location.coordinate.latitude)
+        } else {
+            return (129.0595, 35.1577)
+        }
+    }
+    
+    func getLocationBy(typeId: PlaceType, lat: CGFloat, lng: CGFloat, radius: Double) {
+        placeService.getPlaces(by: typeId, lang: NSLocalizedString("lang", comment: ""), lat: lat, lng: lng, radius: radius)
             .receive(on: DispatchQueue.global())
             .assign(to: &$searchedPlaces)
     }
     
     func getLocationsBy(keyword: String) {
-        placeService.getPlaces(by: keyword, lang: "eng")
-//            .debounce(for: 0.8, scheduler: RunLoop.current)
-            .removeDuplicates()
+        placeService.getPlaces(by: keyword, lang: NSLocalizedString("lang", comment: ""))
             .receive(on: DispatchQueue.global())
-            .share()
-            .assign(to: &$searchedPlaces)
+            .assign(to: &$textSearchedPlaces)
     }
 }

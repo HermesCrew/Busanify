@@ -28,4 +28,6 @@ struct Place: Identifiable, Hashable, Codable {
     let restroom: Int?
     let isBookmarked: Bool
     let avgRating: Double
+    let reviews: [Review]?
+    let reviewCount: Int?
 }

@@ -8,8 +8,9 @@
 import Foundation
 import Combine
 
-final class PlacesApi: HomeViewUseCase, PlaceDetailViewUseCase {
+final class PlacesApi: HomeViewUseCase, PlaceDetailViewUseCase, PlaceListViewUseCase {
     private let baseURL: String
+    var cancellables = Set<AnyCancellable>()
     
     init() {
         guard let baseURL = Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String else {
@@ -20,6 +21,7 @@ final class PlacesApi: HomeViewUseCase, PlaceDetailViewUseCase {
     
     func getPlaces(by typeId: PlaceType, lang: String, lat: Double, lng: Double, radius: Double) -> AnyPublisher<[Place], Never> {
         let urlString = "\(baseURL)/places/searchByType?typeId=\(typeId.rawValue)&lang=\(lang)&lat=\(lat)&lng=\(lng)&radius=\(radius)"
+        
         guard let url = URL(string: urlString) else {
             fatalError("Invalid URL")
         }
@@ -50,21 +52,59 @@ final class PlacesApi: HomeViewUseCase, PlaceDetailViewUseCase {
             .eraseToAnyPublisher()
     }
     
-    func getPlace(by id: Int, lang: String) -> AnyPublisher<Place, Never> {
-        let urlString = "\(baseURL)/place?id=\(id)&lang=\(lang)"
+    func getPlace(by id: String, lang: String, token: String?) -> AnyPublisher<Place, Never> {
+        let urlString = "\(baseURL)/places?id=\(id)&lang=\(lang)"
         guard let url = URL(string: urlString) else {
             fatalError("Invalid URL")
         }
         
-        return URLSession.shared.dataTaskPublisher(for: url)
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        if let token = token {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
             .map(\.data)
-            .handleEvents(receiveOutput: { data in
-                if let jsonString = String(data: data, encoding: .utf8) {
-                    print("Response JSON: \(jsonString)")
-                }
+            .handleEvents(receiveCompletion: {
+                print($0)
             })
             .decode(type: Place.self, decoder: JSONDecoder())
-            .replaceError(with: Place(id: "", typeId: "", image: "", lat: 0, lng: 0, tel: "", title: "", address: "", openTime: nil, parking: nil, holiday: nil, fee: nil, reservationURL: nil, goodStay: nil, hanok: nil, menu: nil, shopguide: nil, restroom: nil, isBookmarked: false, avgRating: 0.0))
+            .replaceError(with: Place(id: "", typeId: "", image: "", lat: 0, lng: 0, tel: "", title: "", address: "", openTime: nil, parking: nil, holiday: nil, fee: nil, reservationURL: nil, goodStay: nil, hanok: nil, menu: nil, shopguide: nil, restroom: nil, isBookmarked: false, avgRating: 0.0, reviews: nil, reviewCount: nil))
             .eraseToAnyPublisher()
+    }
+    
+    func getBookmarkedPlaces(token: String, lang: String) -> AnyPublisher<[Bookmark], Error> {
+        let urlString = "\(baseURL)/bookmarks/user?lang=\(lang)"
+        guard let url = URL(string: urlString) else {
+            return Fail(error: NetworkError.invalidURL).eraseToAnyPublisher()
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map(\.data)
+            .decode(type: [Bookmark].self, decoder: JSONDecoder())
+            .eraseToAnyPublisher()
+    }
+    
+    func toggleBookmark(placeId: String, token: String) async throws {
+        let urlString = "\(baseURL)/bookmarks/toggle"
+        guard let url = URL(string: urlString) else {
+            fatalError("Invalid URL")
+        }
+        
+        let json: [String: String] = ["placeId": placeId]
+        let jsonData = try? JSONSerialization.data(withJSONObject: json)
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.httpBody = jsonData
+        
+        let (_, _) = try await URLSession.shared.data(for: request)
     }
 }
