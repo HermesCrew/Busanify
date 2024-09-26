@@ -366,20 +366,30 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let settingInfos =  [(NSLocalizedString("myReview", comment: ""), "doc.text.magnifyingglass"), (NSLocalizedString("myCommunityPost", comment: ""), "square.and.pencil"), (NSLocalizedString("language", comment: ""), "globe"), (NSLocalizedString("privacyPolicy", comment: ""), "shield.lefthalf.fill"), (NSLocalizedString("version", comment: ""), "info.circle"), (NSLocalizedString("logout", comment: ""), "rectangle.portrait.and.arrow.right")]
+        let settingInfos =  [(NSLocalizedString("myReview", comment: ""), "doc.text.magnifyingglass"), (NSLocalizedString("myCommunityPost", comment: ""), "square.and.pencil"), (NSLocalizedString("privacyPolicy", comment: ""), "shield.lefthalf.fill"), (NSLocalizedString("language", comment: ""), "globe"), (NSLocalizedString("version", comment: ""), "info.circle"), (NSLocalizedString("logout", comment: ""), "rectangle.portrait.and.arrow.right")]
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingTableViewCell.identifier, for: indexPath) as? SettingTableViewCell else {
             return UITableViewCell()
         }
         
         let settingInfo = settingInfos[indexPath.row]
-        cell.configure(with: settingInfo)
         cell.selectionStyle = .none
             
         switch indexPath.row {
-        case 0, 1, 2, 3:
+        case 0, 1, 2:
+            cell.configure(with: settingInfo, labelText: "")
             cell.accessoryType = .disclosureIndicator
+        case 3:
+            cell.configure(with: settingInfo, labelText: NSLocalizedString("langInLocalText", comment: ""))
+            cell.accessoryType = .none
+        case 4:
+            cell.configure(with: settingInfo, labelText: "1.0")
+            cell.accessoryType = .none
+        case 5:
+            cell.configure(with: settingInfo, labelText: "")
+            cell.accessoryType = .none
         default:
+            cell.configure(with: settingInfo, labelText: "")
             cell.accessoryType = .none
         }
         
@@ -392,6 +402,9 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
         } else if indexPath.row == 1 {
             let userPostVC = UserPostViewController()
             navigationController?.pushViewController(userPostVC, animated: true)
+        } else if indexPath.row == 2 {
+            let privacyPolicyVC = PrivacyPolicyViewController()
+            navigationController?.pushViewController(privacyPolicyVC, animated: true)
         }
     }
 }
