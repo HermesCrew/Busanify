@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class CommunityTableViewCell: UITableViewCell {
     static let identifier = "community"
@@ -107,13 +108,8 @@ class CommunityTableViewCell: UITableViewCell {
     }
     
     @objc private func didTapContentLabel() {
-        if contentLabel.numberOfLines == 0 {
-            contentLabel.numberOfLines = 5
-        } else {
-            contentLabel.numberOfLines = 0
-        }
-        
-        self.delegate?.expandPost(cell: self)
+        guard let post = self.post else { return }
+        self.delegate?.showPostDetail(post:post)
     }
     
     // 게시글 삭제 Alert
@@ -283,6 +279,20 @@ protocol CommunityTableViewCellDelegate: NSObject {
     func didDeletePost(_ post: Post)
     func updatePost(_ post: Post)
     func reportPost(_ post: Post)
-    func expandPost(cell: CommunityTableViewCell)
+//    func expandPost(cell: CommunityTableViewCell)
     func commentButtonTapped(_ post: Post)
+    func showPostDetail(post: Post)
+}
+
+
+extension CommunityTableViewCell: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // 선택한 이미지 URL 오 ImagePreviewViewController에 전달
+        let previewVC = ImagePreviewViewController(imageUrls: photoUrls)
+        previewVC.modalPresentationStyle = .overFullScreen
+        
+        if let viewController = self.delegate as? UIViewController {
+            viewController.present(previewVC, animated: true, completion: nil)
+        }
+    }
 }

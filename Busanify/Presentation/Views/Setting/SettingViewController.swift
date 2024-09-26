@@ -34,7 +34,7 @@ class SettingViewController: UIViewController {
         imageView.contentMode = .scaleAspectFill
         imageView.tintColor = .black
         imageView.backgroundColor = .lightGray
-        imageView.layer.cornerRadius = 60
+        imageView.layer.cornerRadius = 75
         imageView.clipsToBounds = true
         
         return imageView
@@ -48,12 +48,19 @@ class SettingViewController: UIViewController {
         imageView.backgroundColor = .white
         imageView.layer.cornerRadius = 15
         imageView.clipsToBounds = true
+        
+        imageView.layer.shadowColor = UIColor.black.cgColor
+        imageView.layer.shadowOpacity = 0.1 // 그림자 불투명도 (0.0 ~ 1.0)
+        imageView.layer.shadowOffset = CGSize(width: 1, height: 1) // 그림자 위치 (x, y)
+        imageView.layer.shadowRadius = 1 // 그림자 퍼짐 정도
+        imageView.layer.masksToBounds = false
+        
+        
         return imageView
     }()
     
     private lazy var nicknameLabel: UILabel = {
         let nameLabel = UILabel()
-//        nameLabel.font = UIFont.systemFont(ofSize: 36, weight: .bold)
         
         return nameLabel
     }()
@@ -70,11 +77,18 @@ class SettingViewController: UIViewController {
         return textField
     }()
     
+    private lazy var buttonToLabelConstraint: NSLayoutConstraint = {
+       return editNicknameButton.leadingAnchor.constraint(equalTo: nicknameLabel.trailingAnchor)
+    }()
+    
+    private lazy var buttonToTextFieldConstraint: NSLayoutConstraint = {
+       return editNicknameButton.leadingAnchor.constraint(equalTo: nicknameTextField.trailingAnchor)
+    }()
+    
     private lazy var editNicknameButton: UIButton = {
-        var config = UIButton.Configuration.filled()
+        var config = UIButton.Configuration.plain()
         config.image = UIImage(systemName: "pencil")
         config.baseForegroundColor = .black
-        config.baseBackgroundColor = .white
         let button = UIButton(configuration: config)
         button.addTarget(self, action: #selector(editNickname), for: .touchUpInside)
         
@@ -106,7 +120,12 @@ class SettingViewController: UIViewController {
         return indicator
     }()
     
-    private let footerView = UIView()
+    private lazy var footerView: UIView = {
+        let view = UIView()
+        view.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
+        
+        return view
+    }()
     
     private lazy var footerButton: UIButton = {
         let button = UIButton()
@@ -136,13 +155,18 @@ class SettingViewController: UIViewController {
         
         view.addSubview(loginButton)
         view.addSubview(profileImageView)
+        view.addSubview(cameraIconView)
         view.addSubview(nicknameLabel)
         view.addSubview(nicknameTextField)
         view.addSubview(editNicknameButton)
         view.addSubview(emailLabel)
         view.addSubview(settingTableView)
+        view.addSubview(loadingIndicator)
         footerView.addSubview(footerButton)
         settingTableView.tableFooterView = footerView
+        
+        buttonToLabelConstraint.isActive = true
+        buttonToTextFieldConstraint.isActive = false
         
         loginButton.translatesAutoresizingMaskIntoConstraints = false
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -152,11 +176,7 @@ class SettingViewController: UIViewController {
         emailLabel.translatesAutoresizingMaskIntoConstraints = false
         settingTableView.translatesAutoresizingMaskIntoConstraints = false
         footerButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(loadingIndicator)
         loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(cameraIconView)
         cameraIconView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -165,21 +185,21 @@ class SettingViewController: UIViewController {
             
             profileImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             profileImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            profileImageView.widthAnchor.constraint(equalToConstant: 120),
-            profileImageView.heightAnchor.constraint(equalToConstant: 120),
+            profileImageView.widthAnchor.constraint(equalToConstant: 150),
+            profileImageView.heightAnchor.constraint(equalToConstant: 150),
             
-            cameraIconView.widthAnchor.constraint(equalToConstant: 30),   // 카메라 아이콘 크기 설정
+            cameraIconView.widthAnchor.constraint(equalToConstant: 30),
             cameraIconView.heightAnchor.constraint(equalToConstant: 30),
-            cameraIconView.trailingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: -5), // 오른쪽 하단에 위치
-            cameraIconView.bottomAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: -5),
+            cameraIconView.trailingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: -15), // 오른쪽 하단에 위치
+            cameraIconView.bottomAnchor.constraint(equalTo: profileImageView.bottomAnchor),
             
             nicknameLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 10),
             nicknameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             nicknameTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             nicknameTextField.centerYAnchor.constraint(equalTo: nicknameLabel.centerYAnchor),
-            
-            editNicknameButton.leadingAnchor.constraint(equalTo: nicknameLabel.trailingAnchor, constant: 14),
+        
+            buttonToLabelConstraint,
             editNicknameButton.centerYAnchor.constraint(equalTo: nicknameLabel.centerYAnchor),
             
             emailLabel.topAnchor.constraint(equalTo: nicknameLabel.bottomAnchor, constant: 8),
@@ -255,9 +275,13 @@ class SettingViewController: UIViewController {
             nicknameTextField.text = nicknameLabel.text
             nicknameTextField.becomeFirstResponder()
             editNicknameButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
+            buttonToLabelConstraint.isActive = false
+            buttonToTextFieldConstraint.isActive = true
         } else {
             nicknameLabel.isHidden = false
             nicknameTextField.isHidden = true
+            buttonToLabelConstraint.isActive = true
+            buttonToTextFieldConstraint.isActive = false
             
             if let newName = nicknameTextField.text, !newName.isEmpty, nicknameTextField.text != nicknameLabel.text {
                 self.viewModel.updateProfileNickname(nickname: newName) { [weak self] success in
@@ -419,5 +443,17 @@ extension SettingViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        // 현재 텍스트 필드의 텍스트
+        let currentText = textField.text ?? ""
+        
+        // 새로 입력될 텍스트
+        guard let stringRange = Range(range, in: currentText) else { return false }
+        let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+        
+        // 글자 수 제한 (예: 20자)
+        return updatedText.count <= 20
     }
 }

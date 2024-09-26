@@ -8,16 +8,15 @@
 import UIKit
 import PhotosUI
 
-class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDragDelegate, UICollectionViewDropDelegate {
     private let postViewModel: PostViewModel
     private let authViewModel = AuthenticationViewModel.shared
     private let post: Post
     
     private var selections = [String : PHPickerResult]()
     private var selectedAssetIdentifiers = [String]()
-    private var existingImageUrls: [String] = []
-    private var selectedImages: [UIImage] = []
-
+    private var imageItems: [ImageData] = []
+    
     weak var delegate: AddPostViewControllerDelegate?
     
     private lazy var addButton: UIButton = {
@@ -94,6 +93,8 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
         contentTextView.delegate = self
         photoCollectionView.delegate = self
         photoCollectionView.dataSource = self
+        photoCollectionView.dragDelegate = self
+        photoCollectionView.dropDelegate = self
         photoCollectionView.dragInteractionEnabled = true
         photoCollectionView.reorderingCadence = .immediate
         
@@ -136,30 +137,106 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     func configure() {
-        self.existingImageUrls = post.photoUrls
+//        self.existingImageUrls = post.photoUrls
         self.contentTextView.text = post.content
-        
+        self.imageItems = post.photoUrls.map { ImageData.url($0) }
         self.photoCollectionView.reloadData()
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.existingImageUrls.count + self.selectedImages.count
+        return self.imageItems.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCollectionViewCell", for: indexPath) as! PhotoCollectionViewCell
         
-        if indexPath.item < existingImageUrls.count {
-            let imageUrl = existingImageUrls[indexPath.item]
+        let imageData = imageItems[indexPath.item]
+        
+        switch imageData {
+        case .url(let imageUrl):
             cell.configure(with: imageUrl)
-        } else {
-            let image = selectedImages[indexPath.item - existingImageUrls.count]
+        case .image(let image):
             cell.configure(with: image)
         }
+//        if indexPath.item < existingImageUrls.count {
+//            let imageUrl = existingImageUrls[indexPath.item]
+//            cell.configure(with: imageUrl)
+//        } else {
+//            let image = selectedImages[indexPath.item - existingImageUrls.count]
+//            cell.configure(with: image)
+//        }
         cell.deleteButton.tag = indexPath.item
         cell.deleteButton.addTarget(self, action: #selector(self.deleteButtonTapped(_:)), for: .touchUpInside)
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+        guard let destinationIndexPath = coordinator.destinationIndexPath else { return }
+        
+        for item in coordinator.items {
+            if let sourceIndexPath = item.sourceIndexPath {
+                collectionView.performBatchUpdates({
+                    // 데이터 소스 업데이트
+                    let movedItem = imageItems.remove(at: sourceIndexPath.item)
+                    imageItems.insert(movedItem, at: destinationIndexPath.item)
+                    
+                    // 컬렉션 뷰에서 셀 이동
+                    collectionView.moveItem(at: sourceIndexPath, to: destinationIndexPath)
+                }, completion: { _ in
+                    self.updateCellTags()
+                })
+                coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
+            }
+        }
+    }
+    
+    private func updateCellTags() {
+        let totalItems = photoCollectionView.numberOfItems(inSection: 0)  // 섹션이 하나이므로 0번째 섹션 사용
+        for item in 0..<totalItems {
+            let indexPath = IndexPath(item: item, section: 0)
+            if let cell = photoCollectionView.cellForItem(at: indexPath) as? PhotoCollectionViewCell {
+                cell.deleteButton.tag = item
+            }
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
+        return session.localDragSession != nil
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, dragPreviewParametersForItemAt indexPath: IndexPath) -> UIDragPreviewParameters? {
+        let parameters = UIDragPreviewParameters()
+        
+        // 꾹 누르고 이미지 이동 시 둥글게 유지되도록
+        if let cell = collectionView.cellForItem(at: indexPath) as? PhotoCollectionViewCell {
+            parameters.visiblePath = UIBezierPath(roundedRect: cell.imageView.bounds, cornerRadius: 10)
+        }
+        
+        return parameters
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+        return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: any UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        let item = imageItems[indexPath.item]
+            let itemProvider: NSItemProvider
+            
+            switch item {
+            case .url(let urlString):
+                // URL String을 NSItemProvider에 제공
+                itemProvider = NSItemProvider(object: urlString as NSString)
+            case .image(let image):
+                // UIImage를 NSItemProvider에 제공
+                itemProvider = NSItemProvider(object: image)
+            }
+            
+            let dragItem = UIDragItem(itemProvider: itemProvider)
+            dragItem.localObject = item // 드래그하는 객체 자체를 보관
+            
+            return [dragItem]
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -180,11 +257,7 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
     @objc private func deleteButtonTapped(_ sender: UIButton) {
         let index = sender.tag
         
-        if index < existingImageUrls.count {
-            existingImageUrls.remove(at: index)
-        } else {
-            selectedImages.remove(at: index - existingImageUrls.count)
-        }
+        imageItems.remove(at: index)
         
         DispatchQueue.main.async {
             self.photoCollectionView.performBatchUpdates({
@@ -198,7 +271,7 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
     private func updatePost() {
         Task {
             do {
-                try await postViewModel.updatePost(token: authViewModel.getToken(), id: post.id, content: contentTextView.text, photos: selectedImages, existingImageUrls: existingImageUrls)
+                try await postViewModel.updatePost(token: authViewModel.getToken(), id: post.id, content: contentTextView.text, photos: imageItems)
             
                 DispatchQueue.main.async {
                     self.delegate?.didCreatePost()
@@ -267,7 +340,7 @@ extension UpdatePostViewController: PHPickerViewControllerDelegate {
             // 선택한 이미지의 순서대로 정렬하여 스택뷰에 올리기
             for identifier in self.selectedAssetIdentifiers {
                 guard let image = imagesDict[identifier] else { return }
-                self.selectedImages.append(image)
+                self.imageItems.append(ImageData.image(image))
             }
             
             self.photoCollectionView.reloadData()

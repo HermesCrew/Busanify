@@ -26,9 +26,9 @@ final class PlaceDetailViewModel {
             .assign(to: &$place)
     }
     
-    func toggleBookmarkPlace(token: String?) {
+    func toggleBookmarkPlace(token: String?) async throws {
         guard let token = token else { return }
         
-        useCase.toggleBookmark(placeId: placeId, token: token)
+        try await useCase.toggleBookmark(placeId: placeId, token: token)
     }
 }
