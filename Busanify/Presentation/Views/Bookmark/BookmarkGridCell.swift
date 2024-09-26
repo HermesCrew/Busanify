@@ -66,7 +66,6 @@ class BookmarkGridCell: UICollectionViewCell {
             gridImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
             gridImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
             gridImageView.heightAnchor.constraint(equalToConstant: 110),
-            gridImageView.widthAnchor.constraint(equalToConstant: 110),
             
             titleLabel.topAnchor.constraint(equalTo: gridImageView.bottomAnchor, constant: 4),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
