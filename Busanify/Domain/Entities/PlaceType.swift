@@ -18,13 +18,13 @@ enum PlaceType: Int, Codable, CaseIterable {
         get {
             switch self {
             case .touristAttraction:
-                return ("관광지", "flag.fill", UIColor.systemRed)
+                return (NSLocalizedString("touristAttraction", comment: ""), "flag.fill", UIColor.systemRed)
             case .restaurant:
-                return ("음식점", "fork.knife", UIColor.systemOrange)
+                return (NSLocalizedString("restaurant", comment: ""), "fork.knife", UIColor.systemOrange)
             case .accommodation:
-                return ("숙박", "bed.double.fill", UIColor.systemYellow)
+                return (NSLocalizedString("accommodation", comment: ""), "bed.double.fill", UIColor.systemYellow)
             case .shopping:
-                return ("쇼핑", "handbag.fill", UIColor.systemPurple)
+                return (NSLocalizedString("shopping", comment: ""), "handbag.fill", UIColor.systemPurple)
             }
         }
     }

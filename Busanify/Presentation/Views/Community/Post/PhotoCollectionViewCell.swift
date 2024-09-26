@@ -22,9 +22,8 @@ class PhotoCollectionViewCell: UICollectionViewCell {
     
     let deleteButton: UIButton = {
         let button = UIButton(type: .custom)
-        let deleteImage = UIImage(systemName: "x.circle.fill")
+        let deleteImage = UIImage(systemName: "x.circle.fill")?.withRenderingMode(.alwaysOriginal)
         button.setImage(deleteImage, for: .normal)
-        button.tintColor = .gray
         return button
     }()
     
@@ -50,8 +49,8 @@ class PhotoCollectionViewCell: UICollectionViewCell {
             
             deleteButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: -10),
             deleteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 10),
-            deleteButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.22),
-            deleteButton.heightAnchor.constraint(equalTo: deleteButton.widthAnchor)
+            deleteButton.widthAnchor.constraint(equalToConstant: 44),
+            deleteButton.heightAnchor.constraint(equalToConstant: 44)
         ])
     }
     

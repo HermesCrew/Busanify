@@ -49,34 +49,34 @@ struct Post: Identifiable, Hashable, Codable {
 
         // 1년 이상
         if let years = components.year, years > 0 {
-            return "\(years) years ago"
+            return "\(years)\(NSLocalizedString("yearAgo", comment: ""))"
         }
         
         // 1달 이상
         if let months = components.month, months > 0 {
-            return "\(months) months ago"
+            return "\(months)\(NSLocalizedString("monthAgo", comment: ""))"
         }
         
         // 1일 이상
         if let days = components.day, days > 0 {
-            return "\(days) days ago"
+            return "\(days)\(NSLocalizedString("dayAgo", comment: ""))"
         }
         
         // 1시간 이상
         if let hours = components.hour, hours > 0 {
-            return "\(hours) hours ago"
+            return "\(hours)\(NSLocalizedString("hourAgo", comment: ""))"
         }
         
         // 1분 이상
         if let minutes = components.minute, minutes > 0 {
-            return "\(minutes) minutes ago"
+            return "\(minutes)\(NSLocalizedString("minuteAgo", comment: ""))"
         }
         
         // 1분 이내
         if let seconds = components.second, seconds > 0 {
-            return "\(seconds) seconds ago"
+            return "\(seconds)\(NSLocalizedString("secondAgo", comment: ""))"
         }
         
-        return "now"
+        return NSLocalizedString("now", comment: "")
     }
 }
