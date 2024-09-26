@@ -137,9 +137,15 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
     private func bookmarkTapped() {
         switch authViewModel.state {
         case .googleSignedIn, .appleSignedIn:
-            placeDetailViewModel.toggleBookmarkPlace(token: authViewModel.getToken())
-            bookmarkButton.isSelected.toggle() // isBookmarked를 값을 매번 가져오지않고 화면 내에서 바뀌도록
-            delegate?.didUpdateData() // 디테일 뷰에서 이전 뷰로 돌아갈때 변경사항을 업데이트해줌
+            Task {
+                do {
+                    try await placeDetailViewModel.toggleBookmarkPlace(token: authViewModel.getToken())
+                    bookmarkButton.isSelected.toggle() // isBookmarked를 값을 매번 가져오지않고 화면 내에서 바뀌도록
+                    delegate?.didUpdateData() // 디테일 뷰에서 이전 뷰로 돌아갈때 변경사항을 업데이트해줌
+                } catch {
+                    print("Failed to create post: \(error)")
+                }
+            }
         case .signedOut:
             showLoginAlert()
         }
