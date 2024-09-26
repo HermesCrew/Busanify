@@ -389,6 +389,9 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 5 {
             showLogoutAlert()
+        } else if indexPath.row == 1 {
+            let userPostVC = UserPostViewController()
+            navigationController?.pushViewController(userPostVC, animated: true)
         }
     }
 }
