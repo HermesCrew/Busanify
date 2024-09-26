@@ -356,6 +356,15 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
 }
 
 extension PlaceDetailViewController: ReviewTableViewCellDelegate {
+    
+    func didEditReview(_ review: Review) {
+        let reviewController = ReviewViewController(reviewViewModel: reviewViewModel, selectedPlace: self.placeDetailViewModel.place)
+        reviewController.selectedReview = review
+        reviewController.delegate = self
+        let reviewView = UINavigationController(rootViewController: reviewController)
+        present(reviewView, animated: true)
+    }
+    
     func didDeleteReview(_ review: Review) {
         Task {
             do {
