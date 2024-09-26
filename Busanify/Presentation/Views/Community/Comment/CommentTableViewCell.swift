@@ -111,7 +111,7 @@ class CommentTableViewCell: UITableViewCell {
         dateLabel.text = comment.createdAt
         
         var menuItems: [UIAction] = [
-            UIAction(title: "Report", image: UIImage(systemName: "exclamationmark.triangle"), handler: { _ in
+            UIAction(title: NSLocalizedString("report", comment: ""), image: UIImage(systemName: "exclamationmark.triangle"), handler: { _ in
                 self.delegate?.reportComment(comment)
             })
         ]
@@ -121,16 +121,24 @@ class CommentTableViewCell: UITableViewCell {
             if post.user.id == user.userID {
                 if comment.user.id == user.userID {
                     menuItems = [
-                        UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
+                        UIAction(title: NSLocalizedString("delete", comment: ""), image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
                             self?.delegate?.didDeleteComment(comment)
                         })
                     ]
                 } else {
                     menuItems.append(
-                        UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
+                        UIAction(title: NSLocalizedString("delete", comment: ""), image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
                             self?.delegate?.didDeleteComment(comment)
                         })
                     )
+                }
+            } else {
+                if comment.user.id == user.userID {
+                    menuItems = [
+                        UIAction(title: NSLocalizedString("delete", comment: ""), image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
+                            self?.delegate?.didDeleteComment(comment)
+                        })
+                    ]
                 }
             }
         case .appleSignedIn:
@@ -142,16 +150,24 @@ class CommentTableViewCell: UITableViewCell {
             if post.user.id == userId {
                 if comment.user.id == userId {
                     menuItems = [
-                        UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
+                        UIAction(title: NSLocalizedString("delete", comment: ""), image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
                             self?.delegate?.didDeleteComment(comment)
                         })
                     ]
                 } else {
                     menuItems.append(
-                        UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
+                        UIAction(title: NSLocalizedString("delete", comment: ""), image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
                             self?.delegate?.didDeleteComment(comment)
                         })
                     )
+                }
+            } else {
+                if comment.user.id == userId {
+                    menuItems = [
+                        UIAction(title: NSLocalizedString("delete", comment: ""), image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
+                            self?.delegate?.didDeleteComment(comment)
+                        })
+                    ]
                 }
             }
         default:

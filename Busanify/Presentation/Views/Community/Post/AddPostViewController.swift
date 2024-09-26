@@ -50,7 +50,7 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
         textView.layer.borderWidth = 1
         textView.layer.borderColor = UIColor.lightGray.cgColor
         textView.layer.cornerRadius = 10
-        textView.text = "Write content"
+        textView.text = NSLocalizedString("writeContent", comment: "")
         textView.textColor = .systemGray3
         textView.autocapitalizationType = .none
         textView.autocorrectionType = .no
@@ -61,7 +61,7 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
     
     private lazy var saveButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Add Post", for: .normal)
+        button.setTitle(NSLocalizedString("save", comment: ""), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 10
@@ -125,7 +125,7 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
     private func configureUI() {
         // 내비게이션 leftitem 추가
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(cancelButtonTapped))
-        title = "Add Post"
+        title = NSLocalizedString("addPost", comment: "")
         view.backgroundColor = .systemBackground
         view.addSubview(addButton)
         view.addSubview(photoCollectionView)
@@ -291,7 +291,7 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
                     self.hideLoading()
                     self.delegate?.didCreatePost()
                     self.navigationController?.popViewController(animated: true)
-                    self.delegate?.showToastMessage("Post uploaded successfully")
+                    self.delegate?.showToastMessage(NSLocalizedString("postUploadedSuccessfully", comment: ""))
                 }
             } catch {
                 print("Failed to create post: \(error)")
@@ -304,8 +304,8 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
     }
     
     private func showErrorAlert(message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
     }
     
@@ -322,12 +322,12 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
     // 입력된 내용이 있으면 Alert 띄우기
     @objc private func cancelButtonTapped() {
         if !selectedImages.isEmpty || !contentTextView.text.isEmpty && contentTextView.textColor != .systemGray3 {
-            let alert = UIAlertController(title: "Unsaved Changes", message: "You have unsaved changes.", preferredStyle: .alert)
+            let alert = UIAlertController(title: NSLocalizedString("discardUnsavedChanges", comment: ""), message: NSLocalizedString("discardUnsavedChangesMessageForAdd", comment: ""), preferredStyle: .alert)
             
-            let discardAction = UIAlertAction(title: "Discard", style: .destructive) { _ in
+            let discardAction = UIAlertAction(title: NSLocalizedString("discard", comment: ""), style: .destructive) { _ in
                 self.navigationController?.popViewController(animated: true)
             }
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil)
             
             alert.addAction(discardAction)
             alert.addAction(cancelAction)
@@ -431,7 +431,7 @@ extension AddPostViewController: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if contentTextView.text.isEmpty {
-            contentTextView.text = "Write content"
+            contentTextView.text = NSLocalizedString("writeContent", comment: "")
             contentTextView.textColor = .systemGray3
         }
         updateSaveButtonState()

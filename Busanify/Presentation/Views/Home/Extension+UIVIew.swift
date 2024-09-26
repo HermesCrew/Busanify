@@ -177,7 +177,7 @@ class SearchTextField: UITextField {
     
     func configureTextField() {
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.placeholder = "검색하기"
+        self.placeholder = NSLocalizedString("search", comment: "")
         self.borderStyle = .roundedRect
         self.backgroundColor = .white
         self.layer.cornerRadius = 8
