@@ -25,11 +25,14 @@
 "report" = "Report";
 "reportReview" = "Report Review";
 "reportPost" = "Report Post";
+"reportComment" = "Report Comment";
 "writeTheReason" = "Please write the reason";
 "edit" = "Edit";
 "delete" = "Delete";
 "addComment" = "Add Comment";
 "addPost" = "Add Post";
+"editPost" = "Edit Post";
+"save" = "Save";
 "writeContent" = "Write Content";
 "postUploadedSuccessfully" = "Post Uploaded Successfully";
 "yearAgo" = " years ago";

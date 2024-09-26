@@ -281,10 +281,10 @@ extension PostDetailViewController{
 
     // 게시글 삭제
     func showDeleteConfirmationAlert() {
-        let alert = UIAlertController(title: "Delete Post", message: "작성한 글이 삭제됩니다.", preferredStyle: .alert)
+        let alert = UIAlertController(title: NSLocalizedString("deletePost", comment: ""), message: NSLocalizedString("postWillBeDeleted", comment: ""), preferredStyle: .alert)
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+        let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil)
+        let deleteAction = UIAlertAction(title: NSLocalizedString("delete", comment: ""), style: .destructive) { [weak self] _ in
             self?.deletePost()
         }
         
@@ -307,24 +307,40 @@ extension PostDetailViewController{
 
     // 게시글 신고
     func reportPost() {
-        let alert = UIAlertController(title: "신고하기", message: "신고 사유를 입력해주세요.", preferredStyle: .alert)
+        var alert = UIAlertController()
         
-        alert.addTextField { textField in
-            textField.placeholder = "신고 사유"
-        }
-        
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        let reportAction = UIAlertAction(title: "신고", style: .destructive) { _ in
-            guard let reason = alert.textFields?.first?.text, !reason.isEmpty else { return }
+        switch authViewModel.state {
+        case .googleSignedIn, .appleSignedIn:
+            alert = UIAlertController(title: NSLocalizedString("reportPost", comment: ""), message: nil, preferredStyle: .alert)
             
-            let reportDTO = ReportDTO(reportedContentId: self.post.id, reportedUserId: self.post.user.id, content: reason, reportType: .post)
-            self.postViewModel.reportPost(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
+            alert.addTextField { textField in
+                textField.placeholder = NSLocalizedString("writeTheReason", comment: "")
+            }
+            
+            let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil)
+            let reportAction = UIAlertAction(title: NSLocalizedString("report", comment: ""), style: .destructive) { _ in
+                guard let reason = alert.textFields?.first?.text, !reason.isEmpty else { return }
+                
+                let reportDTO = ReportDTO(reportedContentId: self.post.id, reportedUserId: self.post.user.id, content: reason, reportType: .post)
+                self.postViewModel.reportPost(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
+            }
+            
+            alert.addAction(cancelAction)
+            alert.addAction(reportAction)
+        case .signedOut:
+            alert = UIAlertController(title: NSLocalizedString("needLogin", comment: ""), message: NSLocalizedString("needLoginMessageForReport", comment: ""), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("login", comment: ""), style: .default, handler: { [weak self] _ in
+                self?.moveToSignInView()
+            }))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
         }
-        
-        alert.addAction(cancelAction)
-        alert.addAction(reportAction)
         
         present(alert, animated: true, completion: nil)
+    }
+    
+    private func moveToSignInView() {
+        let signInVC = SignInViewController()
+        present(signInVC, animated: true, completion: nil)
     }
 }
 
@@ -347,22 +363,33 @@ extension PostDetailViewController: CommentTableViewCellDelegate {
     }
     
     func reportComment(_ comment: Comment) {
-        let alert = UIAlertController(title: "댓글 신고하기", message: "신고 사유를 입력해주세요.", preferredStyle: .alert)
+        var alert = UIAlertController()
         
-        alert.addTextField { textField in
-            textField.placeholder = "신고 사유"
-        }
-        
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        let reportAction = UIAlertAction(title: "신고", style: .destructive) { _ in
-            guard let reason = alert.textFields?.first?.text, !reason.isEmpty else { return }
+        switch authViewModel.state {
+        case .googleSignedIn, .appleSignedIn:
+            alert = UIAlertController(title: NSLocalizedString("reportComment", comment: ""), message: nil, preferredStyle: .alert)
             
-            let reportDTO = ReportDTO(reportedContentId: comment.id, reportedUserId: comment.user.id, content: reason, reportType: .comment)
-            self.commentViewModel.reportComment(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
+            alert.addTextField { textField in
+                textField.placeholder = NSLocalizedString("writeTheReason", comment: "")
+            }
+            
+            let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil)
+            let reportAction = UIAlertAction(title: NSLocalizedString("report", comment: ""), style: .destructive) { _ in
+                guard let reason = alert.textFields?.first?.text, !reason.isEmpty else { return }
+                
+                let reportDTO = ReportDTO(reportedContentId: comment.id, reportedUserId: comment.user.id, content: reason, reportType: .comment)
+                self.commentViewModel.reportComment(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
+            }
+            
+            alert.addAction(cancelAction)
+            alert.addAction(reportAction)
+        case .signedOut:
+            alert = UIAlertController(title: NSLocalizedString("needLogin", comment: ""), message: NSLocalizedString("needLoginMessageForReport", comment: ""), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("login", comment: ""), style: .default, handler: { [weak self] _ in
+                self?.moveToSignInView()
+            }))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
         }
-        
-        alert.addAction(cancelAction)
-        alert.addAction(reportAction)
         
         present(alert, animated: true, completion: nil)
     }
