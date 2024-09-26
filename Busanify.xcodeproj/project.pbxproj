@@ -86,6 +86,7 @@
 		C2FFD2B92C494AD90032C902 /* ReviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FFD2B82C494AD90032C902 /* ReviewTableViewCell.swift */; };
 		CD0F67FB2CA440CC005E0628 /* ReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0F67FA2CA440CC005E0628 /* ReviewViewController.swift */; };
 		CD0F67FE2CA4458A005E0628 /* ReviewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0F67FD2CA4458A005E0628 /* ReviewProtocol.swift */; };
+		CD2A432D2CA538070013A094 /* UpdateReviewDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2A432C2CA538070013A094 /* UpdateReviewDTO.swift */; };
 		CD3251972C4C07E7006CB590 /* SelectedPlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3251962C4C07E7006CB590 /* SelectedPlaceListViewController.swift */; };
 		CD32519A2C4C0816006CB590 /* SelectedPlaceListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3251992C4C0816006CB590 /* SelectedPlaceListTableViewCell.swift */; };
 		CD32519C2C4C14E1006CB590 /* SelectedPlaceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD32519B2C4C14E1006CB590 /* SelectedPlaceListViewModel.swift */; };
@@ -198,6 +199,7 @@
 		C2FFD2B82C494AD90032C902 /* ReviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewTableViewCell.swift; sourceTree = "<group>"; };
 		CD0F67FA2CA440CC005E0628 /* ReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewViewController.swift; sourceTree = "<group>"; };
 		CD0F67FD2CA4458A005E0628 /* ReviewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewProtocol.swift; sourceTree = "<group>"; };
+		CD2A432C2CA538070013A094 /* UpdateReviewDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateReviewDTO.swift; sourceTree = "<group>"; };
 		CD3251962C4C07E7006CB590 /* SelectedPlaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedPlaceListViewController.swift; sourceTree = "<group>"; };
 		CD3251992C4C0816006CB590 /* SelectedPlaceListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedPlaceListTableViewCell.swift; sourceTree = "<group>"; };
 		CD32519B2C4C14E1006CB590 /* SelectedPlaceListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedPlaceListViewModel.swift; sourceTree = "<group>"; };
@@ -377,6 +379,7 @@
 				CDF123822CA46C1C001A0C63 /* ReviewDTO.swift */,
 				C2AD58BC2C96D5CC00FBE6AA /* ReportDTO.swift */,
 				C20D08402CA1AD4D00459803 /* CommentDTO.swift */,
+				CD2A432C2CA538070013A094 /* UpdateReviewDTO.swift */,
 			);
 			path = DTOs;
 			sourceTree = "<group>";
@@ -411,14 +414,6 @@
 				B8F32CE42CA4562C00DF172A /* ImagePreviewViewController.swift */,
 			);
 			path = Post;
-			sourceTree = "<group>";
-		};
-		C236ED6F2CA3D0B300CDA182 /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				C2293DE32CA2DBD400E92E5B /* GoogleService-Info.plist */,
-			);
-			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		C2695D2F2C47889900375BA6 /* PlaceDetail */ = {
@@ -460,7 +455,6 @@
 				C296D6FB2C1F16B000691515 /* Products */,
 				BEFDFFBA458BE9B300E7C88A /* Pods */,
 				393F9CAAFA31CE009CC48C16 /* Frameworks */,
-				C236ED6F2CA3D0B300CDA182 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -926,6 +920,7 @@
 				C26E7CCA2C482CDF004996FE /* RatingTableViewCell.swift in Sources */,
 				B8F89BCE2C5386C100332FE2 /* Region.swift in Sources */,
 				C2AD58B62C96D0AA00FBE6AA /* ReviewUseCase.swift in Sources */,
+				CD2A432D2CA538070013A094 /* UpdateReviewDTO.swift in Sources */,
 				CDF123852CA47348001A0C63 /* UIViewController+Extension.swift in Sources */,
 				C22C8DA72C9C6802006BB06B /* AddPostViewController.swift in Sources */,
 				75D78A3C2C4F84FC00E3259B /* BookmarkViewController.swift in Sources */,

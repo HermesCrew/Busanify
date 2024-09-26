@@ -347,11 +347,8 @@ class RatingStackView: UIStackView {
     private func updateRating(at location: CGPoint) {
         let starWidth = starSize + spacing
         var newRating = location.x / starWidth
-        
-        // Clamp the rating between 0 and 5
         newRating = max(0, min(CGFloat(starCount), newRating))
         
-        // Round to nearest 0.5
         rating = round(newRating * 2) / 2
     }
     
@@ -385,5 +382,10 @@ class RatingStackView: UIStackView {
         }
 
         return fullStars + halfStars
+    }
+    
+    func setStarCount(_ count: Double) {
+        rating = count
+        updateStarImages()
     }
 }

@@ -7,6 +7,7 @@
 
 import UIKit
 import PhotosUI
+import Kingfisher
 
 class ReviewViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDragDelegate, UICollectionViewDropDelegate {
     private let reviewViewModel: ReviewViewModel
@@ -20,10 +21,12 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
     private var selections = [String : PHPickerResult]()
     private var selectedAssetIdentifiers = [String]()
     private var selectedImages: [UIImage] = []
+    private var updateImages: [ImageData] = []
     
     weak var delegate: AddReviewViewControllerDelegate?
     
     var selectedPlace: Place
+    var selectedReview: Review?
     
     private lazy var rateStackView: RatingStackView = {
         let stackView = RatingStackView()
@@ -57,7 +60,7 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
         return collectionView
     }()
     
-    private let contentTextView: UITextView = {
+    private lazy var contentTextView: UITextView = {
         let textView = UITextView()
         textView.font = UIFont.systemFont(ofSize: 16)
         textView.layer.borderWidth = 1
@@ -74,13 +77,17 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     private lazy var saveButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Add Review", for: .normal)
+        button.setTitle(self.selectedReview == nil ? "Add Review" : "Edit Review", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 10
         
         button.addAction(UIAction { [weak self] _ in
-            self?.addReview()
+            if self?.selectedReview == nil {
+                self?.addReview()
+            } else {
+                self?.editReview()
+            }
         }, for: .touchUpInside)
         
         return button
@@ -133,6 +140,14 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
         photoCollectionView.reorderingCadence = .immediate
         
         photoCollectionView.register(PhotoCollectionViewCell.self, forCellWithReuseIdentifier: "PhotoCollectionViewCell")
+        
+        if let editReview = selectedReview {
+            self.rateStackView.setStarCount(editReview.rating)
+            self.contentTextView.text = editReview.content
+            self.updateImages = editReview.photoUrls.map { ImageData.url($0) }
+            self.photoCollectionView.reloadData()
+            updateSaveButtonState()
+        }
     }
     
     private func configureUI() {
@@ -198,13 +213,27 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.selectedImages.count
+        if selectedReview == nil {
+            return self.selectedImages.count
+        } else {
+            return self.updateImages.count
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCollectionViewCell", for: indexPath) as! PhotoCollectionViewCell
         
-        cell.configure(with: self.selectedImages[indexPath.item])
+        if selectedReview == nil {
+            cell.configure(with: self.selectedImages[indexPath.item])
+        } else {
+            let imageData = updateImages[indexPath.item]
+            switch imageData {
+            case .url(let imageUrl):
+                cell.configure(with: imageUrl)
+            case .image(let image):
+                cell.configure(with: image)
+            }
+        }
         cell.deleteButton.tag = indexPath.item
         cell.deleteButton.addTarget(self, action: #selector(self.deleteButtonTapped(_:)), for: .touchUpInside)
         
@@ -276,7 +305,11 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     @objc private func deleteButtonTapped(_ sender: UIButton) {
         let index = sender.tag
-        self.selectedImages.remove(at: index)
+        if selectedReview == nil {
+            self.selectedImages.remove(at: index)
+        } else {
+            self.updateImages.remove(at: index)
+        }
         
         DispatchQueue.main.async {
             self.photoCollectionView.performBatchUpdates({
@@ -302,7 +335,29 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
         showLoading()
         Task {
             do {
-                try await reviewViewModel.createReview(token: authViewModel.getToken(), content: contentTextView.text, rating: currentRating, photos: selectedImages)
+                try await reviewViewModel.createReview(token: authViewModel.getToken(), content: contentTextView.text, placeId: self.selectedPlace.id, rating: currentRating, photos: selectedImages)
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.hideLoading()
+                    self.delegate?.didCreateReview()
+                    self.dismiss(animated: true)
+                    self.delegate?.showToastMessage("Post uploaded successfully")
+                }
+            } catch {
+                print("Failed to create post: \(error)")
+                DispatchQueue.main.async { [weak self] in
+                    self?.hideLoading()
+                    self?.showErrorAlert(message: "Failed to create post. Please try again.")
+                }
+            }
+        }
+    }
+    
+    private func editReview() {
+        showLoading()
+        Task {
+            do {
+                try await reviewViewModel.editReview(token: authViewModel.getToken(), content: contentTextView.text, reviewId: self.selectedReview!.id, rating: currentRating, photos: updateImages)
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     self.hideLoading()
@@ -367,26 +422,6 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
         loadingView.isHidden = true
         activityIndicator.stopAnimating()
         view.isUserInteractionEnabled = true
-    }
-    
-    @objc private func starTapped(_ gesture: UITapGestureRecognizer) {
-        guard let tappedImageView = gesture.view as? UIImageView else { return }
-        let tappedRating = tappedImageView.tag + 1
-        updateRating(tappedRating)
-    }
-    
-    private func updateRating(_ rating: Int) {
-        for i in 0..<5 {
-            if let starImageView = rateStackView.arrangedSubviews[i] as? UIImageView {
-                if i < rating {
-                    starImageView.image = .init(systemName: "star.fill")
-                } else if i == rating - 1 && rating.isMultiple(of: 1) == false {
-                    starImageView.image = .init(systemName: "star.leadinghalf.filled")
-                } else {
-                    starImageView.image = .init(systemName: "star")
-                }
-            }
-        }
     }
 }
 
