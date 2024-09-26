@@ -291,7 +291,7 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
                     self.hideLoading()
                     self.delegate?.didCreatePost()
                     self.navigationController?.popViewController(animated: true)
-                    self.delegate?.showToastMessage(NSLocalizedString("postUploadedSuccessfully", comment: ""))
+                    self.delegate?.showToastMessage(NSLocalizedString("postSaved", comment: ""))
                 }
             } catch {
                 print("Failed to create post: \(error)")
