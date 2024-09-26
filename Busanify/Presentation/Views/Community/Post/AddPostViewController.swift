@@ -117,6 +117,7 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
         photoCollectionView.dropDelegate = self
         photoCollectionView.dragInteractionEnabled = true
         photoCollectionView.reorderingCadence = .immediate
+        photoCollectionView.showsHorizontalScrollIndicator = false
         
         photoCollectionView.register(PhotoCollectionViewCell.self, forCellWithReuseIdentifier: "PhotoCollectionViewCell")
     }
@@ -124,7 +125,7 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
     private func configureUI() {
         // 내비게이션 leftitem 추가
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(cancelButtonTapped))
-        
+        title = "Add Post"
         view.backgroundColor = .systemBackground
         view.addSubview(addButton)
         view.addSubview(photoCollectionView)
@@ -146,16 +147,16 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
         
         NSLayoutConstraint.activate([
             addButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            addButton.widthAnchor.constraint(equalToConstant: 50),
-            addButton.heightAnchor.constraint(equalToConstant: 50),
+            addButton.widthAnchor.constraint(equalToConstant: 80),
+            addButton.heightAnchor.constraint(equalToConstant: 80),
             addButton.centerYAnchor.constraint(equalTo: photoCollectionView.centerYAnchor),
             
-            photoCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            photoCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             photoCollectionView.leadingAnchor.constraint(equalTo: addButton.trailingAnchor, constant: 16),
             photoCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            photoCollectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.20),
+            photoCollectionView.heightAnchor.constraint(equalToConstant: 120),
             
-            contentTextView.topAnchor.constraint(equalTo: photoCollectionView.bottomAnchor, constant: 16),
+            contentTextView.topAnchor.constraint(equalTo: photoCollectionView.bottomAnchor, constant: 10),
             contentTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             contentTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             contentTextView.bottomAnchor.constraint(equalTo: saveButton.topAnchor, constant: -16),
