@@ -140,19 +140,19 @@ extension HomeViewController {
         _auth = false
         switch errorCode {
         case 400:
-            showToast(self.view, message: "지도 종료(API인증 파라미터 오류)")
+            showErrorToast(self.view, message: "지도 종료(API인증 파라미터 오류)")
             break;
         case 401:
-            showToast(self.view, message: "지도 종료(API인증 키 오류)")
+            showErrorToast(self.view, message: "지도 종료(API인증 키 오류)")
             break;
         case 403:
-            showToast(self.view, message: "지도 종료(API인증 권한 오류)")
+            showErrorToast(self.view, message: "지도 종료(API인증 권한 오류)")
             break;
         case 429:
-            showToast(self.view, message: "지도 종료(API 사용쿼터 초과)")
+            showErrorToast(self.view, message: "지도 종료(API 사용쿼터 초과)")
             break;
         case 499:
-            showToast(self.view, message: "지도 종료(네트워크 오류) 5초 후 재시도..")
+            showErrorToast(self.view, message: "지도 종료(네트워크 오류) 5초 후 재시도..")
             
             // 인증 실패 delegate 호출 이후 5초뒤에 재인증 시도..
             DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
@@ -166,7 +166,7 @@ extension HomeViewController {
         }
     }
     
-    func showToast(_ view: UIView, message: String, duration: TimeInterval = 2.0) {
+    func showErrorToast(_ view: UIView, message: String, duration: TimeInterval = 2.0) {
         let toastLabel = UILabel(frame: CGRect(x: view.frame.size.width/2 - 150, y: view.frame.size.height-100, width: 300, height: 35))
         toastLabel.backgroundColor = UIColor.black
         toastLabel.textColor = UIColor.white

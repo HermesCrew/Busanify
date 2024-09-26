@@ -141,4 +141,20 @@ final class PostApi: PostViewUseCase {
             })
             .store(in: &cancellables)
     }
+    
+    func getUserPosts(token: String) -> AnyPublisher<[Post], Never> {
+        let urlString = "\(baseURL)/posts/user/list"
+        guard let url = URL(string: urlString) else {
+            fatalError("Invalid URL")
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map(\.data)
+            .decode(type: [Post].self, decoder: JSONDecoder())
+            .replaceError(with: [])
+            .eraseToAnyPublisher()
+    }
 }
