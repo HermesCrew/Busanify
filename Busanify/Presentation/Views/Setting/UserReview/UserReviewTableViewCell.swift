@@ -19,6 +19,7 @@ class UserReviewTableViewCell: UITableViewCell {
     private lazy var placenameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        label.numberOfLines = 1
         
         return label
     }()
@@ -101,6 +102,7 @@ class UserReviewTableViewCell: UITableViewCell {
         NSLayoutConstraint.activate([
             placenameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             placenameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            placenameLabel.trailingAnchor.constraint(equalTo: moreButton.leadingAnchor, constant: -8),
             
             moreButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             moreButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
@@ -120,9 +122,8 @@ class UserReviewTableViewCell: UITableViewCell {
             collectionViewHeightConstraint,
             collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
             
-            dateLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            dateLabel.leadingAnchor.constraint(equalTo: placenameLabel.trailingAnchor, constant: 8),
-            dateLabel.centerYAnchor.constraint(equalTo: placenameLabel.centerYAnchor),
+            dateLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+            dateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
         ])
     }
     
@@ -140,10 +141,9 @@ class UserReviewTableViewCell: UITableViewCell {
         
         collectionView.reloadData()
         
-        
-        var menuItems: [UIAction] = [
+        let menuItems: [UIAction] = [
             UIAction(title: NSLocalizedString("edit", comment: ""), image: UIImage(systemName: "pencil"), handler: { [weak self] _ in
-                self?.delegate?.didEditReview(review)
+                self?.delegate?.openReviewDeitView(review)
             }),
             UIAction(title: NSLocalizedString("delete", comment: ""), image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
                 self?.delegate?.didDeleteReview(review)
@@ -154,7 +154,7 @@ class UserReviewTableViewCell: UITableViewCell {
         let menu = UIMenu(title: "", image: nil, options: [], children: menuItems)
         moreButton.menu = menu
         
-        setupStarRating(rating: review.rating)
+        setupStarRating(rating: Double(review.rating))
     }
     
     private func setupStarRating(rating: Double) {
@@ -229,6 +229,7 @@ extension UserReviewTableViewCell: UICollectionViewDataSource, UICollectionViewD
 
 protocol UserReviewTableViewCellDelegate: NSObject {
     func didDeleteReview(_ review: Review)
-    func didEditReview(_ review: Review)
+    func openReviewDeitView(_ review: Review)
     func reportReview(_ review: Review)
+    func didUpdateReview()
 }

@@ -83,6 +83,17 @@ extension UserReviewViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        let selectedReview = viewModel.reviews[indexPath.item]
+        
+        let placeDetailViewModel = PlaceDetailViewModel(
+            placeId: selectedReview.place?.id ?? "",
+            useCase: PlacesApi()
+        )
+        
+        let reviewViewModel = ReviewViewModel(useCase: ReviewApi())
+        let placeDetailVC = PlaceDetailViewController(placeDetailViewModel: placeDetailViewModel, reviewViewModel: reviewViewModel)
+        self.navigationController?.pushViewController(placeDetailVC, animated: true)
     }
 }
 
@@ -94,11 +105,26 @@ extension UserReviewViewController: UISheetPresentationControllerDelegate {
 
 extension UserReviewViewController: UserReviewTableViewCellDelegate, AddPostViewControllerDelegate {
     func didDeleteReview(_ review: Review) {
-        //
+        Task {
+            do {
+                try await postViewModel.deleteReview(id: review.id, token: AuthenticationViewModel.shared.getToken()!)
+                self.viewModel.loadReviews()
+            } catch {
+                print("Failed to delete review: \(error)")
+            }
+        }
     }
     
-    func didEditReview(_ review: Review) {
-        //
+    func openReviewDeitView(_ review: Review) {
+        let reviewController = ReviewViewController(reviewViewModel: postViewModel, selectedPlace: review.place!)
+        reviewController.selectedReview = review
+        reviewController.userReviewDelegate = self
+        let reviewView = UINavigationController(rootViewController: reviewController)
+        present(reviewView, animated: true)
+    }
+    
+    func didUpdateReview() {
+        self.viewModel.loadReviews()
     }
     
     func reportReview(_ review: Review) {
