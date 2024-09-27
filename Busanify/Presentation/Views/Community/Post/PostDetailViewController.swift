@@ -172,6 +172,8 @@ class PostDetailViewController: UIViewController {
             contentLabel.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
         ])
 
+        contentLabel.preferredMaxLayoutWidth = view.frame.width - 32 // 좌우 패딩고려
+        
         if !post.photoUrls.isEmpty {
             headerView.addSubview(collectionView)
             collectionView.translatesAutoresizingMaskIntoConstraints = false
