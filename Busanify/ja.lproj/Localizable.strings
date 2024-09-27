@@ -47,6 +47,7 @@
 "cancel" = "キャンセル";
 "delete" = "削除";
 "deletePost" = "投稿削除？";
+"deleteReview" = "レビューを削除？";
 "postWillBeDeleted" = "これは元に戻せません";
 "wouldYouLikeToLogout" = "ログアウトしますか？";
 "discardUnsavedChanges" = "変更を破棄しますか？";

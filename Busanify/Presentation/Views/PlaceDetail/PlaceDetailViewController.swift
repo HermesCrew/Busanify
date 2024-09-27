@@ -293,7 +293,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
             if indexPath.row == 0 {
                 // "View all reviews" 셀을 눌렀을 때
                 guard let reviews = placeDetailViewModel.place.reviews else { return }
-                let reviewsListVC = PlaceReviewsListViewController(reviews: reviews)
+                let reviewsListVC = PlaceReviewsListViewController(reviews: reviews, placeDetailViewModel: placeDetailViewModel, reviewViewModel: reviewViewModel)
                 present(reviewsListVC, animated: true, completion: nil)
             }
         default:

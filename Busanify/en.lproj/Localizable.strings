@@ -47,6 +47,7 @@
 "cancel" = "Cancel";
 "delete" = "Delete";
 "deletePost" = "Delete Post?";
+"deleteReview" = "Delete Review?";
 "postWillBeDeleted" = "This can't be undone";
 "wouldYouLikeToLogout" = "Logout?";
 "discardUnsavedChanges" = "Discard unsaved changes?";

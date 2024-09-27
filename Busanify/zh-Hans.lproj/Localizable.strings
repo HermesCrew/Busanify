@@ -47,6 +47,7 @@
 "cancel" = "取消";
 "delete" = "删除";
 "deletePost" = "删除帖子？";
+"deleteReview" = "删除评价？";
 "postWillBeDeleted" = "此操作无法撤销";
 "wouldYouLikeToLogout" = "您确定要登出吗？";
 "discardUnsavedChanges" = "放弃未保存的更改？";

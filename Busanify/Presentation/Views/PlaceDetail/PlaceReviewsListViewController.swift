@@ -6,23 +6,32 @@
 //
 
 import UIKit
+import Combine
 
 class PlaceReviewsListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     private let reviews: [Review]
+    private let placeDetailViewModel: PlaceDetailViewModel
+    private let reviewViewModel: ReviewViewModel
+    private let authViewModel = AuthenticationViewModel.shared
+    weak var delegate: PlaceReviewsListViewControllerDelegate?
+    weak var placeListDelegate: AddReviewViewControllerDelegate?
+    private var cancellables = Set<AnyCancellable>()
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(UserReviewTableViewCell.self, forCellReuseIdentifier: UserReviewTableViewCell.identifier)
+        tableView.register(ReviewTableViewCell.self, forCellReuseIdentifier: ReviewTableViewCell.identifier)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 100
         return tableView
     }()
     
-    init(reviews: [Review]) {
+    init(reviews: [Review], placeDetailViewModel: PlaceDetailViewModel, reviewViewModel: ReviewViewModel) {
         self.reviews = reviews
+        self.placeDetailViewModel = placeDetailViewModel
+        self.reviewViewModel = reviewViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -62,7 +71,83 @@ class PlaceReviewsListViewController: UIViewController, UITableViewDelegate, UIT
         
         let review = reviews[indexPath.row]
         cell.configure(with: review)
+        cell.delegate = self
         cell.selectionStyle = .none
         return cell
+    }
+}
+
+extension PlaceReviewsListViewController: ReviewTableViewCellDelegate {
+    
+    func didEditReview(_ review: Review) {
+        let reviewController = ReviewViewController(reviewViewModel: reviewViewModel, selectedPlace: self.placeDetailViewModel.place)
+        reviewController.selectedReview = review
+        reviewController.delegate = self
+        let reviewView = UINavigationController(rootViewController: reviewController)
+        present(reviewView, animated: true)
+    }
+    
+    func didDeleteReview(_ review: Review) {
+        Task {
+            do {
+                try await reviewViewModel.deleteReview(id: review.id, token: self.authViewModel.getToken()!)
+                placeDetailViewModel.fetchPlace(token: self.authViewModel.getToken()!)
+                self.delegate?.didUpdateData()
+            } catch {
+                print("Failed to delete review: \(error)")
+            }
+        }
+    }
+    
+    func reportReview(_ review: Review) {
+        var alert = UIAlertController()
+        
+        switch authViewModel.state {
+        case .googleSignedIn, .appleSignedIn:
+            alert = UIAlertController(title: NSLocalizedString("reportReview", comment: ""), message: nil, preferredStyle: .alert)
+            
+            alert.addTextField { textField in
+                textField.placeholder = NSLocalizedString("writeTheReason", comment: "")
+            }
+            
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("report", comment: ""), style: .destructive, handler: { _ in
+                let reportReason = alert.textFields?.first?.text ?? "report"
+                
+                let reportDTO = ReportDTO(reportedContentId: review.id, reportedUserId: review.user.id, content: reportReason, reportType: .review)
+                self.reviewViewModel.reportReview(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
+            }))
+        case .signedOut:
+            alert = UIAlertController(title: NSLocalizedString("needLogin", comment: ""), message: NSLocalizedString("needLoginMessageForBookmark", comment: ""), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("login", comment: ""), style: .default, handler: { [weak self] _ in
+                self?.moveToSignInView()
+            }))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
+        }
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func moveToSignInView() {
+        let signInVC = SignInViewController()
+        show(signInVC, sender: self)
+    }
+}
+
+protocol PlaceReviewsListViewControllerDelegate: NSObject {
+    func didUpdateData()
+}
+
+extension PlaceReviewsListViewController: AddReviewViewControllerDelegate {
+    func showToastMessage(_ message: String) {
+        self.showToast(view, message: message)
+    }
+    
+    func didCreateReview() {
+        placeDetailViewModel.fetchPlace(token: authViewModel.getToken())
+    }
+    
+    func updateListView() {
+        self.placeListDelegate?.updateListView()
     }
 }
