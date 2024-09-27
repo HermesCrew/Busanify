@@ -15,7 +15,7 @@ class PlaceReviewsListViewController: UIViewController, UITableViewDelegate, UIT
         let tableView = UITableView()
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(ReviewTableViewCell.self, forCellReuseIdentifier: ReviewTableViewCell.identifier)
+        tableView.register(UserReviewTableViewCell.self, forCellReuseIdentifier: UserReviewTableViewCell.identifier)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 100
         return tableView

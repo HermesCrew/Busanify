@@ -349,6 +349,7 @@ class RatingStackView: UIStackView {
         let starWidth = starSize + spacing
         let newRating = Int(location.x / starWidth) + 1
         
+        // Clamp the rating between 1 and 5
         rating = max(1, min(starCount, newRating))
     }
     

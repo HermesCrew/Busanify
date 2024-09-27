@@ -399,6 +399,9 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 5 {
             showLogoutAlert()
+        } else if indexPath.row == 0 {
+            let userReviewVC = UserReviewViewController()
+            navigationController?.pushViewController(userReviewVC, animated: true)
         } else if indexPath.row == 1 {
             let userPostVC = UserPostViewController()
             userPostVC.hidesBottomBarWhenPushed = true
