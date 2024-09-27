@@ -15,6 +15,8 @@
 		754871152CA445E80088E74A /* UserPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754871142CA445E80088E74A /* UserPostViewController.swift */; };
 		7548711A2CA44A3C0088E74A /* UserPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754871192CA44A3C0088E74A /* UserPostViewModel.swift */; };
 		754871202CA5945F0088E74A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7548711F2CA5945E0088E74A /* GoogleService-Info.plist */; };
+		754C0E0D2CA6D6A1006301BC /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 754C0E0C2CA6D6A1006301BC /* Config.xcconfig */; };
+		754C0E0F2CA6DE0F006301BC /* LanguageSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754C0E0E2CA6DE0F006301BC /* LanguageSettingViewController.swift */; };
 		758FB83B2C57DF430029EBAA /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758FB83A2C57DF430029EBAA /* Bookmark.swift */; };
 		75B3CF0C2CA69B6500E11BE9 /* UserReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B3CF0B2CA69B6500E11BE9 /* UserReviewViewController.swift */; };
 		75B3CF0F2CA69D6600E11BE9 /* UserReviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B3CF0E2CA69D6600E11BE9 /* UserReviewViewModel.swift */; };
@@ -134,6 +136,8 @@
 		754871142CA445E80088E74A /* UserPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostViewController.swift; sourceTree = "<group>"; };
 		754871192CA44A3C0088E74A /* UserPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostViewModel.swift; sourceTree = "<group>"; };
 		7548711F2CA5945E0088E74A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		754C0E0C2CA6D6A1006301BC /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		754C0E0E2CA6DE0F006301BC /* LanguageSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageSettingViewController.swift; sourceTree = "<group>"; };
 		757882F72C43E52A0078EFAB /* Busanify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Busanify.entitlements; sourceTree = "<group>"; };
 		758FB83A2C57DF430029EBAA /* Bookmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
 		75B3CF0B2CA69B6500E11BE9 /* UserReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserReviewViewController.swift; sourceTree = "<group>"; };
@@ -526,6 +530,7 @@
 				754871172CA44A160088E74A /* UserPost */,
 				C2B27C8B2C9184EF00223874 /* Cells */,
 				C276594C2C3D2897006D0D6C /* SettingViewController.swift */,
+				754C0E0E2CA6DE0F006301BC /* LanguageSettingViewController.swift */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -533,6 +538,7 @@
 		C296D6F12C1F16B000691515 = {
 			isa = PBXGroup;
 			children = (
+				754C0E0C2CA6D6A1006301BC /* Config.xcconfig */,
 				B84A06CE2CA696CF0063E08E /* GoogleService-Info.plist */,
 				C296D6FC2C1F16B000691515 /* Busanify */,
 				C296D7132C1F16B200691515 /* BusanifyTests */,
@@ -901,6 +907,7 @@
 				C296D7072C1F16B200691515 /* Assets.xcassets in Resources */,
 				C242DFDE2CA5206F00AEC1D1 /* arial-unicode-ms.ttf in Resources */,
 				C296D70A2C1F16B200691515 /* Base in Resources */,
+				754C0E0D2CA6D6A1006301BC /* Config.xcconfig in Resources */,
 				C296D7052C1F16B000691515 /* Base in Resources */,
 				754871202CA5945F0088E74A /* GoogleService-Info.plist in Resources */,
 			);
@@ -1046,6 +1053,7 @@
 				CD89D3552C29A56B00715404 /* HomeViewModel.swift in Sources */,
 				CD32519C2C4C14E1006CB590 /* SelectedPlaceListViewModel.swift in Sources */,
 				C2695D322C4788AC00375BA6 /* PlaceDetailViewController.swift in Sources */,
+				754C0E0F2CA6DE0F006301BC /* LanguageSettingViewController.swift in Sources */,
 				B8F32CE32CA44ACA00DF172A /* PostDetailViewController.swift in Sources */,
 				C207B98B2C45FEFB0088E2D5 /* Keychain.swift in Sources */,
 				B88542112CA1842E00696BD5 /* PlaceReviewsListViewController.swift in Sources */,
@@ -1141,6 +1149,7 @@
 /* Begin XCBuildConfiguration section */
 		C296D7222C1F16B200691515 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 754C0E0C2CA6D6A1006301BC /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -1205,6 +1214,7 @@
 		};
 		C296D7232C1F16B200691515 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 754C0E0C2CA6D6A1006301BC /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
