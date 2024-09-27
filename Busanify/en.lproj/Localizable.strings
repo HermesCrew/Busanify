@@ -82,3 +82,5 @@
 "review" = "Review";
 "langInLocalText" = "English";
 "close" = "Close";
+"languageChanged" = "Language Changed";
+"restartApp" = "Please Restart the App";
