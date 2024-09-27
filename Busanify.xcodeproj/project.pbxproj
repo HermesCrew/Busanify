@@ -63,6 +63,7 @@
 		C26E7CCA2C482CDF004996FE /* RatingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26E7CC92C482CDF004996FE /* RatingTableViewCell.swift */; };
 		C276594D2C3D2897006D0D6C /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C276594C2C3D2897006D0D6C /* SettingViewController.swift */; };
 		C28ABD3F2CA6E7B200AA5CCE /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28ABD3E2CA6E7B200AA5CCE /* UIViewController+Extensions.swift */; };
+		C28ABD422CA6F23500AA5CCE /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28ABD412CA6F23500AA5CCE /* CustomTabBarController.swift */; };
 		C296D6FE2C1F16B000691515 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D6FD2C1F16B000691515 /* AppDelegate.swift */; };
 		C296D7002C1F16B000691515 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D6FF2C1F16B000691515 /* SceneDelegate.swift */; };
 		C296D7022C1F16B000691515 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296D7012C1F16B000691515 /* ViewController.swift */; };
@@ -183,6 +184,7 @@
 		C26E7CC92C482CDF004996FE /* RatingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingTableViewCell.swift; sourceTree = "<group>"; };
 		C276594C2C3D2897006D0D6C /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		C28ABD3E2CA6E7B200AA5CCE /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
+		C28ABD412CA6F23500AA5CCE /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
 		C296D6FA2C1F16B000691515 /* Busanify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Busanify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C296D6FD2C1F16B000691515 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C296D6FF2C1F16B000691515 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -532,7 +534,6 @@
 				CDE5CB3B2CA1D22600950993 /* Extension */,
 				757882F72C43E52A0078EFAB /* Busanify.entitlements */,
 				C296D72F2C1F2B0200691515 /* Application */,
-				C2ED4A2B2CA2A43C00A93A90 /* Common */,
 				C296D72D2C1F2AA100691515 /* Data */,
 				C296D72E2C1F2AB400691515 /* Network */,
 				C296D7342C1F2B8B00691515 /* Domain */,
@@ -614,6 +615,7 @@
 				C207F3782C3AFB52007DFA27 /* Authentication */,
 				CD89D3512C29A55A00715404 /* Home */,
 				75304AF12C377A3D0058FDDE /* PlaceList */,
+				C28ABD412CA6F23500AA5CCE /* CustomTabBarController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -690,14 +692,6 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
-		C2ED4A2B2CA2A43C00A93A90 /* Common */ = {
-			isa = PBXGroup;
-			children = (
-				C2ED4A2C2CA2A46400A93A90 /* UIResponder+Extensions.swift */,
-			);
-			path = Common;
-			sourceTree = "<group>";
-		};
 		CD0F67F92CA440C3005E0628 /* Review */ = {
 			isa = PBXGroup;
 			children = (
@@ -747,6 +741,7 @@
 		CDE5CB3B2CA1D22600950993 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				C2ED4A2C2CA2A46400A93A90 /* UIResponder+Extensions.swift */,
 				CDE5CB3C2CA1D23000950993 /* String+Extension.swift */,
 				CDF123842CA47348001A0C63 /* UIViewController+Extension.swift */,
 				C28ABD3E2CA6E7B200AA5CCE /* UIViewController+Extensions.swift */,
@@ -1023,6 +1018,7 @@
 				B8F32CE32CA44ACA00DF172A /* PostDetailViewController.swift in Sources */,
 				C207B98B2C45FEFB0088E2D5 /* Keychain.swift in Sources */,
 				B88542112CA1842E00696BD5 /* PlaceReviewsListViewController.swift in Sources */,
+				C28ABD422CA6F23500AA5CCE /* CustomTabBarController.swift in Sources */,
 				B8F89BDC2C53883000332FE2 /* WeatherIcon.swift in Sources */,
 				B8F89BD82C5387EC00332FE2 /* WeatherViewController.swift in Sources */,
 				754871152CA445E80088E74A /* UserPostViewController.swift in Sources */,
