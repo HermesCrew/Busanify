@@ -207,14 +207,14 @@ class ReviewTableViewCell: UITableViewCell {
         setupStarRating(rating: review.rating)
     }
     
-    private func setupStarRating(rating: Double) {
+    private func setupStarRating(rating: Int) {
         starStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
         for i in 0..<5 {
             let starImageView = UIImageView()
             starImageView.contentMode = .scaleAspectFit
             
-            let fillRatio = min(max(rating - Double(i), 0), 1)
+            let fillRatio = min(max(rating - i, 0), 1)
             
             let filledStarImage = drawPartialStar(fillRatio: CGFloat(fillRatio))
             starImageView.image = filledStarImage

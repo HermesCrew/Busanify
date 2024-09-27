@@ -58,6 +58,9 @@ class WeatherViewController: UIViewController {
     private func setupNavigationBar() {
         self.title = "날씨"
         self.navigationController?.navigationBar.barTintColor = .white
+        let backButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"), style: .plain, target: self, action: #selector(backButtonTapped)
+        )
+        navigationItem.leftBarButtonItem = backButton
     }
 
     @objc private func backButtonTapped() {

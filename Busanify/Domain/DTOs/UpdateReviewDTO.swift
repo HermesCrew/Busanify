@@ -9,7 +9,7 @@ import Foundation
 
 struct UpdateReviewDTO: Codable {
     let id: String
-    let rating: Double
+    let rating: Int
     let content: String
     let photoUrls: [String]
 }

@@ -129,7 +129,7 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     private func configureUI() {
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(cancelButtonTapped))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"), style: .plain, target: self, action: #selector(cancelButtonTapped))
         title = NSLocalizedString("editPost", comment: "")
         view.backgroundColor = .systemBackground
         view.addSubview(addButton)

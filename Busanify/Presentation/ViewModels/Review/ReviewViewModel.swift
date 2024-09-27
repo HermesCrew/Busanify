@@ -7,7 +7,7 @@ final class ReviewViewModel {
         self.useCase = useCase
     }
     
-    func createReview(token: String?, content: String, placeId: String, rating: Double, photos: [UIImage]) async throws {
+    func createReview(token: String?, content: String, placeId: String, rating: Int, photos: [UIImage]) async throws {
         guard let token = token else { return }
         var photoUrls: [String] = []
         
@@ -22,7 +22,7 @@ final class ReviewViewModel {
         try await useCase.createReview(token: token, reviewDTO: reviewDTO)
     }
     
-    func editReview(token: String?, content: String, reviewId: Int, rating: Double, photos: [ImageData]) async throws {
+    func editReview(token: String?, content: String, reviewId: Int, rating: Int, photos: [ImageData]) async throws {
         guard let token = token else { return }
         var photoUrls: [String] = []
         

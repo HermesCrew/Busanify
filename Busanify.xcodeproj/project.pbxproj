@@ -16,6 +16,7 @@
 		7548711A2CA44A3C0088E74A /* UserPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754871192CA44A3C0088E74A /* UserPostViewModel.swift */; };
 		754871202CA5945F0088E74A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7548711F2CA5945E0088E74A /* GoogleService-Info.plist */; };
 		758FB83B2C57DF430029EBAA /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758FB83A2C57DF430029EBAA /* Bookmark.swift */; };
+		75B3CF092CA6897800E11BE9 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 75B3CF082CA6897800E11BE9 /* Config.xcconfig */; };
 		75D78A3C2C4F84FC00E3259B /* BookmarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D78A3B2C4F84FC00E3259B /* BookmarkViewController.swift */; };
 		75D78A3E2C4F851900E3259B /* BookmarkGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D78A3D2C4F851900E3259B /* BookmarkGridCell.swift */; };
 		75D78A402C4F852900E3259B /* BookmarkListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D78A3F2C4F852900E3259B /* BookmarkListCell.swift */; };
@@ -130,6 +131,7 @@
 		7548711F2CA5945E0088E74A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		757882F72C43E52A0078EFAB /* Busanify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Busanify.entitlements; sourceTree = "<group>"; };
 		758FB83A2C57DF430029EBAA /* Bookmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
+		75B3CF082CA6897800E11BE9 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		75D78A3B2C4F84FC00E3259B /* BookmarkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkViewController.swift; sourceTree = "<group>"; };
 		75D78A3D2C4F851900E3259B /* BookmarkGridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkGridCell.swift; sourceTree = "<group>"; };
 		75D78A3F2C4F852900E3259B /* BookmarkListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkListCell.swift; sourceTree = "<group>"; };
@@ -309,14 +311,6 @@
 				754871192CA44A3C0088E74A /* UserPostViewModel.swift */,
 			);
 			path = UserPost;
-			sourceTree = "<group>";
-		};
-		754871232CA59BDD0088E74A /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				7548711F2CA5945E0088E74A /* GoogleService-Info.plist */,
-			);
-			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		75D78A3A2C4F84E800E3259B /* Bookmark */ = {
@@ -510,6 +504,7 @@
 		C296D6F12C1F16B000691515 = {
 			isa = PBXGroup;
 			children = (
+				75B3CF082CA6897800E11BE9 /* Config.xcconfig */,
 				C2159D5A2CA5B08B00CD1DD7 /* GoogleService-Info.plist */,
 				C296D6FC2C1F16B000691515 /* Busanify */,
 				C296D7132C1F16B200691515 /* BusanifyTests */,
@@ -884,6 +879,7 @@
 				C242DFDE2CA5206F00AEC1D1 /* arial-unicode-ms.ttf in Resources */,
 				C296D70A2C1F16B200691515 /* Base in Resources */,
 				C296D7052C1F16B000691515 /* Base in Resources */,
+				75B3CF092CA6897800E11BE9 /* Config.xcconfig in Resources */,
 				754871202CA5945F0088E74A /* GoogleService-Info.plist in Resources */,
 				754871252CA59DB00088E74A /* GoogleService-Info.plist in Resources */,
 			);
@@ -1118,7 +1114,7 @@
 /* Begin XCBuildConfiguration section */
 		C296D7222C1F16B200691515 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 754871212CA594BD0088E74A /* Config.xcconfig */;
+			baseConfigurationReference = 75B3CF082CA6897800E11BE9 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -1183,7 +1179,7 @@
 		};
 		C296D7232C1F16B200691515 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 754871212CA594BD0088E74A /* Config.xcconfig */;
+			baseConfigurationReference = 75B3CF082CA6897800E11BE9 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
