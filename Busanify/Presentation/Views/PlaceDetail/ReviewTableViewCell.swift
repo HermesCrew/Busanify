@@ -177,7 +177,7 @@ class ReviewTableViewCell: UITableViewCell {
                         self?.delegate?.didEditReview(review)
                     }),
                     UIAction(title: NSLocalizedString("delete", comment: ""), image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
-                        self?.delegate?.didDeleteReview(review)
+                        self?.showDeleteConfirmationAlert(for: review)
                     })
                 ]
             }
@@ -193,7 +193,7 @@ class ReviewTableViewCell: UITableViewCell {
                         self?.delegate?.didEditReview(review)
                     }),
                     UIAction(title: NSLocalizedString("delete", comment: ""), image: UIImage(systemName: "trash"), attributes: .destructive, handler: { [weak self] _ in
-                        self?.delegate?.didDeleteReview(review)
+                        self?.showDeleteConfirmationAlert(for: review)
                     })
                 ]
             }
@@ -205,6 +205,23 @@ class ReviewTableViewCell: UITableViewCell {
         moreButton.menu = menu
         
         setupStarRating(rating: review.rating)
+    }
+    
+    private func showDeleteConfirmationAlert(for review: Review) {
+        guard let viewController = self.delegate as? UIViewController else { return }
+        
+        let alert = UIAlertController(title: NSLocalizedString("deleteReview", comment: ""), message: NSLocalizedString("postWillBeDeleted", comment: ""), preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil)
+        let deleteAction = UIAlertAction(title: NSLocalizedString("delete", comment: ""), style: .destructive) { [weak self] _ in
+            guard let self = self else { return }
+            self.delegate?.didDeleteReview(review)
+        }
+        
+        alert.addAction(cancelAction)
+        alert.addAction(deleteAction)
+        
+        viewController.present(alert, animated: true, completion: nil)
     }
     
     private func setupStarRating(rating: Int) {
