@@ -37,11 +37,23 @@ class LanguageSettingViewController: UIViewController {
     }
     
     private func getCurrentLanguageCode() -> String {
-            let currentLang = UserDefaults.standard.array(forKey: "AppleLanguages")?.first as? String
-        ?? Locale.current.language.languageCode?.identifier
-                ?? "en"
-            return currentLang.components(separatedBy: "-").first ?? currentLang
+        let currentLangs = UserDefaults.standard.array(forKey: "AppleLanguages") as? [String] ?? []
+        if let firstLang = currentLangs.first {
+            if firstLang.starts(with: "zh") {
+                return firstLang
+            }
+            return firstLang.components(separatedBy: "-").first ?? firstLang
         }
+        return Locale.current.language.languageCode?.identifier ?? "en"
+    }
+    
+    private func isMatchingLanguageCode(_ code: String, with currentCode: String) -> Bool {
+        if code.starts(with: "zh") {
+            return code == currentCode
+        } else {
+            return code.starts(with: currentCode)
+        }
+    }
 }
 
 extension LanguageSettingViewController: UITableViewDelegate, UITableViewDataSource {
@@ -53,8 +65,8 @@ extension LanguageSettingViewController: UITableViewDelegate, UITableViewDataSou
         let cell = tableView.dequeueReusableCell(withIdentifier: "LanguageCell", for: indexPath)
         cell.textLabel?.text = languages[indexPath.row]
         
-        let currentLang = getCurrentLanguageCode()
-        if currentLang.starts(with: languageCodes[indexPath.row]) {
+        let currentLangCode = getCurrentLanguageCode()
+        if isMatchingLanguageCode(languageCodes[indexPath.row], with: currentLangCode) {
             cell.accessoryType = .checkmark
         } else {
             cell.accessoryType = .none
