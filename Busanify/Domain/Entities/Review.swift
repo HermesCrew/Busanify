@@ -10,7 +10,7 @@ import UIKit
 
 struct Review: Identifiable, Hashable, Codable {
     let id: Int
-    let rating: Double
+    let rating: Int
     let content: String
     let photoUrls: [String]
     let user: User
@@ -23,7 +23,7 @@ struct Review: Identifiable, Hashable, Codable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(Int.self, forKey: .id)
-        rating = try container.decode(Double.self, forKey: .rating)
+        rating = try container.decode(Int.self, forKey: .rating)
         content = try container.decode(String.self, forKey: .content)
         photoUrls = try container.decode([String].self, forKey: .photoUrls)
         user = try container.decode(User.self, forKey: .user)
