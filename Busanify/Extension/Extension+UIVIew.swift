@@ -283,6 +283,8 @@ class CustomLocationButton: UIButton {
 }
 
 class RatingStackView: UIStackView {
+    var onRatingChanged: ((Double) -> Void)?
+    
     private(set) var rating: Int = 0 {
         didSet {
             updateStarImages()
@@ -351,6 +353,7 @@ class RatingStackView: UIStackView {
         
         // Clamp the rating between 1 and 5
         rating = max(1, min(starCount, newRating))
+        onRatingChanged?(Double(rating))
     }
     
     private func updateStarImages() {

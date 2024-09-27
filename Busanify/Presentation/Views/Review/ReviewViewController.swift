@@ -149,9 +149,9 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
             updateSaveButtonState()
         }
         
-//        rateStackView.onRatingChanged = { [weak self] _ in
-//            self?.updateSaveButtonState()
-//        }
+        rateStackView.onRatingChanged = { [weak self] _ in
+            self?.updateSaveButtonState()
+        }
     }
     
     private func configureUI() {
