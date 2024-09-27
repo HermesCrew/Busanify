@@ -82,3 +82,5 @@
 "review" = "評論";
 "langInLocalText" = "繁體中文";
 "close" = "關閉";
+"languageChanged" = "語言變更";
+"restartApp" = "請重新啓動應用程序";

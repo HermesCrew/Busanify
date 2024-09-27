@@ -82,3 +82,5 @@
 "review" = "レビュー";
 "langInLocalText" = "日本語";
 "close" = "閉じる";
+"languageChanged" = "言語が変更されました";
+"restartApp" = "アプリを再起動します";
