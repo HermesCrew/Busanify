@@ -99,18 +99,16 @@ class CommunityTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureUI()
         
+        // 셀 전체에 대한 제스쳐추가
+        let cellTapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapContentLabel))
+        contentView.addGestureRecognizer(cellTapGesture)
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapContentLabel))
         contentLabel.addGestureRecognizer(tapGesture)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        
-        profileImageView.image = UIImage(systemName: "person.crop.circle")
     }
     
     @objc private func didTapContentLabel() {
@@ -293,12 +291,8 @@ protocol CommunityTableViewCellDelegate: NSObject {
 
 extension CommunityTableViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // 선택한 이미지 URL 오 ImagePreviewViewController에 전달
-        let previewVC = ImagePreviewViewController(imageUrls: photoUrls)
-        previewVC.modalPresentationStyle = .overFullScreen
-        
-        if let viewController = self.delegate as? UIViewController {
-            viewController.present(previewVC, animated: true, completion: nil)
-        }
+        //상세 화면으로 바로 이동
+        guard let post = self.post else { return }
+        self.delegate?.showPostDetail(post: post)
     }
 }

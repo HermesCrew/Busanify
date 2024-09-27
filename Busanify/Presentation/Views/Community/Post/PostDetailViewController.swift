@@ -23,7 +23,7 @@ class PostDetailViewController: UIViewController {
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.contentInset = .zero
-        tableView.backgroundColor = .systemGray5
+        tableView.backgroundColor = .white
         tableView.showsVerticalScrollIndicator = false
         return tableView
     }()
@@ -64,6 +64,7 @@ class PostDetailViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.backgroundColor = .clear
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "ImageCell")
         return collectionView
@@ -114,64 +115,82 @@ class PostDetailViewController: UIViewController {
     }
 
     private func setupUI() {
-        view.addSubview(profileImageView)
-        view.addSubview(usernameLabel)
-        view.addSubview(dateLabel)
-        view.addSubview(moreButton)
-        view.addSubview(contentLabel)
-        view.addSubview(collectionView)
-        view.addSubview(tableView)
-        view.addSubview(dividerLine)
+            view.addSubview(tableView)
+            tableView.translatesAutoresizingMaskIntoConstraints = false
+
+            NSLayoutConstraint.activate([
+                tableView.topAnchor.constraint(equalTo: view.topAnchor),
+                tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            ])
+
+            tableView.dataSource = self
+            tableView.delegate = self
+            tableView.register(CommentTableViewCell.self, forCellReuseIdentifier: CommentTableViewCell.identifier)
+            tableView.tableHeaderView = createTableHeaderView()
+        }
+
+    private func createTableHeaderView() -> UIView {
+        let headerView = UIView()
+        headerView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 350)
+
+        headerView.addSubview(profileImageView)
+        headerView.addSubview(usernameLabel)
+        headerView.addSubview(dateLabel)
+        headerView.addSubview(moreButton)
+        headerView.addSubview(contentLabel)
         
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         usernameLabel.translatesAutoresizingMaskIntoConstraints = false
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
         moreButton.translatesAutoresizingMaskIntoConstraints = false
         contentLabel.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        
+
         NSLayoutConstraint.activate([
-            profileImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            profileImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            profileImageView.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 16),
+            profileImageView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
             profileImageView.widthAnchor.constraint(equalToConstant: 30),
             profileImageView.heightAnchor.constraint(equalToConstant: 30),
             
-            usernameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            usernameLabel.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 16),
             usernameLabel.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 8),
             usernameLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
             
-            dateLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            dateLabel.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 16),
             dateLabel.leadingAnchor.constraint(equalTo: usernameLabel.trailingAnchor, constant: 8),
             dateLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
             
-            moreButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            moreButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            moreButton.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 16),
+            moreButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
             moreButton.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
             
             contentLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 16),
-            contentLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            contentLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            
-            collectionView.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 16),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            collectionView.heightAnchor.constraint(equalToConstant: 200),
-            
-            dividerLine.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 16),
-            dividerLine.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            dividerLine.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            dividerLine.heightAnchor.constraint(equalToConstant: 1),
-            
-            tableView.topAnchor.constraint(equalTo: dividerLine.bottomAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            contentLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
+            contentLabel.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
         ])
 
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(CommentTableViewCell.self, forCellReuseIdentifier: CommentTableViewCell.identifier)
+        if !post.photoUrls.isEmpty {
+            headerView.addSubview(collectionView)
+            collectionView.translatesAutoresizingMaskIntoConstraints = false
+            
+            NSLayoutConstraint.activate([
+                collectionView.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 16),
+                collectionView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
+                collectionView.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
+                collectionView.heightAnchor.constraint(equalToConstant: 200),
+                collectionView.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -16)
+            ])
+        } else {
+            contentLabel.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -16).isActive = true
+        }
+
+        headerView.setNeedsLayout()
+        headerView.layoutIfNeeded()
+        let height = headerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
+        headerView.frame.size.height = height
+
+        return headerView
     }
 
     private func configureUI() {
@@ -185,7 +204,41 @@ class PostDetailViewController: UIViewController {
         
         setupMoreButton()
         
-        collectionView.reloadData()
+        if !post.photoUrls.isEmpty {
+            if collectionView.superview == nil {
+                tableView.tableHeaderView?.addSubview(collectionView)
+                collectionView.translatesAutoresizingMaskIntoConstraints = false
+                
+                NSLayoutConstraint.activate([
+                    collectionView.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 16),
+                    collectionView.leadingAnchor.constraint(equalTo: tableView.tableHeaderView!.leadingAnchor, constant: 16),
+                    collectionView.trailingAnchor.constraint(equalTo: tableView.tableHeaderView!.trailingAnchor, constant: -16),
+                    collectionView.heightAnchor.constraint(equalToConstant: 200),
+                    collectionView.bottomAnchor.constraint(equalTo: tableView.tableHeaderView!.bottomAnchor, constant: -16)
+                ])
+            }
+            collectionView.isHidden = false
+            collectionView.reloadData()
+        } else {
+            collectionView.isHidden = true
+            contentLabel.bottomAnchor.constraint(equalTo: tableView.tableHeaderView!.bottomAnchor, constant: -16).isActive = true
+        }
+        
+        updateTableHeaderViewHeight()
+    }
+    
+    private func updateTableHeaderViewHeight() {
+        guard let headerView = tableView.tableHeaderView else { return }
+        
+        headerView.setNeedsLayout()
+        headerView.layoutIfNeeded()
+        
+        let height = headerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
+        var frame = headerView.frame
+        frame.size.height = height
+        headerView.frame = frame
+        
+        tableView.tableHeaderView = headerView
     }
     
     private func setupMoreButton() {
@@ -253,6 +306,7 @@ extension PostDetailViewController: UITableViewDataSource, UITableViewDelegate {
         let comment = commentViewModel.comments[indexPath.row]
         cell.configure(comment: comment, post: post)
         cell.delegate = self
+        cell.selectionStyle = .none
         return cell
     }
 }
@@ -267,7 +321,8 @@ extension PostDetailViewController: UICollectionViewDataSource, UICollectionView
         
         // 기존의 이미지 뷰 제거 (중복 추가 방지)
         cell.contentView.subviews.forEach { $0.removeFromSuperview() }
-        
+        cell.backgroundColor = .clear
+        cell.contentView.backgroundColor = .clear
         // 이미지 뷰 생성 및 추가
         let imageView = UIImageView(frame: cell.contentView.bounds)
         imageView.contentMode = .scaleAspectFill
@@ -286,6 +341,13 @@ extension PostDetailViewController: UICollectionViewDataSource, UICollectionView
         
         return cell
     }
+    
+    // 이미지를 선택했을 때,, 사진 크게보기
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let imagePreviewVC = ImagePreviewViewController(imageUrls: post.photoUrls) // 모든 이미지 전달하도록 수정
+        imagePreviewVC.modalPresentationStyle = .overFullScreen
+        present(imagePreviewVC, animated: true, completion: nil)
+    }
 }
 
 // Post 관련 로직을 처리하는 확장
@@ -296,13 +358,27 @@ extension PostDetailViewController: UpdatePostViewControllerDelegate {
     
     func didUpdatePost(post: Post) {
         delegate?.didCreatePost()
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            let hadPhotos = !self.post.photoUrls.isEmpty
             self.post = post
-            self.contentLabel.text = post.content
-            self.collectionView.reloadData()
+            let hasPhotosNow = !post.photoUrls.isEmpty
+            
+            if !hadPhotos && hasPhotosNow {
+                // 사진이 새로 추가된 경우
+                self.tableView.tableHeaderView = self.createTableHeaderView()
+            }
+            
+            self.configureUI()
+            self.tableView.reloadData()
+            
+            if hasPhotosNow {
+                self.collectionView.reloadData()
+            }
+            
+            self.updateTableHeaderViewHeight()
         }
     }
-    
     // 게시글 수정
     func updatePost() {
         let updatePostVC = UpdatePostViewController(postViewModel: postViewModel, post: post)
