@@ -10,9 +10,9 @@ import UIKit
 
 struct Review: Identifiable, Hashable, Codable {
     let id: Int
-    let rating: Int
-    let content: String
-    let photoUrls: [String]
+    var rating: Int
+    var content: String
+    var photoUrls: [String]
     let user: User
     let place: Place?
     let createdAt: String

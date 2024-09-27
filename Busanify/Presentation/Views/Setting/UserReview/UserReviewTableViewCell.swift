@@ -248,5 +248,5 @@ protocol UserReviewTableViewCellDelegate: NSObject {
     func didDeleteReview(_ review: Review)
     func openReviewDeitView(_ review: Review)
     func reportReview(_ review: Review)
-    func didUpdateReview()
+    func didUpdateReview(_ review: Review?)
 }

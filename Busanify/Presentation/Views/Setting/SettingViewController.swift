@@ -20,11 +20,14 @@ class SettingViewController: UIViewController {
     private lazy var loginButton: UIButton = {
         var config = UIButton.Configuration.filled()
         config.title = "Login"
-        config.baseForegroundColor = .black
-        config.baseBackgroundColor = .white
+        config.baseForegroundColor = .white // 글자 색상 흰색
+        config.baseBackgroundColor = .systemBlue // 배경 파란색
+        
         let button = UIButton(configuration: config)
         button.addTarget(self, action: #selector(goToLogin), for: .touchUpInside)
-        
+        button.layer.cornerRadius = 25
+        button.clipsToBounds = true
+
         return button
     }()
     
@@ -32,8 +35,8 @@ class SettingViewController: UIViewController {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person.fill")
         imageView.contentMode = .scaleAspectFill
-        imageView.tintColor = .black
-        imageView.backgroundColor = .lightGray
+//        imageView.tintColor = .black
+//        imageView.backgroundColor = .lightGray
         imageView.layer.cornerRadius = 75
         imageView.clipsToBounds = true
         
@@ -179,9 +182,12 @@ class SettingViewController: UIViewController {
         loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
         cameraIconView.translatesAutoresizingMaskIntoConstraints = false
         
+        let screenWidth = UIScreen.main.bounds.width
         NSLayoutConstraint.activate([
-            loginButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            loginButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 80),
             loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loginButton.widthAnchor.constraint(equalToConstant: screenWidth / 3),
+            loginButton.heightAnchor.constraint(equalToConstant: 50),
             
             profileImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             profileImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -229,7 +235,7 @@ class SettingViewController: UIViewController {
                         with: url,
                         placeholder: profileImageView.image)
                 } else {
-                    profileImageView.image = UIImage(systemName: "person.fill")
+                    profileImageView.image = UIImage(systemName: "person.crop.circle")
                 }
                 nicknameLabel.text = currentUser.nickname
                 emailLabel.text = currentUser.email
@@ -383,7 +389,7 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
 //            cell.configure(with: settingInfo, labelText: NSLocalizedString("langInLocalText", comment: ""))
 //            cell.accessoryType = .none
         case 4:
-            cell.configure(with: settingInfo, labelText: "1.0")
+            cell.configure(with: settingInfo, labelText: "1.0.1")
             cell.accessoryType = .none
         case 5:
             cell.configure(with: settingInfo, labelText: "")
@@ -401,6 +407,7 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
             showLogoutAlert()
         } else if indexPath.row == 0 {
             let userReviewVC = UserReviewViewController()
+            userReviewVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(userReviewVC, animated: true)
         } else if indexPath.row == 1 {
             let userPostVC = UserPostViewController()
@@ -412,6 +419,7 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
             navigationController?.pushViewController(privacyPolicyVC, animated: true)
         } else if indexPath.row == 3 {
             let langVC = LanguageSettingViewController()
+            langVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(langVC, animated: true)
         }
     }

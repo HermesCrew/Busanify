@@ -386,13 +386,17 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
         showLoading()
         Task {
             do {
-                try await reviewViewModel.editReview(token: authViewModel.getToken(), content: contentTextView.text, reviewId: self.selectedReview!.id, rating: currentRating, photos: imageItems)
+                let photoUrls = try await reviewViewModel.editReview(token: authViewModel.getToken(), content: contentTextView.text, reviewId: self.selectedReview!.id, rating: currentRating, photos: imageItems)
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     self.hideLoading()
                     self.delegate?.didCreateReview()
                     self.delegate?.updateListView()
-                    self.userReviewDelegate?.didUpdateReview()
+                    var updateReview = self.selectedReview!
+                    updateReview.rating = self.currentRating
+                    updateReview.photoUrls = photoUrls
+                    updateReview.content = self.contentTextView.text
+                    self.userReviewDelegate?.didUpdateReview(updateReview)
                     self.dismiss(animated: true)
                     self.delegate?.showToastMessage(NSLocalizedString("changesSaved", comment: ""))
                 }

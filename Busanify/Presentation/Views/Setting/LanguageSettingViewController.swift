@@ -19,6 +19,7 @@ class LanguageSettingViewController: UIViewController {
     }
     
     private func setupUI() {
+        enableInteractivePopGesture()
         view.backgroundColor = .systemBackground
         title = NSLocalizedString("language", comment: "")
         

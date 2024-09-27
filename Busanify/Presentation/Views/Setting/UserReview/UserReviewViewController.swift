@@ -36,6 +36,7 @@ class UserReviewViewController: UIViewController {
     }
     
     private func setupUI() {
+        enableInteractivePopGesture()
         view.backgroundColor = .white
         
         tableView.register(UserReviewTableViewCell.self, forCellReuseIdentifier: UserReviewTableViewCell.identifier)
@@ -54,7 +55,7 @@ class UserReviewViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        title = "My Review"
+        title = NSLocalizedString("myReview", comment: "")
         let backButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"), style: .plain, target: self, action: #selector(backButtonTapped)
         )
         navigationItem.leftBarButtonItem = backButton
@@ -123,7 +124,7 @@ extension UserReviewViewController: UserReviewTableViewCellDelegate, AddPostView
         present(reviewView, animated: true)
     }
     
-    func didUpdateReview() {
+    func didUpdateReview(_ review: Review? = nil) {
         self.viewModel.loadReviews()
     }
     
