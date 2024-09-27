@@ -24,6 +24,7 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
     private var imageItems: [ImageData] = []
     
     weak var delegate: AddReviewViewControllerDelegate?
+    weak var userReviewDelegate: UserReviewTableViewCellDelegate?
     
     var selectedPlace: Place
     var selectedReview: Review?
@@ -149,9 +150,9 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
             updateSaveButtonState()
         }
         
-//        rateStackView.onRatingChanged = { [weak self] _ in
-//            self?.updateSaveButtonState()
-//        }
+        rateStackView.onRatingChanged = { [weak self] _ in
+            self?.updateSaveButtonState()
+        }
     }
     
     private func configureUI() {
@@ -391,6 +392,7 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
                     self.hideLoading()
                     self.delegate?.didCreateReview()
                     self.delegate?.updateListView()
+                    self.userReviewDelegate?.didUpdateReview()
                     self.dismiss(animated: true)
                     self.delegate?.showToastMessage(NSLocalizedString("changesSaved", comment: ""))
                 }
