@@ -183,6 +183,7 @@ extension CommunityViewController: CommunityTableViewCellDelegate {
         
         let postDetailVC = PostDetailViewController(post: post, commentViewModel: commentViewModel, postViewModel: postViewModel)
         postDetailVC.delegate = self
+        postDetailVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(postDetailVC, animated: true)
     }
     

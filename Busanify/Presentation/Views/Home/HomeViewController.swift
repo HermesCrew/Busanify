@@ -134,6 +134,7 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
     // WeatherContainerDelegate 메서드 구현
     func didTapWeatherButton() {
         let weatherVC = WeatherViewController()
+        weatherVC.hidesBottomBarWhenPushed = true
         
         if navigationController == nil {
             // 현재 ViewController를 NavigationController로 감싸주기!

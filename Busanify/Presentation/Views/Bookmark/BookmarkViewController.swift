@@ -254,6 +254,7 @@ extension BookmarkViewController: UICollectionViewDataSource, UICollectionViewDe
         let reviewViewModel = ReviewViewModel(useCase: ReviewApi())
         let placeDetailVC = PlaceDetailViewController(placeDetailViewModel: placeDetailViewModel, reviewViewModel: reviewViewModel)
         placeDetailVC.delegate = self
+        placeDetailVC.hidesBottomBarWhenPushed = true
         show(placeDetailVC, sender: self)
     }
 }
