@@ -118,5 +118,20 @@ final class ReviewApi: ReviewUseCase {
         let (_, _) = try await URLSession.shared.data(for: request)
     }
     
+    func getUserReviews(token: String, lang: String) -> AnyPublisher<[Review], Never> {
+        let urlString = "\(baseURL)/reviews/user/list?lang=\(lang)"
+        guard let url = URL(string: urlString) else {
+            fatalError("Invalid URL")
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map(\.data)
+            .decode(type: [Review].self, decoder: JSONDecoder())
+            .replaceError(with: [])
+            .eraseToAnyPublisher()
+    }
     
 }

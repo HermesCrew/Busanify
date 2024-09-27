@@ -22,7 +22,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
         tableView.dataSource = self
         tableView.register(PlaceInfoTableViewCell.self, forCellReuseIdentifier: PlaceInfoTableViewCell.identifier)
         tableView.register(RatingTableViewCell.self, forCellReuseIdentifier: RatingTableViewCell.identifier)
-        tableView.register(ReviewTableViewCell.self, forCellReuseIdentifier: ReviewTableViewCell.identifier)
+        tableView.register(UserReviewTableViewCell.self, forCellReuseIdentifier: UserReviewTableViewCell.identifier)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "reviewList")
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 100
