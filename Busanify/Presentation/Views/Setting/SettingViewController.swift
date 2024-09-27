@@ -376,12 +376,12 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
         cell.selectionStyle = .none
             
         switch indexPath.row {
-        case 0, 1, 2:
+        case 0, 1, 2, 3:
             cell.configure(with: settingInfo, labelText: "")
             cell.accessoryType = .disclosureIndicator
-        case 3:
-            cell.configure(with: settingInfo, labelText: NSLocalizedString("langInLocalText", comment: ""))
-            cell.accessoryType = .none
+//        case 3:
+//            cell.configure(with: settingInfo, labelText: NSLocalizedString("langInLocalText", comment: ""))
+//            cell.accessoryType = .none
         case 4:
             cell.configure(with: settingInfo, labelText: "1.0")
             cell.accessoryType = .none
@@ -408,6 +408,9 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
         } else if indexPath.row == 2 {
             let privacyPolicyVC = PrivacyPolicyViewController()
             navigationController?.pushViewController(privacyPolicyVC, animated: true)
+        } else if indexPath.row == 3 {
+            let langVC = LanguageSettingViewController()
+            navigationController?.pushViewController(langVC, animated: true)
         }
     }
 }

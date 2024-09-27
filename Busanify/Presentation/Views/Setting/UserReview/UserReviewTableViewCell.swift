@@ -154,7 +154,7 @@ class UserReviewTableViewCell: UITableViewCell {
         let menu = UIMenu(title: "", image: nil, options: [], children: menuItems)
         moreButton.menu = menu
         
-        setupStarRating(rating: review.rating)
+        setupStarRating(rating: Double(review.rating))
     }
     
     private func setupStarRating(rating: Double) {
