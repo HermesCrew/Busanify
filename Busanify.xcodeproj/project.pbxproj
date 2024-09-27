@@ -16,7 +16,6 @@
 		7548711A2CA44A3C0088E74A /* UserPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754871192CA44A3C0088E74A /* UserPostViewModel.swift */; };
 		754871202CA5945F0088E74A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7548711F2CA5945E0088E74A /* GoogleService-Info.plist */; };
 		758FB83B2C57DF430029EBAA /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758FB83A2C57DF430029EBAA /* Bookmark.swift */; };
-		75B3CF092CA6897800E11BE9 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 75B3CF082CA6897800E11BE9 /* Config.xcconfig */; };
 		75B3CF0C2CA69B6500E11BE9 /* UserReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B3CF0B2CA69B6500E11BE9 /* UserReviewViewController.swift */; };
 		75B3CF0F2CA69D6600E11BE9 /* UserReviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B3CF0E2CA69D6600E11BE9 /* UserReviewViewModel.swift */; };
 		75B3CF132CA6A99100E11BE9 /* UserReviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B3CF122CA6A99100E11BE9 /* UserReviewTableViewCell.swift */; };
@@ -136,7 +135,6 @@
 		7548711F2CA5945E0088E74A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		757882F72C43E52A0078EFAB /* Busanify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Busanify.entitlements; sourceTree = "<group>"; };
 		758FB83A2C57DF430029EBAA /* Bookmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
-		75B3CF082CA6897800E11BE9 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		75B3CF0B2CA69B6500E11BE9 /* UserReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserReviewViewController.swift; sourceTree = "<group>"; };
 		75B3CF0E2CA69D6600E11BE9 /* UserReviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserReviewViewModel.swift; sourceTree = "<group>"; };
 		75B3CF122CA6A99100E11BE9 /* UserReviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserReviewTableViewCell.swift; sourceTree = "<group>"; };
