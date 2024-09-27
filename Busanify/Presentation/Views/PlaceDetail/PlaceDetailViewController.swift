@@ -85,6 +85,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
+        enableInteractivePopGesture()
         configureUI()
         bind()
         

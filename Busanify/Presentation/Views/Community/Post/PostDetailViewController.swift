@@ -102,6 +102,7 @@ class PostDetailViewController: UIViewController {
         setupUI()
         configureUI()
         setupNavigationBar()
+        enableInteractivePopGesture()
         fetchComments()
     }
     
