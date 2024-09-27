@@ -37,6 +37,7 @@ class PostDetailViewController: UIViewController {
     
     private lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "person.crop.circle")
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 15
