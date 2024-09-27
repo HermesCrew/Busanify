@@ -214,7 +214,18 @@ class PrivacyPolicyViewController: UIViewController {
         
         configureUI()
         setupTextView()
+        setupNavigationBar()
         title = NSLocalizedString("privacyPolicy", comment: "")
+    }
+    
+    private func setupNavigationBar() {
+        let backButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"), style: .plain, target: self, action: #selector(backButtonTapped)
+        )
+        navigationItem.leftBarButtonItem = backButton
+    }
+
+    @objc private func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
     }
     
     private func configureUI() {

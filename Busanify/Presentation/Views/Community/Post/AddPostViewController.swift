@@ -124,7 +124,7 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
     
     private func configureUI() {
         // 내비게이션 leftitem 추가
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(cancelButtonTapped))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"), style: .plain, target: self, action: #selector(cancelButtonTapped))
         title = NSLocalizedString("addPost", comment: "")
         view.backgroundColor = .systemBackground
         view.addSubview(addButton)

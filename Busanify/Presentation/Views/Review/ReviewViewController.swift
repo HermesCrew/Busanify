@@ -184,14 +184,14 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
             rateStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             addButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            addButton.widthAnchor.constraint(equalToConstant: 50),
-            addButton.heightAnchor.constraint(equalToConstant: 50),
+            addButton.widthAnchor.constraint(equalToConstant: 80),
+            addButton.heightAnchor.constraint(equalToConstant: 80),
             addButton.centerYAnchor.constraint(equalTo: photoCollectionView.centerYAnchor),
             
             photoCollectionView.topAnchor.constraint(equalTo: rateStackView.bottomAnchor, constant: 20),
             photoCollectionView.leadingAnchor.constraint(equalTo: addButton.trailingAnchor, constant: 16),
             photoCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            photoCollectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.20),
+            photoCollectionView.heightAnchor.constraint(equalToConstant: 120),
             
             contentTextView.topAnchor.constraint(equalTo: photoCollectionView.bottomAnchor, constant: 16),
             contentTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
