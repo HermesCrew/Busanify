@@ -18,6 +18,7 @@ class UserPostViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupNavigationBar()
+        enableInteractivePopGesture()
         bindViewModel()
     }
     
@@ -92,6 +93,7 @@ extension UserPostViewController: CommunityTableViewCellDelegate {
         let postViewModel = PostViewModel(useCase: PostApi())
         
         let postDetailVC = PostDetailViewController(post: post, commentViewModel: commentViewModel, postViewModel: postViewModel)
+        postDetailVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(postDetailVC, animated: true)
     }
     

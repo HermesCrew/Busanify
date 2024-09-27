@@ -96,7 +96,7 @@ class ImagePreviewViewController: UIViewController {
     // exit(닫기)
     private func setupCloseButton() {
         let closeButton = UIButton(type: .system)
-        closeButton.setTitle("닫기", for: .normal)
+        closeButton.setTitle(NSLocalizedString("close", comment: ""), for: .normal)
         closeButton.setTitleColor(.white, for: .normal)
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         closeButton.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)

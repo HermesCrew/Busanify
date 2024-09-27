@@ -47,6 +47,7 @@ class WeatherViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupNavigationBar()
+        enableInteractivePopGesture()
         setupBindings()
         
         hourlyForecastCollectionView.delegate = self
@@ -56,7 +57,7 @@ class WeatherViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        self.title = "날씨"
+        self.title = NSLocalizedString("weather", comment: "")
         self.navigationController?.navigationBar.barTintColor = .white
         let backButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"), style: .plain, target: self, action: #selector(backButtonTapped)
         )

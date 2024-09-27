@@ -127,10 +127,10 @@
             </objects>
             <point key="canvasLocation" x="442" y="299"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--Custom Tab Bar Controller-->
         <scene sceneID="MSE-jE-TSz">
             <objects>
-                <tabBarController id="GrE-jI-Msc" sceneMemberID="viewController">
+                <tabBarController id="GrE-jI-Msc" customClass="CustomTabBarController" customModule="Busanify" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ZGT-P8-yW0">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>

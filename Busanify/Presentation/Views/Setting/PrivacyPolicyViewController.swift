@@ -215,6 +215,7 @@ class PrivacyPolicyViewController: UIViewController {
         configureUI()
         setupTextView()
         setupNavigationBar()
+        enableInteractivePopGesture()
         title = NSLocalizedString("privacyPolicy", comment: "")
     }
     
