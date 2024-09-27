@@ -239,7 +239,7 @@ extension CommentViewController: CommentTableViewCellDelegate {
     }
 }
 
-extension CommentViewController: UITextFieldDelegate, UIGestureRecognizerDelegate {
+extension CommentViewController: UITextFieldDelegate {
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         if authViewModel.state == .signedOut {
             var alert = UIAlertController()

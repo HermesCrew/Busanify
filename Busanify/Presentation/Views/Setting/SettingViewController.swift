@@ -401,9 +401,11 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
             showLogoutAlert()
         } else if indexPath.row == 1 {
             let userPostVC = UserPostViewController()
+            userPostVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(userPostVC, animated: true)
         } else if indexPath.row == 2 {
             let privacyPolicyVC = PrivacyPolicyViewController()
+            privacyPolicyVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(privacyPolicyVC, animated: true)
         }
     }

@@ -79,8 +79,8 @@ class CommunityViewController: UIViewController  {
         view.backgroundColor = .systemBackground
         view.addSubview(titleLabel)
         view.addSubview(addPostButton)
-        view.addSubview(emptyMessageLabel)
         view.addSubview(tableView)
+        view.addSubview(emptyMessageLabel)
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -183,6 +183,7 @@ extension CommunityViewController: CommunityTableViewCellDelegate {
         
         let postDetailVC = PostDetailViewController(post: post, commentViewModel: commentViewModel, postViewModel: postViewModel)
         postDetailVC.delegate = self
+        postDetailVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(postDetailVC, animated: true)
     }
     

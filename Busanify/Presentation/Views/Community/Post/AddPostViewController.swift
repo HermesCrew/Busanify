@@ -109,6 +109,7 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
         
         configureUI()
         setupTapGesture()
+        enableInteractivePopGesture()
         
         contentTextView.delegate = self
         photoCollectionView.delegate = self
@@ -344,12 +345,14 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
         loadingView.isHidden = false
         activityIndicator.startAnimating()
         view.isUserInteractionEnabled = false
+        disableInteractivePopGesture()
     }
     
     private func hideLoading() {
         loadingView.isHidden = true
         activityIndicator.stopAnimating()
         view.isUserInteractionEnabled = true
+        enableInteractivePopGesture()
     }
 }
 
