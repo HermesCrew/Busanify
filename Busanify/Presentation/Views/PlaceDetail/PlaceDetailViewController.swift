@@ -83,11 +83,21 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setupNavigationBar()
         configureUI()
         bind()
         
         placeDetailViewModel.fetchPlace(token: authViewModel.getToken())
+    }
+    
+    private func setupNavigationBar() {
+        let backButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"), style: .plain, target: self, action: #selector(backButtonTapped)
+        )
+        navigationItem.leftBarButtonItem = backButton
+    }
+
+    @objc private func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
     }
     
     func configureUI() {
@@ -299,7 +309,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
-        headerView.backgroundColor = .clear
+        headerView.backgroundColor = .systemBackground
         
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
