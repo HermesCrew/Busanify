@@ -79,8 +79,8 @@ class CommunityViewController: UIViewController  {
         view.backgroundColor = .systemBackground
         view.addSubview(titleLabel)
         view.addSubview(addPostButton)
-        view.addSubview(emptyMessageLabel)
         view.addSubview(tableView)
+        view.addSubview(emptyMessageLabel)
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
