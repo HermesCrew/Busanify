@@ -22,7 +22,7 @@ enum PlaceType: Int, Codable, CaseIterable {
             case .restaurant:
                 return (NSLocalizedString("restaurant", comment: ""), "fork.knife", UIColor.systemOrange)
             case .accommodation:
-                return (NSLocalizedString("accommodation", comment: ""), "bed.double.fill", UIColor.systemYellow)
+                return (NSLocalizedString("accommodation", comment: ""), "bed.double.fill", UIColor.systemBlue)
             case .shopping:
                 return (NSLocalizedString("shopping", comment: ""), "handbag.fill", UIColor.systemPurple)
             }

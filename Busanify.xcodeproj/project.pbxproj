@@ -89,6 +89,7 @@
 		C2ED4A2D2CA2A46400A93A90 /* UIResponder+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2ED4A2C2CA2A46400A93A90 /* UIResponder+Extensions.swift */; };
 		C2F5776D2C479C1E00B2365F /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F5776C2C479C1E00B2365F /* Review.swift */; };
 		C2FFD2B92C494AD90032C902 /* ReviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FFD2B82C494AD90032C902 /* ReviewTableViewCell.swift */; };
+		CD0DB0412CA6834C0021244C /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0DB0402CA6834C0021244C /* UIColor+Extension.swift */; };
 		CD0F67FB2CA440CC005E0628 /* ReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0F67FA2CA440CC005E0628 /* ReviewViewController.swift */; };
 		CD0F67FE2CA4458A005E0628 /* ReviewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0F67FD2CA4458A005E0628 /* ReviewProtocol.swift */; };
 		CD2A432D2CA538070013A094 /* UpdateReviewDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2A432C2CA538070013A094 /* UpdateReviewDTO.swift */; };
@@ -210,6 +211,7 @@
 		C2ED4A2C2CA2A46400A93A90 /* UIResponder+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIResponder+Extensions.swift"; sourceTree = "<group>"; };
 		C2F5776C2C479C1E00B2365F /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
 		C2FFD2B82C494AD90032C902 /* ReviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewTableViewCell.swift; sourceTree = "<group>"; };
+		CD0DB0402CA6834C0021244C /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		CD0F67FA2CA440CC005E0628 /* ReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewViewController.swift; sourceTree = "<group>"; };
 		CD0F67FD2CA4458A005E0628 /* ReviewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewProtocol.swift; sourceTree = "<group>"; };
 		CD2A432C2CA538070013A094 /* UpdateReviewDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateReviewDTO.swift; sourceTree = "<group>"; };
@@ -725,8 +727,6 @@
 		CD89D3512C29A55A00715404 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				CDA3BD112C56415B007A64E8 /* Extension+UIVIew.swift */,
-				CD7C5F502C56278300CACD6A /* Extension+KakaoMap.swift */,
 				CD3251982C4C080B006CB590 /* cell */,
 				CD89D3502C29A55A00715404 /* HomeViewController.swift */,
 				CD3251962C4C07E7006CB590 /* SelectedPlaceListViewController.swift */,
@@ -746,8 +746,11 @@
 		CDE5CB3B2CA1D22600950993 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				CD7C5F502C56278300CACD6A /* Extension+KakaoMap.swift */,
+				CDA3BD112C56415B007A64E8 /* Extension+UIVIew.swift */,
 				CDE5CB3C2CA1D23000950993 /* String+Extension.swift */,
 				CDF123842CA47348001A0C63 /* UIViewController+Extension.swift */,
+				CD0DB0402CA6834C0021244C /* UIColor+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -1015,6 +1018,7 @@
 				C259310D2C9D51A100901DC2 /* CommunityTableViewCell.swift in Sources */,
 				C2B27C8D2C91850700223874 /* SettingTableViewCell.swift in Sources */,
 				B8F32CE52CA4562C00DF172A /* ImagePreviewViewController.swift in Sources */,
+				CD0DB0412CA6834C0021244C /* UIColor+Extension.swift in Sources */,
 				CD89D3552C29A56B00715404 /* HomeViewModel.swift in Sources */,
 				CD32519C2C4C14E1006CB590 /* SelectedPlaceListViewModel.swift in Sources */,
 				C2695D322C4788AC00375BA6 /* PlaceDetailViewController.swift in Sources */,

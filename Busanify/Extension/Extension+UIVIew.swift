@@ -316,7 +316,7 @@ class RatingStackView: UIStackView {
     private func setupStars() {
         for i in 0..<starCount {
             let starImageView = UIImageView(image: UIImage(systemName: "star"))
-            starImageView.tintColor = .systemYellow
+            starImageView.tintColor = .busanifyColor
             starImageView.contentMode = .scaleAspectFit
             starImageView.tag = i
             
@@ -349,6 +349,7 @@ class RatingStackView: UIStackView {
         let starWidth = starSize + spacing
         let newRating = Int(location.x / starWidth) + 1
         
+        // Clamp the rating between 1 and 5
         rating = max(1, min(starCount, newRating))
     }
     
