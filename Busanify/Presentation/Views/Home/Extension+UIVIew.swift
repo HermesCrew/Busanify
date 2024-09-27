@@ -283,9 +283,7 @@ class CustomLocationButton: UIButton {
 }
 
 class RatingStackView: UIStackView {
-    var onRatingChanged: ((Double) -> Void)?
-    
-    private(set) var rating: CGFloat = 0 {
+    private(set) var rating: Int = 0 {
         didSet {
             updateStarImages()
         }
@@ -317,7 +315,7 @@ class RatingStackView: UIStackView {
     
     private func setupStars() {
         for i in 0..<starCount {
-            let starImageView = UIImageView(image: .init(systemName: "star"))
+            let starImageView = UIImageView(image: UIImage(systemName: "star"))
             starImageView.tintColor = .systemYellow
             starImageView.contentMode = .scaleAspectFit
             starImageView.tag = i
@@ -330,64 +328,56 @@ class RatingStackView: UIStackView {
     }
     
     private func setupGesture() {
-        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
-        longPressGesture.minimumPressDuration = 0
-        addGestureRecognizer(longPressGesture)
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
+        addGestureRecognizer(panGesture)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        addGestureRecognizer(tapGesture)
     }
     
-    @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
+    @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
         let location = gesture.location(in: self)
-        
-        switch gesture.state {
-        case .began, .changed:
-            updateRating(at: location)
-        default:
-            break
-        }
+        updateRating(at: location)
+    }
+    
+    @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
+        let location = gesture.location(in: self)
+        updateRating(at: location)
     }
     
     private func updateRating(at location: CGPoint) {
         let starWidth = starSize + spacing
-        var newRating = location.x / starWidth
-        newRating = max(0, min(CGFloat(starCount), newRating))
+        let newRating = Int(location.x / starWidth) + 1
         
-        rating = round(newRating * 2) / 2
-        onRatingChanged?(rating)
+        rating = max(1, min(starCount, newRating))
     }
     
     private func updateStarImages() {
         for i in 0..<starCount {
             if let starImageView = arrangedSubviews[i] as? UIImageView {
-                if CGFloat(i) + 1 <= rating {
-                    starImageView.image = .init(systemName: "star.fill")
-                } else if CGFloat(i) + 0.5 == rating {
-                    starImageView.image = .init(systemName: "star.leadinghalf.filled")
-                } else {
-                    starImageView.image = .init(systemName: "star")
-                }
+                starImageView.image = UIImage(systemName: i < rating ? "star.fill" : "star")
             }
         }
     }
-    
-    func getStarCounts() -> Double {
-        var fullStars: Double = 0
-        var halfStars: Double = 0
-
+    func getStarCounts() -> Int {
+        var fullStars: Int = 0
+//        var halfStars: Double = 0
+        
         for arrangedSubview in arrangedSubviews {
             if let imageView = arrangedSubview as? UIImageView,
                let image = imageView.image {
                 if image.isEqual(UIImage(systemName: "star.fill")) {
                     fullStars += 1
-                } else if image.isEqual(UIImage(systemName: "star.leadinghalf.filled")) {
+                } /*else if image.isEqual(UIImage(systemName: "star.leadinghalf.filled")) {
                     halfStars += 0.5
-                }
+                }*/
             }
         }
-
-        return fullStars + halfStars
+        
+        return fullStars// + halfStars
     }
     
-    func setStarCount(_ count: Double) {
+    func setStarCount(_ count: Int) {
         rating = count
         updateStarImages()
     }

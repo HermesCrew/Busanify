@@ -19,20 +19,10 @@ class PlaceListViewController: UIViewController {
     var selectedLng: Double = 0
     var selectedRadius: Double = 3000
     
-    //    init(viewModel: PlaceListViewModel) {
-    //        self.viewModel = viewModel
-    //        super.init(nibName: nil, bundle: nil)
-    //    }
-    
-    //    required init?(coder: NSCoder) {
-    //        fatalError("init(coder:) has not been implemented")
-    //    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
         bindViewModel()
-        //        fetchPlaces()
     }
     
     private func setupTableView() {
@@ -141,10 +131,21 @@ extension PlaceListViewController: UITableViewDataSource, UITableViewDelegate, D
         
         let placeDetailVC = PlaceDetailViewController(placeDetailViewModel: placeDetailViewModel, reviewViewModel: reviewViewModel)
         placeDetailVC.delegate = self
+        placeDetailVC.placeListDelegate = self
         show(placeDetailVC, sender: self)
     }
     
     func didUpdateData() {
         fetchPlaces()
+    }
+}
+
+extension PlaceListViewController: AddReviewViewControllerDelegate {
+    func didCreateReview() {}
+    
+    func showToastMessage(_ message: String) {}
+    
+    func updateListView() {
+        self.fetchPlaces()
     }
 }

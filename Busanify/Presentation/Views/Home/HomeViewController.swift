@@ -571,16 +571,21 @@ extension HomeViewController: UITextFieldDelegate {
             var btnInfo: PlaceType? = nil
             
             switch text {
-            case "음식", "음식점", "restaurant", "food":
+            case "음식", "음식점", "restaurant", "food", "eat", "食べ物", "食", "食べる",
+                "レストラン", "食事", "一顿饭", "食物", "餐馆", "吃点东西", "吃點東西",
+                "餐廳":
                 btnInfo = .restaurant
                 tempPlaceType = .restaurant
-            case "쇼핑", "shopping", "shop":
+            case "쇼핑", "shopping", "shop", "ショッピング", "住む", "我要去买它", "购物",
+                "購物", "我要去買它":
                 btnInfo = .shopping
                 tempPlaceType = .shopping
-            case "숙박", "숙소", "잠", "accommodation", "house", "rest", "sleep":
+            case "숙박", "숙소", "잠", "accommodation", "house", "rest", "sleep",
+                "宿泊", "宿泊施設", "眠る", "寄宿", "住宿", "睡觉", "睡覺":
                 btnInfo = .accommodation
                 tempPlaceType = .accommodation
-            case "관광", "관광지", "볼거":
+            case "관광", "관광지", "볼거", "sightseeing", "tourist attraction", "tour", "tourist",
+                "観光", "観光地", "観光する", "观光", "旅游景点", "旅遊景點", "觀光", "觀光地", "觀光する":
                 btnInfo = .touristAttraction
                 tempPlaceType = .touristAttraction
             default:

@@ -13,7 +13,7 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
     private let reviewViewModel: ReviewViewModel
     private let authViewModel = AuthenticationViewModel.shared
     
-    private var currentRating: Double {
+    private var currentRating: Int {
         get {
             return self.rateStackView.getStarCounts()
         }
@@ -367,6 +367,7 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
                     guard let self = self else { return }
                     self.hideLoading()
                     self.delegate?.didCreateReview()
+                    self.delegate?.updateListView()
                     self.dismiss(animated: true)
                     self.delegate?.showToastMessage(NSLocalizedString("reviewSaved", comment: ""))
                 }
@@ -389,6 +390,7 @@ class ReviewViewController: UIViewController, UICollectionViewDataSource, UIColl
                     guard let self = self else { return }
                     self.hideLoading()
                     self.delegate?.didCreateReview()
+                    self.delegate?.updateListView()
                     self.dismiss(animated: true)
                     self.delegate?.showToastMessage(NSLocalizedString("changesSaved", comment: ""))
                 }
@@ -556,4 +558,5 @@ extension ReviewViewController: UITextViewDelegate {
 protocol AddReviewViewControllerDelegate: NSObject {
     func didCreateReview()
     func showToastMessage(_ message: String)
+    func updateListView()
 }

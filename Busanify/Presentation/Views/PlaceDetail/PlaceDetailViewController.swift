@@ -15,6 +15,7 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
     private var cancellables = Set<AnyCancellable>()
     private var placeInfos: [(label: String, icon: String)] = []
     weak var delegate: DetailViewControllerDelegate?
+    weak var placeListDelegate: AddReviewViewControllerDelegate?
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -457,5 +458,9 @@ extension PlaceDetailViewController: AddReviewViewControllerDelegate {
     
     func didCreateReview() {
         placeDetailViewModel.fetchPlace(token: authViewModel.getToken())
+    }
+    
+    func updateListView() {
+        self.placeListDelegate?.updateListView()
     }
 }
