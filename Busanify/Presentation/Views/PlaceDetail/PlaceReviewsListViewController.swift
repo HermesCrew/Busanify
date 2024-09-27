@@ -10,7 +10,7 @@ import Combine
 
 class PlaceReviewsListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    private let reviews: [Review]
+    private var reviews: [Review]
     private let placeDetailViewModel: PlaceDetailViewModel
     private let reviewViewModel: ReviewViewModel
     private let authViewModel = AuthenticationViewModel.shared
@@ -83,6 +83,7 @@ extension PlaceReviewsListViewController: ReviewTableViewCellDelegate {
         let reviewController = ReviewViewController(reviewViewModel: reviewViewModel, selectedPlace: self.placeDetailViewModel.place)
         reviewController.selectedReview = review
         reviewController.delegate = self
+        reviewController.userReviewDelegate = self
         let reviewView = UINavigationController(rootViewController: reviewController)
         present(reviewView, animated: true)
     }
@@ -93,6 +94,13 @@ extension PlaceReviewsListViewController: ReviewTableViewCellDelegate {
                 try await reviewViewModel.deleteReview(id: review.id, token: self.authViewModel.getToken()!)
                 placeDetailViewModel.fetchPlace(token: self.authViewModel.getToken()!)
                 self.delegate?.didUpdateData()
+                
+                if let idx = self.reviews.map({ $0.id }).firstIndex(of: review.id) {
+                    DispatchQueue.main.async {
+                        self.reviews.remove(at: idx)
+                        self.tableView.deleteRows(at: [IndexPath(row: idx, section: 0)], with: .fade)
+                    }
+                }
             } catch {
                 print("Failed to delete review: \(error)")
             }
@@ -149,5 +157,22 @@ extension PlaceReviewsListViewController: AddReviewViewControllerDelegate {
     
     func updateListView() {
         self.placeListDelegate?.updateListView()
+    }
+}
+
+extension PlaceReviewsListViewController: UserReviewTableViewCellDelegate {
+    func openReviewDeitView(_ review: Review) {}
+    
+    func didUpdateReview(_ review: Review?) {
+        guard let review = review else { return }
+
+        if let idx = self.reviews.map({ $0.id }).firstIndex(of: review.id) {
+            let indexPath = IndexPath(row: idx, section: 0)
+            if let cell = tableView.cellForRow(at: indexPath) as? ReviewTableViewCell {
+                DispatchQueue.main.async {
+                    cell.configure(with: review)
+                }
+            }
+        }
     }
 }

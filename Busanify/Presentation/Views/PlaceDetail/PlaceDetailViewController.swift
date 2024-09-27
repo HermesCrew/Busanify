@@ -294,6 +294,8 @@ class PlaceDetailViewController: UIViewController, UITableViewDelegate, UITableV
                 // "View all reviews" 셀을 눌렀을 때
                 guard let reviews = placeDetailViewModel.place.reviews else { return }
                 let reviewsListVC = PlaceReviewsListViewController(reviews: reviews, placeDetailViewModel: placeDetailViewModel, reviewViewModel: reviewViewModel)
+                reviewsListVC.delegate = self
+                reviewsListVC.placeListDelegate = self
                 present(reviewsListVC, animated: true, completion: nil)
             }
         default:
@@ -463,5 +465,11 @@ extension PlaceDetailViewController: AddReviewViewControllerDelegate {
     
     func updateListView() {
         self.placeListDelegate?.updateListView()
+    }
+}
+
+extension PlaceDetailViewController: PlaceReviewsListViewControllerDelegate {
+    func didUpdateData() {
+        placeDetailViewModel.fetchPlace(token: authViewModel.getToken())
     }
 }
