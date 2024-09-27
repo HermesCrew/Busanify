@@ -205,7 +205,6 @@ class PostDetailViewController: UIViewController {
         setupMoreButton()
         
         if !post.photoUrls.isEmpty {
-            collectionView.reloadData()
             if collectionView.superview == nil {
                 tableView.tableHeaderView?.addSubview(collectionView)
                 collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -218,15 +217,28 @@ class PostDetailViewController: UIViewController {
                     collectionView.bottomAnchor.constraint(equalTo: tableView.tableHeaderView!.bottomAnchor, constant: -16)
                 ])
             }
+            collectionView.isHidden = false
+            collectionView.reloadData()
         } else {
-            collectionView.removeFromSuperview()
+            collectionView.isHidden = true
             contentLabel.bottomAnchor.constraint(equalTo: tableView.tableHeaderView!.bottomAnchor, constant: -16).isActive = true
         }
         
-        tableView.tableHeaderView?.layoutIfNeeded()
-        let fittingSize = tableView.tableHeaderView?.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-        tableView.tableHeaderView?.frame.size.height = fittingSize?.height ?? 0
-        tableView.tableHeaderView = tableView.tableHeaderView
+        updateTableHeaderViewHeight()
+    }
+    
+    private func updateTableHeaderViewHeight() {
+        guard let headerView = tableView.tableHeaderView else { return }
+        
+        headerView.setNeedsLayout()
+        headerView.layoutIfNeeded()
+        
+        let height = headerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
+        var frame = headerView.frame
+        frame.size.height = height
+        headerView.frame = frame
+        
+        tableView.tableHeaderView = headerView
     }
     
     private func setupMoreButton() {
@@ -348,22 +360,23 @@ extension PostDetailViewController: UpdatePostViewControllerDelegate {
         delegate?.didCreatePost()
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
+            let hadPhotos = !self.post.photoUrls.isEmpty
             self.post = post
+            let hasPhotosNow = !post.photoUrls.isEmpty
+            
+            if !hadPhotos && hasPhotosNow {
+                // 사진이 새로 추가된 경우
+                self.tableView.tableHeaderView = self.createTableHeaderView()
+            }
+            
             self.configureUI()
             self.tableView.reloadData()
-            self.collectionView.reloadData()
-
             
-            // 테이블 헤더 뷰의 높이를 다시 계산하고 업데이트
-            if let headerView = self.tableView.tableHeaderView {
-                headerView.setNeedsLayout()
-                headerView.layoutIfNeeded()
-                let height = headerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
-                var frame = headerView.frame
-                frame.size.height = height
-                headerView.frame = frame
-                self.tableView.tableHeaderView = headerView
+            if hasPhotosNow {
+                self.collectionView.reloadData()
             }
+            
+            self.updateTableHeaderViewHeight()
         }
     }
     // 게시글 수정
