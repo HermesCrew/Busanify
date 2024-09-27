@@ -464,7 +464,7 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
                    styleID: "My Location",
                    poiID: "mainPoi",
                    mapPoints: [MapPoint(longitude: viewModel.currentLong, latitude: viewModel.currentLat)],
-                   titles: ["My Position"],
+                   titles: [""],
                    ids: ["My_Position"])
         
         let _ = view.addCameraWillMovedEventHandler(target: view, handler: { map in
