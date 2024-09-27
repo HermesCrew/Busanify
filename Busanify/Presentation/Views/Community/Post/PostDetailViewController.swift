@@ -206,11 +206,27 @@ class PostDetailViewController: UIViewController {
         
         if !post.photoUrls.isEmpty {
             collectionView.reloadData()
+            if collectionView.superview == nil {
+                tableView.tableHeaderView?.addSubview(collectionView)
+                collectionView.translatesAutoresizingMaskIntoConstraints = false
+                
+                NSLayoutConstraint.activate([
+                    collectionView.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 16),
+                    collectionView.leadingAnchor.constraint(equalTo: tableView.tableHeaderView!.leadingAnchor, constant: 16),
+                    collectionView.trailingAnchor.constraint(equalTo: tableView.tableHeaderView!.trailingAnchor, constant: -16),
+                    collectionView.heightAnchor.constraint(equalToConstant: 200),
+                    collectionView.bottomAnchor.constraint(equalTo: tableView.tableHeaderView!.bottomAnchor, constant: -16)
+                ])
+            }
         } else {
             collectionView.removeFromSuperview()
+            contentLabel.bottomAnchor.constraint(equalTo: tableView.tableHeaderView!.bottomAnchor, constant: -16).isActive = true
         }
         
-        tableView.tableHeaderView = createTableHeaderView()
+        tableView.tableHeaderView?.layoutIfNeeded()
+        let fittingSize = tableView.tableHeaderView?.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+        tableView.tableHeaderView?.frame.size.height = fittingSize?.height ?? 0
+        tableView.tableHeaderView = tableView.tableHeaderView
     }
     
     private func setupMoreButton() {
@@ -330,14 +346,26 @@ extension PostDetailViewController: UpdatePostViewControllerDelegate {
     
     func didUpdatePost(post: Post) {
         delegate?.didCreatePost()
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.post = post
-            self.contentLabel.text = post.content
+            self.configureUI()
             self.tableView.reloadData()
             self.collectionView.reloadData()
+
+            
+            // 테이블 헤더 뷰의 높이를 다시 계산하고 업데이트
+            if let headerView = self.tableView.tableHeaderView {
+                headerView.setNeedsLayout()
+                headerView.layoutIfNeeded()
+                let height = headerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
+                var frame = headerView.frame
+                frame.size.height = height
+                headerView.frame = frame
+                self.tableView.tableHeaderView = headerView
+            }
         }
     }
-    
     // 게시글 수정
     func updatePost() {
         let updatePostVC = UpdatePostViewController(postViewModel: postViewModel, post: post)
