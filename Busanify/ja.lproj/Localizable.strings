@@ -1,0 +1,83 @@
+/* 
+  Localizable.strings
+  Busanify
+
+  Created by 이인호 on 9/25/24.
+  
+*/
+
+"lang" = "jpn";
+"home" = "ホーム";
+"bookmark" = "ブックマーク";
+"community" = "コミュニティ";
+"setting" = "設定";
+"weather" = "天気";
+"myReview" = "自分のレビュー";
+"myCommunityPost" = "自分のコミュニティ投稿";
+"language" = "言語";
+"privacyPolicy" = "プライバシーポリシー";
+"version" = "バージョン";
+"logout" = "ログアウト";
+"deleteAccount" = "アカウント削除";
+"addProfileImage" = "プロフィール画像を追加";
+"selectImage" = "画像を選択";
+"deleteExistImage" = "既存画像を削除";
+"report" = "報告";
+"reportReview" = "レビューを報告";
+"reportPost" = "投稿を報告";
+"reportComment" = "コメントを報告";
+"writeTheReason" = "理由を記入してください";
+"edit" = "編集";
+"delete" = "削除";
+"addComment" = "コメントを追加";
+"addPost" = "投稿を追加";
+"editPost" = "投稿を編集";
+"save" = "保存";
+"writeContent" = "内容を書く";
+"postSaved" = "投稿が正常に保存されました";
+"reviewSaved" = "レビューが正常に保存されました";
+"changesSaved" = "変更が正常に保存されました";
+"yearAgo" = "年前";
+"monthAgo" = "か月前";
+"dayAgo" = "日前";
+"hourAgo" = "時間前";
+"minuteAgo" = "分前";
+"secondAgo" = "秒前";
+"now" = "今";
+"cancel" = "キャンセル";
+"delete" = "削除";
+"deletePost" = "投稿削除？";
+"postWillBeDeleted" = "これは元に戻せません";
+"wouldYouLikeToLogout" = "ログアウトしますか？";
+"discardUnsavedChanges" = "変更を破棄しますか？";
+"discardUnsavedChangesMessageForAdd" = "この操作は下書きを破棄します";
+"discardUnsavedChangesMessageForEdit" = "この操作はすべての編集を削除します";
+"discard" = "破棄";
+"deleteAccount" = "アカウントを削除";
+"deleteAccountAsk" = "アカウントを削除しますか？";
+"deleteAccountMessage" = "すべてのデータが削除されます";
+"bookmarkEmpty" = "ブックマークされた場所はありません";
+"postEmpty" = "最初の投稿者になりましょう！";
+"touristAttraction" = "観光名所";
+"shopping" = "ショッピング";
+"accommodation" = "宿泊施設";
+"restaurant" = "レストラン";
+"search" = "検索";
+"Highest" = "最高";
+"Lowest" = "最低";
+"today" = "今日";
+"viewAsList" = "リストで表示";
+"viewAsGrid" = "グリッドで表示";
+"error" = "エラー";
+"ok" = "OK";
+"needLogin" = "ログインが必要です";
+"login" = "ログイン";
+"needLoginMessageForReport" = "報告するにはログインが必要です";
+"needLoginMessageForWritePost" = "投稿するにはログインが必要です";
+"needLoginMessageForWriteComment" = "コメントを書くにはログインが必要です";
+"needLoginMessageForWriteReview" = "レビューを書くにはログインが必要です";
+"needLoginMessageForBookmark" = "ブックマークするにはログインが必要です";
+"viewAllReviews" = "すべてのレビューを見る";
+"info" = "情報";
+"review" = "レビュー";
+"langInLocalText" = "日本語";
