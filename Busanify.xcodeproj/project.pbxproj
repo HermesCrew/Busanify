@@ -15,7 +15,6 @@
 		754871152CA445E80088E74A /* UserPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754871142CA445E80088E74A /* UserPostViewController.swift */; };
 		7548711A2CA44A3C0088E74A /* UserPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754871192CA44A3C0088E74A /* UserPostViewModel.swift */; };
 		754871202CA5945F0088E74A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7548711F2CA5945E0088E74A /* GoogleService-Info.plist */; };
-		754C0E0D2CA6D6A1006301BC /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 754C0E0C2CA6D6A1006301BC /* Config.xcconfig */; };
 		754C0E0F2CA6DE0F006301BC /* LanguageSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754C0E0E2CA6DE0F006301BC /* LanguageSettingViewController.swift */; };
 		758FB83B2C57DF430029EBAA /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758FB83A2C57DF430029EBAA /* Bookmark.swift */; };
 		75B3CF0C2CA69B6500E11BE9 /* UserReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B3CF0B2CA69B6500E11BE9 /* UserReviewViewController.swift */; };
@@ -136,7 +135,6 @@
 		754871142CA445E80088E74A /* UserPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostViewController.swift; sourceTree = "<group>"; };
 		754871192CA44A3C0088E74A /* UserPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostViewModel.swift; sourceTree = "<group>"; };
 		7548711F2CA5945E0088E74A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		754C0E0C2CA6D6A1006301BC /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		754C0E0E2CA6DE0F006301BC /* LanguageSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageSettingViewController.swift; sourceTree = "<group>"; };
 		757882F72C43E52A0078EFAB /* Busanify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Busanify.entitlements; sourceTree = "<group>"; };
 		758FB83A2C57DF430029EBAA /* Bookmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
@@ -538,7 +536,6 @@
 		C296D6F12C1F16B000691515 = {
 			isa = PBXGroup;
 			children = (
-				754C0E0C2CA6D6A1006301BC /* Config.xcconfig */,
 				B84A06CE2CA696CF0063E08E /* GoogleService-Info.plist */,
 				C296D6FC2C1F16B000691515 /* Busanify */,
 				C296D7132C1F16B200691515 /* BusanifyTests */,
@@ -778,7 +775,7 @@
 				CDF123842CA47348001A0C63 /* UIViewController+Extension.swift */,
 				CD0DB0402CA6834C0021244C /* UIColor+Extension.swift */,
 				C2ED4A2C2CA2A46400A93A90 /* UIResponder+Extensions.swift */,
-				C28ABD3E2CA6E7B200AA5CCE /* UIViewController+Extensions.swift */
+				C28ABD3E2CA6E7B200AA5CCE /* UIViewController+Extensions.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -907,7 +904,6 @@
 				C296D7072C1F16B200691515 /* Assets.xcassets in Resources */,
 				C242DFDE2CA5206F00AEC1D1 /* arial-unicode-ms.ttf in Resources */,
 				C296D70A2C1F16B200691515 /* Base in Resources */,
-				754C0E0D2CA6D6A1006301BC /* Config.xcconfig in Resources */,
 				C296D7052C1F16B000691515 /* Base in Resources */,
 				754871202CA5945F0088E74A /* GoogleService-Info.plist in Resources */,
 			);
@@ -1149,7 +1145,6 @@
 /* Begin XCBuildConfiguration section */
 		C296D7222C1F16B200691515 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 754C0E0C2CA6D6A1006301BC /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -1214,7 +1209,6 @@
 		};
 		C296D7232C1F16B200691515 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 754C0E0C2CA6D6A1006301BC /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
