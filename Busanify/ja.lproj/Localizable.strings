@@ -23,6 +23,7 @@
 "selectImage" = "画像を選択";
 "deleteExistImage" = "既存画像を削除";
 "report" = "報告";
+"reportContent" = "理由を選択してください";
 "reportReview" = "レビューを報告";
 "reportPost" = "投稿を報告";
 "reportComment" = "コメントを報告";
@@ -85,3 +86,12 @@
 "close" = "閉じる";
 "languageChanged" = "言語が変更されました";
 "restartApp" = "アプリを再起動します";
+"inappropriate" = "不適切なコメントには措置が取られる場合があります";
+"uploading" = "アップロード中";
+"misinformation" = "誤った情報";
+"advertisement" = "商業広告";
+"pornography" = "ポルノ";
+"violence" = "暴力的な内容";
+"other" = "その他";
+"reportSubmitted" = "報告が送信されました";
+"reportSubmittedMessage" = "レビューには最大24時間かかる場合があります";

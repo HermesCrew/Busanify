@@ -23,6 +23,7 @@
 "selectImage" = "选择图片";
 "deleteExistImage" = "删除现有图片";
 "report" = "举报";
+"reportContent" = "请选择举报原因";
 "reportReview" = "举报评价";
 "reportPost" = "举报帖子";
 "reportComment" = "举报评论";
@@ -85,3 +86,12 @@
 "close" = "关闭";
 "languageChanged" = "语言变更";
 "restartApp" = "请重新启动应用程序";
+"inappropriate" = "不当的评论可能会受到处罚";
+"uploading" = "上传中";
+"misinformation" = "错误信息";
+"advertisement" = "商业广告";
+"pornography" = "色情内容";
+"violence" = "暴力内容";
+"other" = "其他";
+"reportSubmitted" = "举报已提交";
+"reportSubmittedMessage" = "审核最多可能需要24小时";

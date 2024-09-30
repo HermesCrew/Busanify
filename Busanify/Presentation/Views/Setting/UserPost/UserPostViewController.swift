@@ -130,21 +130,51 @@ extension UserPostViewController: CommunityTableViewCellDelegate {
     func reportPost(_ post: Post) {
         var alert = UIAlertController()
         
-        alert = UIAlertController(title: NSLocalizedString("reportPost", comment: ""), message: nil, preferredStyle: .alert)
+        alert = UIAlertController(title: NSLocalizedString("reportContent", comment: ""), message: nil, preferredStyle: .actionSheet)
         
-        alert.addTextField { textField in
-            textField.placeholder = NSLocalizedString("writeTheReason", comment: "")
-        }
-        
-        alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: NSLocalizedString("report", comment: ""), style: .destructive, handler: { _ in
-            let reportReason = alert.textFields?.first?.text ?? "report"
-            
-            let reportDTO = ReportDTO(reportedContentId: post.id, reportedUserId: post.user.id, content: reportReason, reportType: .post)
-            self.postViewModel.reportPost(token: self.viewModel.validateToken(), reportDTO: reportDTO)
+        // 각 신고 사유에 대한 선택지를 추가
+        alert.addAction(UIAlertAction(title: NSLocalizedString("misinformation", comment: ""), style: .default, handler: { _ in
+            self.handleReportReason(post: post, reason: "misinformation")
+            self.showReportConfirmationAlert()
+        }))
+
+        alert.addAction(UIAlertAction(title: NSLocalizedString("advertisement", comment: ""), style: .default, handler: { _ in
+            self.handleReportReason(post: post, reason: "advertisement")
+            self.showReportConfirmationAlert()
         }))
         
+        alert.addAction(UIAlertAction(title: NSLocalizedString("pornography", comment: ""), style: .default, handler: { _ in
+            self.handleReportReason(post: post, reason: "pornography")
+            self.showReportConfirmationAlert()
+        }))
+        
+        alert.addAction(UIAlertAction(title: NSLocalizedString("violence", comment: ""), style: .default, handler: { _ in
+            self.handleReportReason(post: post, reason: "violence")
+            self.showReportConfirmationAlert()
+        }))
+
+        alert.addAction(UIAlertAction(title: NSLocalizedString("other", comment: ""), style: .default, handler: { _ in
+            self.handleReportReason(post: post, reason: "other")
+            self.showReportConfirmationAlert()
+        }))
+
+        // 취소 버튼 추가
+        alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
+        
         present(alert, animated: true, completion: nil)
+    }
+    
+    func handleReportReason(post: Post, reason: String) {
+        let reportDTO = ReportDTO(reportedContentId: post.id, reportedUserId: post.user.id, content: reason, reportType: .post)
+        self.postViewModel.reportPost(token: self.viewModel.validateToken(), reportDTO: reportDTO)
+    }
+    
+    func showReportConfirmationAlert() {
+        let confirmationAlert = UIAlertController(title: NSLocalizedString("reportSubmitted", comment: ""), message: NSLocalizedString("reportSubmittedMessage", comment: ""), preferredStyle: .alert)
+        
+        confirmationAlert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: "OK"), style: .default, handler: nil))
+        
+        self.present(confirmationAlert, animated: true, completion: nil)
     }
     
     func expandPost(cell: CommunityTableViewCell) {
