@@ -50,6 +50,17 @@ class CommentViewController: UIViewController {
         return textField
     }()
     
+    private let warningLabel: UILabel = {
+        let label = UILabel()
+        
+        label.text = NSLocalizedString("inappropriate", comment: "")
+        label.font = UIFont.systemFont(ofSize: 10)
+        label.textColor = .gray
+        label.numberOfLines = 0
+        
+        return label
+    }()
+    
     private lazy var saveButton: UIButton = {
         var config = UIButton.Configuration.plain()
         config.image = UIImage(systemName: "paperplane.fill")
@@ -68,7 +79,7 @@ class CommentViewController: UIViewController {
     }()
     
     private lazy var contentTextFieldBottomConstraint: NSLayoutConstraint = {
-       return contentTextField.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+       return warningLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
     }()
     
     init(commentViewModel: CommentViewModel, postViewModel: PostViewModel, post: Post) {
@@ -100,11 +111,13 @@ class CommentViewController: UIViewController {
         view.addSubview(profileImageView)
         view.addSubview(contentTextField)
         view.addSubview(saveButton)
+        view.addSubview(warningLabel)
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         contentTextField.translatesAutoresizingMaskIntoConstraints = false
         saveButton.translatesAutoresizingMaskIntoConstraints = false
+        warningLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -119,10 +132,14 @@ class CommentViewController: UIViewController {
             
             contentTextField.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 8),
             contentTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            contentTextFieldBottomConstraint,
             
             saveButton.trailingAnchor.constraint(equalTo: contentTextField.trailingAnchor),
             saveButton.centerYAnchor.constraint(equalTo: contentTextField.centerYAnchor),
+            
+            warningLabel.leadingAnchor.constraint(equalTo: contentTextField.leadingAnchor),
+            warningLabel.trailingAnchor.constraint(equalTo: contentTextField.trailingAnchor),
+            warningLabel.topAnchor.constraint(equalTo: contentTextField.bottomAnchor, constant: 2),
+            contentTextFieldBottomConstraint,
         ])
     }
     
@@ -214,19 +231,36 @@ extension CommentViewController: CommentTableViewCellDelegate {
         
         switch authViewModel.state {
         case .googleSignedIn, .appleSignedIn:
-            alert = UIAlertController(title: NSLocalizedString("reportComment", comment: ""), message: nil, preferredStyle: .alert)
+            alert = UIAlertController(title: NSLocalizedString("reportContent", comment: ""), message: nil, preferredStyle: .actionSheet)
             
-            alert.addTextField { textField in
-                textField.placeholder = NSLocalizedString("writeTheReason", comment: "")
-            }
-            
-            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
-            alert.addAction(UIAlertAction(title: NSLocalizedString("report", comment: ""), style: .destructive, handler: { _ in
-                let reportReason = alert.textFields?.first?.text ?? "report"
-                
-                let reportDTO = ReportDTO(reportedContentId: comment.id, reportedUserId: comment.user.id, content: reportReason, reportType: .comment)
-                self.commentViewModel.reportComment(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
+            // 각 신고 사유에 대한 선택지를 추가
+            alert.addAction(UIAlertAction(title: NSLocalizedString("misinformation", comment: ""), style: .default, handler: { _ in
+                self.handleReportReason(comment: comment, reason: "misinformation")
+                self.showReportConfirmationAlert()
             }))
+
+            alert.addAction(UIAlertAction(title: NSLocalizedString("advertisement", comment: ""), style: .default, handler: { _ in
+                self.handleReportReason(comment: comment, reason: "advertisement")
+                self.showReportConfirmationAlert()
+            }))
+            
+            alert.addAction(UIAlertAction(title: NSLocalizedString("pornography", comment: ""), style: .default, handler: { _ in
+                self.handleReportReason(comment: comment, reason: "pornography")
+                self.showReportConfirmationAlert()
+            }))
+            
+            alert.addAction(UIAlertAction(title: NSLocalizedString("violence", comment: ""), style: .default, handler: { _ in
+                self.handleReportReason(comment: comment, reason: "violence")
+                self.showReportConfirmationAlert()
+            }))
+
+            alert.addAction(UIAlertAction(title: NSLocalizedString("other", comment: ""), style: .default, handler: { _ in
+                self.handleReportReason(comment: comment, reason: "other")
+                self.showReportConfirmationAlert()
+            }))
+
+            // 취소 버튼 추가
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
         case .signedOut:
             alert = UIAlertController(title: NSLocalizedString("needLogin", comment: ""), message: NSLocalizedString("needLoginMessageForReport", comment: ""), preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("login", comment: ""), style: .default, handler: { [weak self] _ in
@@ -236,6 +270,19 @@ extension CommentViewController: CommentTableViewCellDelegate {
         }
         
         present(alert, animated: true, completion: nil)
+    }
+    
+    func handleReportReason(comment: Comment, reason: String) {
+        let reportDTO = ReportDTO(reportedContentId: comment.id, reportedUserId: comment.user.id, content: reason, reportType: .comment)
+        self.commentViewModel.reportComment(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
+    }
+    
+    func showReportConfirmationAlert() {
+        let confirmationAlert = UIAlertController(title: NSLocalizedString("reportSubmitted", comment: ""), message: NSLocalizedString("reportSubmittedMessage", comment: ""), preferredStyle: .alert)
+        
+        confirmationAlert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: "OK"), style: .default, handler: nil))
+        
+        self.present(confirmationAlert, animated: true, completion: nil)
     }
 }
 

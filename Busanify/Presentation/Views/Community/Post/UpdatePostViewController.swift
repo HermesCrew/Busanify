@@ -61,6 +61,17 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
         return textView
     }()
     
+    private let warningLabel: UILabel = {
+        let label = UILabel()
+        
+        label.text = NSLocalizedString("inappropriate", comment: "")
+        label.font = UIFont.systemFont(ofSize: 10)
+        label.textColor = .gray
+        label.numberOfLines = 0
+        
+        return label
+    }()
+    
     private lazy var updateButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(NSLocalizedString("save", comment: ""), for: .normal)
@@ -91,7 +102,7 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
     
     private let loadingLabel: UILabel = {
         let label = UILabel()
-        label.text = "Uploading"
+        label.text = NSLocalizedString("uploading", comment: "")
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         return label
@@ -136,6 +147,7 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
         view.addSubview(addButton)
         view.addSubview(photoCollectionView)
         view.addSubview(contentTextView)
+        view.addSubview(warningLabel)
         view.addSubview(updateButton)
         view.addSubview(loadingView)
         loadingView.addSubview(activityIndicator)
@@ -148,6 +160,7 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
         loadingView.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         loadingLabel.translatesAutoresizingMaskIntoConstraints = false
+        warningLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             addButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -163,7 +176,11 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
             contentTextView.topAnchor.constraint(equalTo: photoCollectionView.bottomAnchor, constant: 10),
             contentTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             contentTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            contentTextView.bottomAnchor.constraint(equalTo: updateButton.topAnchor, constant: -16),
+            
+            warningLabel.leadingAnchor.constraint(equalTo: contentTextView.leadingAnchor),
+            warningLabel.trailingAnchor.constraint(equalTo: contentTextView.trailingAnchor),
+            warningLabel.topAnchor.constraint(equalTo: contentTextView.bottomAnchor, constant: 2),
+            warningLabel.bottomAnchor.constraint(equalTo: updateButton.topAnchor, constant: -16),
             
             updateButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             updateButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),

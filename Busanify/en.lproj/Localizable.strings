@@ -24,7 +24,7 @@
 "deleteExistImage" = "Delete Exist Image";
 "report" = "Report";
 "reportReview" = "Report Review";
-"reportPost" = "Report Post";
+"reportContent" = "Please select a reason";
 "reportComment" = "Report Comment";
 "writeTheReason" = "Please write the reason";
 "edit" = "Edit";
@@ -43,7 +43,7 @@
 "hourAgo" = " hours ago";
 "minuteAgo" = " minutes ago";
 "secondAgo" = " seconds ago";
-"now" = "now";
+"now" = "Now";
 "cancel" = "Cancel";
 "delete" = "Delete";
 "deletePost" = "Delete Post?";
@@ -85,3 +85,12 @@
 "close" = "Close";
 "languageChanged" = "Language Changed";
 "restartApp" = "Please Restart the App";
+"inappropriate" = "Inappropriate comments may be subject to enforcement actions";
+"uploading" = "Uploading";
+"misinformation" = "Misinformation";
+"advertisement" = "Commercial Advertisement";
+"pornography" = "Pornography";
+"violence" = "Violence";
+"other" = "Other";
+"reportSubmitted" = "Report submitted";
+"reportSubmittedMessage" = "It may take up to 24 hours for review";

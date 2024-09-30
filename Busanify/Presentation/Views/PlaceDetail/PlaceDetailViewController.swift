@@ -399,19 +399,36 @@ extension PlaceDetailViewController: ReviewTableViewCellDelegate {
         
         switch authViewModel.state {
         case .googleSignedIn, .appleSignedIn:
-            alert = UIAlertController(title: NSLocalizedString("reportReview", comment: ""), message: nil, preferredStyle: .alert)
+            alert = UIAlertController(title: NSLocalizedString("reportContent", comment: ""), message: nil, preferredStyle: .actionSheet)
             
-            alert.addTextField { textField in
-                textField.placeholder = NSLocalizedString("writeTheReason", comment: "")
-            }
-            
-            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
-            alert.addAction(UIAlertAction(title: NSLocalizedString("report", comment: ""), style: .destructive, handler: { _ in
-                let reportReason = alert.textFields?.first?.text ?? "report"
-                
-                let reportDTO = ReportDTO(reportedContentId: review.id, reportedUserId: review.user.id, content: reportReason, reportType: .review)
-                self.reviewViewModel.reportReview(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
+            // 각 신고 사유에 대한 선택지를 추가
+            alert.addAction(UIAlertAction(title: NSLocalizedString("misinformation", comment: ""), style: .default, handler: { _ in
+                self.handleReportReason(review: review, reason: "misinformation")
+                self.showReportConfirmationAlert()
             }))
+
+            alert.addAction(UIAlertAction(title: NSLocalizedString("advertisement", comment: ""), style: .default, handler: { _ in
+                self.handleReportReason(review: review, reason: "advertisement")
+                self.showReportConfirmationAlert()
+            }))
+            
+            alert.addAction(UIAlertAction(title: NSLocalizedString("pornography", comment: ""), style: .default, handler: { _ in
+                self.handleReportReason(review: review, reason: "pornography")
+                self.showReportConfirmationAlert()
+            }))
+            
+            alert.addAction(UIAlertAction(title: NSLocalizedString("violence", comment: ""), style: .default, handler: { _ in
+                self.handleReportReason(review: review, reason: "violence")
+                self.showReportConfirmationAlert()
+            }))
+
+            alert.addAction(UIAlertAction(title: NSLocalizedString("other", comment: ""), style: .default, handler: { _ in
+                self.handleReportReason(review: review, reason: "other")
+                self.showReportConfirmationAlert()
+            }))
+
+            // 취소 버튼 추가
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
         case .signedOut:
             alert = UIAlertController(title: NSLocalizedString("needLogin", comment: ""), message: NSLocalizedString("needLoginMessageForBookmark", comment: ""), preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("login", comment: ""), style: .default, handler: { [weak self] _ in
@@ -421,6 +438,19 @@ extension PlaceDetailViewController: ReviewTableViewCellDelegate {
         }
         
         present(alert, animated: true, completion: nil)
+    }
+    
+    func handleReportReason(review: Review, reason: String) {
+        let reportDTO = ReportDTO(reportedContentId: review.id, reportedUserId: review.user.id, content: reason, reportType: .review)
+        self.reviewViewModel.reportReview(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
+    }
+    
+    func showReportConfirmationAlert() {
+        let confirmationAlert = UIAlertController(title: NSLocalizedString("reportSubmitted", comment: ""), message: NSLocalizedString("reportSubmittedMessage", comment: ""), preferredStyle: .alert)
+        
+        confirmationAlert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: "OK"), style: .default, handler: nil))
+        
+        self.present(confirmationAlert, animated: true, completion: nil)
     }
 }
 

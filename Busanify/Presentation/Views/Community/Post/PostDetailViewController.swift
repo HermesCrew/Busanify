@@ -426,22 +426,36 @@ extension PostDetailViewController: UpdatePostViewControllerDelegate {
         
         switch authViewModel.state {
         case .googleSignedIn, .appleSignedIn:
-            alert = UIAlertController(title: NSLocalizedString("reportPost", comment: ""), message: nil, preferredStyle: .alert)
+            alert = UIAlertController(title: NSLocalizedString("reportContent", comment: ""), message: nil, preferredStyle: .actionSheet)
             
-            alert.addTextField { textField in
-                textField.placeholder = NSLocalizedString("writeTheReason", comment: "")
-            }
+            // 각 신고 사유에 대한 선택지를 추가
+            alert.addAction(UIAlertAction(title: NSLocalizedString("misinformation", comment: ""), style: .default, handler: { _ in
+                self.handleReportReason(post: self.post, reason: "misinformation")
+                self.showReportConfirmationAlert()
+            }))
+
+            alert.addAction(UIAlertAction(title: NSLocalizedString("advertisement", comment: ""), style: .default, handler: { _ in
+                self.handleReportReason(post: self.post, reason: "advertisement")
+                self.showReportConfirmationAlert()
+            }))
             
-            let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil)
-            let reportAction = UIAlertAction(title: NSLocalizedString("report", comment: ""), style: .destructive) { _ in
-                guard let reason = alert.textFields?.first?.text, !reason.isEmpty else { return }
-                
-                let reportDTO = ReportDTO(reportedContentId: self.post.id, reportedUserId: self.post.user.id, content: reason, reportType: .post)
-                self.postViewModel.reportPost(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
-            }
+            alert.addAction(UIAlertAction(title: NSLocalizedString("pornography", comment: ""), style: .default, handler: { _ in
+                self.handleReportReason(post: self.post, reason: "pornography")
+                self.showReportConfirmationAlert()
+            }))
             
-            alert.addAction(cancelAction)
-            alert.addAction(reportAction)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("violence", comment: ""), style: .default, handler: { _ in
+                self.handleReportReason(post: self.post, reason: "violence")
+                self.showReportConfirmationAlert()
+            }))
+
+            alert.addAction(UIAlertAction(title: NSLocalizedString("other", comment: ""), style: .default, handler: { _ in
+                self.handleReportReason(post: self.post, reason: "other")
+                self.showReportConfirmationAlert()
+            }))
+
+            // 취소 버튼 추가
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
         case .signedOut:
             alert = UIAlertController(title: NSLocalizedString("needLogin", comment: ""), message: NSLocalizedString("needLoginMessageForReport", comment: ""), preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("login", comment: ""), style: .default, handler: { [weak self] _ in
@@ -451,6 +465,19 @@ extension PostDetailViewController: UpdatePostViewControllerDelegate {
         }
         
         present(alert, animated: true, completion: nil)
+    }
+    
+    func handleReportReason(post: Post, reason: String) {
+        let reportDTO = ReportDTO(reportedContentId: post.id, reportedUserId: post.user.id, content: reason, reportType: .post)
+        self.postViewModel.reportPost(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
+    }
+    
+    func showReportConfirmationAlert() {
+        let confirmationAlert = UIAlertController(title: NSLocalizedString("reportSubmitted", comment: ""), message: NSLocalizedString("reportSubmittedMessage", comment: ""), preferredStyle: .alert)
+        
+        confirmationAlert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: "OK"), style: .default, handler: nil))
+        
+        self.present(confirmationAlert, animated: true, completion: nil)
     }
     
     private func moveToSignInView() {
@@ -483,22 +510,36 @@ extension PostDetailViewController: CommentTableViewCellDelegate {
         
         switch authViewModel.state {
         case .googleSignedIn, .appleSignedIn:
-            alert = UIAlertController(title: NSLocalizedString("reportComment", comment: ""), message: nil, preferredStyle: .alert)
+            alert = UIAlertController(title: NSLocalizedString("reportContent", comment: ""), message: nil, preferredStyle: .actionSheet)
             
-            alert.addTextField { textField in
-                textField.placeholder = NSLocalizedString("writeTheReason", comment: "")
-            }
+            // 각 신고 사유에 대한 선택지를 추가
+            alert.addAction(UIAlertAction(title: NSLocalizedString("misinformation", comment: ""), style: .default, handler: { _ in
+                self.handleReportReason(comment: comment, reason: "misinformation")
+                self.showReportConfirmationAlert()
+            }))
+
+            alert.addAction(UIAlertAction(title: NSLocalizedString("advertisement", comment: ""), style: .default, handler: { _ in
+                self.handleReportReason(comment: comment, reason: "advertisement")
+                self.showReportConfirmationAlert()
+            }))
             
-            let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil)
-            let reportAction = UIAlertAction(title: NSLocalizedString("report", comment: ""), style: .destructive) { _ in
-                guard let reason = alert.textFields?.first?.text, !reason.isEmpty else { return }
-                
-                let reportDTO = ReportDTO(reportedContentId: comment.id, reportedUserId: comment.user.id, content: reason, reportType: .comment)
-                self.commentViewModel.reportComment(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
-            }
+            alert.addAction(UIAlertAction(title: NSLocalizedString("pornography", comment: ""), style: .default, handler: { _ in
+                self.handleReportReason(comment: comment, reason: "pornography")
+                self.showReportConfirmationAlert()
+            }))
             
-            alert.addAction(cancelAction)
-            alert.addAction(reportAction)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("violence", comment: ""), style: .default, handler: { _ in
+                self.handleReportReason(comment: comment, reason: "violence")
+                self.showReportConfirmationAlert()
+            }))
+
+            alert.addAction(UIAlertAction(title: NSLocalizedString("other", comment: ""), style: .default, handler: { _ in
+                self.handleReportReason(comment: comment, reason: "other")
+                self.showReportConfirmationAlert()
+            }))
+
+            // 취소 버튼 추가
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
         case .signedOut:
             alert = UIAlertController(title: NSLocalizedString("needLogin", comment: ""), message: NSLocalizedString("needLoginMessageForReport", comment: ""), preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("login", comment: ""), style: .default, handler: { [weak self] _ in
@@ -508,6 +549,11 @@ extension PostDetailViewController: CommentTableViewCellDelegate {
         }
         
         present(alert, animated: true, completion: nil)
+    }
+    
+    func handleReportReason(comment: Comment, reason: String) {
+        let reportDTO = ReportDTO(reportedContentId: comment.id, reportedUserId: comment.user.id, content: reason, reportType: .comment)
+        self.commentViewModel.reportComment(token: self.authViewModel.getToken()!, reportDTO: reportDTO)
     }
 }
 

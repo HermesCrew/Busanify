@@ -23,6 +23,7 @@
 "selectImage" = "選擇圖片";
 "deleteExistImage" = "刪除現有圖片";
 "report" = "舉報";
+"reportContent" = "請選擇檢舉原因";
 "reportReview" = "舉報評價";
 "reportPost" = "舉報貼文";
 "reportComment" = "舉報評論";
@@ -85,3 +86,12 @@
 "close" = "關閉";
 "languageChanged" = "語言變更";
 "restartApp" = "請重新啓動應用程序";
+"inappropriate" = "不當的評論可能會受到處罰";
+"uploading" = "上傳中";
+"misinformation" = "錯誤信息";
+"advertisement" = "商業廣告";
+"pornography" = "色情內容";
+"violence" = "暴力內容";
+"other" = "其他";
+"reportSubmitted" = "檢舉已提交";
+"reportSubmittedMessage" = "審核最多可能需要24小時";
