@@ -95,3 +95,5 @@
 "other" = "その他";
 "reportSubmitted" = "報告が送信されました";
 "reportSubmittedMessage" = "レビューには最大24時間かかる場合があります";
+"reportContentMessage" = "報告の理由に合わない場合、その報告は処理されません。
+累積報告回数が3回以上のユーザーは、投稿を作成できなくなります。";

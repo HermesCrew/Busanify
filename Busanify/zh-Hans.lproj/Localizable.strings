@@ -95,3 +95,6 @@
 "other" = "其他";
 "reportSubmitted" = "举报已提交";
 "reportSubmittedMessage" = "审核最多可能需要24小时";
+"reportContentMessage" = "请选择举报原因。
+如果举报原因不符，举报将不予处理。
+累计举报次数达到3次以上的用户将无法创建条目";

@@ -130,7 +130,7 @@ extension UserPostViewController: CommunityTableViewCellDelegate {
     func reportPost(_ post: Post) {
         var alert = UIAlertController()
         
-        alert = UIAlertController(title: NSLocalizedString("reportContent", comment: ""), message: nil, preferredStyle: .actionSheet)
+        alert = UIAlertController(title: NSLocalizedString("reportContent", comment: ""), message: NSLocalizedString("reportContentMessage", comment: ""), preferredStyle: .actionSheet)
         
         // 각 신고 사유에 대한 선택지를 추가
         alert.addAction(UIAlertAction(title: NSLocalizedString("misinformation", comment: ""), style: .default, handler: { _ in
