@@ -228,7 +228,10 @@ extension CommentViewController: CommentTableViewCellDelegate {
                             // 게시글 목록 갱신
                             self.commentViewModel.fetchComments(postId: self.post.id, token: self.authViewModel.getToken())
                             self.postViewModel.fetchPosts(token:  self.authViewModel.getToken())
-                            self.dismiss(animated: true, completion: nil)
+                            
+                            if self.post.user.id == comment.user.id {
+                                self.dismiss(animated: true, completion: nil)
+                            }
                         }
                     } catch {
                         print("Error blocking user or fetching posts: \(error)")
