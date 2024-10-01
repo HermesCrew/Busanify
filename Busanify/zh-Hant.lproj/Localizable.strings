@@ -95,3 +95,6 @@
 "other" = "其他";
 "reportSubmitted" = "檢舉已提交";
 "reportSubmittedMessage" = "審核最多可能需要24小時";
+"reportContentMessage" = "請選擇檢舉原因。
+如果檢舉原因不符，檢舉將不予處理。
+累計檢舉次數達到3次以上的用戶將無法創建條目。";

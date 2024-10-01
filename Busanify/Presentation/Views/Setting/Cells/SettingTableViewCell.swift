@@ -46,9 +46,9 @@ class SettingTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            iconImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
+            iconImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             iconImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            iconImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24),
+            iconImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
             
             cellLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: 16),
             cellLabel.centerYAnchor.constraint(equalTo: iconImageView.centerYAnchor),
