@@ -98,3 +98,5 @@
 Users who have been reported three or more times will be unable to create entries.";
 "inquiry" = "Inquiry";
 "contactEmail" = "Please contact us at the email below.";
+"blockPost" = "Are you sure you want to block this user?";
+"Block" = "Block";

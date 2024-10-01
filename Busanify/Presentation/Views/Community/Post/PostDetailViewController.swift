@@ -249,6 +249,10 @@ class PostDetailViewController: UIViewController {
         var menuItems: [UIAction] = [
             UIAction(title: NSLocalizedString("report", comment: ""), image: UIImage(systemName: "exclamationmark.triangle"), handler: { [weak self] _ in
                 self?.reportPost()
+            }),
+            UIAction(title: NSLocalizedString("Block", comment: ""), image: UIImage(systemName: "nosign"), attributes: .destructive, handler: { [weak self] _ in
+                guard let self = self else { return }
+                self.blockUserByPost(self.post)
             })
         ]
         
@@ -288,7 +292,7 @@ class PostDetailViewController: UIViewController {
     }
 
     private func fetchComments() {
-        commentViewModel.fetchComments(postId: post.id)
+        commentViewModel.fetchComments(postId: post.id, token: authViewModel.getToken())
         commentViewModel.$comments
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
@@ -356,6 +360,39 @@ extension PostDetailViewController: UICollectionViewDataSource, UICollectionView
 
 // Post 관련 로직을 처리하는 확장
 extension PostDetailViewController: UpdatePostViewControllerDelegate {
+    func blockUserByPost(_ post: Post) {
+        var alert = UIAlertController()
+        
+        switch authViewModel.state {
+        case .googleSignedIn, .appleSignedIn:
+            alert = UIAlertController(title: NSLocalizedString("blockPost", comment: ""), message: nil, preferredStyle: .alert)
+            
+
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: { [weak self] _ in
+                Task {
+                    do {
+                        if let token = self?.authViewModel.getToken() {
+                            try await self?.postViewModel.blockUserByPost(token: token, blockedUserId: post.user.id)
+                            // 게시글 목록 갱신
+                            self?.navigationController?.popViewController(animated: true)
+                        }
+                    } catch {
+                        print("Error blocking user or fetching posts: \(error)")
+                    }
+                }
+            }))
+        case .signedOut:
+            alert = UIAlertController(title: NSLocalizedString("needLogin", comment: ""), message: NSLocalizedString("needLoginMessageForReport", comment: ""), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("login", comment: ""), style: .default, handler: { [weak self] _ in
+                self?.moveToSignInView()
+            }))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
+        }
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
     func showToastMessage(messaage: String) {
         self.showToast(view, message: messaage)
     }
@@ -488,6 +525,41 @@ extension PostDetailViewController: UpdatePostViewControllerDelegate {
 
 // 댓글 신고 및 삭제 로직
 extension PostDetailViewController: CommentTableViewCellDelegate {
+    func blockUserByComment(_ comment: Comment) {
+        var alert = UIAlertController()
+        
+        switch authViewModel.state {
+        case .googleSignedIn, .appleSignedIn:
+            alert = UIAlertController(title: NSLocalizedString("blockPost", comment: ""), message: nil, preferredStyle: .alert)
+            
+
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: { [weak self] _ in
+                guard let self = self else { return }
+                
+                Task {
+                    do {
+                        if let token = self.authViewModel.getToken() {
+                            try await self.commentViewModel.blockUserByComment(token: token, blockedUserId: comment.user.id)
+                            // 게시글 목록 갱신
+                            self.navigationController?.popViewController(animated: true)
+                        }
+                    } catch {
+                        print("Error blocking user or fetching posts: \(error)")
+                    }
+                }
+            }))
+        case .signedOut:
+            alert = UIAlertController(title: NSLocalizedString("needLogin", comment: ""), message: NSLocalizedString("needLoginMessageForReport", comment: ""), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("login", comment: ""), style: .default, handler: { [weak self] _ in
+                self?.moveToSignInView()
+            }))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
+        }
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
     func didDeleteComment(_ comment: Comment) {
         Task {
             do {

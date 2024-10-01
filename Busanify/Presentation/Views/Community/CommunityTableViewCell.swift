@@ -212,9 +212,13 @@ class CommunityTableViewCell: UITableViewCell {
         
         collectionView.reloadData()
         
-        var menuItems: [UIAction] = [UIAction(title: NSLocalizedString("report", comment: ""), image: UIImage(systemName: "exclamationmark.triangle"), handler: { _ in
-            self.delegate?.reportPost(post)
-        })
+        var menuItems: [UIAction] = [
+            UIAction(title: NSLocalizedString("report", comment: ""), image: UIImage(systemName: "exclamationmark.triangle"), handler: { _ in
+                self.delegate?.reportPost(post)
+            }),
+            UIAction(title: NSLocalizedString("Block", comment: ""), image: UIImage(systemName: "nosign"), attributes: .destructive, handler: { [weak self] _ in
+                self?.delegate?.blockUserByPost(post)
+            })
         ]
         
         switch authViewModel.state {
@@ -292,6 +296,7 @@ protocol CommunityTableViewCellDelegate: NSObject {
 //    func expandPost(cell: CommunityTableViewCell)
     func commentButtonTapped(_ post: Post)
     func showPostDetail(post: Post)
+    func blockUserByPost(_ post: Post)
 }
 
 

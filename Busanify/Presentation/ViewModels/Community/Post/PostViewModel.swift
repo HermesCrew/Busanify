@@ -36,10 +36,11 @@ final class PostViewModel {
         try await useCase.createPost(token: token, postDTO: postDTO)
     }
     
-    func fetchPosts() {
+    func fetchPosts(token: String?) {
+        guard let token = token else { return }
         isLoading = true
         
-        useCase.getPosts()
+        useCase.getPosts(token: token)
             .receive(on: DispatchQueue.main)
             .handleEvents(receiveCompletion: { [weak self] _ in
                 self?.isLoading = false
@@ -93,5 +94,11 @@ final class PostViewModel {
         guard let token = token else { return }
         
         useCase.reportPost(token: token, reportDTO: reportDTO)
+    }
+    
+    func blockUserByPost(token: String?, blockedUserId: String) async throws {
+        guard let token = token else { return }
+        
+        try await useCase.blockUserByPost(token: token, blockedUserId: blockedUserId)
     }
 }
