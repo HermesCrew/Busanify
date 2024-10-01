@@ -96,3 +96,5 @@
 "reportSubmittedMessage" = "It may take up to 24 hours for review";
 "reportContentMessage" = "If the report does not match the reason, the report will not be processed.
 Users who have been reported three or more times will be unable to create entries.";
+"inquiry" = "Inquiry";
+"contactEmail" = "Please contact us at the email below.";
