@@ -12,6 +12,7 @@ class UserPostViewController: UIViewController {
     private let tableView = UITableView()
     private let viewModel = UserPostViewModel()
     private let postViewModel = PostViewModel(useCase: PostApi())
+    private let authViewModel = AuthenticationViewModel.shared
     private var cancellables = Set<AnyCancellable>()
     
     override func viewDidLoad() {
@@ -88,6 +89,30 @@ extension UserPostViewController: UITableViewDataSource, UITableViewDelegate {
 }
 
 extension UserPostViewController: CommunityTableViewCellDelegate {
+    func blockUserByPost(_ post: Post) {
+        var alert = UIAlertController()
+        
+        alert = UIAlertController(title: NSLocalizedString("blockPost", comment: ""), message: nil, preferredStyle: .alert)
+        
+
+        alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: { [weak self] _ in
+            Task {
+                do {
+                    if let token = self?.authViewModel.getToken() {
+                        try await self?.postViewModel.blockUserByPost(token: token, blockedUserId: post.user.id)
+                        // 게시글 목록 갱신
+                        self?.postViewModel.fetchPosts(token: token)
+                    }
+                } catch {
+                    print("Error blocking user or fetching posts: \(error)")
+                }
+            }
+        }))
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
     func showPostDetail(post: Post) {
         let commentViewModel = CommentViewModel(useCase: CommentApi())
         let postViewModel = PostViewModel(useCase: PostApi())
@@ -203,7 +228,7 @@ extension UserPostViewController: AddPostViewControllerDelegate {
     }
     
     func didCreatePost() {
-        postViewModel.fetchPosts()
+        postViewModel.fetchPosts(token: authViewModel.getToken())
     }
 }
 

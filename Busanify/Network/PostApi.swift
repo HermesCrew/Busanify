@@ -52,13 +52,17 @@ final class PostApi: PostViewUseCase {
         return downloadUrl.absoluteString
     }
     
-    func getPosts() -> AnyPublisher<[Post], Never> {
+    func getPosts(token: String) -> AnyPublisher<[Post], Never> {
         let urlString = "\(baseURL)/posts"
         guard let url = URL(string: urlString) else {
             fatalError("Invalid URL")
         }
         
-        return URLSession.shared.dataTaskPublisher(for: url)
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
             .map(\.data)
             .handleEvents(receiveCompletion: {
                 print($0)
@@ -156,5 +160,23 @@ final class PostApi: PostViewUseCase {
             .decode(type: [Post].self, decoder: JSONDecoder())
             .replaceError(with: [])
             .eraseToAnyPublisher()
+    }
+    
+    func blockUserByPost(token: String, blockedUserId: String) async throws {
+        let urlString = "\(baseURL)/block"
+        
+        guard let url = URL(string: urlString) else {
+            throw URLError(.badURL)
+        }
+        
+        let jsonData = try JSONEncoder().encode(["blockedUserId": blockedUserId])
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.httpBody = jsonData
+        
+        let (_, _) = try await URLSession.shared.data(for: request)
     }
 }

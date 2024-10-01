@@ -23,8 +23,10 @@ final class CommentViewModel {
         try await useCase.createComment(token: token, commentDTO: commentDTO)
     }
     
-    func fetchComments(postId: Int) {
-        useCase.getComments(postId: postId)
+    func fetchComments(postId: Int, token: String?) {
+        guard let token = token else { return }
+        
+        useCase.getComments(postId: postId, token: token)
             .receive(on: DispatchQueue.main)
             .assign(to: &$comments)
     }
@@ -39,5 +41,11 @@ final class CommentViewModel {
         guard let token = token else { return }
         
         useCase.reportComment(token: token, reportDTO: reportDTO)
+    }
+    
+    func blockUserByComment(token: String?, blockedUserId: String) async throws {
+        guard let token = token else { return }
+        
+        try await useCase.blockUserByComment(token: token, blockedUserId: blockedUserId)
     }
 }

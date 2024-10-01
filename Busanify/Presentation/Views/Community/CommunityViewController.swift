@@ -16,7 +16,7 @@ class CommunityViewController: UIViewController  {
     private lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.addAction(UIAction { [weak self] _ in
-            self?.postViewModel.fetchPosts()
+            self?.postViewModel.fetchPosts(token: self?.authViewModel.getToken())
             DispatchQueue.main.async {
                 self?.refreshControl.endRefreshing()
             }
@@ -72,7 +72,13 @@ class CommunityViewController: UIViewController  {
         configureUI()
         bind()
         
-        postViewModel.fetchPosts()
+        postViewModel.fetchPosts(token: authViewModel.getToken())
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureUI()
+        bind()
     }
     
     private func configureUI() {
@@ -152,7 +158,7 @@ class CommunityViewController: UIViewController  {
         authViewModel.$currentUser
             .receive(on: DispatchQueue.main)
             .sink { [weak self] currentUser in
-                self?.postViewModel.fetchPosts()
+                self?.postViewModel.fetchPosts(token: self?.authViewModel.getToken())
             }
             .store(in: &cancellables)
     }
@@ -176,6 +182,39 @@ extension CommunityViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension CommunityViewController: CommunityTableViewCellDelegate {
+    func blockUserByPost(_ post: Post) {
+        var alert = UIAlertController()
+        
+        switch authViewModel.state {
+        case .googleSignedIn, .appleSignedIn:
+            alert = UIAlertController(title: NSLocalizedString("blockPost", comment: ""), message: nil, preferredStyle: .alert)
+            
+
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: { [weak self] _ in
+                Task {
+                    do {
+                        if let token = self?.authViewModel.getToken() {
+                            try await self?.postViewModel.blockUserByPost(token: token, blockedUserId: post.user.id)
+                            // 게시글 목록 갱신
+                            self?.postViewModel.fetchPosts(token: token)
+                        }
+                    } catch {
+                        print("Error blocking user or fetching posts: \(error)")
+                    }
+                }
+            }))
+        case .signedOut:
+            alert = UIAlertController(title: NSLocalizedString("needLogin", comment: ""), message: NSLocalizedString("needLoginMessageForReport", comment: ""), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("login", comment: ""), style: .default, handler: { [weak self] _ in
+                self?.moveToSignInView()
+            }))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
+        }
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
     
     func showPostDetail(post: Post) {
         let commentViewModel = CommentViewModel(useCase: CommentApi())
@@ -296,6 +335,6 @@ extension CommunityViewController: AddPostViewControllerDelegate {
     }
     
     func didCreatePost() {
-        postViewModel.fetchPosts()
+        postViewModel.fetchPosts(token: authViewModel.getToken())
     }
 }

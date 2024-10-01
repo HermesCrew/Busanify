@@ -39,13 +39,17 @@ final class CommentApi: CommentViewUseCase {
         let (_, _) = try await URLSession.shared.data(for: request)
     }
     
-    func getComments(postId: Int) -> AnyPublisher<[Comment], Never> {
+    func getComments(postId: Int, token: String) -> AnyPublisher<[Comment], Never> {
         let urlString = "\(baseURL)/comments/post/\(postId)"
         guard let url = URL(string: urlString) else {
             fatalError("Invalid URL")
         }
         
-        return URLSession.shared.dataTaskPublisher(for: url)
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
             .map(\.data)
             .handleEvents(receiveCompletion: {
                 print($0)
@@ -98,5 +102,23 @@ final class CommentApi: CommentViewUseCase {
                 print($0)
             })
             .store(in: &cancellables)
+    }
+    
+    func blockUserByComment(token: String, blockedUserId: String) async throws {
+        let urlString = "\(baseURL)/block"
+        
+        guard let url = URL(string: urlString) else {
+            throw URLError(.badURL)
+        }
+        
+        let jsonData = try JSONEncoder().encode(["blockedUserId": blockedUserId])
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.httpBody = jsonData
+        
+        let (_, _) = try await URLSession.shared.data(for: request)
     }
 }
