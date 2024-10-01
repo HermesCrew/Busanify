@@ -542,7 +542,12 @@ extension PostDetailViewController: CommentTableViewCellDelegate {
                         if let token = self.authViewModel.getToken() {
                             try await self.commentViewModel.blockUserByComment(token: token, blockedUserId: comment.user.id)
                             // 게시글 목록 갱신
-                            self.navigationController?.popViewController(animated: true)
+                            
+                            if comment.user.id == self.post.user.id {
+                                self.navigationController?.popViewController(animated: true)
+                            } else {
+                                self.commentViewModel.fetchComments(postId: self.post.id, token: self.authViewModel.getToken())
+                            }
                         }
                     } catch {
                         print("Error blocking user or fetching posts: \(error)")
