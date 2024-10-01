@@ -40,10 +40,20 @@ class SignInViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         
         button.addAction(UIAction { [weak self] _ in
-            self?.viewModel.googleSignIn { success in
-                if success {
-                    self?.dismiss(animated: true, completion: nil)
+            let defaults = UserDefaults.standard
+            if let alreadyAgree = defaults.data(forKey: "userAgree") {
+                self?.viewModel.googleSignIn { success in
+                    if success {
+                        self?.dismiss(animated: true, completion: nil)
+                    }
                 }
+            } else {
+                let agreeViewController = SignInAgreeView(selectedType: .google)
+                agreeViewController.googleSigninDelegate = self
+                let agreeView = UINavigationController(rootViewController: agreeViewController)
+                agreeView.modalPresentationStyle = .fullScreen
+                
+                self?.present(agreeView, animated: true)
             }
         }, for: .touchUpInside)
         
@@ -69,7 +79,18 @@ class SignInViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         
         button.addAction(UIAction { [weak self] _ in
-            self?.appleSignIn()
+            let defaults = UserDefaults.standard
+            if let alreadyAgree = defaults.data(forKey: "userAgree") {
+                self?.appleSignIn()
+            } else {
+                let agreeViewController = SignInAgreeView(selectedType: .apple)
+                agreeViewController.appleSigninDelegate = self
+                let agreeView = UINavigationController(rootViewController: agreeViewController)
+                agreeView.modalPresentationStyle = .fullScreen
+                
+                self?.present(agreeView, animated: true)
+            }
+            
         }, for: .touchUpInside)
         
         return button
@@ -150,5 +171,21 @@ extension SignInViewController: ASAuthorizationControllerDelegate, ASAuthorizati
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         // 로그인 실패(유저의 취소도 포함)
         print("login failed - \(error.localizedDescription)")
+    }
+}
+
+extension SignInViewController: AppleSignDelegate {
+    func signInApple() {
+        self.appleSignIn()
+    }
+}
+
+extension SignInViewController: GoogleSignDelegate {
+    func signInGoogle() {
+        self.viewModel.googleSignIn { success in
+            if success {
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
     }
 }

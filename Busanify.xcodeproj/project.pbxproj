@@ -97,6 +97,7 @@
 		CD0DB0412CA6834C0021244C /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0DB0402CA6834C0021244C /* UIColor+Extension.swift */; };
 		CD0F67FB2CA440CC005E0628 /* ReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0F67FA2CA440CC005E0628 /* ReviewViewController.swift */; };
 		CD0F67FE2CA4458A005E0628 /* ReviewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0F67FD2CA4458A005E0628 /* ReviewProtocol.swift */; };
+		CD17BA532CABCF1E003B8EC9 /* SignInAgreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD17BA522CABCF1E003B8EC9 /* SignInAgreeView.swift */; };
 		CD2A432D2CA538070013A094 /* UpdateReviewDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2A432C2CA538070013A094 /* UpdateReviewDTO.swift */; };
 		CD3251972C4C07E7006CB590 /* SelectedPlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3251962C4C07E7006CB590 /* SelectedPlaceListViewController.swift */; };
 		CD32519A2C4C0816006CB590 /* SelectedPlaceListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3251992C4C0816006CB590 /* SelectedPlaceListTableViewCell.swift */; };
@@ -225,6 +226,7 @@
 		CD0DB0402CA6834C0021244C /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		CD0F67FA2CA440CC005E0628 /* ReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewViewController.swift; sourceTree = "<group>"; };
 		CD0F67FD2CA4458A005E0628 /* ReviewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewProtocol.swift; sourceTree = "<group>"; };
+		CD17BA522CABCF1E003B8EC9 /* SignInAgreeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInAgreeView.swift; sourceTree = "<group>"; };
 		CD2A432C2CA538070013A094 /* UpdateReviewDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateReviewDTO.swift; sourceTree = "<group>"; };
 		CD3251962C4C07E7006CB590 /* SelectedPlaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedPlaceListViewController.swift; sourceTree = "<group>"; };
 		CD3251992C4C0816006CB590 /* SelectedPlaceListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedPlaceListTableViewCell.swift; sourceTree = "<group>"; };
@@ -401,6 +403,7 @@
 			isa = PBXGroup;
 			children = (
 				C207F37A2C3AFC0C007DFA27 /* SignInViewController.swift */,
+				CD17BA522CABCF1E003B8EC9 /* SignInAgreeView.swift */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -1053,6 +1056,7 @@
 				B8F32CE32CA44ACA00DF172A /* PostDetailViewController.swift in Sources */,
 				C207B98B2C45FEFB0088E2D5 /* Keychain.swift in Sources */,
 				B88542112CA1842E00696BD5 /* PlaceReviewsListViewController.swift in Sources */,
+				CD17BA532CABCF1E003B8EC9 /* SignInAgreeView.swift in Sources */,
 				C28ABD422CA6F23500AA5CCE /* CustomTabBarController.swift in Sources */,
 				B8F89BDC2C53883000332FE2 /* WeatherIcon.swift in Sources */,
 				B8F89BD82C5387EC00332FE2 /* WeatherViewController.swift in Sources */,
@@ -1291,7 +1295,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Busanify;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1333,7 +1337,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Busanify;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

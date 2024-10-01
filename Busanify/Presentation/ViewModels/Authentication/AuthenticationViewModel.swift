@@ -265,6 +265,12 @@ final class AuthenticationViewModel {
     func deleteUser() {
         guard let token = self.getToken() else { return }
         
+        let defaults = UserDefaults.standard
+        if defaults.object(forKey: "userAgree") != nil {
+            defaults.removeObject(forKey: "userAgree")
+            
+//            defaults.synchronize()
+        }
         switch state {
         case .googleSignedIn:
             self.signInApi.deleteUser(token: token, providerToDelete: "googleDelete") { success in
@@ -291,5 +297,6 @@ final class AuthenticationViewModel {
         default:
             return
         }
+        
     }
 }
