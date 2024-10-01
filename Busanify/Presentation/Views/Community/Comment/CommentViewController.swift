@@ -102,7 +102,7 @@ class CommentViewController: UIViewController {
         setupTapGesture()
         setupKeyboardEvent()
         
-        commentViewModel.fetchComments(postId: post.id)
+        commentViewModel.fetchComments(postId: post.id, token: authViewModel.getToken())
     }
     
     private func configureUI() {
@@ -170,8 +170,8 @@ class CommentViewController: UIViewController {
         Task {
             do {
                 try await commentViewModel.createComment(token: authViewModel.getToken(), postId: post.id, content: contentTextField.text ?? "")
-                commentViewModel.fetchComments(postId: post.id)
-                postViewModel.fetchPosts()
+                commentViewModel.fetchComments(postId: post.id, token: authViewModel.getToken())
+                postViewModel.fetchPosts(token: authViewModel.getToken())
                 contentTextField.text = ""
                 saveButton.isEnabled = false
             } catch {
@@ -209,6 +209,43 @@ extension CommentViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension CommentViewController: CommentTableViewCellDelegate {
+    func blockUserByComment(_ comment: Comment) {
+        var alert = UIAlertController()
+        
+        switch authViewModel.state {
+        case .googleSignedIn, .appleSignedIn:
+            alert = UIAlertController(title: NSLocalizedString("blockPost", comment: ""), message: nil, preferredStyle: .alert)
+            
+
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default, handler: { [weak self] _ in
+                guard let self = self else { return }
+                
+                Task {
+                    do {
+                        if let token = self.authViewModel.getToken() {
+                            try await self.commentViewModel.blockUserByComment(token: token, blockedUserId: comment.user.id)
+                            // 게시글 목록 갱신
+                            self.commentViewModel.fetchComments(postId: self.post.id, token: self.authViewModel.getToken())
+                            self.postViewModel.fetchPosts(token:  self.authViewModel.getToken())
+                            self.dismiss(animated: true, completion: nil)
+                        }
+                    } catch {
+                        print("Error blocking user or fetching posts: \(error)")
+                    }
+                }
+            }))
+        case .signedOut:
+            alert = UIAlertController(title: NSLocalizedString("needLogin", comment: ""), message: NSLocalizedString("needLoginMessageForReport", comment: ""), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("login", comment: ""), style: .default, handler: { [weak self] _ in
+                self?.moveToSignInView()
+            }))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
+        }
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
     func didDeleteComment(_ comment: Comment) {
         Task {
             do {
@@ -219,7 +256,7 @@ extension CommentViewController: CommentTableViewCellDelegate {
                     tableView.endUpdates()
                 }
                 try await commentViewModel.deleteComment(token: self.authViewModel.getToken()!, id: comment.id)
-                postViewModel.fetchPosts()
+                postViewModel.fetchPosts(token: self.authViewModel.getToken())
             } catch {
                 print("Failed to delete review: \(error)")
             }

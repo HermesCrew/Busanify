@@ -113,6 +113,9 @@ class CommentTableViewCell: UITableViewCell {
         var menuItems: [UIAction] = [
             UIAction(title: NSLocalizedString("report", comment: ""), image: UIImage(systemName: "exclamationmark.triangle"), handler: { _ in
                 self.delegate?.reportComment(comment)
+            }),
+            UIAction(title: NSLocalizedString("Block", comment: ""), image: UIImage(systemName: "nosign"), attributes: .destructive, handler: { [weak self] _ in
+                self?.delegate?.blockUserByComment(comment)
             })
         ]
         
@@ -181,4 +184,5 @@ class CommentTableViewCell: UITableViewCell {
 protocol CommentTableViewCellDelegate: NSObject {
     func didDeleteComment(_ comment: Comment)
     func reportComment(_ comment: Comment)
+    func blockUserByComment(_ comment: Comment)
 }
