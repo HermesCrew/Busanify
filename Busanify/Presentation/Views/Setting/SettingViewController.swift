@@ -327,6 +327,7 @@ class SettingViewController: UIViewController {
     private func showDeleteAccountAlert() {
         let alert = UIAlertController(title: NSLocalizedString("deleteAccountAsk", comment: ""), message: NSLocalizedString("deleteAccountMessage", comment: ""), preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: NSLocalizedString("delete", comment: ""), style: .destructive, handler: { [weak self] _ in
+            
             self?.viewModel.deleteUser()
         }))
         alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil))
