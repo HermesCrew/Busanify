@@ -133,7 +133,7 @@ class SettingViewController: UIViewController {
     private lazy var footerButton: UIButton = {
         let button = UIButton()
         button.setTitle(NSLocalizedString("deleteAccount", comment: ""), for: .normal)
-        button.setTitleColor(.gray, for: .normal)
+        button.setTitleColor(.systemRed, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 12)
         
         button.addAction(UIAction { [weak self] _ in
@@ -216,7 +216,8 @@ class SettingViewController: UIViewController {
             settingTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             settingTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
-            footerButton.trailingAnchor.constraint(equalTo: footerView.trailingAnchor, constant: -16),
+            footerButton.topAnchor.constraint(equalTo: footerView.topAnchor, constant: 16),
+            footerButton.centerXAnchor.constraint(equalTo: footerView.centerXAnchor),
             
             loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
@@ -368,11 +369,11 @@ class SettingViewController: UIViewController {
 
 extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.state == .signedOut ? 5 : 6
+        return viewModel.state == .signedOut ? 6 : 7
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let settingInfos =  [(NSLocalizedString("myReview", comment: ""), "doc.text.magnifyingglass"), (NSLocalizedString("myCommunityPost", comment: ""), "square.and.pencil"), (NSLocalizedString("privacyPolicy", comment: ""), "shield.lefthalf.fill"), (NSLocalizedString("language", comment: ""), "globe"), (NSLocalizedString("version", comment: ""), "info.circle"), (NSLocalizedString("logout", comment: ""), "rectangle.portrait.and.arrow.right")]
+        let settingInfos =  [(NSLocalizedString("myReview", comment: ""), "doc.text.magnifyingglass"), (NSLocalizedString("myCommunityPost", comment: ""), "square.and.pencil"), (NSLocalizedString("privacyPolicy", comment: ""), "shield.lefthalf.fill"), (NSLocalizedString("language", comment: ""), "globe"), (NSLocalizedString("version", comment: ""), "info.circle"), (NSLocalizedString("inquiry", comment: ""), "questionmark.circle"), (NSLocalizedString("logout", comment: ""), "rectangle.portrait.and.arrow.right")]
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingTableViewCell.identifier, for: indexPath) as? SettingTableViewCell else {
             return UITableViewCell()
@@ -391,7 +392,7 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
         case 4:
             cell.configure(with: settingInfo, labelText: "1.0.1")
             cell.accessoryType = .none
-        case 5:
+        case 6:
             cell.configure(with: settingInfo, labelText: "")
             cell.accessoryType = .none
         default:
@@ -403,7 +404,7 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 5 {
+        if indexPath.row == 6 {
             showLogoutAlert()
         } else if indexPath.row == 0 {
             let userReviewVC = UserReviewViewController()
@@ -421,7 +422,27 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
             let langVC = LanguageSettingViewController()
             langVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(langVC, animated: true)
+        } else if indexPath.row == 5 {
+            self.showAlert(alertTitle: NSLocalizedString("contactEmail", comment: ""), msg: "busanify@gmail.com", confirm: NSLocalizedString("ok", comment: ""), hideCancel: true, confirmAction: nil)
         }
+    }
+    
+    func showAlert(alertTitle: String, msg: String? = nil, confirm: String, hideCancel: Bool? = false, confirmAction: (() -> Void)?, cancelAction: (() -> Void)? = nil) {
+        let alertController = UIAlertController(title: alertTitle, message: msg, preferredStyle: .alert)
+        
+        let confirmAction = UIAlertAction(title: confirm, style: .default) { _ in
+            confirmAction?()
+        }
+        alertController.addAction(confirmAction)
+        
+        if hideCancel != true {
+            let cancelAction = UIAlertAction(title: "취소", style: .cancel) { _ in
+                cancelAction?()
+            }
+            alertController.addAction(cancelAction)
+        }
+        
+        present(alertController, animated: true, completion: nil)
     }
 }
 

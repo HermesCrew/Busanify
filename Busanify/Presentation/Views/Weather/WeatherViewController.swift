@@ -29,6 +29,40 @@ class WeatherViewController: UIViewController {
     private let precipitationIconImageView = UIImageView()
     private let precipitationProbabilityLabel = UILabel()
     
+    // WeatherKit 상표
+    private let appleweatherLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
+        label.text = "Powered by  Weather"
+        label.textColor = .systemGray
+        
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        return label
+    }()
+    
+    private let appleweatherLinkButton: UIButton = {
+        let button = UIButton(type: .custom)
+        var config = UIButton.Configuration.plain()
+        
+        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        
+        let title = "[Link]"
+        let attributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.systemGray,
+            .underlineStyle: NSUnderlineStyle.single.rawValue,
+            .font: UIFont.systemFont(ofSize: 12, weight: .semibold)
+        ]
+        
+        let attributedTitle = NSAttributedString(string: title, attributes: attributes)
+    
+        button.configuration = config
+        button.setAttributedTitle(attributedTitle, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        return button
+    }()
+    
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         let layout = UICollectionViewFlowLayout()
@@ -134,6 +168,14 @@ class WeatherViewController: UIViewController {
         dailyForecastTableView.allowsSelection = false
 
         contentView.addSubview(dailyForecastTableView)
+        contentView.addSubview(appleweatherLinkButton)
+        contentView.addSubview(appleweatherLabel)
+        
+        appleweatherLinkButton.addAction(UIAction { _ in
+            if let url = URL(string: "https://weatherkit.apple.com/legal-attribution.html") {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+        }, for: .touchUpInside)
         
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -170,7 +212,14 @@ class WeatherViewController: UIViewController {
             dailyForecastTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             dailyForecastTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             dailyForecastTableView.heightAnchor.constraint(equalToConstant: 400),
-            dailyForecastTableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+//            dailyForecastTableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+            
+            appleweatherLabel.topAnchor.constraint(equalTo: dailyForecastTableView.bottomAnchor, constant: 10),
+            appleweatherLabel.leadingAnchor.constraint(equalTo: dailyForecastTableView.leadingAnchor),
+            appleweatherLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
+            
+            appleweatherLinkButton.topAnchor.constraint(equalTo: appleweatherLabel.topAnchor),
+            appleweatherLinkButton.leadingAnchor.constraint(equalTo: appleweatherLabel.trailingAnchor, constant: 5),
         ])
     }
 
