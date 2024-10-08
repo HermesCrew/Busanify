@@ -39,7 +39,7 @@ final class CommentApi: CommentViewUseCase {
         let (_, _) = try await URLSession.shared.data(for: request)
     }
     
-    func getComments(postId: Int, token: String) -> AnyPublisher<[Comment], Never> {
+    func getComments(postId: Int, token: String?) -> AnyPublisher<[Comment], Never> {
         let urlString = "\(baseURL)/comments/post/\(postId)"
         guard let url = URL(string: urlString) else {
             fatalError("Invalid URL")
@@ -47,7 +47,9 @@ final class CommentApi: CommentViewUseCase {
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        if let token = token {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
         
         return URLSession.shared.dataTaskPublisher(for: request)
             .map(\.data)

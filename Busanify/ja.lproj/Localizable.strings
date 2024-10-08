@@ -79,6 +79,7 @@
 "needLoginMessageForWriteComment" = "コメントを書くにはログインが必要です";
 "needLoginMessageForWriteReview" = "レビューを書くにはログインが必要です";
 "needLoginMessageForBookmark" = "ブックマークするにはログインが必要です";
+"needLoginMessageForBlock" = "ブロックするにはログインが必要です";
 "viewAllReviews" = "すべてのレビューを見る";
 "info" = "情報";
 "review" = "レビュー";

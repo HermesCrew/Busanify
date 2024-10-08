@@ -79,6 +79,7 @@
 "needLoginMessageForWriteComment" = "写评论需要登录";
 "needLoginMessageForWriteReview" = "写评价需要登录";
 "needLoginMessageForBookmark" = "收藏需要登录";
+"needLoginMessageForBlock" = "屏蔽需要登录";
 "viewAllReviews" = "查看所有评论";
 "info" = "信息";
 "review" = "评论";
