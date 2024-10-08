@@ -37,7 +37,6 @@ final class PostViewModel {
     }
     
     func fetchPosts(token: String?) {
-        guard let token = token else { return }
         isLoading = true
         
         useCase.getPosts(token: token)

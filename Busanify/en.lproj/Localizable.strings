@@ -78,6 +78,7 @@
 "needLoginMessageForWriteComment" = "You need to login to write a comment";
 "needLoginMessageForWriteReview" = "You need to login to write a review";
 "needLoginMessageForBookmark" = "You need to login to bookmark";
+"needLoginMessageForBlock" = "You need to login to block";
 "viewAllReviews" = "View All Reviews";
 "info" = "Info";
 "review" = "Review";

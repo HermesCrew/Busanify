@@ -52,7 +52,7 @@ final class PostApi: PostViewUseCase {
         return downloadUrl.absoluteString
     }
     
-    func getPosts(token: String) -> AnyPublisher<[Post], Never> {
+    func getPosts(token: String?) -> AnyPublisher<[Post], Never> {
         let urlString = "\(baseURL)/posts"
         guard let url = URL(string: urlString) else {
             fatalError("Invalid URL")
@@ -60,7 +60,9 @@ final class PostApi: PostViewUseCase {
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        if let token = token {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
         
         return URLSession.shared.dataTaskPublisher(for: request)
             .map(\.data)

@@ -24,8 +24,6 @@ final class CommentViewModel {
     }
     
     func fetchComments(postId: Int, token: String?) {
-        guard let token = token else { return }
-        
         useCase.getComments(postId: postId, token: token)
             .receive(on: DispatchQueue.main)
             .assign(to: &$comments)
