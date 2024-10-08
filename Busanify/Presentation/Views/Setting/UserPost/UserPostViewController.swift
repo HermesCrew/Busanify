@@ -224,7 +224,7 @@ extension UserPostViewController: CommunityTableViewCellDelegate {
 
 extension UserPostViewController: AddPostViewControllerDelegate {
     func showToastMessage(_ message: String) {
-        //showToast(view, message: message)
+        showToast(view, message: message)
     }
     
     func didCreatePost() {

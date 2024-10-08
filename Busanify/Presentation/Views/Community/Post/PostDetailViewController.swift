@@ -449,7 +449,6 @@ extension PostDetailViewController: UpdatePostViewControllerDelegate {
             do {
                 try await postViewModel.deletePost(token: authViewModel.getToken()!, id: post.id, photoUrls: post.photoUrls)
                 self.delegate?.didCreatePost()
-                self.delegate?.showToastMessage("게시글이 삭제되었습니다.")
                 navigationController?.popViewController(animated: true)
             } catch {
                 print("게시글 삭제 실패: \(error)")

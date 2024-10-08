@@ -385,7 +385,6 @@ class UpdatePostViewController: UIViewController, UICollectionViewDataSource, UI
                     self.updateDelegate?.didUpdatePost(post: post)
                     self.navigationController?.popViewController(animated: true)
                     self.delegate?.showToastMessage(NSLocalizedString("changesSaved", comment: ""))
-                    self.updateDelegate?.showToastMessage(messaage: "Post Updated")
                 }
             } catch {
                 print("Failed to create post: \(error)")
