@@ -181,8 +181,6 @@ class SearchTextField: UITextField {
         self.borderStyle = .roundedRect
         self.backgroundColor = .white
         self.layer.cornerRadius = 8
-        self.layer.borderWidth = 1
-        self.layer.borderColor = UIColor.lightGray.cgColor
         self.returnKeyType = .search
         self.autocapitalizationType = .none
         self.autocorrectionType = .no
