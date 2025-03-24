@@ -25,7 +25,6 @@ class WeatherViewController: UIViewController {
     private let weatherImageView = UIImageView()
     private let hourlyForecastCollectionView: UICollectionView
     private let dailyForecastTableView = UITableView()
-    private let locationSymbolButton = CustomLocationButton()
     private let precipitationIconImageView = UIImageView()
     private let precipitationProbabilityLabel = UILabel()
     
@@ -117,10 +116,7 @@ class WeatherViewController: UIViewController {
         districtLabel.text = "Loading..."
         districtLabel.numberOfLines = 0 // 여러 줄 표시 허용
         contentView.addSubview(districtLabel)
-        
-        locationSymbolButton.addTarget(self, action: #selector(locationSymbolTapped), for: .touchUpInside)
-        contentView.addSubview(locationSymbolButton)
-        
+
         currentWeatherStackView.axis = .horizontal
         currentWeatherStackView.alignment = .center
         currentWeatherStackView.distribution = .fillEqually
@@ -192,9 +188,6 @@ class WeatherViewController: UIViewController {
             districtLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             districtLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             
-            locationSymbolButton.centerYAnchor.constraint(equalTo: districtLabel.centerYAnchor),
-            locationSymbolButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            
             currentWeatherStackView.topAnchor.constraint(equalTo: districtLabel.bottomAnchor, constant: 25),
             currentWeatherStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             currentWeatherStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
@@ -245,13 +238,6 @@ class WeatherViewController: UIViewController {
                 if let error = error {
                     self?.showError(error)
                 }
-            }
-            .store(in: &cancellables)
-        
-        viewModel.$isCurrentLocation
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] isCurrentLocation in
-                self?.locationSymbolButton.tintColor = isCurrentLocation ? .systemBlue : .systemGray
             }
             .store(in: &cancellables)
     }
