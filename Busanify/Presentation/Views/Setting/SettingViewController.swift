@@ -408,13 +408,24 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
         if indexPath.row == 6 {
             showLogoutAlert()
         } else if indexPath.row == 0 {
-            let userReviewVC = UserReviewViewController()
-            userReviewVC.hidesBottomBarWhenPushed = true
-            navigationController?.pushViewController(userReviewVC, animated: true)
+            switch viewModel.state {
+            case .googleSignedIn, .appleSignedIn:
+                let userReviewVC = UserReviewViewController()
+                userReviewVC.hidesBottomBarWhenPushed = true
+                navigationController?.pushViewController(userReviewVC, animated: true)
+            case .signedOut:
+                self.showAlert(alertTitle: NSLocalizedString("needLogin", comment: ""), msg: NSLocalizedString("needLoginMessageForBlock", comment: ""), confirm: NSLocalizedString("login", comment: ""), confirmAction: self.moveToSignInView)
+            }
+            
         } else if indexPath.row == 1 {
-            let userPostVC = UserPostViewController()
-            userPostVC.hidesBottomBarWhenPushed = true
-            navigationController?.pushViewController(userPostVC, animated: true)
+            switch viewModel.state {
+            case .googleSignedIn, .appleSignedIn:
+                let userPostVC = UserPostViewController()
+                userPostVC.hidesBottomBarWhenPushed = true
+                navigationController?.pushViewController(userPostVC, animated: true)
+            case .signedOut:
+                self.showAlert(alertTitle: NSLocalizedString("needLogin", comment: ""), msg: NSLocalizedString("needLoginMessageForBlock", comment: ""), confirm: NSLocalizedString("login", comment: ""), confirmAction: self.moveToSignInView)
+            }
         } else if indexPath.row == 2 {
             let privacyPolicyVC = PrivacyPolicyViewController()
             privacyPolicyVC.hidesBottomBarWhenPushed = true
@@ -437,13 +448,18 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
         alertController.addAction(confirmAction)
         
         if hideCancel != true {
-            let cancelAction = UIAlertAction(title: "취소", style: .cancel) { _ in
+            let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel) { _ in
                 cancelAction?()
             }
             alertController.addAction(cancelAction)
         }
         
         present(alertController, animated: true, completion: nil)
+    }
+    
+    private func moveToSignInView() {
+        let signInVC = SignInViewController()
+        present(signInVC, animated: true, completion: nil)
     }
 }
 
