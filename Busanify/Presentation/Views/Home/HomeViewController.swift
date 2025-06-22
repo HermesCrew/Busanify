@@ -393,7 +393,7 @@ class HomeViewController: UIViewController, MapControllerDelegate, WeatherContai
         
         NSLayoutConstraint.activate([
             currentButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            currentButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+            currentButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12)
         ])
         
         currentButton.addAction(UIAction { [weak self] _ in

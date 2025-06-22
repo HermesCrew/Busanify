@@ -35,7 +35,7 @@ class SignInViewController: UIViewController {
         button.backgroundColor = .white
         button.layer.cornerRadius = 12
         button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.lightGray.cgColor
+        button.layer.borderColor = UIColor.systemGray3.cgColor
         
         button.translatesAutoresizingMaskIntoConstraints = false
         
@@ -74,7 +74,7 @@ class SignInViewController: UIViewController {
         button.backgroundColor = .white
         button.layer.cornerRadius = 12
         button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.lightGray.cgColor
+        button.layer.borderColor = UIColor.systemGray3.cgColor
         
         button.translatesAutoresizingMaskIntoConstraints = false
         

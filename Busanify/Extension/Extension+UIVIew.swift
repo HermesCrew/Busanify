@@ -75,6 +75,10 @@ class WeatherContainer: UIView {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundColor = .white
         self.layer.cornerRadius = 8
+        self.layer.shadowColor = UIColor.black.cgColor
+        self.layer.shadowOpacity = 0.2
+        self.layer.shadowOffset = CGSize(width: 0, height: 2)
+        self.layer.shadowRadius = 4
     }
     
     private func configureSubviews() {
@@ -105,7 +109,7 @@ class WeatherContainer: UIView {
             icon.widthAnchor.constraint(equalToConstant: 24),
             
             label.topAnchor.constraint(equalTo: icon.bottomAnchor, constant: -10),
-            label.leadingAnchor.constraint(equalTo: icon.trailingAnchor, constant: -10),
+            label.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -4),
             
             button.topAnchor.constraint(equalTo: self.topAnchor),
             button.bottomAnchor.constraint(equalTo: self.bottomAnchor),
@@ -145,10 +149,10 @@ class CategoryButton: UIButton {
         self.backgroundColor = .white
         self.titleLabel?.font = UIFont.systemFont(ofSize: textSize, weight: .bold)
         self.layer.cornerRadius = 20
-//        self.layer.shadowColor = UIColor.black.cgColor
-//        self.layer.shadowOpacity = 0.7
-//        self.layer.shadowOffset = CGSize(width: 3, height: 3)
-//        self.layer.shadowRadius = 3
+        self.layer.shadowColor = UIColor.black.cgColor
+        self.layer.shadowOpacity = 0.2
+        self.layer.shadowOffset = CGSize(width: 0, height: 2)
+        self.layer.shadowRadius = 4
 
         if let title = self.title(for: .normal), let font = self.titleLabel?.font {
             let titleSize = (title as NSString).size(withAttributes: [NSAttributedString.Key.font: font])
@@ -181,8 +185,10 @@ class SearchTextField: UITextField {
         self.borderStyle = .roundedRect
         self.backgroundColor = .white
         self.layer.cornerRadius = 8
-        self.layer.borderWidth = 1
-        self.layer.borderColor = UIColor.lightGray.cgColor
+        self.layer.shadowColor = UIColor.black.cgColor
+        self.layer.shadowOpacity = 0.2
+        self.layer.shadowOffset = CGSize(width: 0, height: 2)
+        self.layer.shadowRadius = 4
         self.returnKeyType = .search
         self.autocapitalizationType = .none
         self.autocorrectionType = .no
@@ -265,8 +271,11 @@ class CustomLocationButton: UIButton {
         self.heightAnchor.constraint(equalToConstant: 40).isActive = true
         self.backgroundColor = .white
         self.layer.cornerRadius = 20
-        self.layer.borderWidth = 0.5
-        self.layer.masksToBounds = true
+        self.layer.shadowColor = UIColor.black.cgColor
+        self.layer.shadowOpacity = 0.2
+        self.layer.shadowOffset = CGSize(width: 0, height: 2)
+        self.layer.shadowRadius = 4
+        self.layer.masksToBounds = false
         
         let triangleImageView = UIImageView(image: UIImage(systemName: "dot.scope"))
         triangleImageView.translatesAutoresizingMaskIntoConstraints = false

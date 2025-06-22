@@ -23,7 +23,7 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
         button.setImage(UIImage(systemName: "photo.badge.plus"), for: .normal)
         button.tintColor = .gray
         button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.lightGray.cgColor
+        button.layer.borderColor = UIColor.systemGray3.cgColor
         button.layer.cornerRadius = 10
         
         button.addAction(UIAction { [weak self] _ in
@@ -48,13 +48,14 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
         let textView = UITextView()
         textView.font = UIFont.systemFont(ofSize: 16)
         textView.layer.borderWidth = 1
-        textView.layer.borderColor = UIColor.lightGray.cgColor
+        textView.layer.borderColor = UIColor.systemGray3.cgColor
         textView.layer.cornerRadius = 10
         textView.text = NSLocalizedString("writeContent", comment: "")
         textView.textColor = .systemGray3
         textView.autocapitalizationType = .none
         textView.autocorrectionType = .no
         textView.spellCheckingType = .no
+        textView.textContainerInset = UIEdgeInsets(top: 12, left: 8, bottom: 12, right: 8)
         
         return textView
     }()
@@ -161,8 +162,8 @@ class AddPostViewController: UIViewController, UICollectionViewDataSource, UICol
         
         NSLayoutConstraint.activate([
             addButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            addButton.widthAnchor.constraint(equalToConstant: 80),
-            addButton.heightAnchor.constraint(equalToConstant: 80),
+            addButton.widthAnchor.constraint(equalToConstant: 60),
+            addButton.heightAnchor.constraint(equalToConstant: 60),
             addButton.centerYAnchor.constraint(equalTo: photoCollectionView.centerYAnchor),
             
             photoCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
